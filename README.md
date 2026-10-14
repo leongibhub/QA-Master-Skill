@@ -1,47 +1,35 @@
-# QA Master Skill — v0.1 prototype
+# QA Master Skill
 
-Original QA workflow guardrail and orchestration Skill. Public repository maintained under `leongibhub`.
+**单仓库、一套安装入口的原创 QA 总控工程（当前为 v0.1 原型）。**
 
-**Status:** prototype, **not** a fully operational autonomous testing platform. No actual GitLab/Jira/Confluence/SynapseRT/SSH or upstream-skill-dispatch integration yet.
+目标：对用户的一句话测试任务，自动判断需求评审、测试设计、代码分析、执行、回归、报告等阶段，按风险、审批与状态安全推进。测试技能以本项目自有模块实现，不要求用户另装其它 QA Skill。
 
-## Install and run on Windows (PowerShell)
+## 当前已实现（V0.1）
+- 任务意图和范围解析的基础规则
+- 项目状态与确认答复持久化
+- 需求/用例/执行审批门禁
+- 缺少构建/环境时暂停
+- 13 类测试覆盖检查
+- 21 项本地单元测试（详见 `docs/TEST_REPORT.md`）
 
+## 尚未实现
+完整的原创需求分析/白盒/API/性能/稳定性/安全 Skill 内容、运行时 AI Agent 分派、GitLab/Jira/SynapseRT/Wiki 接口、远程 Runner、自动生成可执行脚本及端到端闭环。**V0.1 不应视为可独立完成所有测试的成品。**
+
+## 安装（Windows）
 ```powershell
 git clone https://github.com/leongibhub/QA-Master-Skill.git
 cd QA-Master-Skill
 py -3.10 -m unittest discover -s tests -v
-py -3.10 -m qa_master init "my-project"
+py -3.10 -m qa_master init "demo"
 py -3.10 -m qa_master plan "只生成测试用例，不执行测试"
-py -3.10 -m qa_master check design
 ```
 
-Alternatively, use a Python 3.10+ interpreter with `python -m ...`.
+在 Codex/OpenCode 以当前目录为工程根目录，读取 `AGENTS.md` 与 `skills/qa-master/SKILL.md`。当前命令行工具是本地规则验证器，并不会自动访问外部平台。
 
-The project-level `AGENTS.md` references `skills/qa-master/SKILL.md`. Open this repository as the working directory in Codex/OpenCode, and ask the agent to read the files and follow the QA Master workflow. The Python CLI is only a deterministic policy/state helper; it is **not** an LLM or live executor.
+## 统一产品化方向
+`skills/qa-master` 为唯一入口；`skills/` 下逐步加入独立实现的需求评审、功能/API/白盒、性能/压力、可靠性、安全、回归及报告模块；`adapters/` 与 `runners/` 为后续内置集成。一次安装应包含已实现的全部模块，无需用户单独配置或安装第三方 QA Skill 包。
 
-## How to use with Awesome QA Skills
+## 知识产权
+项目以自主实现为原则。可以研究公开项目的功能思想，但不复制受许可证限制的实现，也不将他人代码篡改署名后作为原创发布。借鉴的第三方资料如需使用，应遵守其许可证及归属要求。
 
-Use **two separately installed components**:
-
-- **QA Master:** planning, conversational scope, approvals, stages, persistence and coverage gates.
-- **[awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills):** specialized skills for requirements, functional/API, performance, reliability, security, regression and reports.
-
-Install authorized upstream skills separately in the *same agent environment*, confirm they are discoverable, then direct QA Master to route requests to the available specialists. Merely cloning both repositories does **not** automatically provide runtime dispatch. The v0.1 Skill specifies selection rules, but actual dynamic invocation has not yet been implemented and verified.
-
-**License caution:** check the upstream repository's full LICENSE and commercial-use permissions before importing/copying/using upstream assets in a company workflow. This repository does not redistribute them.
-
-## Included
-
-- `skills/qa-master/SKILL.md`: conversational orchestration rules
-- `qa_master/core.py`: campaign state, intent routing, approval and coverage checks
-- `qa_master/__main__.py`: state helper CLI
-- `config/example.json`: non-secret integration placeholders
-- `tests/test_core.py`: 21 unit tests
-- `docs/TEST_REPORT.md`: verification scope
-- `.github/workflows/test.yml`: CI unit test workflow
-
-## Current limitations
-
-No actual third-party API adapters or remote execution runner; no automatic user-interface exploration or code-to-requirements analysis; no evidence-linked report generator. These are target capabilities for future versions. Do not claim tests have executed until real execution evidence exists.
-
-Never upload real passwords, personal tokens, SSH keys, or environment secrets into this Public repository.
+> 注意：这是 Public 仓库。不要提交 Token、密码、SSH 私钥或真实机器凭据。
