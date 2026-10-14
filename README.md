@@ -55,3 +55,10 @@ The new `qa_master/workflow.py` provides dependency expansion, required-input ch
 `tests/test_workflow.py` includes 15 regression scenarios. Full local suite: **89 passing tests**.
 
 **Limitations:** This is a dependency/authorization *planner*, not an actual scheduler or Jira/SynapseRT executor. It does not authenticate approval identities, bind approvals cryptographically to artifact hashes, or perform enterprise API calls. A complete V1.0 release is still pending. Do not start destructive tests based solely on this model.
+
+
+## V1.0 开发进度：GitLab 真实只读接口（2026-10）
+- 新增 `qa_master/gitlab_adapter.py`：GitLab REST v4 项目信息、递归目录及源码文件读取，HTTPS 默认启用，分页和数据大小受限。
+- 新增 `tests/test_gitlab_adapter.py`：15 项 Mock HTTP 测试。
+- 使用方法与安全边界见 `docs/GITLAB_CONNECTOR.md`。
+- 连接器代码已提交并核验；尚**未**以公司 GitLab 实际环境进行端到端验证。代码逆向语义分析、Jira/SynapseRT、远程执行器仍需继续开发。
