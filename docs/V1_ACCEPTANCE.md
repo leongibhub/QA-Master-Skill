@@ -22,14 +22,15 @@ These surfaces do not prove deployment, authenticated identity, live third-party
 
 ## Current evidence and open boundaries
 
-The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-14.md) and its Runtime evidence is `EVD-BASELINE-20261014-001`. It preserves the non-clean `77e3b5d` source-baseline suite, then records a 375-test continuation suite and clean-wheel smoke test against a specifically fingerprinted shared dirty worktree. The 375-test run exited successfully, but emitted an open subprocess-leak warning (`BUG-002`). It is useful local independent evidence, not a final-subject regression conclusion: later changes require another independent run against the exact final revision.
+The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-14.md). Its current local source is `73a86bb31f4348ce1fa40cf1b79d4c82b0b215e3`: `EV-BASE-017` ran 385 tests with `ResourceWarning` treated as an error and reported `OK`. The independent portability re-review also built and installed a fresh wheel, then verified ASCII-pipe Chinese project initialization and design-only JSON round trips. The remote branch subject is `d0ff0a538a705abfa586604f85dcc1c66ff796ab`, whose tree is equal to local tree `5187d7d2097851069a7a2d52572a6ea402dad840`. GitHub API readback records completed/success runs `38573546825` and `38573557640` for that remote commit; the four matrix jobs in `38573546825` passed on Ubuntu/Windows and Python 3.10/3.12. The preceding remote `1931bd0` run `38573216585` failed cross-platform and was corrected by CR-006. BUG-001/002 retain their bounded local verification. These facts do not prove enterprise compatibility, production operation, release, or acceptance.
 
 | Domain | Current status | Boundary |
 |---|---|---|
 | Enterprise E2E | NOT_EXECUTED | No authorized staging target, dedicated account, or operation authorization is recorded. This does not block local product development. |
 | Enterprise adapter contracts | OBSERVED | Local code and contract tests may exist; no live Jira, Confluence, SynapseRT, GitLab, SSH, WinRM, or remote-runner result is asserted. |
-| Local configuration UI | OBSERVED | A loopback-only JSON UI is implemented locally. `docs/verification/config-browser-smoke.md` records one local browser form-save smoke with empty mappings and no enterprise contact; independent automation and multi-user authorization remain pending. |
-| Current local regression and package smoke | OBSERVED | The independent continuation report records 375 local tests with `OK` and a clean-wheel smoke test. `BUG-002` remains open for the subprocess warning; the tested working-tree fingerprint is not a final release subject. |
+| Local configuration UI | OBSERVED | A loopback-only JSON UI is implemented locally. The final 385-test suite includes 11 `test_configuration` automated cases, and `docs/verification/config-browser-smoke.md` records one empty-config form-save smoke without enterprise contact. Full GUI multi-user authorization is not implemented. |
+| Current local regression, package smoke and CI | OBSERVED | `73a86bb` has an independent strict 385-test local result and fresh-wheel ASCII/Chinese JSON smoke; `d0ff0a` has two successful GitHub CI API readbacks, including a four-cell Linux/Windows matrix. |
+| Independent implementation review | OBSERVED | The portability re-review found no new P0–P3 in the final four-file source difference. The bounded local review separately concludes full V1 is `FAIL` because required capabilities and lifecycle evidence are absent. |
 | Remote execution | NOT_EXECUTED | No authorized remote scheduling, monitoring, retention, or network execution is recorded. |
 | Performance, load, stress, stability, compatibility | NOT_EXECUTED | No approved environment, thresholds, or execution evidence is recorded. |
 | Competitor comparison | NOT_EXECUTED | No same-model, same-input paired outputs with completed expert ratings and execution artifacts exist. No superiority claim is permitted. |
@@ -37,14 +38,18 @@ The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-
 
 ## V1 release evidence still required
 
-1. A current, independent full local regression result against the final subject revision, with any defects triaged and retested.
-2. Independent review of current code, architecture conformance, security and regression risks.
+1. Retain a current independent full local regression result as the source changes; `73a86bb` has one, but it does not cover missing V1 capabilities.
+2. Retain independent code, architecture, security and regression review as the source changes; the current portability review is bounded to the local increment and reports full V1 `FAIL`.
 3. A complete enough RTM linking every in-scope requirement to design, task/change, test case, and current execution evidence.
 4. Authenticated approval and audit controls for any side-effecting external operation.
 5. Explicit authorization and observable readback for every live enterprise integration or remote execution, using non-production targets and dedicated accounts.
 6. Approved nonfunctional test models, environments, thresholds, and preserved raw results where those claims are made.
 7. A valid release manifest, installation/rollback instructions, known-issue record, readiness decision, and human acceptance where required.
 8. Before any superiority statement: same model, identical inputs/settings, paired outputs, completed expert ratings, evidence references, and a separate human decision.
+
+## Current V1 evaluation
+
+The independent review evaluates the full stated V1 as **FAIL**. The bounded local increment is safer and locally verified, but authenticated authority, remote execution, a single canonical workflow, enterprise staging validation, complete professional methods, paired evaluation, formal requirement baselines, acceptance, and release evidence remain absent. This is an evaluation conclusion, not a Gate decision.
 
 ## Historical source record
 

@@ -163,3 +163,65 @@ The V1 tracker already records that live Jira/SynapseRT calls, remote execution,
 - Independent reviewer confirms the implementation path actually uses the hardened components.
 
 Until those criteria are met, all findings remain open and the independent decision remains `FAIL`.
+
+## Frozen-candidate re-review — 2026-10-14
+
+### Subject and independent verification
+
+- Source commit: `18e92b1432b190f122b42297cb9038f712b0b907`.
+- Git tree: `2607e2c3891f16136ae0dceed491179d003d1888`.
+- The only uncommitted path visible during the final run was the tester-owned `docs/verification/baseline-2026-10-14.md`; no source or test file differed from the subject commit.
+- `python -W error::ResourceWarning -m unittest discover -s tests -q`: **384 tests, OK**, 14.515 seconds. The earlier subprocess warning did not recur.
+- Safety-focused run covering API generation, runner isolation, workflow receipts, release governance and enterprise adapters: **95 tests, OK**, 6.555 seconds.
+- `python -m compileall -q qa_master`: exit 0.
+- A wheel was built with `pip wheel --no-deps --no-build-isolation`, installed into a new temporary virtual environment, and `python -m qa_master skills` returned `DISCOVERED` with all six bundled professional guides and no registry gap.
+- External enterprise targets and remote machines remained `NOT_EXECUTED`.
+
+An earlier frozen candidate, `c27cb4d`, was rejected because the full suite still expected the removed `AssertionError`; `c3b9aa0` corrected that test contract. Review then found that runner receipts omitted timeout and evidence destination. Commit `18e92b1` binds both values, rejects common secret-bearing command arguments, and adds replay-negative tests. These were independently re-run above.
+
+### Finding reconciliation
+
+The continuation closes the reproducible P1 implementation defects from the baseline within the documented local, trusted-host boundary:
+
+- `IR-P1-001`: mitigated. The CLI persists a default-deny task contract, and design-only scope survives reload and denies execution.
+- `IR-P1-002`: mitigated for the local workflow contract. Required answer changes invalidate the affected step and descendants; side-effect completion requires a typed host receipt bound to the current result and workflow inputs, and persists its audit metadata. Identity, signature and time validity remain duties of the absent production host verifier.
+- `IR-P1-003`: mitigated. Release assessment fails closed without evidence and governance verifiers; release scope, waiver and defect-closure records are separately checked.
+- `IR-P1-004`: mitigated. Credentialed HTTP requires HTTPS and standard network reads reject redirects. Generated API tests also reject credentialed HTTP.
+- `IR-P1-005`: mitigated for the bounded local runner. It now binds the actual executable, source manifest, sanitized environment values, timeout and evidence destination; bounds output; reaps timed-out processes; and records process results separately from business outcomes. The mutable workspace limitation remains explicit.
+- `IR-P1-006`: mitigated. Scenario approval flags require exact booleans, and runtime target/mutation/host/HTTPS guards use explicit exceptions that remain active with optimized Python.
+
+The baseline P2 defects were either corrected or converted to explicit product limits: JUnit is reparsed from the hashed bytes and rejects DTD/entity and namespace inputs; synthetic artifact transports are labeled; SynapseRT dry-run scope uses canonical structured content; state writes use revision/CAS persistence; enterprise writes use a journal and readback; Jira readback uses submitted-value subset matching for enriched objects; and the local suite is green. `IR-P2-001` remains architecturally open because the installed CLI still uses the legacy `Campaign` aggregate while stronger workflow behavior lives in `Workflow`. The bundled professional files are real packaged planning guides, but they are not complete semantic specialist agents.
+
+No unresolved P0 or reproducible P1 defect was found in the implemented local development increment at this frozen source tree. This is a bounded code-review conclusion, not V1 acceptance or release approval.
+
+### Full V1 blockers and remaining major gaps
+
+The overall independent V1 decision remains **FAIL**. The following missing capabilities are blockers against the stated full-V1 scope even though the local increment is materially safer:
+
+1. **P1 capability blocker — authenticated authority is not delivered.** All production approval, evidence, governance and execution verifiers are host extension points. No production identity provider, signed receipt verifier, key management, expiry/revocation service or durable multi-user audit service is implemented. Side effects therefore remain unavailable by default.
+2. **P1 capability blocker — remote execution is not delivered.** There is no SSH/WinRM/worker scheduler, authenticated remote worker, immutable job staging, resource policy, heartbeat/cancel/recovery protocol or content-addressed remote artifact return. `REQ-008` remains a traceability gap.
+3. **P2 architecture gap — one canonical workflow is not complete.** `Campaign`, `Workflow` and campaign-generation paths still have distinct state and approval models. Schema migration and one application command service remain pending.
+4. **P2 execution-isolation gap — the local workspace is mutable.** The manifest is a trust-provider input, not an immutable staging or hostile-code sandbox. The product correctly documents that it does not support untrusted workspace code.
+5. **P2 enterprise-validation gap.** Jira, Confluence, SynapseRT and GitLab behavior is supported by local contract tests only. No authorized staging readback, compatibility matrix, rate-limit/retry exercise or deployment-specific SynapseRT contract has been verified.
+6. **P2 professional-depth gap.** Six packaged guides improve planning coverage, but full multilingual semantic specialists, advanced oracle generation and executed nonfunctional methods are not implemented or evaluated.
+7. **P2 evaluation and acceptance gap.** The paired benchmark validates submitted artifacts but no same-model paired outputs or independent expert ratings exist. Requirements remain inferred, RTM coverage is partial, project Gates remain blocked, and no human acceptance, release manifest, deployment/rollback evidence or closure record exists.
+
+Accordingly, the current increment is suitable for continued local development and review. It must not be described as a completed QA Master V1, production-ready enterprise integration, authenticated execution service, proven remote runner, or superior system.
+
+## CI portability follow-up re-review
+
+- Scoped source commit: `73a86bb31f4348ce1fa40cf1b79d4c82b0b215e3`.
+- Git tree: `5187d7d2097851069a7a2d52572a6ea402dad840`.
+- The supplied remote counterpart is `d0ff0a...` with the same tree; this review used the local tree and did not infer CI execution from that mapping.
+- Changed files: `.github/workflows/test.yml`, `qa_master/__main__.py`, `tests/test_intent_cli.py`, and `tests/test_runner_isolation.py` only.
+
+The diff does not relax an authorization, execution, HTTPS or evidence check. CLI output now uses ASCII JSON escaping, which preserves Unicode values after JSON decoding and avoids legacy Windows pipe encoding failures. The runner change is confined to the synthetic test provider and compares against the same resolved executable path used by production code. CI now keeps all matrix cells running and promotes `ResourceWarning` to an error.
+
+Independent verification used the later documentation-only `bc722f7` checkout after confirming its source and test files were identical to `73a86bb`:
+
+- `python -W error::ResourceWarning -m unittest discover -s tests -q`: **385 tests, OK**, 11.058 seconds.
+- `python -m unittest tests.test_intent_cli tests.test_runner_isolation -q`: **15 tests, OK**, 4.294 seconds.
+- `python -m compileall -q qa_master`: exit 0.
+- A fresh wheel was installed into a temporary virtual environment. With `PYTHONIOENCODING=ascii`, Chinese project initialization and a Chinese design-only plan both round-tripped through JSON; the persisted plan remained `PLANNING_ONLY` with `no_execution=true`.
+
+No new P0, P1, P2 or P3 finding was identified in this four-file portability change. The bounded local-increment conclusion remains unchanged: no unresolved reproducible P1 implementation defect was found. The full V1 decision remains **FAIL** for the capability and lifecycle blockers listed above.

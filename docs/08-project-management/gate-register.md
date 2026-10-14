@@ -15,9 +15,9 @@ Gate Status is controlled to `PASS`, `FAIL`, or `BLOCKED`. No Gate has an eviden
 | G3 Requirements | BLOCKED | PENDING | Initial RTM exists; formal requirement baseline and requirement review are pending. |
 | G4 Architecture & Design | BLOCKED | NOT_AVAILABLE | Existing source layout is observable, but no current HLD/LLD/ADR or architecture review baseline is registered. |
 | G5 Planning | BLOCKED | PENDING | Initial continuation tasks exist; dependency map and approved implementation plan are pending audit outcomes. |
-| G6 Development | BLOCKED | INFERRED | Source changes are present in history, but current independent verification and task-to-change evidence are pending. |
-| G7 Test | BLOCKED | NOT_EXECUTED | Local product verification is being independently audited. Enterprise E2E is deliberately out of scope and `NOT_EXECUTED`. |
-| G8 Independent Review | BLOCKED | PENDING | `/root/gap_review` is performing the current baseline review; no conclusion is recorded yet. |
+| G6 Development | BLOCKED | OBSERVED | Local `73a86bb` and remote-equivalent `d0ff0a` have current code/task/change records, but required lifecycle baselines and full V1 capabilities remain incomplete. |
+| G7 Test | BLOCKED | OBSERVED | `EV-BASE-017` records 385 strict local tests at `73a86bb`. GitHub API readback records two successful `d0ff0a` matrix runs. Enterprise E2E, remote execution and nonfunctional scope remain `NOT_EXECUTED`. |
+| G8 Independent Review | BLOCKED | OBSERVED | The portability re-review covers the `73a86bb` tree and found no new P0–P3; the full-V1 conclusion remains `FAIL` for missing capabilities and incomplete lifecycle evidence. |
 | G9 Acceptance | BLOCKED | NOT_AVAILABLE | No authenticated human acceptance evidence is available. |
 | G10 Release | BLOCKED | NOT_EXECUTED | V1 is not release-ready; no release manifest, deployment, or rollback execution exists. |
 | G11 Project Closure | BLOCKED | NOT_EXECUTED | Project remains active; archive and closure evidence are not due. |
@@ -25,3 +25,12 @@ Gate Status is controlled to `PASS`, `FAIL`, or `BLOCKED`. No Gate has an eviden
 ## Gate readiness discipline
 
 Before any later Gate assessment, reconcile this register with the RTM, current source and Git history, actual test/review evidence, work records, defects/risks, and release evidence. A local test exit code, generated artifact, CI download, or agent message is not a Gate decision.
+
+## Frozen-candidate evidence snapshot
+
+- Local portability-review subject: `73a86bb31f4348ce1fa40cf1b79d4c82b0b215e3`; Git tree `5187d7d2097851069a7a2d52572a6ea402dad840`.
+- The GitHub branch `codex/qa-master-v1-continuation` remote commit `d0ff0a538a705abfa586604f85dcc1c66ff796ab` has the same tree. This is source-integrity evidence only; it is not a release or deployment outcome.
+- GitHub API readback recorded run `38573216585` at preceding remote `1931bd0` as failed (nine Linux synthetic-provider executable-resolution errors and two Windows cp1252 JSON-output failures). The correction is CR-006. Runs `38573546825` and `38573557640` at `d0ff0a` are completed/success; the former has Ubuntu 3.10/3.12 and Windows 3.10/3.12 successful jobs.
+- [Independent test report](../verification/baseline-2026-10-14.md) records the strict 385-test local run. [Independent review](../verification/independent-review-2026-10-14.md) records the local finding reconciliation, portability re-review, fresh-wheel ASCII/Chinese JSON check, and full-V1 `FAIL` conclusion.
+
+This snapshot updates evidence notes only. It does not create a Gate assessment or decision, and no row above is `PASS`.
