@@ -17,7 +17,7 @@ def main():
     sub.add_parser('invalidate').add_argument('source',choices=('requirements','code'))
     args=p.parse_args()
     if args.cmd=='skills':
-        print(json.dumps(discover_skills(),ensure_ascii=False,indent=2));return
+        print(json.dumps(discover_skills(),ensure_ascii=True,indent=2));return
     if args.cmd=='init': obj=Campaign(args.name)
     else: obj=load(args.state)
     if args.cmd=='answer':obj.set_answer(args.key,args.value)
@@ -47,5 +47,6 @@ def main():
     else:output={'project':obj.name,'known':obj.known,'approvals':obj.approvals}
     if args.cmd not in ('status','check'):
         save(obj,args.state)
-    print(json.dumps(output,ensure_ascii=False,indent=2))
+    # ASCII JSON preserves Unicode values and works on legacy Windows pipes.
+    print(json.dumps(output,ensure_ascii=True,indent=2))
 if __name__=='__main__':main()

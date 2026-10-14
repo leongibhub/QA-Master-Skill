@@ -17,7 +17,7 @@ class SyntheticTrustedExecutionProvider:
 
     def verify_execution(self, binding):
         self.last_binding = binding
-        if binding["project"] != "demo" or binding["argv"] != [sys.executable, "-m", "unittest", "discover"]:
+        if binding["project"] != "demo" or binding["argv"] != [str(Path(sys.executable).resolve()), "-m", "unittest", "discover"]:
             return None
         if self.expected_manifest and binding["source_manifest_sha256"] != self.expected_manifest:
             return None
