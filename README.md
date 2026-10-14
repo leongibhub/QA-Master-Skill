@@ -107,3 +107,8 @@ CLI `python -m qa_master --state .qa-master/campaign.json plan "先评审需求�
 新增 `qa_master/approval.py` 和 `Workflow.approve_exact/evaluate_exact/complete_exact`：审批现在可以与**项目、操作、范围和 JSON 产物 SHA-256** 精确绑定，修改需求/用例或更换范围后拒绝沿用原审批。老版本仅记录文本版本的审批不满足新检查。包含 12 项模块测试和 5 项工作流集成测试；文件已上传 GitHub。
 
 **重要：这并不是受信任的身份认证与审计服务。** Reviewer 当前只是记录字段，旧 `complete` 路径仍存在，因此生产环境必须统一切换到不可绕过的服务端授权门禁。详见 [审批完整性设计](docs/ARTIFACT_APPROVAL.md)。本轮环境无法访问 GitHub 域名完成克隆，因此没有声称整仓最新提交回归通过，请查看 GitHub Actions 并在可联网环境运行 `python -m unittest discover -s tests -v`。
+
+
+## 发布质量门禁（2026-10-14）
+
+新增 `qa_master/release_gate.py`，可按测试用例、运行证据、审批、缺陷和跳过豁免判断 `BLOCKED` 或 `READY_FOR_HUMAN_REVIEW`，不自动授权上线。修复全部 SKIPPED 也可能进入评审的问题。详见 [`docs/RELEASE_GATE.md`](docs/RELEASE_GATE.md)。本地全量单元测试 188 项通过；GitHub Actions 结果需独立确认。该功能尚未接入 Jira/SynapseRT 真实执行记录。
