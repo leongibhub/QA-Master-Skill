@@ -39,3 +39,11 @@
 ## Development approach
 
 Complete the remaining adapters and expert testing modules behind separate feature branches, run cross-component integration tests, then release a versioned public V1.0 only after all critical criteria are passed.
+
+
+## 2026-10-14: side-effect completion enforcement
+- Legacy `Workflow.complete` now denies `test_plan`, `execution`, and `regression` because these stages have `side_effect=True`; no legacy free-text approval can complete them.
+- `Workflow.complete_exact` validates an artifact-bound approval before recording completion.
+- Added `tests/test_side_effect_gate.py` (five new test definitions).
+- **Verification status:** changes are published and GitHub API file reads succeeded. Complete local repository test run is **not verified** in this session: local checkout failed because `github.com` could not resolve. Do not add these five tests to the last verified pass total until CI or an actual local run passes.
+- This is a workflow-state guard, **not** authorization for remote execution; no authenticated approval server or real third-party writes are implemented.
