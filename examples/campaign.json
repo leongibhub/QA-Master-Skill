@@ -1,0 +1,30 @@
+{
+  "project": "document-review-agent",
+  "requirements": [
+    {
+      "id": "REQ-UPLOAD-001",
+      "text": "Authenticated users can upload a supported document",
+      "source": "requirements-v1",
+      "approved": true,
+      "dimension": "functional",
+      "acceptance": "The uploaded document appears in the current user's list",
+      "preconditions": "Signed-in user and staging environment",
+      "test_data": "safe-fixture.pdf",
+      "priority": "P1"
+    },
+    {
+      "id": "REQ-API-002",
+      "text": "Upload API returns an assigned document identifier",
+      "source": "requirements-v1",
+      "approved": true,
+      "dimension": "api",
+      "acceptance": "HTTP 201 with a non-empty document identifier",
+      "preconditions": "Valid scoped test account",
+      "test_data": "safe-fixture.pdf",
+      "priority": "P1"
+    }
+  ],
+  "applicability": {
+    "mobile": {"status": "N/A", "reason": "No mobile client in this project"}
+  }
+}
