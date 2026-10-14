@@ -48,6 +48,7 @@ def assess_release(cases, runs, defects=None, *, approved_case_ids=None, waivers
         if case_id not in allowed:reasons.append('CASE_NOT_APPROVED:'+case_id)
         if status=='PASS':evidenced+=1
         counts[status]+=1
+    if evidenced == 0: reasons.append('NO_EVIDENCED_PASS')
     if defects is None: reasons.append('DEFECT_STATUS_UNKNOWN')
     elif not isinstance(defects,list):raise ValueError('Defects must be a list')
     else:
