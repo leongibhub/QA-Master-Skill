@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "qa-master-skill"
+version = "0.1.0"
+description = "Human-gated, resumable QA workflow controller"
+requires-python = ">=3.10"
+[project.scripts]
+qa-master = "qa_master.__main__:main"
+[tool.setuptools.packages.find]
+include = ["qa_master*"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
