@@ -69,3 +69,7 @@ The new `qa_master/workflow.py` provides dependency expansion, required-input ch
 新增 `qa_master/reverse_requirements.py`：结合只读 GitLab Adapter，限定文件数量和大小，分析 Python 函数、分支与异常候选，保留文件行号、Blob ID 与内容哈希；输出始终是 `PENDING_HUMAN` 候选需求。新增 `tests/test_reverse_requirements.py`（17 项测试）和 `docs/REVERSE_REQUIREMENTS.md`。
 
 **限制：** 当前不等于 AI 语义逆向需求，不支持多语言的深入解析，也没有真实 GitLab 环境的端到端验证。要形成正式需求，必须完成人工评审和批准；代码当前行为不自动作为正确的验收标准。
+
+
+## 当前真实交付状态（2026-10-14）
+**项目仍处于 V1.0 开发中，未通过端到端验收，也未证明优于 Awesome QA Skills。** 新增 `qa_master/enterprise.py` 和 `tests/test_enterprise.py`（只读接口保护、审批作用域、SynapseRT 计划 Dry-run、远程机器配置验证）。本地隔离环境 134 项单元测试通过。完整未完成项及正式版准入标准请见 [`docs/V1_ACCEPTANCE.md`](docs/V1_ACCEPTANCE.md)。
