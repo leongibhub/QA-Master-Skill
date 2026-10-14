@@ -37,6 +37,8 @@ def assess_release(cases, runs, defects=None, *, approved_case_ids=None, waivers
     for case_id in ids:
         result=by_case.get(case_id)
         status=result['status'] if result else 'NOT_RUN'
+        if status in ('PASS','FAIL') and result.get('provenance')=='UNVERIFIED_EXTERNAL_ARTIFACT':
+            reasons.append('UNVERIFIED_SOURCE:'+case_id)
         if status in ('PASS','FAIL') and not result.get('evidence'):
             reasons.append('MISSING_EVIDENCE:'+case_id)
             status='BLOCKED'
