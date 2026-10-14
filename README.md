@@ -93,3 +93,10 @@ python -m unittest discover -s tests -q
 ```
 
 已接通结构化需求分析、需求质量检查、多类型草稿用例、追踪与覆盖检查。输出 JSON 会保留审批和执行的待确认状态，**不会**写 Jira/SynapseRT 或启动测试。这是离线集成的第一个端到端 CLI，详见 [docs/CAMPAIGN_CLI.md](docs/CAMPAIGN_CLI.md)。在本地进行了 151 项测试（包含 CLI 子进程验证），但企业系统端到端验收和对标仍未完成。
+
+
+## 自然语言任务规划（2026-10-14）
+
+CLI `python -m qa_master --state .qa-master/campaign.json plan "先评审需求并生成用例，不执行测试"` 现在通过内置 `qa_master/intent.py` 解析任务，读取已保存项目信息，返回 `stages`、`no_execution`、`no_external_writes`、`questions` 和 `uncertainty`。比如只有 GitLab 时会询问是否有需求；回答“没有”后不重复追问。
+
+这是**保守关键词意图解析器**，不是 LLM 自然语言理解或自动执行引擎；复杂表达与否定组合尚不能保证全覆盖。只支持规划，不会创建 Jira 对象、触发真实测试。新增 `tests/test_intent.py`（15 项）和 `tests/test_intent_cli.py`（2 项），本地完整 unittest 为 **168/168 PASS**。GitHub Actions 云端结果仍需单独确认。
