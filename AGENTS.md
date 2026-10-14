@@ -1,0 +1,2 @@
+# QA Master Agent operating guide
+Read `skills/qa-master/SKILL.md` first. Use `qa_master` state checker to enforce the side-effect boundary. This repository contains no authorization to access real external systems. The user must configure integrations and approve actions. Never interpret missing approvals as implied approval. Do not insert passwords or tokens into repository files, logs, prompts, or test artifacts.
