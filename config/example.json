@@ -1,0 +1,7 @@
+{
+  "gitlab": {"base_url": "https://gitlab.example.com", "credential_ref": "secret://qa/gitlab-readonly"},
+  "jira": {"base_url": "https://jira.example.com", "credential_ref": "secret://qa/jira-test"},
+  "confluence": {"base_url": "https://wiki.example.com", "credential_ref": "secret://qa/wiki"},
+  "synapsert": {"adapter": "not_implemented", "project_mapping": {}},
+  "machines": [{"id": "linux-lab-01", "host": "192.0.2.10", "transport": "ssh", "credential_ref": "secret://qa/lab-01", "exclusive": true}]
+}
