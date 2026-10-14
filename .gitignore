@@ -8,3 +8,7 @@ __pycache__/
 secrets/
 *.pem
 *.key
+build/
+dist/
+*.egg-info/
+.venv/

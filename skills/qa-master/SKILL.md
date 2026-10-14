@@ -18,7 +18,9 @@ description: Single-entry QA workflow controller for staged requirement analysis
 8. 用户明确要求只做一个阶段，不自动扩展到其他阶段。未运行的用例不得给 PASS/FAIL。
 
 ## 专业能力
-先列举此工程内已实现的专业模块；按测试目标挑选并调用，不要仅凭文件名臆测存在。V0.1 仅提供上述流程规则及 `qa_master` 状态工具，尚没有完整专业测试生成器或运行时分派器。
+先通过 `qa_master.skill_registry.select_skills(intent=..., dimensions=..., risk=...)` 列举并选择包内已验证存在的专业指导文件；以返回的 `path` 和 `artifacts` 作为精确可读的指导产物。注册表只做规划，返回必须保留 `status: PLANNING_ONLY` 与 `execution: NOT_EXECUTED`；它不调用模型、不运行测试、不产生 PASS/FAIL。
+
+当前内置原创专业指南覆盖需求多源冲突与人工基线复核、功能边界/状态、API 合约/鉴权/负向、白盒分支/路径、集成、性能/负载/压力/稳定性、兼容性、安全、恢复、回归、缺陷与证据报告。指南要求输入、草稿输出、可执行 acceptance oracle、缺口和复核清单；缺 SLA、授权、oracle 或环境时只报告缺口。可用性与安装包资源要求见 `docs/SKILL_CAPABILITIES.md`。
 
 ## 本地验证 CLI
 `python -m qa_master init "project-name"`
