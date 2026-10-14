@@ -83,3 +83,13 @@ The new `qa_master/workflow.py` provides dependency expansion, required-input ch
 - 文档：`docs/V1_ACCEPTANCE.md`、`docs/LOCAL_RUNNER.md`。
 
 **仍未具备 V1.0 正式发布条件**：公司 Jira/SynapseRT/Confluence 的真实接口对接和认证、远程 SSH/WinRM Runner、全类型专家测试引擎、端到端质量验收及与 Awesome QA Skills 的实测对标尚未完成。详见准入清单，不得用单元测试数量替代项目验收。
+
+
+## 一键生成项目测试设计草稿（新增）
+
+```powershell
+python -m qa_master.campaign_cli --input examples/campaign.json --output campaign-report.json
+python -m unittest discover -s tests -q
+```
+
+已接通结构化需求分析、需求质量检查、多类型草稿用例、追踪与覆盖检查。输出 JSON 会保留审批和执行的待确认状态，**不会**写 Jira/SynapseRT 或启动测试。这是离线集成的第一个端到端 CLI，详见 [docs/CAMPAIGN_CLI.md](docs/CAMPAIGN_CLI.md)。在本地进行了 151 项测试（包含 CLI 子进程验证），但企业系统端到端验收和对标仍未完成。
