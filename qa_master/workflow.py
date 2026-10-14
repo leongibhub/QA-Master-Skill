@@ -85,3 +85,31 @@ class Workflow:
         raw=json.loads(Path(path).read_text(encoding='utf8'))
         raw['steps']={k:Step(**v) for k,v in raw['steps'].items()}
         return cls(**raw)
+
+    def approve_exact(self,kind,scope,artifact,reviewer):
+        """Explicit exact-artifact approval; record is persisted with workflow."""
+        from .approval import approve_artifact,approval_record
+        if kind not in {a for s in STEPS.values() for a in s.approvals}:raise ValueError('Unknown approval')
+        record=approval_record(approve_artifact(kind=kind,project=self.project,scope=scope,
+                                                 artifact=artifact,reviewer=reviewer))
+        self.approvals[kind]=record
+        self.events.append({'action':'approve_exact','kind':kind,'scope':scope,
+                            'artifact_sha256':record['artifact_sha256']})
+        return record
+
+    def evaluate_exact(self,step,artifacts,scopes):
+        """Fail closed on legacy version-only approvals and any stale artifact."""
+        from .approval import check_approval
+        state=self.evaluate(step)
+        if state!='READY':return state
+        for kind in self.steps[step].approvals:
+            if kind not in artifacts or kind not in scopes or not check_approval(
+                self.approvals.get(kind),kind=kind,project=self.project,
+                scope=scopes[kind],artifact=artifacts[kind]):
+                return 'WAITING_APPROVAL'
+        return 'READY'
+
+    def complete_exact(self,step,result_ref,artifacts,scopes):
+        if self.evaluate_exact(step,artifacts,scopes)!='READY':
+            raise PermissionError('Exact artifact approval or step prerequisites missing')
+        self.complete(step,result_ref)
