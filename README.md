@@ -112,3 +112,9 @@ CLI `python -m qa_master --state .qa-master/campaign.json plan "先评审需求�
 ## 发布质量门禁（2026-10-14）
 
 新增 `qa_master/release_gate.py`，可按测试用例、运行证据、审批、缺陷和跳过豁免判断 `BLOCKED` 或 `READY_FOR_HUMAN_REVIEW`，不自动授权上线。修复全部 SKIPPED 也可能进入评审的问题。详见 [`docs/RELEASE_GATE.md`](docs/RELEASE_GATE.md)。本地全量单元测试 188 项通过；GitHub Actions 结果需独立确认。该功能尚未接入 Jira/SynapseRT 真实执行记录。
+
+
+## JUnit CI 测试结果导入（2026-10-14）
+新增 `qa_master/junit_ingest.py` 和 `tests/test_junit_ingest.py`：将 JUnit XML 的成功/失败/错误/跳过结果映射到唯一的正式 Case ID，保留 XML SHA-256，拒绝重复、未映射、冲突结果及 DTD。外部 XML 默认标记 `UNVERIFIED_EXTERNAL_ARTIFACT`；发布质量门禁新增 `UNVERIFIED_SOURCE` 阻断，不将外来数据冒充可信的 CI 证据。详见 [JUnit 证据导入说明](docs/JUNIT_INGEST.md)。
+
+本地整仓 `unittest` 共 **203 项通过**。最新 GitHub Actions 运行结果仍需单独核验。真实 CI 来源认证、SynapseRT 回写和远程测试机联调仍未完成。
