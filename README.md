@@ -48,3 +48,10 @@ py -3.10 -m qa_master plan "只生成测试用例，不执行测试"
 
 ### 当前限制
 这里的生成器是**确定性基础能力**，尚不具备从自由文本自动抽取完整业务规则、基于多语言代码的深层语义分析、独立生成全部非功能用例、自动运行 API/性能测试或外部企业平台联动的能力。V0.3 **没有**超过 Awesome QA Skills 的实测证据。要达到该目标仍需按真实基准集持续开发和对比。
+
+
+## V1.0 development branch milestone: persistent workflow core (2026-10-14)
+The new `qa_master/workflow.py` provides dependency expansion, required-input checks, human approval gates with version+scope, no bypass of unready steps, evidence references, upstream-change invalidation and save/load.
+`tests/test_workflow.py` includes 15 regression scenarios. Full local suite: **89 passing tests**.
+
+**Limitations:** This is a dependency/authorization *planner*, not an actual scheduler or Jira/SynapseRT executor. It does not authenticate approval identities, bind approvals cryptographically to artifact hashes, or perform enterprise API calls. A complete V1.0 release is still pending. Do not start destructive tests based solely on this model.
