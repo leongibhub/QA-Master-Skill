@@ -59,7 +59,10 @@ class Workflow:
         if any(a not in self.approvals for a in x.approvals):return 'WAITING_APPROVAL'
         return 'READY'
     def complete(self,step,result_ref):
-        if step not in self.steps or self.evaluate(step)!='READY':raise ValueError('Step not ready')
+        if step not in self.steps:raise ValueError('Unknown step')
+        if self.steps[step].side_effect:
+            raise PermissionError('Side-effecting steps require complete_exact and an authenticated external executor')
+        if self.evaluate(step)!='READY':raise ValueError('Step not ready')
         if not result_ref:raise ValueError('Result/evidence reference required')
         self.steps[step].status='DONE';self.steps[step].result_ref=result_ref
         self.events.append({'action':'complete','step':step,'result_ref':result_ref})
@@ -112,4 +115,6 @@ class Workflow:
     def complete_exact(self,step,result_ref,artifacts,scopes):
         if self.evaluate_exact(step,artifacts,scopes)!='READY':
             raise PermissionError('Exact artifact approval or step prerequisites missing')
-        self.complete(step,result_ref)
+        if not result_ref:raise ValueError('Result/evidence reference required')
+        self.steps[step].status='DONE';self.steps[step].result_ref=result_ref
+        self.events.append({'action':'complete_exact','step':step,'result_ref':result_ref})
