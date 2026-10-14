@@ -67,3 +67,15 @@ class GitLabReader:
             decoded=raw.decode('utf-8')
         except (ValueError,UnicodeError) as e:raise GitLabError('Cannot decode file') from e
         return {'path':obj.get('file_path') or path,'ref':ref,'blob_id':obj.get('blob_id'),'content':decoded,'provenance':'SOURCE_CODE_UNREVIEWED'}
+
+    def job(self,project,job_id):
+        if type(job_id) is not int or job_id < 1:raise ValueError('Positive job ID required')
+        result=self._get('/projects/'+self._project_id(project)+'/jobs/'+str(job_id))
+        if not isinstance(result,dict):raise GitLabError('Invalid GitLab job metadata')
+        return result
+
+    def pipeline(self,project,pipeline_id):
+        if type(pipeline_id) is not int or pipeline_id < 1:raise ValueError('Positive pipeline ID required')
+        result=self._get('/projects/'+self._project_id(project)+'/pipelines/'+str(pipeline_id))
+        if not isinstance(result,dict):raise GitLabError('Invalid GitLab pipeline metadata')
+        return result
