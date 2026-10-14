@@ -1,5 +1,6 @@
 import argparse, json
 from .core import Campaign,save,load
+from .intent import plan_task
 
 def main():
     p=argparse.ArgumentParser(description='QA Master workflow guardrail CLI (no actual remote execution)')
@@ -18,7 +19,10 @@ def main():
     if args.cmd=='answer':obj.set_answer(args.key,args.value)
     if args.cmd=='approve':obj.approve(args.kind,args.version)
     if args.cmd=='invalidate':obj.invalidate(args.source)
-    if args.cmd=='plan':output=obj.plan(args.prompt)
+    if args.cmd=='plan':
+        known={k:(v.get('value') if isinstance(v,dict) else v) for k,v in obj.known.items()}
+        if obj.status('requirements')=='CONFIRMED_NONE':known['requirements_status']='CONFIRMED_NONE'
+        output=plan_task(args.prompt,known)
     elif args.cmd=='check':output=obj.next_action(args.intent)
     else:output={'project':obj.name,'known':obj.known,'approvals':obj.approvals}
     save(obj,args.state)
