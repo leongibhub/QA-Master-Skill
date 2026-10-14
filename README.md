@@ -62,3 +62,10 @@ The new `qa_master/workflow.py` provides dependency expansion, required-input ch
 - 新增 `tests/test_gitlab_adapter.py`：15 项 Mock HTTP 测试。
 - 使用方法与安全边界见 `docs/GITLAB_CONNECTOR.md`。
 - 连接器代码已提交并核验；尚**未**以公司 GitLab 实际环境进行端到端验证。代码逆向语义分析、Jira/SynapseRT、远程执行器仍需继续开发。
+
+
+## V1.0 开发里程碑：源码候选需求（2026-10-14）
+
+新增 `qa_master/reverse_requirements.py`：结合只读 GitLab Adapter，限定文件数量和大小，分析 Python 函数、分支与异常候选，保留文件行号、Blob ID 与内容哈希；输出始终是 `PENDING_HUMAN` 候选需求。新增 `tests/test_reverse_requirements.py`（17 项测试）和 `docs/REVERSE_REQUIREMENTS.md`。
+
+**限制：** 当前不等于 AI 语义逆向需求，不支持多语言的深入解析，也没有真实 GitLab 环境的端到端验证。要形成正式需求，必须完成人工评审和批准；代码当前行为不自动作为正确的验收标准。
