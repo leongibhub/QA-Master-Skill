@@ -33,3 +33,8 @@ class JUnitTests(unittest.TestCase):
  def test_evidence_digest(self):
   x=self.load('<testsuite><testcase classname="a" name="ok"/></testsuite>')
   self.assertIn(x['source_sha256'],x['runs'][0]['evidence'])
+
+ def test_unverified_pass_blocks_release(self):
+  x=self.load('<testsuite><testcase classname="a" name="ok"/></testsuite>')
+  r=assess_release([{'id':'TC-1'}],x['runs'],defects=[],approved_case_ids={'TC-1'})
+  self.assertIn('UNVERIFIED_SOURCE:TC-1',r.reasons)
