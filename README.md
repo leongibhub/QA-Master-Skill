@@ -73,3 +73,13 @@ The new `qa_master/workflow.py` provides dependency expansion, required-input ch
 
 ## 当前真实交付状态（2026-10-14）
 **项目仍处于 V1.0 开发中，未通过端到端验收，也未证明优于 Awesome QA Skills。** 新增 `qa_master/enterprise.py` 和 `tests/test_enterprise.py`（只读接口保护、审批作用域、SynapseRT 计划 Dry-run、远程机器配置验证）。本地隔离环境 134 项单元测试通过。完整未完成项及正式版准入标准请见 [`docs/V1_ACCEPTANCE.md`](docs/V1_ACCEPTANCE.md)。
+
+
+## 2026-10-14 实际开发更新 — 企业控制与本机执行
+
+- `qa_master/enterprise.py`：只读 HTTPS API 连接、作用域审批对象、SynapseRT Dry-run（**不进行实际写入**）、机器配置检查。
+- `qa_master/local_runner.py`：经许可的本机 unittest/pytest 命令执行，采集进程结果、超时、日志及 SHA-256 证据；**进程退出成功不等于业务测试 PASS**。
+- 测试：`tests/test_enterprise.py` 和 `tests/test_local_runner.py`；当前本地隔离测试共 **143 项通过**。
+- 文档：`docs/V1_ACCEPTANCE.md`、`docs/LOCAL_RUNNER.md`。
+
+**仍未具备 V1.0 正式发布条件**：公司 Jira/SynapseRT/Confluence 的真实接口对接和认证、远程 SSH/WinRM Runner、全类型专家测试引擎、端到端质量验收及与 Awesome QA Skills 的实测对标尚未完成。详见准入清单，不得用单元测试数量替代项目验收。
