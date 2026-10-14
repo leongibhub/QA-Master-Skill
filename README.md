@@ -100,3 +100,10 @@ python -m unittest discover -s tests -q
 CLI `python -m qa_master --state .qa-master/campaign.json plan "先评审需求并生成用例，不执行测试"` 现在通过内置 `qa_master/intent.py` 解析任务，读取已保存项目信息，返回 `stages`、`no_execution`、`no_external_writes`、`questions` 和 `uncertainty`。比如只有 GitLab 时会询问是否有需求；回答“没有”后不重复追问。
 
 这是**保守关键词意图解析器**，不是 LLM 自然语言理解或自动执行引擎；复杂表达与否定组合尚不能保证全覆盖。只支持规划，不会创建 Jira 对象、触发真实测试。新增 `tests/test_intent.py`（15 项）和 `tests/test_intent_cli.py`（2 项），本地完整 unittest 为 **168/168 PASS**。GitHub Actions 云端结果仍需单独确认。
+
+
+## 2026-10-14 审批完整性加强
+
+新增 `qa_master/approval.py` 和 `Workflow.approve_exact/evaluate_exact/complete_exact`：审批现在可以与**项目、操作、范围和 JSON 产物 SHA-256** 精确绑定，修改需求/用例或更换范围后拒绝沿用原审批。老版本仅记录文本版本的审批不满足新检查。包含 12 项模块测试和 5 项工作流集成测试；文件已上传 GitHub。
+
+**重要：这并不是受信任的身份认证与审计服务。** Reviewer 当前只是记录字段，旧 `complete` 路径仍存在，因此生产环境必须统一切换到不可绕过的服务端授权门禁。详见 [审批完整性设计](docs/ARTIFACT_APPROVAL.md)。本轮环境无法访问 GitHub 域名完成克隆，因此没有声称整仓最新提交回归通过，请查看 GitHub Actions 并在可联网环境运行 `python -m unittest discover -s tests -v`。
