@@ -48,11 +48,19 @@ class InstalledDesignRouteTests(unittest.TestCase):
                          sorted(item["id"] for item in report["method_design"]["obligations"]))
         self.assertEqual({item["method"] for item in report["method_design"]["model_results"]},
                          {"boundary", "decision_table", "state_transition"})
+        self.assertEqual(len(report["test_cases"]), 1)
+        self.assertEqual(report["test_cases"][0]["trace"], ["REQ-EXAMPLE"])
+        self.assertEqual(report["test_cases"][0]["expected"],
+                         "Amounts 1 through 9 are accepted; members receive discount, non-members receive normal outcome; submitting a draft order reaches submitted and undeclared state-trigger pairs are denied.")
+        self.assertNotIn("EMPTY_REQUIREMENT", {item["code"] for item in report["requirement_review"]["findings"]})
+        self.assertNotIn("NO_PROVENANCE", {item["code"] for item in report["requirement_review"]["findings"]})
+        self.assertNotIn("NO_ACCEPTANCE", {item["code"] for item in report["requirement_review"]["findings"]})
         reference = (self.target / "references" / "design-methods.md").read_text(encoding="utf-8")
         for required in ("decision_table", "state_transition", "source_refs", "oracle_refs",
                          "closed_world_deny_oracle_ref", "DECISION_LIMIT_EXCEEDED",
                          "STATE_LIMIT_EXCEEDED", "METHOD_MODELS_NOT_SUPPLIED",
-                         "DRAFT_UNAPPROVED", "NOT_EXECUTED"):
+                         "DRAFT_UNAPPROVED", "NOT_EXECUTED", "EMPTY_REQUIREMENT",
+                         "NO_PROVENANCE", "NO_ACCEPTANCE", "case_review.pass"):
             self.assertIn(required, reference)
         guide = next(item for item in projection["guides"] if item["id"] == "functional-api-design")
         self.assertEqual(guide["locator"], "scripts/qa_master/skills/professional/functional-api.md")

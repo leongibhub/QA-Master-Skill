@@ -95,3 +95,35 @@ v2 working-file hashes before commit:
 | `qa_master/skills/codex/references/design-methods.md` | `D128BDCFCC17AAD064693E73E56AF8EF907596FA563CFA815C9E5AF2DAF682B4` |
 | `qa_master/skills/codex/examples/design-methods.json` | `805B3A6EB2C2AD37FFE4DFFFBA3BDAD6B3BDF47A94F8FD9246894211284085C3` |
 | `tests/test_installed_design_route.py` | `88F048205A607E456CBDB67C0BA2EF1FFB1E9EC9D59B73CDDD00F7E85CA8BD38` |
+
+## v3 legacy-requirement semantic repair
+
+An independent installed-task attempt retained as BUG-014 found 13 finite
+method candidates but zero generic cases and six each of `EMPTY_REQUIREMENT`,
+`NO_PROVENANCE`, and `NO_ACCEPTANCE`. The method models were valid; the task
+bundle omitted the separate legacy requirement fields consumed by the generic
+campaign projection. This v3 repair does not alter the engine, schema, or that
+historical attempt. It makes the installed reference and example state the
+four required generic fields (`id`, `text`, `source`, `acceptance`), common
+optional behavior, generic/method separation, and the zero-case
+`case_review.pass` boundary.
+
+The packaged example now supplies a concrete source-grounded generic oracle
+consistent with its boundary, decision, and state models. The installed-route
+test asserts one meaningful generic draft case, its exact expected outcome,
+all three method results, and the absence of the three false legacy findings.
+
+```text
+D:\codex-rd-platform\.venv\Scripts\python.exe -X utf8 -m unittest \
+  tests.test_installed_design_route tests.test_campaign_cli tests.test_codex_skill -q
+```
+
+Observed: 20 tests passed in 5.751 seconds. `git diff --check` passed.
+This remains developer verification only; independent task testing and formal
+review of the v3 source are pending.
+
+| Path | SHA-256 |
+| --- | --- |
+| `qa_master/skills/codex/references/design-methods.md` | `128DF839DA4B48DF2B40DE1B943EE0E1C1B76573FDAAAEF2717E5E8087F4265F` |
+| `qa_master/skills/codex/examples/design-methods.json` | `3C90119659C20A35B7A9178A0224D4D3FC5AB4456E331B8A9C25E1A60FB38E64` |
+| `tests/test_installed_design_route.py` | `F97D6A55B9810F200367F09109A0BAC6E7EB45925D8C13E087F70BE44EEC491D` |
