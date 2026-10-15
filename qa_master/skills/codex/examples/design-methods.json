@@ -1,0 +1,49 @@
+{
+  "project": "installed-design-example",
+  "requirements": [
+    {
+      "id": "REQ-EXAMPLE",
+      "text": "Model the accepted amount boundary",
+      "source": "declared/example-requirements.md",
+      "approved": false,
+      "dimension": "functional",
+      "acceptance": "Use the declared valid and invalid oracle references",
+      "priority": "P1"
+    }
+  ],
+  "design_models": {
+    "schema_version": 1,
+    "source_refs": [
+      {"id": "SRC-REQ", "kind": "requirement", "locator": "declared/example-requirements.md"}
+    ],
+    "oracle_refs": [
+      {"id": "OR-VALID", "kind": "valid", "locator": "declared/example-oracles.md"},
+      {"id": "OR-INVALID", "kind": "invalid", "locator": "declared/example-oracles.md"}
+    ],
+    "models": [
+      {
+        "id": "DM-AMOUNT",
+        "method": "boundary",
+        "title": "Accepted amount",
+        "dimension": "functional",
+        "requirement_ids": ["REQ-EXAMPLE"],
+        "source_refs": ["SRC-REQ"],
+        "spec": {
+          "numeric_type": "decimal",
+          "precision": 4,
+          "scale": 0,
+          "origin": "0",
+          "step": "1",
+          "lower": {"value": "1", "inclusive": true},
+          "upper": {"value": "9", "inclusive": true},
+          "oracle_by_class": {
+            "IN_DOMAIN": "OR-VALID",
+            "LOWER_INVALID": "OR-INVALID",
+            "UPPER_INVALID": "OR-INVALID",
+            "BOTH_INVALID": "OR-INVALID"
+          }
+        }
+      }
+    ]
+  }
+}
