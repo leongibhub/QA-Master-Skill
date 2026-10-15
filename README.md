@@ -7,19 +7,20 @@
 需要 Python 3.10 或以上；Windows 与 Linux 使用相同 Python 命令。
 
 ```sh
-git clone https://github.com/leongibhub/QA-Master-Skill.git
+git clone --branch codex/qa-master-v1-continuation --single-branch https://github.com/leongibhub/QA-Master-Skill.git
 cd QA-Master-Skill
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # Linux: source .venv/bin/activate
 python -m pip install .
-python -m unittest discover -s tests -q
-python -m qa_master skills
-python -m qa_master init "我的项目"
-python -m qa_master plan "先评审需求并生成用例，严禁执行测试"
+python -m qa_master install-codex --user
 ```
 
-在 Codex / OpenCode 中打开本仓库并读取 `AGENTS.md` 与 `skills/qa-master/SKILL.md`。总控按任务选择包内专业指南；指南包含专业方法、输入输出、判定依据和自检要求。注册表选择的是实际文件，不代表已经调用模型或执行测试。
+安装器将入口、专业指南、领域参考和本地助手一起安装到 `~/.agents/skills/qa-master`。在 Codex 中打开待测项目，输入 `$qa-master 评审这份需求并生成测试用例，开发还未完成，不执行测试`。Codex 根据材料开展分析和设计，助手负责本地规划状态；注册表列出文件不代表已经完成分析或执行测试。
+
+只供某个项目使用时，改用 `python -m qa_master install-codex --project <项目目录>`，安装到该项目的 `.agents/skills/qa-master`。安装后若 Codex 未刷新技能列表，重新打开会话。重复安装相同内容不会覆盖文件；更新未修改的受管安装用 `--update`，旧版保留为 ZIP 和返回的 `recovery_directory` 目录。后者保留旧文件及仍打开的编辑器可能写入的内容；确认没有遗漏修改后再自行清理。存在用户修改或未知文件时拒绝覆盖，请先保留自定义内容并选择新安装目录。发布失败会尝试恢复原目录；若恢复也失败，错误会提供保留的恢复目录路径。安装目录及其内部不支持符号链接或 Windows junction。
+
+安装后的 Skill 不依赖原始源码目录或另一个 QA Skills 仓库；本地助手需要 Python 3.10+，没有 Python 时仍可按指南由 Codex 完成分析设计，但不能使用状态助手。三类对象的分析设计指导已内置；真实设备/远程执行能力须分别验证，不能视为已经接通。详细交付边界见 [Codex 核心版](docs/CODEX_CORE.md)。
 
 ## 已有可用入口
 

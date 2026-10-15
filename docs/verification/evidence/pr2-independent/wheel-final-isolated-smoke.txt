@@ -1,0 +1,156 @@
+{
+  "guides": [
+    {
+      "id": "functional-api-design",
+      "title": "Functional state, boundary, API contract, authentication and negative design",
+      "dimensions": [
+        "functional",
+        "api",
+        "negative"
+      ],
+      "intents": [
+        "design",
+        "review",
+        "code_refinement"
+      ],
+      "risks": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "artifacts": [
+        "functional-case-set",
+        "api-contract-matrix",
+        "auth-negative-matrix"
+      ],
+      "file": "functional-api.md",
+      "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md"
+    },
+    {
+      "id": "nonfunctional-compatibility-design",
+      "title": "Performance load stress stability and compatibility design",
+      "dimensions": [
+        "performance",
+        "load",
+        "stress",
+        "stability",
+        "compatibility"
+      ],
+      "intents": [
+        "design",
+        "review",
+        "regression"
+      ],
+      "risks": [
+        "medium",
+        "high"
+      ],
+      "artifacts": [
+        "workload-model",
+        "nonfunctional-readiness-register",
+        "compatibility-matrix"
+      ],
+      "file": "nonfunctional-compatibility.md",
+      "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\nonfunctional-compatibility.md"
+    },
+    {
+      "id": "regression-evidence-reporting",
+      "title": "Regression impact, defect reporting and evidence review",
+      "dimensions": [
+        "regression"
+      ],
+      "intents": [
+        "regression",
+        "report",
+        "design",
+        "review"
+      ],
+      "risks": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "artifacts": [
+        "regression-impact-map",
+        "defect-report",
+        "evidence-report"
+      ],
+      "file": "regression-evidence.md",
+      "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\regression-evidence.md"
+    },
+    {
+      "id": "requirements-review",
+      "title": "Requirements, source conflict, and human-baseline review",
+      "dimensions": [
+        "functional",
+        "negative"
+      ],
+      "intents": [
+        "requirements",
+        "review",
+        "discovery",
+        "design"
+      ],
+      "risks": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "artifacts": [
+        "requirement-review-packet",
+        "conflict-register",
+        "human-baseline-decision"
+      ],
+      "file": "requirements-review.md",
+      "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md"
+    },
+    {
+      "id": "security-recovery-design",
+      "title": "Authorized security proof and recovery design",
+      "dimensions": [
+        "security",
+        "recovery"
+      ],
+      "intents": [
+        "design",
+        "review",
+        "regression"
+      ],
+      "risks": [
+        "high"
+      ],
+      "artifacts": [
+        "security-proof-plan",
+        "recovery-drill-plan",
+        "authorization-record"
+      ],
+      "file": "security-recovery.md",
+      "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\security-recovery.md"
+    },
+    {
+      "id": "structural-integration-design",
+      "title": "White-box branch path and integration contract design",
+      "dimensions": [
+        "whitebox",
+        "integration"
+      ],
+      "intents": [
+        "code_refinement",
+        "design",
+        "review"
+      ],
+      "risks": [
+        "medium",
+        "high"
+      ],
+      "artifacts": [
+        "structural-candidate-register",
+        "integration-contract-map"
+      ],
+      "file": "structural-integration.md",
+      "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\structural-integration.md"
+    }
+  ],
+  "gaps": [],
+  "status": "DISCOVERED"
+}
