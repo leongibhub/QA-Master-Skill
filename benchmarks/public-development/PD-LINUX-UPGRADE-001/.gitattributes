@@ -1,0 +1,3 @@
+# Preserve exact public-development source and audit bytes after the freeze.
+* -text -whitespace
+**/* -text -whitespace
