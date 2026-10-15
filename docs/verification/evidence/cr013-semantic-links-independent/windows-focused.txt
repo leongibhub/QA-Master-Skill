@@ -1,0 +1,15 @@
+test_junction_bundle (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_bundle) ... ok
+test_junction_inspect (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_inspect) ... ok
+test_junction_output (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_output) ... ok
+test_junction_response (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_response) ... ok
+test_junction_source (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_source) ... ok
+test_symlink_bundle (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_bundle) ... skipped 'NOT_EXECUTED: Windows denied real symlink creation (1314)'
+test_symlink_inspect (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_inspect) ... skipped 'NOT_EXECUTED: Windows denied real symlink creation (1314)'
+test_symlink_output (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_output) ... skipped 'NOT_EXECUTED: Windows denied real symlink creation (1314)'
+test_symlink_response (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_response) ... skipped 'NOT_EXECUTED: Windows denied real symlink creation (1314)'
+test_symlink_source (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_source) ... skipped 'NOT_EXECUTED: Windows denied real symlink creation (1314)'
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.193s
+
+OK (skipped=5)

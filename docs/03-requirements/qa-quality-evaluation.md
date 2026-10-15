@@ -3,7 +3,7 @@
 - Artifact ID: `DOC-QA-QUALITY-EVALUATION-REQ-001`
 - Document State: `DRAFT`
 - Evaluation State: `IN_REVIEW`
-- Evidence Status: `PENDING`
+- Evidence Status: `OBSERVED`
 - Change: `CR-013`
 - Work: `TASK-054` / `work-67c9f0ae30514ccd9c89103dcc207ca3` v3, attempt 1
 - Date: 2026-10-15
@@ -129,8 +129,8 @@ gap before investing in a more elaborate comparison scorer.
 
 | Phase | Scope and measurable exit | Current evidence state |
 |---|---|---|
-| 1 — reachable offline QA product workflow | Architecture and implementation expose the installed Skill's single `design --input --output` path, package its strict input reference/example, preserve offline draft-only behavior, map selected professional guides and supplied sources to output, and connect valid `design_models` to the existing campaign draft engine.  Fresh isolated installation and independent representative-task testing prove this path; missing source/model remains a typed gap. | `PENDING`.  The deterministic engine/campaign CLI is covered prospectively by `REQ-013`–`REQ-018`, but the installed Skill route is not currently demonstrated. |
-| 2 — semantic and usability evaluation contract | New versioned fixtures cover the four core dimensions and whole-product categories, with public development material plus independently held material.  Tests prove projection semantics, source binding, obligation-to-case/gap completeness, case readiness, and preservation of old evidence. | `PENDING`.  TASK-053 identifies the contract gaps but is not a new quality result. |
+| 1 — reachable offline QA product workflow | Architecture and implementation expose the installed Skill's single `design --input --output` path, package its strict input reference/example, preserve offline draft-only behavior, map selected professional guides and supplied sources to output, and connect valid `design_models` to the existing campaign draft engine.  Fresh isolated installation and independent representative-task testing prove this path; missing source/model remains a typed gap. | `OBSERVED`, bounded: `8b5017a` TASK057 attempt3 independently passed 8 focused and 8 fresh-wheel checks and a representative offline task; TASK058 review is `PASS WITH P3 FOLLOW-UP`. This does not baseline the DRAFT contract, prove all REQ-025 criteria, or decide a Gate. |
+| 2 — semantic and usability evaluation contract | New versioned fixtures cover the four core dimensions and whole-product categories, with public development material plus independently held material.  Tests prove projection semantics, source binding, obligation-to-case/gap completeness, case readiness, and preservation of old evidence. | `OBSERVED`, partial: repaired evaluator `a9df285` has TASK062 attempt3 independent public-development evidence (30 focused and 30 fresh-wheel PASS; 689 strict `OK` with three Windows-link skips; supplemental gap regressions) and TASK063 `PASS WITH P3 FOLLOW-UP`, P0/P1/P2=0. The P3 semantic-evaluator-specific link/reparse fixture, independently held material, human assessment and whole-product comparison remain pending or not available. |
 | 3 — controlled comparison and human decision | Freeze both participant contexts and a representative holdout before run; meet all strict-comparison conditions in `REQ-011`; retain repeats, blinded human reviews, disagreements, adjudication, and limitations.  A human, not a script or agent, makes any comparison decision. | `NOT_EXECUTED`.  The retained six-call run is only `EXPLORATORY_CONFIGURED_SAME_MODEL`. |
 
 ## Ambiguities and decisions still required
@@ -139,7 +139,7 @@ gap before investing in a more elaborate comparison scorer.
 |---|---|
 | Representative workload mix and minimum sample size | `PENDING`.  It must be selected before a comparison from the product's actual supported request classes, not inferred from three public fixtures. |
 | Per-dimension acceptance threshold or any aggregate interpretation | `PENDING`.  This document intentionally defines no numerical quality threshold and no winner rule. |
-| Exact installed wrapper argument grammar, output schema, and source-mapping structure | Architecture decision required before Phase 1 implementation.  It must preserve `REQ-013`–`REQ-018` semantics and the draft-only boundary. |
+| Exact installed wrapper argument grammar, output schema, and source-mapping structure | Bounded Phase 1 route is implemented and independently evidenced under `DES-055`; this DRAFT requirement remains unapproved and does not imply full Phase 1 or REQ-025 completion. |
 | Holdout owner, retention location, rater qualifications, and adjudication rule | `NOT_AVAILABLE`.  These are required before a human-comparison conclusion, not guessed from local development evidence. |
 | Provider-pinned revision/system-baseline evidence | `NOT_AVAILABLE` in the retained pilot.  Its absence prevents strict comparability under `REQ-024`. |
 
