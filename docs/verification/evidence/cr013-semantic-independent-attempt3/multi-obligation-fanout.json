@@ -1,0 +1,33 @@
+{
+  "scope": "Structural repeated reference validation; no timing benchmark. Six unrelated category cases held fixed.",
+  "records": [
+    {
+      "obligations_for_one_case": 4,
+      "all_calls": 121,
+      "all_reference_elements": 130,
+      "same_mapping_list_calls": 3,
+      "same_mapping_element_visits": 12
+    },
+    {
+      "obligations_for_one_case": 8,
+      "all_calls": 133,
+      "all_reference_elements": 154,
+      "same_mapping_list_calls": 3,
+      "same_mapping_element_visits": 24
+    },
+    {
+      "obligations_for_one_case": 16,
+      "all_calls": 157,
+      "all_reference_elements": 202,
+      "same_mapping_list_calls": 3,
+      "same_mapping_element_visits": 48
+    },
+    {
+      "obligations_for_one_case": 64,
+      "all_calls": 301,
+      "all_reference_elements": 490,
+      "same_mapping_list_calls": 3,
+      "same_mapping_element_visits": 192
+    }
+  ]
+}

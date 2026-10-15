@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "scenario_id": "PE-BND-001",
+  "response_status": "COMPLETED",
+  "summary": "Draft boundary design covers endpoints, just-inside values and just-outside values. No tests were executed.",
+  "cases": [
+    {
+      "id": "C-BND-001",
+      "title": "Accepted endpoints and inside neighbours",
+      "objective": "Check inclusive endpoints and their nearest interior whole numbers.",
+      "preconditions": [
+        "Other order inputs satisfy their requirements."
+      ],
+      "data": ["quantity=1", "quantity=2", "quantity=8", "quantity=9"],
+      "steps": [
+        {
+          "action": "For each listed quantity, independently submit it for order quantity validation.",
+          "expected": "Quantity validation accepts each value under the whole-number range rule; this does not assert overall order creation."
+        }
+      ],
+      "source_refs": ["F-BND-001"]
+    },
+    {
+      "id": "C-BND-002",
+      "title": "Rejected outside neighbours",
+      "objective": "Check the nearest whole numbers outside both boundaries.",
+      "preconditions": [
+        "Other order inputs satisfy their requirements."
+      ],
+      "data": ["quantity=0", "quantity=10"],
+      "steps": [
+        {
+          "action": "For each listed quantity, independently submit it for order quantity validation.",
+          "expected": "Quantity validation rejects the value."
+        }
+      ],
+      "source_refs": ["F-BND-001", "F-BND-002"]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G-BND-001",
+      "description": "The validation interface and concrete acceptance/rejection signals are unspecified.",
+      "impact": "Logical expectations are defined, but interface-specific assertions remain pending.",
+      "needed_evidence": "The validation entry point and its documented acceptance/rejection response or UI feedback.",
+      "source_refs": ["F-BND-001", "F-BND-002"]
+    }
+  ],
+  "observations": [
+    {
+      "check_id": "Q-BND-001",
+      "value_type": "JSON",
+      "value": {
+        "accepted": [1, 2, 8, 9],
+        "rejected": [0, 10]
+      },
+      "evidence_refs": ["F-BND-001", "F-BND-002"]
+    },
+    {
+      "check_id": "Q-BND-002",
+      "value_type": "STRING_SET",
+      "value": ["F-BND-001", "F-BND-002"],
+      "evidence_refs": ["F-BND-001", "F-BND-002"]
+    }
+  ],
+  "metadata": {
+    "artifact_state": "DRAFT",
+    "execution_state": "NOT_EXECUTED"
+  },
+  "failure_reason": null
+}

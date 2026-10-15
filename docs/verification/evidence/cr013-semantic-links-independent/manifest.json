@@ -1,0 +1,57 @@
+[
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\.gitattributes",
+    "sha256": "DA58495F036DC48CA26F8178779ED701D0A2284187A78BC0FBF75460C8BAF399",
+    "bytes": 43
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\ci-final-jobs.json",
+    "sha256": "791C01987028AF23999138435B6C12878D253932DC9797A98CA4DDA6F9B65749",
+    "bytes": 6077
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\linux-job-116436073554-excerpt.txt",
+    "sha256": "7944CE25E30EC9A3D00E848DE92C5D0AEA36E7E04545EA7820DED3625132CCFD",
+    "bytes": 2041
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\linux-job-116436074129-excerpt.txt",
+    "sha256": "D2FA7E6A8DC0F46978733CDEC54084A33F3C8EEE9016A461F9889652CC63DDE5",
+    "bytes": 2341
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\windows-focused.txt",
+    "sha256": "CD40F399B61C0FCD55897C6A2F2579468035382F6635294804B67D4BBCA88DD5",
+    "bytes": 1603
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\windows-job-116436073865-excerpt.txt",
+    "sha256": "7CCD6658EB7FD34A247D9B3A8FB4D6E525D021844A273C16DBBC733D683136D1",
+    "bytes": 1431
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\windows-job-116436073865-summary.txt",
+    "sha256": "A7E9155F8C5C2CA11D58D9E42205BFEF848B72572C9CBC6747AF362EC88FB279",
+    "bytes": 87
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\windows-job-116436073916-excerpt.txt",
+    "sha256": "32194D429A0922795C80D14CED92CB4BC77A1A3541D7031E2B0592C3C10C8F48",
+    "bytes": 1642
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-links-independent\\windows-job-116436073916-summary.txt",
+    "sha256": "D69757D6076A50157FA5174169C1A3AF2AF773EFA03C3F6F788CF22376C93D62",
+    "bytes": 87
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\semantic-quality-links-independent.md",
+    "sha256": "9F1BEF0241364C6C35902046C0A57DCD30A1FDD57290DF22AFF3DE5BF86096E2",
+    "bytes": 4796
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\tests\\test_semantic_quality_links_independent.py",
+    "sha256": "B51F64E5AC47A4D5D29AAE822D5322ACEACC9660DF38CDF1D8A54D1D920D21E1",
+    "bytes": 4726
+  }
+]

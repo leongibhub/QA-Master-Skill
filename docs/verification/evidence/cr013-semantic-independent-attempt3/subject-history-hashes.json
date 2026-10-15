@@ -1,0 +1,26 @@
+[
+  {
+    "Path": "D:\\QA-Master-PR2\\qa_master\\semantic_quality.py",
+    "Hash": "D567D26110EACA5637F54C0DC48994E881BFEDCE69EAFD0C8AA809C41331018A"
+  },
+  {
+    "Path": "D:\\QA-Master-PR2\\docs\\04-design\\semantic-quality-design.md",
+    "Hash": "4611C6C9ADD08AE913E25512361B45369C1F439715CF620FCF875D7B51148B42"
+  },
+  {
+    "Path": "D:\\QA-Master-PR2\\docs\\verification\\semantic-quality-independent-attempt1.md",
+    "Hash": "99CD6131A8E137819F405801240A6DEF18B1B88CD6E54271E150D0B1581835C4"
+  },
+  {
+    "Path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\attempt1-manifest.json",
+    "Hash": "CC8ECA0AE33C279F1AA23E4365E216A5027BE7A58BE763EF43E134CEC3B6BC71"
+  },
+  {
+    "Path": "D:\\QA-Master-PR2\\docs\\verification\\semantic-quality-independent-attempt2.md",
+    "Hash": "1776CD8C12DB5B90F40021568F55B9EA5BB42AE3E7AB3DFF1AD155A1F473E624"
+  },
+  {
+    "Path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent-attempt2\\attempt2-manifest.json",
+    "Hash": "636B4624E50B41F219CEC92A965FC70A44438908D2B54DD7CED212B223F55A70"
+  }
+]

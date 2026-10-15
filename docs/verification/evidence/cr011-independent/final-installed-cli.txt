@@ -1,0 +1,27 @@
+{
+  "import_path": "D:\\QA-Master-PR2\\.qa-master\\cr011-independent\\final-venv\\Lib\\site-packages\\qa_master\\paired_evaluation.py",
+  "cases": [
+    {
+      "command": "validate",
+      "exit": 0,
+      "summary": "VALIDATED_NOT_EXECUTED"
+    },
+    {
+      "command": "materialize",
+      "exit": 0,
+      "summary": "PREVIEW_NOT_RUN"
+    },
+    {
+      "command": "inspect",
+      "exit": 0,
+      "summary": "INTACT"
+    },
+    {
+      "command": "validate-rejection",
+      "exit": 2,
+      "summary": "PROHIBITED_FIELD"
+    }
+  ],
+  "model_calls": 0,
+  "outcome": "PASS"
+}

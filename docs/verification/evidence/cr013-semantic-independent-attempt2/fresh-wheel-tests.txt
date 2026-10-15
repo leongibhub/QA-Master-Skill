@@ -1,0 +1,32 @@
+test_001_public_categories_four_rows (installed_semantic_independent.SemanticIndependent.test_001_public_categories_four_rows) ... ok
+test_002_cross_dimension_independence (installed_semantic_independent.SemanticIndependent.test_002_cross_dimension_independence) ... ok
+test_003_channels_are_independent (installed_semantic_independent.SemanticIndependent.test_003_channels_are_independent) ... ok
+test_004_fatal_recoverable_and_extensions (installed_semantic_independent.SemanticIndependent.test_004_fatal_recoverable_and_extensions) ... ok
+test_005_duplicate_unknown_and_missing_observations (installed_semantic_independent.SemanticIndependent.test_005_duplicate_unknown_and_missing_observations) ... ok
+test_006_native_type_mismatch (installed_semantic_independent.SemanticIndependent.test_006_native_type_mismatch) ... ok
+test_007_case_missing_content_and_optional (installed_semantic_independent.SemanticIndependent.test_007_case_missing_content_and_optional) ... ok
+test_008_missing_threshold_gap_honesty (installed_semantic_independent.SemanticIndependent.test_008_missing_threshold_gap_honesty) ... ok
+test_009_oneof_duplicate_oracles_and_unknown_projection (installed_semantic_independent.SemanticIndependent.test_009_oneof_duplicate_oracles_and_unknown_projection) ... ok
+test_010_input_drift_atomic (installed_semantic_independent.SemanticIndependent.test_010_input_drift_atomic) ... ok
+test_011_inspect_mixed_precedence_and_readonly (installed_semantic_independent.SemanticIndependent.test_011_inspect_mixed_precedence_and_readonly) ... ok
+test_012_single_reservation_winner (installed_semantic_independent.SemanticIndependent.test_012_single_reservation_winner) ... ok
+test_013_no_network_process_state (installed_semantic_independent.SemanticIndependent.test_013_no_network_process_state) ... ok
+test_014_known_legacy_and_absent (installed_semantic_independent.SemanticIndependent.test_014_known_legacy_and_absent) ... ok
+test_015_oneof_success_and_nonapplicable (installed_semantic_independent.SemanticIndependent.test_015_oneof_success_and_nonapplicable) ... ok
+test_016_conflict_and_unavailable_source (installed_semantic_independent.SemanticIndependent.test_016_conflict_and_unavailable_source) ... ok
+test_017_typed_and_document_limits (installed_semantic_independent.SemanticIndependent.test_017_typed_and_document_limits) ... ok
+test_018_joint_profile_manifest_forgery (installed_semantic_independent.SemanticIndependent.test_018_joint_profile_manifest_forgery) ... ok
+test_019_publish_failure_preserves_unrelated (installed_semantic_independent.SemanticIndependent.test_019_publish_failure_preserves_unrelated) ... ok
+test_020_json_depth_nodes_and_case_limit (installed_semantic_independent.SemanticIndependent.test_020_json_depth_nodes_and_case_limit) ... ok
+test_021_string_set_fact_256_257 (installed_semantic_independent.SemanticIndependent.test_021_string_set_fact_256_257) ... ok
+test_022_string_set_observation_257_invalid (installed_semantic_independent.SemanticIndependent.test_022_string_set_observation_257_invalid) ... ok
+test_023_malformed_manifest_is_incomplete (installed_semantic_independent.SemanticIndependent.test_023_malformed_manifest_is_incomplete) ... ok
+test_024_fanout_validation_once_per_mapped_artifact (installed_semantic_independent.SemanticIndependent.test_024_fanout_validation_once_per_mapped_artifact) ... ok
+test_025_manifest_types_enums_and_precedence (installed_semantic_independent.SemanticIndependent.test_025_manifest_types_enums_and_precedence) ... ok
+test_026_installed_deriver_mismatch (installed_semantic_independent.SemanticIndependent.test_026_installed_deriver_mismatch) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 25.998s
+
+OK
+PACKAGE_SOURCE=D:\QA-Master-PR2\.qa-master\cr013-semantic-independent-attempt2\venv\Lib\site-packages\qa_master\__init__.py

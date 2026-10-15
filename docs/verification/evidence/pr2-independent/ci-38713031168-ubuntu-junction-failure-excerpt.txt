@@ -1,0 +1,12 @@
+Source: GitHub Actions run 38713031168, job 116348883216,
+test (ubuntu-latest, 3.10), head 74d6a25e6d36ffeac16722fad849a396e9dd4fbb.
+
+ERROR: test_windows_junction_target_is_refused_without_mutating_destination
+(test_codex_skill_independent.IndependentCodexSkillInstallTests)
+Traceback (most recent call last):
+  File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_codex_skill_independent.py", line 246, in test_windows_junction_target_is_refused_without_mutating_destination
+    created = subprocess.run(
+FileNotFoundError: [Errno 2] No such file or directory: 'cmd'
+
+Ran 562 tests in 12.807s
+FAILED (errors=1)

@@ -1,0 +1,81 @@
+{
+  "root": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0",
+  "module_sha256": "d567d26110eaca5637f54c0dc48994e881bfedce69eafd0c8aa809c41331018a",
+  "resources": [
+    {
+      "path": "contract.json",
+      "sha256": "ec9d623230989ab75d0526a64531680280bfb38dde4e4b9f1a1c502e0433804a",
+      "bytes": 1918
+    },
+    {
+      "path": "legacy-paired-projection.json",
+      "sha256": "de207a596e3e39203a0b6fecd2955a066c68e0096897d3695caa74fbbbe1f8f3",
+      "bytes": 222
+    },
+    {
+      "path": "normalizer.json",
+      "sha256": "a3c9d024e130425c3bc9594e775021e06869485c1f0681655971b97527b2c2d9",
+      "bytes": 2733
+    },
+    {
+      "path": "projection.json",
+      "sha256": "25aa3f1b01dbbe36d75c3e73f73d9256ded70a1d1780804d4f8c93c217ca4c55",
+      "bytes": 1214
+    },
+    {
+      "path": "result-schema.json",
+      "sha256": "fd356165b1a97c7cd6f7e66aa7e326d3a427d890b5f57e4e7281e703af36247d",
+      "bytes": 1395
+    },
+    {
+      "path": "secret-scanner.json",
+      "sha256": "fb26ef33f478e3c0340e02f70c0039cebb1b409b58991a2f68225d586fbd2176",
+      "bytes": 734
+    }
+  ],
+  "runs": [
+    {
+      "argv": [
+        "D:\\QA-Master-PR2\\.qa-master\\cr013-semantic-independent-attempt3\\venv\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import sys;sys.path.insert(0,sys.argv.pop(1));from qa_master.semantic_quality import main;raise SystemExit(main())",
+        "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\project\\.agents\\skills\\qa-master\\scripts",
+        "evaluate",
+        "--bundle",
+        "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\inputs\\bundle.json",
+        "--output-root",
+        "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\output1"
+      ],
+      "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\unrelated",
+      "exit_code": 0,
+      "stdout": "{\"evaluation_id\": \"SQ-INDEPENDENT\", \"profile_path\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\sq-independent-final-w3yq45l0\\\\output1\\\\SQ-74bef1f3f3fdd87c079d238881d53c3c\\\\profile.json\", \"result_id\": \"SQ-74bef1f3f3fdd87c079d238881d53c3c\", \"row_count\": 28, \"status\": \"EVALUATED_DRAFT_ONLY\"}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "D:\\QA-Master-PR2\\.qa-master\\cr013-semantic-independent-attempt3\\venv\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import sys;sys.path.insert(0,sys.argv.pop(1));from qa_master.semantic_quality import main;raise SystemExit(main())",
+        "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\project\\.agents\\skills\\qa-master\\scripts",
+        "evaluate",
+        "--bundle",
+        "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\inputs\\bundle.json",
+        "--output-root",
+        "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\output2"
+      ],
+      "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\sq-independent-final-w3yq45l0\\unrelated",
+      "exit_code": 0,
+      "stdout": "{\"evaluation_id\": \"SQ-INDEPENDENT\", \"profile_path\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\sq-independent-final-w3yq45l0\\\\output2\\\\SQ-74bef1f3f3fdd87c079d238881d53c3c\\\\profile.json\", \"result_id\": \"SQ-74bef1f3f3fdd87c079d238881d53c3c\", \"row_count\": 28, \"status\": \"EVALUATED_DRAFT_ONLY\"}\n",
+      "stderr": ""
+    }
+  ],
+  "identical_retained_files": 13,
+  "result_id": "SQ-74bef1f3f3fdd87c079d238881d53c3c",
+  "rejection": {
+    "status": "REJECTED",
+    "error": "PROHIBITED_INPUT_PATTERN"
+  },
+  "scope": "Fresh independent Python processes, installed local helper only; no model/product execution"
+}

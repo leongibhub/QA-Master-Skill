@@ -1,0 +1,86 @@
+{
+  "work": "TASK069",
+  "attempt": 2,
+  "version": 3,
+  "assessment": "SOURCE_TRACE_ONLY_NO_QUALITY_VERDICT",
+  "records": [
+    {
+      "path": "benchmarks/public-development/PD-API-COLLAB-001/requirements.md",
+      "sha256": "c2edcb918f408f88091c1ca1217d269b6d8fca4f0a9d9abf6b46f63f43883d47",
+      "bytes": 2618,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-API-COLLAB-001/openapi.yaml",
+      "sha256": "6d83f43c638e4f8481f3ee405f18b21b1bcc23858d2b6d46bcecaa498d7ea007",
+      "bytes": 6091,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-API-COLLAB-001/participant-task.md",
+      "sha256": "141bf089f672d6a20c6e9e4d8b54e896f0329cdefc3fa1e188a89f9a98e3baed",
+      "bytes": 1494,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-API-COLLAB-001/audit-ledger.md",
+      "sha256": "cb32c5aa7b565fd258e673aa6f2bbf092665f2d20cde8e5413ea94d352bea41d",
+      "bytes": 4612,
+      "scope": "released audit aid after output freeze"
+    },
+    {
+      "path": "benchmarks/public-development/PD-API-COLLAB-001/expected-review-checklist.md",
+      "sha256": "0647d3a8c24b323e39d47bfb9de8ea4b2ff1789d3c0db24266e089941d906fe5",
+      "bytes": 2880,
+      "scope": "released audit aid after output freeze"
+    },
+    {
+      "path": "docs/verification/evidence/public-api-task-001/attempt1/01-review-and-strategy.md",
+      "sha256": "4ca5d1b47e1b4030eec7444f1b435efe727417111c1814091b9eb0179bc69dcd",
+      "bytes": 11938,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/public-api-task-001/attempt1/02-draft-cases.md",
+      "sha256": "2874ac38eda7dbf1e8d404d309596104c947593dce3cf1618c3a760e5ba83fff",
+      "bytes": 21279,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/public-api-task-001/attempt1/03-review-and-handoff.md",
+      "sha256": "b6b98b815e9d3e7b05b6bc00d238002b5bc571fcf7d9c799fbceda44af6a7ffa",
+      "bytes": 5167,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/public-api-task-001/attempt1/read-audit.md",
+      "sha256": "9344268e31af5c7da9670322065c9a15a3db962d26c440826e6fc0d848859f25",
+      "bytes": 2635,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/public-api-task-001/attempt1/handoff.json",
+      "sha256": "78599ce0fc9ee3a2bb00f642b6b07c96c1c20c49b85226dc4ff578b2f6f842a2",
+      "bytes": 5751,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/public-api-task-001/attempt1/manifest.json",
+      "sha256": "503717dcbd6a5c123f461f479870a4f83a9b32366e7e4853f8dc2ee91a781021",
+      "bytes": 1699,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/public-api-task069-reconciliation.md",
+      "sha256": "f300b8a3897c6c0baaaf81096090c6e5f19ada1be59335e5b896b5e9f0809393",
+      "bytes": 5545,
+      "scope": "prior integrity evidence unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/public-api-task-001/reconciliation-task069/manifest.json",
+      "sha256": "0b5992ac94abf6642757ce06be616b3f9f333dca7e4861b7a9222dbb85806d62",
+      "bytes": 1413,
+      "scope": "prior integrity evidence unchanged"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "helper": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master\\scripts\\qa.py",
+  "wheel_sha256": "0CED0B3412375FBCF6765611064BDE7AF34BA637577A0EC4BF3240C7C7D8CCAF",
+  "isolated_python": "Python 3.13.5",
+  "build_python": "Python 3.13.5",
+  "work_directory": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130",
+  "wheel": "qa_master_skill-0.1.0-py3-none-any.whl",
+  "subject_sha256": "E008FBD1263BD32CBE9E7C62C688F3D4CDAD3B15D2CAEB4BC21DDC24C1B3F93F"
+}

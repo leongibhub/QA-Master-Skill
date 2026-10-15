@@ -1,0 +1,97 @@
+[
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\attempt1-test-snapshot.py",
+    "sha256": "3594BA079D186D90BA3778B3CB0E40BF697419491793C4D0A6A3821DAB372CD1",
+    "bytes": 20403
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\fanout-harness-import-error.txt",
+    "sha256": "3D35647594F5BAD6BC0674D780560220B5A1AEEE8F3CFE3C3E8063AC42CA925E",
+    "bytes": 894
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\fanout-observation.json",
+    "sha256": "B0A60ED0E70E3E5A3A2160DD9AC72DBD010EAFDF33F49CF1ABC6332E5BFB2B32",
+    "bytes": 320
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\fanout-observation.py",
+    "sha256": "6C28FF4FC9CB89C3329C1CA32582BEA310249885772E7DEA1D25006EDD9941B2",
+    "bytes": 1027
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\focused-corrected.txt",
+    "sha256": "F106C6EF8AF7E252FB1B30BED7AD242F93C74DE1AD0386A146A086A7A441B5F6",
+    "bytes": 2821
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\focused-expanded.txt",
+    "sha256": "ADC17B71C9B81982CDAF55A467B355DB632FD5821933A5C685EF7C67260142EB",
+    "bytes": 6239
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\focused-final.txt",
+    "sha256": "0F403C2EAC9E65FEE02EC77D56EF5A8A4D7CA4CE5A0776998E744E553FE08E59",
+    "bytes": 2967
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\focused-first.txt",
+    "sha256": "720C083DCDE4CA9DD71C235CC986700500E7C4CE2ED5B0BA6E110BDAEE55889F",
+    "bytes": 2096
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\legacy-after.json",
+    "sha256": "CED0D889DC783AE7D252322E28937D4658CA23790C027A0499479A9389D59558",
+    "bytes": 145
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\legacy-before.json",
+    "sha256": "DAD7A059CA432DCCD1A3335B07EEBD4C1EFC2803225FC7A9FEAE9FCE697FF789",
+    "bytes": 3527
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\reviewer-findings-reproduction.txt",
+    "sha256": "AC0300FDAEF7ACA497800738AF533C91CB4D7BCAF51CBB0848A94E67EF933248",
+    "bytes": 3754
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\wheel-build.txt",
+    "sha256": "E52DB79F3BD62F78C2BD6719FAD08133D17AFED8FDCCB5BB0B1D43DD1DFA12FD",
+    "bytes": 807
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\wheel-install.txt",
+    "sha256": "AB3E1641FE63B5030B2ACC70CC2F4C51842AE6565967558DF584DB42305FDD9C",
+    "bytes": 207
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\public-fixture\\bundle.json",
+    "sha256": "D527828A3F6D6A5163F5527D142C07790BFEA25E9A06B7EFFB2C70C3F4B7E88A",
+    "bytes": 5290
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\public-fixture\\facts.txt",
+    "sha256": "878D7F2E2F6EDB56628B022E9C2318AEE9179D5C6B091C222D82B6940774908E",
+    "bytes": 57
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-semantic-independent\\public-fixture\\response.json",
+    "sha256": "27C06FF598F9D9881DDBFF1887F7A2AC3CBC1AAB911224F50914BCFDACF388EA",
+    "bytes": 7243
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\semantic-quality-independent-attempt1.md",
+    "sha256": "99CD6131A8E137819F405801240A6DEF18B1B88CD6E54271E150D0B1581835C4",
+    "bytes": 4567
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\tests\\test_semantic_quality_independent.py",
+    "sha256": "3594BA079D186D90BA3778B3CB0E40BF697419491793C4D0A6A3821DAB372CD1",
+    "bytes": 20403
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\cr013-semantic-independent\\wheels\\qa_master_skill-0.1.0-py3-none-any.whl",
+    "sha256": "D90606CB072949D4F8083D6C4C71D815AEB4D5A6D04C1DE17146AF603DB74DDB",
+    "bytes": 155014
+  }
+]

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "scenario_id": "PE-DTT-001",
+  "response_status": "COMPLETED",
+  "summary": "Draft decision-table design identifies three legal combinations: two with defined fees and one with conflicting outcomes. STANDARD/INTERNATIONAL is excluded. No tests were executed or Human decisions made.",
+  "cases": [],
+  "gaps": [
+    {
+      "id": "G-DTT-001",
+      "description": "MEMBER/DOMESTIC matches both a waived-fee rule and an 8 USD rule; precedence is unspecified.",
+      "impact": "The expected fee remains unresolved; neither matching rule can be selected as authoritative.",
+      "needed_evidence": "The business-rule owner must clarify precedence or correct the conflicting rules before an executable oracle can be finalized.",
+      "source_refs": ["F-DTT-003", "F-DTT-006"]
+    }
+  ],
+  "observations": [
+    {
+      "check_id": "Q-DTT-001",
+      "value_type": "JSON",
+      "value": {
+        "input_audit": {
+          "known": ["F-DTT-001", "F-DTT-002", "F-DTT-003", "F-DTT-004", "F-DTT-005", "F-DTT-006"],
+          "missing": ["Precedence for the overlapping MEMBER/DOMESTIC rules."],
+          "conflicting": ["F-DTT-003 and F-DTT-006 assign different outcomes to MEMBER/DOMESTIC."],
+          "stale": [],
+          "out_of_scope": ["STANDARD/INTERNATIONAL", "Runtime execution", "Release approval"],
+          "assumptions": []
+        },
+        "legal_combinations": [
+          {
+            "id": "DTT-01",
+            "plan": "MEMBER",
+            "destination": "DOMESTIC",
+            "classification": "CONFLICTING_UNRESOLVED",
+            "matched_rules": [
+              {"source_ref": "F-DTT-003", "outcome": "WAIVED"},
+              {"source_ref": "F-DTT-006", "fee": 8, "currency": "USD"}
+            ],
+            "resolved_outcome": null,
+            "evidence_state": "STATIC_ONLY",
+            "impact": "Conflicting delivery-fee oracle.",
+            "priority": "UNASSESSED",
+            "owner_role": "Business-rule owner",
+            "close_condition": "An authoritative rule resolves the overlap.",
+            "validation_intent": "Compare the clarified rule against both matching sources before selecting an expected fee."
+          },
+          {
+            "id": "DTT-02",
+            "plan": "MEMBER",
+            "destination": "INTERNATIONAL",
+            "classification": "DEFINED",
+            "matched_rules": ["F-DTT-005"],
+            "outcome": {"fee": 15, "currency": "USD"},
+            "evidence_state": "STATIC_ONLY",
+            "impact": "Incorrect fee assignment if the stated rule is not applied.",
+            "priority": "UNASSESSED",
+            "owner_role": "QA designer",
+            "close_condition": "The draft candidate retains the 15 USD oracle and its source.",
+            "validation_intent": "In later authorized validation, compare the assigned fee with 15 USD."
+          },
+          {
+            "id": "DTT-03",
+            "plan": "STANDARD",
+            "destination": "DOMESTIC",
+            "classification": "DEFINED",
+            "matched_rules": ["F-DTT-004"],
+            "outcome": {"fee": 5, "currency": "USD"},
+            "evidence_state": "STATIC_ONLY",
+            "impact": "Incorrect fee assignment if the stated rule is not applied.",
+            "priority": "UNASSESSED",
+            "owner_role": "QA designer",
+            "close_condition": "The draft candidate retains the 5 USD oracle and its source.",
+            "validation_intent": "In later authorized validation, compare the assigned fee with 5 USD."
+          }
+        ],
+        "excluded_combinations": [
+          {
+            "plan": "STANDARD",
+            "destination": "INTERNATIONAL",
+            "classification": "UNSUPPORTED_EXCLUDED",
+            "source_refs": ["F-DTT-002"]
+          }
+        ],
+        "unmatched_legal_combinations": [],
+        "selection_rationale": "Enumerate every legal combination in the supplied finite domains without compression; preserve the conflicting overlap and the explicit exclusion.",
+        "human_decisions": []
+      },
+      "evidence_refs": [
+        "F-DTT-001",
+        "F-DTT-002",
+        "F-DTT-003",
+        "F-DTT-004",
+        "F-DTT-005",
+        "F-DTT-006",
+        "skills/en/testing-types/decision-table-testing/prompts/decision-table-testing.md"
+      ]
+    },
+    {
+      "check_id": "Q-DTT-002",
+      "value_type": "STRING_SET",
+      "value": ["F-DTT-003", "F-DTT-006"],
+      "evidence_refs": ["F-DTT-003", "F-DTT-006"]
+    }
+  ],
+  "metadata": {
+    "artifact_state": "DRAFT",
+    "execution_state": "NOT_EXECUTED"
+  },
+  "failure_reason": null
+}

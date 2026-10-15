@@ -1,0 +1,212 @@
+[
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-artifact-check.txt",
+    "sha256": "7AA3888315C0115C8E264D3FEE3BD73A69387F9F900DCB6103A8D0E548FDBAAB",
+    "bytes": 156
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\check-actual-artifacts.py",
+    "sha256": "2F354D928832B8CF4594C1CECB105BEA3B339787F8F22AF9A780A8EE1597CE81",
+    "bytes": 2058
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\focused-first.txt",
+    "sha256": "224569E775A18DEA3DFC631D88FD36CEE90F25513C28C0F53832210C7CEB32D3",
+    "bytes": 13739
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\focused-retest.txt",
+    "sha256": "04AE872DACB0A92558305B60D9C2E56CB5ADC3428771607F5331B93BE92EA56D",
+    "bytes": 1537
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\fresh-wheel-tests.txt",
+    "sha256": "BD9005DE7C8DE7EB202A62AF75BD3F91FE29B8906B6F384A0440090ED26E8F0A",
+    "bytes": 1549
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\harness-correction.md",
+    "sha256": "294B197C177E2A2178C76B087CC7FB192CA73EBECC23FE2B34C329B3DD87E9DF",
+    "bytes": 507
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\instruction-boundary.md",
+    "sha256": "0D0CBE4A68C9A1936E2F1F2E4E5BB92D59DC70A7212089AA21E7C3F940C42D1A",
+    "bytes": 1203
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\product-delta.txt",
+    "sha256": "42BFCA7910FF135971066B18EC97DFBCDBB11BF8C7A0F8CAB60540DC30A975F0",
+    "bytes": 5072
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\run-installed-tests.py",
+    "sha256": "6C0ED07DD0661B5D8078AB3B7F68D83F2A376E4252AECF29B2E7C5EEAC8C43BF",
+    "bytes": 509
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\skill-install.txt",
+    "sha256": "C393BA6B53218F70C115149C6AD4024A9FB5413E4C44CF1A5285FB2D36B2386C",
+    "bytes": 261
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\source-facts.md",
+    "sha256": "A52B944D6A6D406C40090AED4C4E2680263D8A9BA96955571421A72631284B7C",
+    "bytes": 2154
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\task-review-ledger.md",
+    "sha256": "3865D38B9C605CD8C0DF3ABB83B6D86B01E24D3E7229608A4C48DEF666ABF0C6",
+    "bytes": 2148
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\wheel-build.txt",
+    "sha256": "62C7C19DCCF07C27A4F242F98928726A7527B53FFE704334DBF3C781CB17D7E8",
+    "bytes": 807
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\wheel-install.txt",
+    "sha256": "CAF0069BAB94C95538968F09D936060336EF8F5F22089DC26DBEB0B9E1DB66F7",
+    "bytes": 207
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\artifact-manifest.json",
+    "sha256": "D5B72CC56EB50EABC725895A9743256FBC57AAD70E9A1CAC380D9D7A3E14241D",
+    "bytes": 3602
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\author-design.py",
+    "sha256": "CAA2E15228B869D7340E8AFBAE3205246C0AF023DDA7C2092E8F7280190BC00E",
+    "bytes": 4972
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\command-evidence.json",
+    "sha256": "6FFB3EE98A1230DEF65B120BADF0C6D1D68C2BA6DFC127AC58F37D7F44F7FBD1",
+    "bytes": 944
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\complete-drafts.py",
+    "sha256": "011BDE49DF7541B89E092E874479B409054FCB222CA4A81A4FEEDCBAF5A3015E",
+    "bytes": 11960
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\final-cases.json",
+    "sha256": "9DC0E6C59CA275F09C74D229BA9AC9DCEE4067703A29EC0D2D5F318054E74BCB",
+    "bytes": 19781
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\final-cases.md",
+    "sha256": "056CDEC3B2C4375C1B076C4549D552A21D25FB5C8267B47F63F02A1BE6DCEB73",
+    "bytes": 2854
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\handoff.json",
+    "sha256": "9FC2E22C655689A4CF9F22B7A315E5CDB7D00AF6643CFFD098A69D9A7EB612F4",
+    "bytes": 5577
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\input-original.json",
+    "sha256": "323862779382AA11B0943BA00FBD0E93FAADB96DDE96A6E3563796784D959A15",
+    "bytes": 9656
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\read-documents.json",
+    "sha256": "74F6F15F6DFFAFA2FCD9D835D614F12F0D6E79AE4A4E3185A9EF492910B288E3",
+    "bytes": 3250
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\report-original.json",
+    "sha256": "449F33AB98AA894B2E8DF0DE68E4D800E2217AE0DB1F13509F5D2AB3F5211D32",
+    "bytes": 46985
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\review.json",
+    "sha256": "B3D40843C806BD2F13D5B25A226D02B5CEB4B63F4A7FAB1B334DAFADE53C41FE",
+    "bytes": 2701
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\source-facts-preserved.md",
+    "sha256": "A52B944D6A6D406C40090AED4C4E2680263D8A9BA96955571421A72631284B7C",
+    "bytes": 2154
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\stderr.txt",
+    "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "bytes": 0
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\stdout.txt",
+    "sha256": "B8F7D0E171C0BC70F14628536B0268C842D695C7B4812BD14B3EF2FD8B58775B",
+    "bytes": 431
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent-attempt3\\actual-task\\typed-gaps.json",
+    "sha256": "2D3CC9D5CB7C99858340B5B6877326DE569308C17F6E29D8AAE818F3E53BC012",
+    "bytes": 5962
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\tests\\test_installed_method_independent.py",
+    "sha256": "7E585FE41DBDC58940D3781E5175FB82639D8341A030A22D2E4312F0203BC57B",
+    "bytes": 13269
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\installed-method-independent-attempt3.md",
+    "sha256": "8B1EFB654B81BAB32D5FE98C619FFA1065E5C179938A79288C5A91FB81A386BB",
+    "bytes": 5544
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\cr013-independent-attempt3\\wheels\\qa_master_skill-0.1.0-py3-none-any.whl",
+    "sha256": "C86D735E283B570747F19F5142F67C3A43283F4F00277D07A7166D70DCCD22FF",
+    "bytes": 134373
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\SKILL.md",
+    "sha256": "626E0506A5B5E4992057596FC57EC69676C1A86B0A99943504A8DDBD7E4DDD6F",
+    "bytes": 5775
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\references\\work-protocol.md",
+    "sha256": "BA232063489DB733EEEA68C46BD4B812A33C982BA36E7440149B1E7DECA549EC",
+    "bytes": 5431
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\references\\domains.md",
+    "sha256": "5B4FF7B66ED7D7B7503EA11D8E30699B09B20D8EE6C8704238FA4260ABE9C9C1",
+    "bytes": 3320
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\references\\design-methods.md",
+    "sha256": "128DF839DA4B48DF2B40DE1B943EE0E1C1B76573FDAAAEF2717E5E8087F4265F",
+    "bytes": 11361
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md",
+    "sha256": "31F7FB509154D9D9756CFE43ED1C027A6470B15C6CAB6BDB526B215FC3BF3C76",
+    "bytes": 2672
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md",
+    "sha256": "28AE23AB80D819157F0630AA6E4579DD9D7FA21D54D7B8F40B6B583C4471207E",
+    "bytes": 2795
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\structural-integration.md",
+    "sha256": "3E393E1775242E807A3244DBAA2F56553C5C6A88564E6E2228EC12DF4BC97615",
+    "bytes": 2773
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\nonfunctional-compatibility.md",
+    "sha256": "352AB77DBCBF8029F33FD316030226614E92042A35CBC2F8217A8A250E69BEF2",
+    "bytes": 2850
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\security-recovery.md",
+    "sha256": "DCC0FCFFA0F2D16B3952F91296DAC0D71311C3DE173DCCFC9956259532CFBB59",
+    "bytes": 2720
+  },
+  {
+    "path": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\regression-evidence.md",
+    "sha256": "C11547B88CCFB79551229390B8147D4C395E7F23548E04F40F5C28942DDB6619",
+    "bytes": 2737
+  }
+]

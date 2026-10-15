@@ -1,0 +1,608 @@
+[
+  {
+    "id": "TC-DRAFT-001",
+    "helper_candidate_id": "TC-MD-04B44BACB9EB9D2B6FB5",
+    "requirement_ids": [
+      "REQ-B"
+    ],
+    "source_ids": [
+      "F-01"
+    ],
+    "title": "Batch size 1",
+    "type": "boundary",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent batch-size validation scenario; fixture mechanism unknown.",
+    "input": {
+      "value": "1",
+      "class": "LOWER_INVALID",
+      "originating_bound_positions": [
+        "lower"
+      ]
+    },
+    "actions": [
+      "Supply strict integer batch size 1 through the future confirmed interface.",
+      "Request policy evaluation and capture the acceptance classification."
+    ],
+    "observable": "Batch-size acceptance classification",
+    "expected": "Invalid under size policy; exact rejection signal unspecified.",
+    "oracle": "source-facts.md F-01",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE",
+      "G-ERROR"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-002",
+    "helper_candidate_id": "TC-MD-2E6193A290A0FCE9FFD7",
+    "requirement_ids": [
+      "REQ-D"
+    ],
+    "source_ids": [
+      "F-02"
+    ],
+    "title": "Rebate member=True, settled=True",
+    "type": "decision_table",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent rebate evaluation with no excluded combinations.",
+    "input": {
+      "assignment": {
+        "member": true,
+        "settled": true
+      },
+      "outcome_id": "REBATE"
+    },
+    "actions": [
+      "Set member=true, settled=true.",
+      "Request rebate decision and capture whether rebate is allowed."
+    ],
+    "observable": "Rebate allowed/no-rebate decision",
+    "expected": "Rebate allowed.",
+    "oracle": "source-facts.md F-02",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-003",
+    "helper_candidate_id": "TC-MD-470AF2F5DC79A8AFD11E",
+    "requirement_ids": [
+      "REQ-D"
+    ],
+    "source_ids": [
+      "F-02"
+    ],
+    "title": "Rebate member=True, settled=False",
+    "type": "decision_table",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent rebate evaluation with no excluded combinations.",
+    "input": {
+      "assignment": {
+        "member": true,
+        "settled": false
+      },
+      "outcome_id": "NO_REBATE"
+    },
+    "actions": [
+      "Set member=true, settled=false.",
+      "Request rebate decision and capture whether rebate is allowed."
+    ],
+    "observable": "Rebate allowed/no-rebate decision",
+    "expected": "No rebate.",
+    "oracle": "source-facts.md F-02",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-004",
+    "helper_candidate_id": "TC-MD-6771DCB506C2535C2986",
+    "requirement_ids": [
+      "REQ-B"
+    ],
+    "source_ids": [
+      "F-01"
+    ],
+    "title": "Batch size 5",
+    "type": "boundary",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent batch-size validation scenario; fixture mechanism unknown.",
+    "input": {
+      "value": "5",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "upper"
+      ]
+    },
+    "actions": [
+      "Supply strict integer batch size 5 through the future confirmed interface.",
+      "Request policy evaluation and capture the acceptance classification."
+    ],
+    "observable": "Batch-size acceptance classification",
+    "expected": "Accepted by size policy.",
+    "oracle": "source-facts.md F-01",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-005",
+    "helper_candidate_id": "TC-MD-698787358E08672685AB",
+    "requirement_ids": [
+      "REQ-B"
+    ],
+    "source_ids": [
+      "F-01"
+    ],
+    "title": "Batch size 7",
+    "type": "boundary",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent batch-size validation scenario; fixture mechanism unknown.",
+    "input": {
+      "value": "7",
+      "class": "UPPER_INVALID",
+      "originating_bound_positions": [
+        "upper"
+      ]
+    },
+    "actions": [
+      "Supply strict integer batch size 7 through the future confirmed interface.",
+      "Request policy evaluation and capture the acceptance classification."
+    ],
+    "observable": "Batch-size acceptance classification",
+    "expected": "Invalid under size policy; exact rejection signal unspecified.",
+    "oracle": "source-facts.md F-01",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE",
+      "G-ERROR"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-006",
+    "helper_candidate_id": "TC-MD-70B1B5D2FB5E3E118F1C",
+    "requirement_ids": [
+      "REQ-B"
+    ],
+    "source_ids": [
+      "F-01"
+    ],
+    "title": "Batch size 6",
+    "type": "boundary",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent batch-size validation scenario; fixture mechanism unknown.",
+    "input": {
+      "value": "6",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "upper"
+      ]
+    },
+    "actions": [
+      "Supply strict integer batch size 6 through the future confirmed interface.",
+      "Request policy evaluation and capture the acceptance classification."
+    ],
+    "observable": "Batch-size acceptance classification",
+    "expected": "Accepted by size policy.",
+    "oracle": "source-facts.md F-01",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-007",
+    "helper_candidate_id": "TC-MD-88135DDF9FDF0F3C9938",
+    "requirement_ids": [
+      "REQ-S"
+    ],
+    "source_ids": [
+      "F-03",
+      "F-05"
+    ],
+    "title": "REVIEW + publish",
+    "type": "state_transition",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent document in REVIEW; fixture construction unknown. No guard declared.",
+    "input": {
+      "from_state": "REVIEW",
+      "trigger": "publish",
+      "guard_refs": [],
+      "validity": "valid",
+      "to_state": "PUBLISHED"
+    },
+    "actions": [
+      "Starting from DRAFT, submit and observe REVIEW before the publish under test.",
+      "From REVIEW, issue publish.",
+      "Read document status through future confirmed observable."
+    ],
+    "observable": "Document status",
+    "expected": "Status becomes PUBLISHED.",
+    "oracle": "source-facts.md F-03, F-05",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-008",
+    "helper_candidate_id": "TC-MD-8C675B515478FAECC901",
+    "requirement_ids": [
+      "REQ-D"
+    ],
+    "source_ids": [
+      "F-02"
+    ],
+    "title": "Rebate member=False, settled=False",
+    "type": "decision_table",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent rebate evaluation with no excluded combinations.",
+    "input": {
+      "assignment": {
+        "member": false,
+        "settled": false
+      },
+      "outcome_id": "NO_REBATE"
+    },
+    "actions": [
+      "Set member=false, settled=false.",
+      "Request rebate decision and capture whether rebate is allowed."
+    ],
+    "observable": "Rebate allowed/no-rebate decision",
+    "expected": "No rebate.",
+    "oracle": "source-facts.md F-02",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-009",
+    "helper_candidate_id": "TC-MD-994439C082F326506657",
+    "requirement_ids": [
+      "REQ-S"
+    ],
+    "source_ids": [
+      "F-03",
+      "F-04"
+    ],
+    "title": "DRAFT + submit",
+    "type": "state_transition",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent document in DRAFT; fixture construction unknown. No guard declared.",
+    "input": {
+      "from_state": "DRAFT",
+      "trigger": "submit",
+      "guard_refs": [],
+      "validity": "valid",
+      "to_state": "REVIEW"
+    },
+    "actions": [
+      "From DRAFT, issue submit.",
+      "Read document status through future confirmed observable."
+    ],
+    "observable": "Document status",
+    "expected": "Status becomes REVIEW.",
+    "oracle": "source-facts.md F-03, F-04",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-010",
+    "helper_candidate_id": "TC-MD-A628F4A9FD0280A8840A",
+    "requirement_ids": [
+      "REQ-D"
+    ],
+    "source_ids": [
+      "F-02"
+    ],
+    "title": "Rebate member=False, settled=True",
+    "type": "decision_table",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent rebate evaluation with no excluded combinations.",
+    "input": {
+      "assignment": {
+        "member": false,
+        "settled": true
+      },
+      "outcome_id": "NO_REBATE"
+    },
+    "actions": [
+      "Set member=false, settled=true.",
+      "Request rebate decision and capture whether rebate is allowed."
+    ],
+    "observable": "Rebate allowed/no-rebate decision",
+    "expected": "No rebate.",
+    "oracle": "source-facts.md F-02",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-011",
+    "helper_candidate_id": "TC-MD-ABB52658B9F3ACB58218",
+    "requirement_ids": [
+      "REQ-B"
+    ],
+    "source_ids": [
+      "F-01"
+    ],
+    "title": "Batch size 2",
+    "type": "boundary",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent batch-size validation scenario; fixture mechanism unknown.",
+    "input": {
+      "value": "2",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "lower"
+      ]
+    },
+    "actions": [
+      "Supply strict integer batch size 2 through the future confirmed interface.",
+      "Request policy evaluation and capture the acceptance classification."
+    ],
+    "observable": "Batch-size acceptance classification",
+    "expected": "Accepted by size policy.",
+    "oracle": "source-facts.md F-01",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-012",
+    "helper_candidate_id": "TC-MD-BB0330A46B4CEA05F65A",
+    "requirement_ids": [
+      "REQ-B"
+    ],
+    "source_ids": [
+      "F-01"
+    ],
+    "title": "Batch size 3",
+    "type": "boundary",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent batch-size validation scenario; fixture mechanism unknown.",
+    "input": {
+      "value": "3",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "lower"
+      ]
+    },
+    "actions": [
+      "Supply strict integer batch size 3 through the future confirmed interface.",
+      "Request policy evaluation and capture the acceptance classification."
+    ],
+    "observable": "Batch-size acceptance classification",
+    "expected": "Accepted by size policy.",
+    "oracle": "source-facts.md F-01",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-013",
+    "helper_candidate_id": "TC-MD-DA8D79BFBF3E07A9AC1B",
+    "requirement_ids": [
+      "REQ-S"
+    ],
+    "source_ids": [
+      "F-03",
+      "F-06"
+    ],
+    "title": "DRAFT + publish",
+    "type": "state_transition",
+    "priority": "P1",
+    "priority_reason": "Direct declared policy rule or adjacent boundary regression risk; draft prioritization.",
+    "preconditions": "Independent document in DRAFT; fixture construction unknown. No guard declared.",
+    "input": {
+      "from_state": "DRAFT",
+      "trigger": "publish",
+      "guard_refs": [],
+      "validity": "invalid",
+      "to_state": null
+    },
+    "actions": [
+      "From DRAFT, issue publish.",
+      "Read document status through future confirmed observable."
+    ],
+    "observable": "Document status",
+    "expected": "Transition invalid and status remains DRAFT; no assertion about other persisted data.",
+    "oracle": "source-facts.md F-03, F-06",
+    "cleanup": "PENDING: cleanup obligations and allowed reset mechanism not supplied (F-07); do not assume no cleanup.",
+    "automation_candidate": "Conditional on target, fixture and observation contract.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE",
+      "G-ERROR",
+      "G-SIDEEFFECT"
+    ]
+  },
+  {
+    "id": "TC-DRAFT-014",
+    "helper_candidate_id": null,
+    "requirement_ids": [
+      "REQ-S"
+    ],
+    "source_ids": [
+      "F-03"
+    ],
+    "title": "Initial lifecycle state",
+    "type": "functional",
+    "priority": "P1",
+    "priority_reason": "Initial state controls transition preconditions.",
+    "preconditions": "Fresh document lifecycle; creation fixture is unknown.",
+    "input": {
+      "lifecycle": "new"
+    },
+    "actions": [
+      "Initialize a document using a future confirmed fixture.",
+      "Observe its initial status before any lifecycle event."
+    ],
+    "observable": "Initial document status",
+    "expected": "DRAFT.",
+    "oracle": "source-facts.md F-03",
+    "cleanup": "PENDING G-CLEANUP",
+    "automation_candidate": "Conditional on fixture and status locator.",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "readiness": "INCOMPLETE_TARGET_BINDING",
+    "gap_ids": [
+      "G-TARGET",
+      "G-ENV",
+      "G-SETUP",
+      "G-OBS",
+      "G-CLEANUP",
+      "G-AUTH",
+      "G-BASELINE"
+    ]
+  }
+]

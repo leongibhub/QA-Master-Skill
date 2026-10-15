@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "scenario_id": "PE-STT-001",
+  "response_status": "COMPLETED",
+  "summary": "Draft design with two valid and three invalid transition candidates derived from the supplied model. No tests were executed.",
+  "cases": [],
+  "gaps": [
+    {
+      "id": "G-STT-001",
+      "description": "The archive request from DRAFT specifies unchanged state but does not specify persisted-data or other side-effect behavior.",
+      "impact": "Only the preserved DRAFT state has a sourced oracle for this request.",
+      "needed_evidence": "A requirement specifying persisted-data and side-effect expectations for undefined events.",
+      "source_refs": ["F-STT-005"]
+    },
+    {
+      "id": "G-STT-002",
+      "description": "Failure atomicity for submission, submitted_at value semantics, and event behavior from CANCELLED are unspecified.",
+      "impact": "Failure-path, timestamp-value, and additional transition oracles remain unassessed.",
+      "needed_evidence": "Submission failure and timestamp contracts, plus event rules for CANCELLED.",
+      "source_refs": ["F-STT-001", "F-STT-002", "F-STT-003"]
+    }
+  ],
+  "observations": [
+    {
+      "check_id": "Q-STT-001",
+      "value_type": "JSON",
+      "value": {
+        "facts": {
+          "objective": "Select sourced valid and invalid transitions with state and side-effect oracles.",
+          "input_audit": {
+            "known": ["F-STT-001", "F-STT-002", "F-STT-003", "F-STT-004", "F-STT-005", "F-STT-006"],
+            "missing": ["Failure atomicity", "submitted_at value semantics", "Archive persisted-data expectations", "Event rules from CANCELLED", "Model version", "Runtime evidence"],
+            "conflicting": [],
+            "stale": [],
+            "out_of_scope": ["Execution", "External-system changes", "Release approval"],
+            "assumptions": []
+          },
+          "initial_state": "DRAFT",
+          "states": ["DRAFT", "SUBMITTED", "CANCELLED"],
+          "stated_terminal_state": "SUBMITTED"
+        },
+        "evidence_backed_inferences": [
+          {
+            "statement": "SUBMITTED is reachable from initial DRAFT by submit with owner=true; CANCELLED is reachable by cancel.",
+            "source_refs": ["F-STT-001", "F-STT-002", "F-STT-003"]
+          },
+          {
+            "statement": "The owner=true and owner=false submission candidates exercise both stated guard outcomes.",
+            "source_refs": ["F-STT-002", "F-STT-006"]
+          }
+        ],
+        "candidate_recommendations": {
+          "shared_context": {
+            "scope": "Supplied submission and cancellation model; version unspecified.",
+            "evidence_state": "Sourced design only; NOT_EXECUTED.",
+            "priority": "Unassessed; no business priority supplied.",
+            "owner_role": "Proposed: QA designer for validation; requirements owner for missing oracles.",
+            "minimum_evidence": "Referenced model facts support design expectations only.",
+            "close_condition": "Future validation records pre-state, request, post-state and relevant persisted-data observations against each sourced oracle.",
+            "selection": "Retain all five explicitly specified transitions. Do not infer additional event outcomes."
+          },
+          "findings": [
+            {
+              "id": "STT-01",
+              "state": "DRAFT",
+              "event": "submit",
+              "guard": {"owner": true},
+              "validity": "valid",
+              "target_state": "SUBMITTED",
+              "side_effect_expectation": "Persist submitted_at.",
+              "reachability": "Pre-state is initial; target is reachable by this transition.",
+              "impact": "Submission state or timestamp persistence could diverge from the model.",
+              "validation_method": "In future validation, submit as owner from DRAFT and inspect SUBMITTED state and persisted submitted_at; exact timestamp semantics remain unspecified.",
+              "source_refs": ["F-STT-001", "F-STT-002"]
+            },
+            {
+              "id": "STT-02",
+              "state": "DRAFT",
+              "event": "cancel",
+              "guard": "No guard stated.",
+              "validity": "valid",
+              "target_state": "CANCELLED",
+              "side_effect_expectation": "No side effect.",
+              "reachability": "Pre-state is initial; target is reachable by this transition.",
+              "impact": "Cancellation could produce the wrong state or unintended side effects.",
+              "validation_method": "In future validation, cancel from DRAFT and compare state and side-effect observations with the stated oracle.",
+              "source_refs": ["F-STT-001", "F-STT-003"]
+            },
+            {
+              "id": "STT-03",
+              "state": "SUBMITTED",
+              "event": "cancel",
+              "guard": "SUBMITTED is terminal.",
+              "validity": "invalid",
+              "preserved_state": "SUBMITTED",
+              "side_effect_expectation": "Persisted data remains unchanged.",
+              "reachability": "Pre-state is reachable through submit from DRAFT with owner=true.",
+              "impact": "Invalid cancellation could mutate terminal state or persisted data.",
+              "validation_method": "In future validation, establish SUBMITTED, snapshot persisted data, request cancel and compare state and data with the snapshot.",
+              "source_refs": ["F-STT-002", "F-STT-004"]
+            },
+            {
+              "id": "STT-04",
+              "state": "DRAFT",
+              "event": "archive",
+              "guard": "archive is not a defined event.",
+              "validity": "invalid",
+              "preserved_state": "DRAFT",
+              "side_effect_expectation": "Unspecified beyond unchanged state; see G-STT-001.",
+              "reachability": "Pre-state is initial.",
+              "impact": "An undefined request could incorrectly change state; persisted-data behavior lacks an oracle.",
+              "validation_method": "In future validation, request archive from DRAFT and inspect unchanged state. Clarify side-effect requirements before asserting a persisted-data outcome.",
+              "source_refs": ["F-STT-001", "F-STT-005"]
+            },
+            {
+              "id": "STT-05",
+              "state": "DRAFT",
+              "event": "submit",
+              "guard": {"owner": false},
+              "validity": "invalid",
+              "preserved_state": "DRAFT",
+              "side_effect_expectation": "Persisted data remains unchanged.",
+              "reachability": "Pre-state is initial.",
+              "impact": "A false ownership guard could incorrectly permit submission or mutate persisted data.",
+              "validation_method": "In future validation, snapshot DRAFT and persisted data, submit with owner=false and compare state and data with the snapshot.",
+              "source_refs": ["F-STT-001", "F-STT-006"]
+            }
+          ],
+          "residual_risk": "Unspecified transitions and failure behavior remain unassessed; candidate selection provides no runtime coverage evidence."
+        },
+        "human_decisions": {
+          "recorded": [],
+          "pending": ["Requirements owner clarification of G-STT-001 and G-STT-002."]
+        }
+      },
+      "evidence_refs": [
+        "F-STT-001",
+        "F-STT-002",
+        "F-STT-003",
+        "F-STT-004",
+        "F-STT-005",
+        "F-STT-006",
+        "skills/en/testing-types/state-transition-testing/prompts/state-transition-testing.md"
+      ]
+    },
+    {
+      "check_id": "Q-STT-002",
+      "value_type": "STRING_SET",
+      "value": ["F-STT-004", "F-STT-005", "F-STT-006"],
+      "evidence_refs": ["F-STT-004", "F-STT-005", "F-STT-006"]
+    }
+  ],
+  "metadata": {
+    "artifact_state": "DRAFT",
+    "execution_state": "NOT_EXECUTED"
+  },
+  "failure_reason": null
+}

@@ -1,0 +1,7 @@
+{
+  "status": "INSTALLED",
+  "target": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-pr2-wheel-success-e7fe719b0d6f4e5aa092dc1aa8e99995\\target project\\.agents\\skills\\qa-master",
+  "files": 50,
+  "backup": null,
+  "execution": "NOT_EXECUTED"
+}

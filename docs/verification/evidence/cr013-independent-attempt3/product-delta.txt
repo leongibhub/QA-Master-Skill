@@ -1,0 +1,89 @@
+diff --git a/qa_master/skills/codex/examples/design-methods.json b/qa_master/skills/codex/examples/design-methods.json
+index 5e3fe11..b2d45fe 100644
+--- a/qa_master/skills/codex/examples/design-methods.json
++++ b/qa_master/skills/codex/examples/design-methods.json
+@@ -7,7 +7,11 @@
+       "source": "declared/example-requirements.md",
+       "approved": false,
+       "dimension": "functional",
+-      "acceptance": "Use only declared source and oracle references",
++      "dimensions": ["functional"],
++      "acceptance": "Amounts 1 through 9 are accepted; members receive discount, non-members receive normal outcome; submitting a draft order reaches submitted and undeclared state-trigger pairs are denied.",
++      "oracles": {"functional": "Amounts 1 through 9 are accepted; members receive discount, non-members receive normal outcome; submitting a draft order reaches submitted and undeclared state-trigger pairs are denied."},
++      "preconditions": "Draft review environment is identified by the task owner",
++      "test_data": "Declared finite model values",
+       "priority": "P1"
+     }
+   ],
+diff --git a/qa_master/skills/codex/references/design-methods.md b/qa_master/skills/codex/references/design-methods.md
+index 3815975..b26c821 100644
+--- a/qa_master/skills/codex/references/design-methods.md
++++ b/qa_master/skills/codex/references/design-methods.md
+@@ -46,6 +46,67 @@ be unique. Top-level `source_refs`, `oracle_refs`, and `models` may be empty;
+ model `requirement_ids` and `source_refs` are non-empty. Other valid empty
+ arrays are stated by the method that owns them.
+ 
++## Legacy requirement semantics and generic draft cases
++
++The finite-method projection is separate from the existing generic campaign
++draft projection. Each method model has its own `title`, but that title does
++not supply a requirement description. To receive a meaningful generic draft
++case and avoid the requirement-review findings `EMPTY_REQUIREMENT`,
++`NO_PROVENANCE`, and `NO_ACCEPTANCE`, every requirement intended for generic
++case design must provide all four non-empty fields:
++
++```json
++{
++  "id": "REQ-X",
++  "text": "The source-grounded behavior to review",
++  "source": "declared/requirements.md",
++  "acceptance": "The observable source-grounded outcome"
++}
++```
++
++`id` is the trace identifier and must be unique. `text` is the behavior used
++in the generic case title and steps. `source` is declared provenance only; the
++helper does not open or verify it. `acceptance` is the generic expected
++outcome, not a test result. A method candidate, model `title`, model source
++reference, or method oracle does not fill any of these fields automatically.
++
++Optional requirement fields accepted by the generic campaign route are:
++
++- `approved`: only literal `true` removes the generic
++  `REQUIREMENT_NOT_APPROVED` coverage gap. The helper never creates or promotes
++  it; `false` may still produce a draft case when an oracle exists.
++- `priority`: `P0`, `P1`, `P2`, or `P3`; an absent/invalid value becomes draft
++  priority `P2`.
++- `dimension`: one of the 13 dimensions listed above; absent defaults to
++  `functional` for generic design. Installed guide selection uses only non-empty
++  singular `dimension` values, so if none is supplied it reports
++  `GUIDE_DIMENSION_NOT_SUPPLIED`; `dimensions` does not select a guide.
++- `dimensions`: an optional explicit list of applicable dimensions. For each
++  listed dimension, provide `oracles[dimension]`; the singular/primary
++  `dimension` may use `acceptance` as its fallback.
++- `oracles`: an optional object mapping dimensions to non-empty expected
++  outcomes. It does not create an external assertion or execution evidence.
++- `thresholds`: an optional object. A non-functional generic dimension needs
++  `thresholds[dimension]`, otherwise it remains the
++  `THRESHOLD_UNCONFIRMED` gap.
++- `preconditions` and `test_data`: optional draft inputs. If omitted, the
++  generic case records a pending environment/initial-state or test-data
++  placeholder rather than inventing one.
++- `origin`: when set to `code`, requires literal `approved: true` or the
++  requirement review records `CODE_UNCONFIRMED`; it is not a way to infer a
++  business requirement from implementation behavior.
++
++The report keeps `test_cases` (generic draft cases and generic coverage gaps)
++separate from `method_design` (finite candidates/obligations). Generic cases
++carry `approval: DRAFT`; `workflow.execution` is `NOT_AUTHORIZED`.
++`method_design`, `installed_design`, and the installed CLI summary carry
++`DRAFT_UNAPPROVED` and `NOT_EXECUTED`. `case_review.pass` only means the
++generated generic collection has no blocker-level structural finding; with
++zero generic cases it is not a requirement-quality, case-completeness,
++approval, execution, or overall product PASS. Read `requirement_review`,
++`unresolved.design_gaps`, `coverage`, and `method_design.obligations` before
++making a task-level draft deliverable.
++
+ ## Boundary model
+ 
+ The `boundary` `spec` has exactly `numeric_type`, `origin`, `step`, `lower`,

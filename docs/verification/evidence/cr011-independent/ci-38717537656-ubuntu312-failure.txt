@@ -1,0 +1,902 @@
+GitHub run 38717537656; job 116363785233; commit 7913fd64397006d26f9a58b1422c0b393a8f23e9
+Observed job log failure excerpt (timestamps retained):
+======================================================================
+2026-10-15T10:04:11.9013446Z ERROR: test_tc_pe_201_manifest_strict_and_malformed_types_no_spawn (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_201_manifest_strict_and_malformed_types_no_spawn)
+2026-10-15T10:04:11.9015499Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9016123Z Traceback (most recent call last):
+2026-10-15T10:04:11.9025599Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 90, in test_tc_pe_201_manifest_strict_and_malformed_types_no_spawn
+2026-10-15T10:04:11.9027097Z     self.assertEqual(self.valid()['status'],'VALIDATED_NOT_EXECUTED')
+2026-10-15T10:04:11.9027716Z                      ^^^^^^^^^^^^
+2026-10-15T10:04:11.9028693Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 86, in valid
+2026-10-15T10:04:11.9030015Z     def valid(self):return pe.validate_run_manifest(packed(self.f.manifest),manifest_dir=self.f.inputs)
+2026-10-15T10:04:11.9030943Z                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9032117Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 214, in validate_run_manifest
+2026-10-15T10:04:11.9032770Z     prepared = _prepare(payload, manifest_dir)
+2026-10-15T10:04:11.9033086Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9033630Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9034197Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9034534Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9035629Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9036269Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9036834Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9037353Z     exe = no_links(exe)
+2026-10-15T10:04:11.9037572Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9038040Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9038551Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9039039Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9039573Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9039936Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9040217Z 
+2026-10-15T10:04:11.9040329Z ======================================================================
+2026-10-15T10:04:11.9041069Z ERROR: test_tc_pe_203_counts_sizes_and_declared_capacity (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_203_counts_sizes_and_declared_capacity)
+2026-10-15T10:04:11.9041825Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9042161Z Traceback (most recent call last):
+2026-10-15T10:04:11.9042906Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 116, in test_tc_pe_203_counts_sizes_and_declared_capacity
+2026-10-15T10:04:11.9043779Z     p['assets']=[dict(original,path=f'a{i:02}.md') for i in range(64)];p['entry_asset']='a00.md';self.valid()
+2026-10-15T10:04:11.9044306Z                                                                                                  ^^^^^^^^^^^^
+2026-10-15T10:04:11.9045249Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 86, in valid
+2026-10-15T10:04:11.9046226Z     def valid(self):return pe.validate_run_manifest(packed(self.f.manifest),manifest_dir=self.f.inputs)
+2026-10-15T10:04:11.9046769Z                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9047447Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 214, in validate_run_manifest
+2026-10-15T10:04:11.9048185Z     prepared = _prepare(payload, manifest_dir)
+2026-10-15T10:04:11.9048487Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9049018Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9049570Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9049877Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9050448Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9051002Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9051534Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9052040Z     exe = no_links(exe)
+2026-10-15T10:04:11.9052250Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9052715Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9053212Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9053682Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9054207Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9054565Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9054838Z 
+2026-10-15T10:04:11.9055121Z ======================================================================
+2026-10-15T10:04:11.9055937Z ERROR: test_tc_pe_204_materialization_prompt_inventory_and_noexec (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_204_materialization_prompt_inventory_and_noexec)
+2026-10-15T10:04:11.9056758Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9057095Z Traceback (most recent call last):
+2026-10-15T10:04:11.9057840Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 128, in test_tc_pe_204_materialization_prompt_inventory_and_noexec
+2026-10-15T10:04:11.9058794Z     preview=self.f.base/'preview'; result=pe.materialize_preview(self.f.manifest_path,self.f.exclusions,preview)
+2026-10-15T10:04:11.9059367Z                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9060016Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 355, in materialize_preview
+2026-10-15T10:04:11.9060802Z     root, prepared, plans, preflight = _materialize(manifest_path, evaluator_exclusions_path, preview_root, True)
+2026-10-15T10:04:11.9061381Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9061993Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9062614Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9063003Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9063565Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9064114Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9064422Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9065121Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9065670Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9066299Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9066806Z     exe = no_links(exe)
+2026-10-15T10:04:11.9067017Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9067471Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9068075Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9068536Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9069059Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9069416Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9069686Z 
+2026-10-15T10:04:11.9069798Z ======================================================================
+2026-10-15T10:04:11.9070608Z ERROR: test_tc_pe_206_exact_six_capture_order_and_no_pilot_promotion (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_206_exact_six_capture_order_and_no_pilot_promotion)
+2026-10-15T10:04:11.9071441Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9071773Z Traceback (most recent call last):
+2026-10-15T10:04:11.9072517Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 151, in test_tc_pe_206_exact_six_capture_order_and_no_pilot_promotion
+2026-10-15T10:04:11.9073224Z     r=self.f.run(launch)
+2026-10-15T10:04:11.9073439Z       ^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9073925Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9074692Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9075588Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9076289Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9077018Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9077504Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9078070Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9078735Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9079230Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9079828Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9080449Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9080844Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9081430Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9081977Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9082294Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9082860Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9083413Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9083909Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9084411Z     exe = no_links(exe)
+2026-10-15T10:04:11.9084626Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9085353Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9085867Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9086479Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9087017Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9087381Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9087761Z 
+2026-10-15T10:04:11.9087873Z ======================================================================
+2026-10-15T10:04:11.9088736Z ERROR: test_tc_pe_207_failure_priority_and_schedule (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) (name='nonzero')
+2026-10-15T10:04:11.9089510Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9089847Z Traceback (most recent call last):
+2026-10-15T10:04:11.9090531Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 170, in test_tc_pe_207_failure_priority_and_schedule
+2026-10-15T10:04:11.9091487Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(a['terminal_status'],terminal);self.assertEqual(len(calls),count)
+2026-10-15T10:04:11.9092022Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9092536Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9093322Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9093909Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9094576Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9095953Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9096476Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9097064Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9097735Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9098226Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9098814Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9099434Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9099832Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9100376Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9100919Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9101228Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9101803Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9102351Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9102858Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9103360Z     exe = no_links(exe)
+2026-10-15T10:04:11.9103573Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9104026Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9104575Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9105176Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9105704Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9106063Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9106330Z 
+2026-10-15T10:04:11.9106600Z ======================================================================
+2026-10-15T10:04:11.9107386Z ERROR: test_tc_pe_207_failure_priority_and_schedule (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) (name='missingfinal')
+2026-10-15T10:04:11.9108276Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9108607Z Traceback (most recent call last):
+2026-10-15T10:04:11.9109306Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 170, in test_tc_pe_207_failure_priority_and_schedule
+2026-10-15T10:04:11.9110247Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(a['terminal_status'],terminal);self.assertEqual(len(calls),count)
+2026-10-15T10:04:11.9110789Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9111294Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9112074Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9112661Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9113325Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9114049Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9114536Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9115469Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9116161Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9116669Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9117266Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9117884Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9118278Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9118818Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9119369Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9119678Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9120237Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9120785Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9121283Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9121779Z     exe = no_links(exe)
+2026-10-15T10:04:11.9121986Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9122438Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9122938Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9123393Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9123908Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9124264Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9124534Z 
+2026-10-15T10:04:11.9124643Z ======================================================================
+2026-10-15T10:04:11.9125679Z ERROR: test_tc_pe_207_failure_priority_and_schedule (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) (name='badtrace')
+2026-10-15T10:04:11.9126596Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9126939Z Traceback (most recent call last):
+2026-10-15T10:04:11.9127632Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 170, in test_tc_pe_207_failure_priority_and_schedule
+2026-10-15T10:04:11.9128690Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(a['terminal_status'],terminal);self.assertEqual(len(calls),count)
+2026-10-15T10:04:11.9129232Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9129743Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9130517Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9131099Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9131753Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9132475Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9132971Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9133538Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9134200Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9134691Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9135533Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9136168Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9136564Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9137121Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9137664Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9137981Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9138545Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9139102Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9139608Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9140107Z     exe = no_links(exe)
+2026-10-15T10:04:11.9140320Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9140778Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9141278Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9141748Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9142266Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9142622Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9142892Z 
+2026-10-15T10:04:11.9143009Z ======================================================================
+2026-10-15T10:04:11.9143758Z ERROR: test_tc_pe_207_failure_priority_and_schedule (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) (name='timeout')
+2026-10-15T10:04:11.9144527Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9144980Z Traceback (most recent call last):
+2026-10-15T10:04:11.9145682Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 170, in test_tc_pe_207_failure_priority_and_schedule
+2026-10-15T10:04:11.9146749Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(a['terminal_status'],terminal);self.assertEqual(len(calls),count)
+2026-10-15T10:04:11.9147292Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9147799Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9148680Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9149266Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9149927Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9150645Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9151128Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9151701Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9152360Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9152855Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9153439Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9154052Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9154443Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9155120Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9155672Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9155984Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9156555Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9157103Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9157603Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9158106Z     exe = no_links(exe)
+2026-10-15T10:04:11.9158316Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9158777Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9159275Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9159743Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9160260Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9160619Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9160894Z 
+2026-10-15T10:04:11.9161012Z ======================================================================
+2026-10-15T10:04:11.9161794Z ERROR: test_tc_pe_207_failure_priority_and_schedule (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) (name='unconfirmed')
+2026-10-15T10:04:11.9162579Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9162911Z Traceback (most recent call last):
+2026-10-15T10:04:11.9163597Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 170, in test_tc_pe_207_failure_priority_and_schedule
+2026-10-15T10:04:11.9164532Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(a['terminal_status'],terminal);self.assertEqual(len(calls),count)
+2026-10-15T10:04:11.9165348Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9165888Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9166801Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9167395Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9168210Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9168937Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9169430Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9169991Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9170663Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9171160Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9171760Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9172381Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9172777Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9173323Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9173867Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9174174Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9174733Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9175425Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9175930Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9176431Z     exe = no_links(exe)
+2026-10-15T10:04:11.9176645Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9177098Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9177600Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9178064Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9178584Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9178940Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9179205Z 
+2026-10-15T10:04:11.9179323Z ======================================================================
+2026-10-15T10:04:11.9180071Z ERROR: test_tc_pe_207_failure_priority_and_schedule (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) (name='spawn')
+2026-10-15T10:04:11.9180837Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9181167Z Traceback (most recent call last):
+2026-10-15T10:04:11.9181901Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 170, in test_tc_pe_207_failure_priority_and_schedule
+2026-10-15T10:04:11.9182848Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(a['terminal_status'],terminal);self.assertEqual(len(calls),count)
+2026-10-15T10:04:11.9183386Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9183889Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9184655Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9185370Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9186148Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9186872Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9187356Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9188017Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9188678Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9189173Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9189754Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9190362Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9190752Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9191294Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9191840Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9192148Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9192706Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9193257Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9193751Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9194246Z     exe = no_links(exe)
+2026-10-15T10:04:11.9194455Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9195043Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9195548Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9196025Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9196547Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9196906Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9197183Z 
+2026-10-15T10:04:11.9197291Z ======================================================================
+2026-10-15T10:04:11.9198061Z ERROR: test_tc_pe_207_failure_priority_and_schedule (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) (name='integrity')
+2026-10-15T10:04:11.9198840Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9199170Z Traceback (most recent call last):
+2026-10-15T10:04:11.9199851Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 170, in test_tc_pe_207_failure_priority_and_schedule
+2026-10-15T10:04:11.9200798Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(a['terminal_status'],terminal);self.assertEqual(len(calls),count)
+2026-10-15T10:04:11.9201339Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9201848Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9202623Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9203219Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9203877Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9204607Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9205373Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9206093Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9206772Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9207369Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9207963Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9208617Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9209004Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9209569Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9210112Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9210417Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9210983Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9211530Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9212026Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9212526Z     exe = no_links(exe)
+2026-10-15T10:04:11.9212736Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9213183Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9213681Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9214146Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9214660Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9215162Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9215431Z 
+2026-10-15T10:04:11.9215552Z ======================================================================
+2026-10-15T10:04:11.9216316Z ERROR: test_tc_pe_208_policy_redaction_and_partial_input_stop (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_208_policy_redaction_and_partial_input_stop)
+2026-10-15T10:04:11.9217106Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9217437Z Traceback (most recent call last):
+2026-10-15T10:04:11.9218194Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 185, in test_tc_pe_208_policy_redaction_and_partial_input_stop
+2026-10-15T10:04:11.9219016Z     r=self.f.run(launch,name);a=r['attempts'][0];self.assertEqual(len(calls),1)
+2026-10-15T10:04:11.9219390Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9219896Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9220671Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9221260Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9221911Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9222662Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9223167Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9223727Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9224388Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9225019Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9225966Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9226746Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9227235Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9228157Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9228838Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9229233Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9229975Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9230665Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9231326Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9285976Z     exe = no_links(exe)
+2026-10-15T10:04:11.9286378Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9287263Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9288133Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9288633Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9289168Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9289538Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9289816Z 
+2026-10-15T10:04:11.9289930Z ======================================================================
+2026-10-15T10:04:11.9290703Z ERROR: test_tc_pe_209_typed_grade_keyword_missing_and_binding (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_209_typed_grade_keyword_missing_and_binding)
+2026-10-15T10:04:11.9291496Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9291846Z Traceback (most recent call last):
+2026-10-15T10:04:11.9292588Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 194, in test_tc_pe_209_typed_grade_keyword_missing_and_binding
+2026-10-15T10:04:11.9293392Z     r=self.f.run(self.launcher);root=self.f.base/'runs/INDEPENDENT-RUN'
+2026-10-15T10:04:11.9293764Z       ^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9294290Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9295443Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9296049Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9296716Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9297442Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9297932Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9298501Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9299173Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9299661Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9300253Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9300876Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9301271Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9301993Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9302548Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9302865Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9303544Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9304099Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9304608Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9305402Z     exe = no_links(exe)
+2026-10-15T10:04:11.9305649Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9306117Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9306623Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9307116Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9307652Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9308025Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9308297Z 
+2026-10-15T10:04:11.9308416Z ======================================================================
+2026-10-15T10:04:11.9309196Z ERROR: test_tc_pe_210_inspect_detects_mutation_and_undeclared (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_210_inspect_detects_mutation_and_undeclared)
+2026-10-15T10:04:11.9309989Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9310325Z Traceback (most recent call last):
+2026-10-15T10:04:11.9311051Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 208, in test_tc_pe_210_inspect_detects_mutation_and_undeclared
+2026-10-15T10:04:11.9311837Z     self.f.run(self.launcher);root=self.f.base/'runs/INDEPENDENT-RUN'
+2026-10-15T10:04:11.9312191Z     ^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9312703Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9313478Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9314068Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9314748Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9315755Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9316255Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9316835Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9317515Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9318016Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9318628Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9319256Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9319652Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9320205Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9320755Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9321070Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9321660Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9322394Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9322915Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9323411Z     exe = no_links(exe)
+2026-10-15T10:04:11.9323731Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9324192Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9324690Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9325393Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9325930Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9326290Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9326560Z 
+2026-10-15T10:04:11.9326677Z ======================================================================
+2026-10-15T10:04:11.9327562Z ERROR: test_tc_pe_214_envelope_types_claims_and_explicit_failure (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_214_envelope_types_claims_and_explicit_failure) (name='boolean-as-integer')
+2026-10-15T10:04:11.9328467Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9328804Z Traceback (most recent call last):
+2026-10-15T10:04:11.9329546Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 261, in test_tc_pe_214_envelope_types_claims_and_explicit_failure
+2026-10-15T10:04:11.9330554Z     r=self.f.run(launch,name);self.assertEqual(len(r['attempts']),6);self.assertEqual({x['terminal_status'] for x in r['attempts']},{status})
+2026-10-15T10:04:11.9331122Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9331628Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9332409Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9333007Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9333664Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9334386Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9335091Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9335727Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9336399Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9336895Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9337494Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9338111Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9338498Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9339048Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9339597Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9339911Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9340479Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9341025Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9341527Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9342031Z     exe = no_links(exe)
+2026-10-15T10:04:11.9342242Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9342842Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9343349Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9343810Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9344432Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9344790Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9345373Z 
+2026-10-15T10:04:11.9345488Z ======================================================================
+2026-10-15T10:04:11.9346351Z ERROR: test_tc_pe_214_envelope_types_claims_and_explicit_failure (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_214_envelope_types_claims_and_explicit_failure) (name='unknown-ref')
+2026-10-15T10:04:11.9347225Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9347559Z Traceback (most recent call last):
+2026-10-15T10:04:11.9348306Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 261, in test_tc_pe_214_envelope_types_claims_and_explicit_failure
+2026-10-15T10:04:11.9349310Z     r=self.f.run(launch,name);self.assertEqual(len(r['attempts']),6);self.assertEqual({x['terminal_status'] for x in r['attempts']},{status})
+2026-10-15T10:04:11.9349884Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9350388Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9351159Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9351741Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9352391Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9353113Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9353600Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9354165Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9354832Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9355555Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9356156Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9356783Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9357171Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9357719Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9358263Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9358573Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9359142Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9359694Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9360191Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9360689Z     exe = no_links(exe)
+2026-10-15T10:04:11.9360902Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9361358Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9361856Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9362458Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9362983Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9363344Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9363612Z 
+2026-10-15T10:04:11.9363831Z ======================================================================
+2026-10-15T10:04:11.9364701Z ERROR: test_tc_pe_214_envelope_types_claims_and_explicit_failure (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_214_envelope_types_claims_and_explicit_failure) (name='duplicate-check')
+2026-10-15T10:04:11.9365834Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9366174Z Traceback (most recent call last):
+2026-10-15T10:04:11.9366924Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 261, in test_tc_pe_214_envelope_types_claims_and_explicit_failure
+2026-10-15T10:04:11.9367932Z     r=self.f.run(launch,name);self.assertEqual(len(r['attempts']),6);self.assertEqual({x['terminal_status'] for x in r['attempts']},{status})
+2026-10-15T10:04:11.9368500Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9369006Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9369783Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9370376Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9371028Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9371746Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9372230Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9372793Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9373465Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9373958Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9374543Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9375427Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9375821Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9376372Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9376922Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9377234Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9377801Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9378345Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9378846Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9379348Z     exe = no_links(exe)
+2026-10-15T10:04:11.9379569Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9380023Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9380522Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9380982Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9381534Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9381895Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9382167Z 
+2026-10-15T10:04:11.9382424Z ======================================================================
+2026-10-15T10:04:11.9383261Z ERROR: test_tc_pe_214_envelope_types_claims_and_explicit_failure (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_214_envelope_types_claims_and_explicit_failure) (name='claim')
+2026-10-15T10:04:11.9384212Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9384543Z Traceback (most recent call last):
+2026-10-15T10:04:11.9385517Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 261, in test_tc_pe_214_envelope_types_claims_and_explicit_failure
+2026-10-15T10:04:11.9386528Z     r=self.f.run(launch,name);self.assertEqual(len(r['attempts']),6);self.assertEqual({x['terminal_status'] for x in r['attempts']},{status})
+2026-10-15T10:04:11.9387104Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9387613Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9388396Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9388981Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9389637Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9390363Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9390849Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9391412Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9392094Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9392588Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9393175Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9393795Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9394188Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9394729Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9395496Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9395813Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9396381Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9396934Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9397438Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9397936Z     exe = no_links(exe)
+2026-10-15T10:04:11.9398150Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9398603Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9399103Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9399564Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9400076Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9400434Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9400705Z 
+2026-10-15T10:04:11.9400814Z ======================================================================
+2026-10-15T10:04:11.9401689Z ERROR: test_tc_pe_214_envelope_types_claims_and_explicit_failure (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_214_envelope_types_claims_and_explicit_failure) (name='explicit-failure')
+2026-10-15T10:04:11.9402705Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9403051Z Traceback (most recent call last):
+2026-10-15T10:04:11.9403791Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 261, in test_tc_pe_214_envelope_types_claims_and_explicit_failure
+2026-10-15T10:04:11.9405129Z     r=self.f.run(launch,name);self.assertEqual(len(r['attempts']),6);self.assertEqual({x['terminal_status'] for x in r['attempts']},{status})
+2026-10-15T10:04:11.9405711Z       ^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9406223Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9407000Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9407584Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9408239Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9408958Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9409445Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9410005Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9410676Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9411172Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9411762Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9412387Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9412779Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9413329Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9413883Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9414197Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9414770Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9415590Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9416099Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9416601Z     exe = no_links(exe)
+2026-10-15T10:04:11.9416814Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9417269Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9417773Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9418230Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9418745Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9419109Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9419376Z 
+2026-10-15T10:04:11.9419489Z ======================================================================
+2026-10-15T10:04:11.9420220Z ERROR: test_tc_pe_215_trace_grammar_warning_and_mismatch (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_215_trace_grammar_warning_and_mismatch)
+2026-10-15T10:04:11.9420973Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9421302Z Traceback (most recent call last):
+2026-10-15T10:04:11.9422138Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 272, in test_tc_pe_215_trace_grammar_warning_and_mismatch
+2026-10-15T10:04:11.9422996Z     r=self.f.run(launch);self.assertEqual(r['attempts'][0]['output_error'],'TRACE_FINAL_MISMATCH')
+2026-10-15T10:04:11.9423433Z       ^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9423923Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9424799Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9425637Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9426300Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9427028Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9427519Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9428081Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9428749Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9429241Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9429830Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9430446Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9430837Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9431379Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9431925Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9432243Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9433037Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9434028Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9434639Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9435388Z     exe = no_links(exe)
+2026-10-15T10:04:11.9435602Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9436066Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9436583Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9437045Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9437567Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9437929Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9438202Z 
+2026-10-15T10:04:11.9438324Z ======================================================================
+2026-10-15T10:04:11.9439042Z ERROR: test_tc_pe_217_scenario_32_ceiling_is_disclosed (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_217_scenario_32_ceiling_is_disclosed)
+2026-10-15T10:04:11.9439786Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9440118Z Traceback (most recent call last):
+2026-10-15T10:04:11.9440803Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 293, in test_tc_pe_217_scenario_32_ceiling_is_disclosed
+2026-10-15T10:04:11.9441466Z     self.valid()
+2026-10-15T10:04:11.9441953Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 86, in valid
+2026-10-15T10:04:11.9442683Z     def valid(self):return pe.validate_run_manifest(packed(self.f.manifest),manifest_dir=self.f.inputs)
+2026-10-15T10:04:11.9443359Z                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9444011Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 214, in validate_run_manifest
+2026-10-15T10:04:11.9444701Z     prepared = _prepare(payload, manifest_dir)
+2026-10-15T10:04:11.9445305Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9445882Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9446445Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9446764Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9447342Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9447915Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9448430Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9448939Z     exe = no_links(exe)
+2026-10-15T10:04:11.9449152Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9449619Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9450126Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9450587Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9451103Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9451464Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9451738Z 
+2026-10-15T10:04:11.9451846Z ======================================================================
+2026-10-15T10:04:11.9452671Z ERROR: test_tc_pe_218_fault_injected_write_preserves_finalized_prefix (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_218_fault_injected_write_preserves_finalized_prefix)
+2026-10-15T10:04:11.9453517Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9453850Z Traceback (most recent call last):
+2026-10-15T10:04:11.9454596Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 306, in test_tc_pe_218_fault_injected_write_preserves_finalized_prefix
+2026-10-15T10:04:11.9455730Z     with patch.object(pe,'_write',side_effect=fail_late):r=self.f.run(self.launcher)
+2026-10-15T10:04:11.9456176Z                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9456768Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9457555Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9458146Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9458804Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9459528Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9460025Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9460589Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9461263Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9461756Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9462350Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9462969Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9463500Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9464058Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9464707Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9465243Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9465829Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9466384Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9466885Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9467381Z     exe = no_links(exe)
+2026-10-15T10:04:11.9467589Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9468047Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9468552Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9469013Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9469529Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9469889Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9470159Z 
+2026-10-15T10:04:11.9470267Z ======================================================================
+2026-10-15T10:04:11.9471034Z ERROR: test_tc_pe_219_grade_missing_assertion_and_keyword_only (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_219_grade_missing_assertion_and_keyword_only)
+2026-10-15T10:04:11.9471832Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9472162Z Traceback (most recent call last):
+2026-10-15T10:04:11.9472881Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 313, in test_tc_pe_219_grade_missing_assertion_and_keyword_only
+2026-10-15T10:04:11.9473734Z     r=self.f.run(launch);root=self.f.base/'runs/INDEPENDENT-RUN';out=self.f.base/'grade.json'
+2026-10-15T10:04:11.9474158Z       ^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9474650Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9475653Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9476240Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9476893Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9477613Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9478097Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9478666Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9479328Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9479828Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9480416Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9481029Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9481419Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9482008Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9482557Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9483034Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9483605Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9484155Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9484763Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9485566Z     exe = no_links(exe)
+2026-10-15T10:04:11.9485786Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9486252Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9486751Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9487214Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9487738Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9488097Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9488363Z 
+2026-10-15T10:04:11.9488481Z ======================================================================
+2026-10-15T10:04:11.9489134Z ERROR: test_tc_pe_220_existing_root_unchanged (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_220_existing_root_unchanged)
+2026-10-15T10:04:11.9489816Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9490147Z Traceback (most recent call last):
+2026-10-15T10:04:11.9490804Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 283, in test_tc_pe_220_existing_root_unchanged
+2026-10-15T10:04:11.9491870Z     self.f.run(self.launcher);root=self.f.base/'runs/INDEPENDENT-RUN';before={p.relative_to(root).as_posix():sha(p.read_bytes()) for p in root.rglob('*') if p.is_file()}
+2026-10-15T10:04:11.9492538Z     ^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9493043Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9493818Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9494405Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9495341Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9496077Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9496571Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9497139Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9497803Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9498298Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9498894Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9499513Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9499905Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9500450Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9500995Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9501307Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9501878Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9502431Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9503070Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9503584Z     exe = no_links(exe)
+2026-10-15T10:04:11.9503797Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9504255Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9504992Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9505491Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9506019Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9506381Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9506656Z 
+2026-10-15T10:04:11.9506766Z ======================================================================
+2026-10-15T10:04:11.9507571Z ERROR: test_tc_pe_222_registered_native_types_observation_and_grade (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_222_registered_native_types_observation_and_grade)
+2026-10-15T10:04:11.9508412Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9508745Z Traceback (most recent call last):
+2026-10-15T10:04:11.9509494Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 328, in test_tc_pe_222_registered_native_types_observation_and_grade
+2026-10-15T10:04:11.9510462Z     result=self.f.run(launch);self.assertEqual({a['terminal_status'] for a in result['attempts']},{'COMPLETED_PROCESS'})
+2026-10-15T10:04:11.9510976Z            ^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9511482Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9512251Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9512836Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9513491Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9514209Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9514695Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9515456Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9516124Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9516611Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9517202Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9517816Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9518212Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9518762Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9519311Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9519629Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9520198Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9520744Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9521244Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9521741Z     exe = no_links(exe)
+2026-10-15T10:04:11.9521950Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9522401Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9523024Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9523489Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9524013Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9524472Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9524740Z 
+2026-10-15T10:04:11.9524976Z ======================================================================
+2026-10-15T10:04:11.9525830Z ERROR: test_tc_pe_226_integer_34_digit_bound_independent_of_python_setting (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_226_integer_34_digit_bound_independent_of_python_setting)
+2026-10-15T10:04:11.9526700Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9527031Z Traceback (most recent call last):
+2026-10-15T10:04:11.9527802Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 375, in test_tc_pe_226_integer_34_digit_bound_independent_of_python_setting
+2026-10-15T10:04:11.9528562Z     result=self.f.run(self.launcher)
+2026-10-15T10:04:11.9528819Z            ^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9529333Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 59, in run
+2026-10-15T10:04:11.9530111Z     self.save();return pe._run_pair_with_ports(self.manifest_path,self.exclusions,self.base/output,launcher=launcher)
+2026-10-15T10:04:11.9530703Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9531363Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 463, in _run_pair_with_ports
+2026-10-15T10:04:11.9532093Z     return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+2026-10-15T10:04:11.9532585Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9533156Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 376, in _run
+2026-10-15T10:04:11.9533824Z     root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+2026-10-15T10:04:11.9534322Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9535031Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 292, in _materialize
+2026-10-15T10:04:11.9535652Z     prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+2026-10-15T10:04:11.9536038Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9536583Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 202, in _prepare
+2026-10-15T10:04:11.9537128Z     return _prepare_unchecked(payload, manifest_dir)
+2026-10-15T10:04:11.9537436Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9538007Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 147, in _prepare_unchecked
+2026-10-15T10:04:11.9538552Z     _runtime(manifest['runtime'])
+2026-10-15T10:04:11.9539053Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/paired_evaluation.py", line 87, in _runtime
+2026-10-15T10:04:11.9539552Z     exe = no_links(exe)
+2026-10-15T10:04:11.9539760Z           ^^^^^^^^^^^^^
+2026-10-15T10:04:11.9540213Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 149, in no_links
+2026-10-15T10:04:11.9540715Z     fail('LINK_FORBIDDEN')
+2026-10-15T10:04:11.9541170Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/qa_master/_paired_contract.py", line 32, in fail
+2026-10-15T10:04:11.9541680Z     raise PairedEvaluationError(code)
+2026-10-15T10:04:11.9542038Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9542317Z 
+2026-10-15T10:04:11.9542547Z ======================================================================
+2026-10-15T10:04:11.9543188Z FAIL: test_tc_pe_202_source_drift_and_paths (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_202_source_drift_and_paths)
+2026-10-15T10:04:11.9543955Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9544360Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9544621Z 
+2026-10-15T10:04:11.9544803Z During handling of the above exception, another exception occurred:
+2026-10-15T10:04:11.9545196Z 
+2026-10-15T10:04:11.9545302Z Traceback (most recent call last):
+2026-10-15T10:04:11.9545964Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 104, in test_tc_pe_202_source_drift_and_paths
+2026-10-15T10:04:11.9546786Z     with self.assertRaisesRegex(PairedEvaluationError,'SOURCE_INTEGRITY_FAILURE'):self.valid()
+2026-10-15T10:04:11.9547286Z          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9547705Z AssertionError: "SOURCE_INTEGRITY_FAILURE" does not match "LINK_FORBIDDEN"
+2026-10-15T10:04:11.9548001Z 
+2026-10-15T10:04:11.9548111Z ======================================================================
+2026-10-15T10:04:11.9548870Z FAIL: test_tc_pe_205_evaluator_leakage_before_process_or_root (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_205_evaluator_leakage_before_process_or_root)
+2026-10-15T10:04:11.9549648Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9550054Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9550318Z 
+2026-10-15T10:04:11.9550498Z During handling of the above exception, another exception occurred:
+2026-10-15T10:04:11.9550770Z 
+2026-10-15T10:04:11.9550874Z Traceback (most recent call last):
+2026-10-15T10:04:11.9551594Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 144, in test_tc_pe_205_evaluator_leakage_before_process_or_root
+2026-10-15T10:04:11.9552678Z     with patch.object(subprocess,'Popen',side_effect=AssertionError('spawn forbidden')),self.assertRaisesRegex(PairedEvaluationError,'EVALUATOR_LEAKAGE'):
+2026-10-15T10:04:11.9553454Z                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9553931Z AssertionError: "EVALUATOR_LEAKAGE" does not match "LINK_FORBIDDEN"
+2026-10-15T10:04:11.9554205Z 
+2026-10-15T10:04:11.9554318Z ======================================================================
+2026-10-15T10:04:11.9555279Z FAIL: test_tc_pe_211_attestation_claim_and_fixed_contract_reject (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_211_attestation_claim_and_fixed_contract_reject) (change='verified')
+2026-10-15T10:04:11.9556147Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9556553Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9556820Z 
+2026-10-15T10:04:11.9556993Z During handling of the above exception, another exception occurred:
+2026-10-15T10:04:11.9557260Z 
+2026-10-15T10:04:11.9557358Z Traceback (most recent call last):
+2026-10-15T10:04:11.9558090Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 221, in test_tc_pe_211_attestation_claim_and_fixed_contract_reject
+2026-10-15T10:04:11.9558991Z     with self.subTest(change=change),self.assertRaisesRegex(PairedEvaluationError,code):self.valid()
+2026-10-15T10:04:11.9559512Z                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9559950Z AssertionError: "ATTESTATION_NOT_SUPPORTED" does not match "LINK_FORBIDDEN"
+2026-10-15T10:04:11.9560259Z 
+2026-10-15T10:04:11.9560369Z ======================================================================
+2026-10-15T10:04:11.9561331Z FAIL: test_tc_pe_211_attestation_claim_and_fixed_contract_reject (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_211_attestation_claim_and_fixed_contract_reject) (change='contract')
+2026-10-15T10:04:11.9562215Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9562730Z qa_master._paired_contract.PairedEvaluationError: LINK_FORBIDDEN
+2026-10-15T10:04:11.9562992Z 
+2026-10-15T10:04:11.9563170Z During handling of the above exception, another exception occurred:
+2026-10-15T10:04:11.9563440Z 
+2026-10-15T10:04:11.9563535Z Traceback (most recent call last):
+2026-10-15T10:04:11.9564257Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 221, in test_tc_pe_211_attestation_claim_and_fixed_contract_reject
+2026-10-15T10:04:11.9565284Z     with self.subTest(change=change),self.assertRaisesRegex(PairedEvaluationError,code):self.valid()
+2026-10-15T10:04:11.9565806Z                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9566229Z AssertionError: "COMMON_CONTRACT_MISMATCH" does not match "LINK_FORBIDDEN"
+2026-10-15T10:04:11.9566524Z 
+2026-10-15T10:04:11.9566638Z ======================================================================
+2026-10-15T10:04:11.9567347Z FAIL: test_tc_pe_212_cli_nonexecute_and_no_secret_echo (test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_212_cli_nonexecute_and_no_secret_echo)
+2026-10-15T10:04:11.9568077Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9568407Z Traceback (most recent call last):
+2026-10-15T10:04:11.9569097Z   File "/home/runner/work/QA-Master-Skill/QA-Master-Skill/tests/test_paired_runtime_independent.py", line 226, in test_tc_pe_212_cli_nonexecute_and_no_secret_echo
+2026-10-15T10:04:11.9569890Z     with redirect_stdout(io.StringIO()) as output:self.assertEqual(pe.main(args),0)
+2026-10-15T10:04:11.9570319Z                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-15T10:04:11.9570628Z AssertionError: 2 != 0
+2026-10-15T10:04:11.9570768Z 
+2026-10-15T10:04:11.9570902Z ----------------------------------------------------------------------
+2026-10-15T10:04:11.9571219Z Ran 595 tests in 19.910s
+2026-10-15T10:04:11.9571366Z 
+2026-10-15T10:04:11.9571471Z FAILED (failures=5, errors=26, skipped=1)
+2026-10-15T10:04:11.9581077Z ##[error]Process completed with exit code 1.
+2026-10-15T10:04:11.9728075Z

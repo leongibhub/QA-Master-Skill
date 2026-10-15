@@ -1,0 +1,3 @@
+Processing c:\users\leon.wang\appdata\local\temp\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\wheel\qa_master_skill-0.1.0-py3-none-any.whl
+Installing collected packages: qa-master-skill
+Successfully installed qa-master-skill-0.1.0

@@ -1,0 +1,32 @@
+{
+  "artifact_id": "CODE-PAIRED-EVALUATION-RUNTIME-REPAIR-001",
+  "task_id": "TASK-049",
+  "base_commit": "412109ef9224f26bc94d14081fbc9c737f59e73a",
+  "binding": "exact working-file bytes before freeze commit; Git newline normalization may differ",
+  "files": [
+    {
+      "path": "qa_master/_paired_contract.py",
+      "sha256": "f8871c22a023916f9821479099c686f3af01c0c90d7889763a857113d7cd97de"
+    },
+    {
+      "path": "qa_master/_paired_process.py",
+      "sha256": "3155104b5625f99a9fb60a125f9078315d1092a65317d92a9b1bc5afeae8e700"
+    },
+    {
+      "path": "qa_master/paired_evaluation.py",
+      "sha256": "0401c3aa4814cc46c250c546ea414643d5076d6608b049bbb3d2f4b601bca8ef"
+    },
+    {
+      "path": "tests/test_paired_evaluation.py",
+      "sha256": "d096c01b5a56150e4c491b200a8e2c524f2eee9e1ea8b28f9d18b048f261a8d4"
+    },
+    {
+      "path": "tests/test_paired_value_contract.py",
+      "sha256": "a17ee019b8dc563e940c9e37c92a0f25d74d9eb26ecdd59cf3f3cf9f117afd45"
+    },
+    {
+      "path": "docs/04-design/paired-value-encoding-clarification.md",
+      "sha256": "63acdff1d09c5149d53e58a3cb2b4bf975bd6bc0534a75d2b79cb96017f4a79d"
+    }
+  ]
+}

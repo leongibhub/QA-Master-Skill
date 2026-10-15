@@ -1,0 +1,34 @@
+test_tc_pe_221_frozen_design_integer_text_envelope (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_221_frozen_design_integer_text_envelope)
+DES-040 section 5 requires string transport for every observation value. ... FAIL
+
+======================================================================
+FAIL: test_tc_pe_221_frozen_design_integer_text_envelope (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_221_frozen_design_integer_text_envelope)
+DES-040 section 5 requires string transport for every observation value.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_paired_runtime_independent.py", line 327, in test_tc_pe_221_frozen_design_integer_text_envelope
+    self.assertEqual([a['terminal_status'] for a in result['attempts']],['COMPLETED_PROCESS']*6)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['OUTPUT_INVALID', 'OUTPUT_INVALID', 'OUTPU[60 chars]LID'] != ['COMPLETED_PROCESS', 'COMPLETED_PROCESS', [78 chars]ESS']
+
+First differing element 0:
+'OUTPUT_INVALID'
+'COMPLETED_PROCESS'
+
+- ['OUTPUT_INVALID',
+-  'OUTPUT_INVALID',
+-  'OUTPUT_INVALID',
+-  'OUTPUT_INVALID',
+-  'OUTPUT_INVALID',
+-  'OUTPUT_INVALID']
++ ['COMPLETED_PROCESS',
++  'COMPLETED_PROCESS',
++  'COMPLETED_PROCESS',
++  'COMPLETED_PROCESS',
++  'COMPLETED_PROCESS',
++  'COMPLETED_PROCESS']
+
+----------------------------------------------------------------------
+Ran 1 test in 1.417s
+
+FAILED (failures=1)

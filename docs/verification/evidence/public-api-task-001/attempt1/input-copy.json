@@ -1,0 +1,17 @@
+[
+  {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\requirements.md",
+    "sha256": "c2edcb918f408f88091c1ca1217d269b6d8fca4f0a9d9abf6b46f63f43883d47",
+    "bytes": 2618
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\openapi.yaml",
+    "sha256": "6d83f43c638e4f8481f3ee405f18b21b1bcc23858d2b6d46bcecaa498d7ea007",
+    "bytes": 6091
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\participant-task.md",
+    "sha256": "141bf089f672d6a20c6e9e4d8b54e896f0329cdefc3fa1e188a89f9a98e3baed",
+    "bytes": 1494
+  }
+]

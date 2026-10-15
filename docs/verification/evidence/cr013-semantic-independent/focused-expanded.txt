@@ -1,0 +1,59 @@
+test_001_public_categories_four_rows (test_semantic_quality_independent.SemanticIndependent.test_001_public_categories_four_rows) ... ok
+test_002_cross_dimension_independence (test_semantic_quality_independent.SemanticIndependent.test_002_cross_dimension_independence) ... ok
+test_003_channels_are_independent (test_semantic_quality_independent.SemanticIndependent.test_003_channels_are_independent) ... ok
+test_004_fatal_recoverable_and_extensions (test_semantic_quality_independent.SemanticIndependent.test_004_fatal_recoverable_and_extensions) ... ok
+test_005_duplicate_unknown_and_missing_observations (test_semantic_quality_independent.SemanticIndependent.test_005_duplicate_unknown_and_missing_observations) ... ok
+test_006_native_type_mismatch (test_semantic_quality_independent.SemanticIndependent.test_006_native_type_mismatch) ... ok
+test_007_case_missing_content_and_optional (test_semantic_quality_independent.SemanticIndependent.test_007_case_missing_content_and_optional) ... ok
+test_008_missing_threshold_gap_honesty (test_semantic_quality_independent.SemanticIndependent.test_008_missing_threshold_gap_honesty) ... ok
+test_009_oneof_duplicate_oracles_and_unknown_projection (test_semantic_quality_independent.SemanticIndependent.test_009_oneof_duplicate_oracles_and_unknown_projection) ... ok
+test_010_input_drift_atomic (test_semantic_quality_independent.SemanticIndependent.test_010_input_drift_atomic) ... ok
+test_011_inspect_mixed_precedence_and_readonly (test_semantic_quality_independent.SemanticIndependent.test_011_inspect_mixed_precedence_and_readonly) ... ok
+test_012_single_reservation_winner (test_semantic_quality_independent.SemanticIndependent.test_012_single_reservation_winner) ... ok
+test_013_no_network_process_state (test_semantic_quality_independent.SemanticIndependent.test_013_no_network_process_state) ... ok
+test_014_known_legacy_and_absent (test_semantic_quality_independent.SemanticIndependent.test_014_known_legacy_and_absent) ... ok
+test_015_oneof_success_and_nonapplicable (test_semantic_quality_independent.SemanticIndependent.test_015_oneof_success_and_nonapplicable) ... ERROR
+test_016_conflict_and_unavailable_source (test_semantic_quality_independent.SemanticIndependent.test_016_conflict_and_unavailable_source) ... ok
+test_017_typed_and_document_limits (test_semantic_quality_independent.SemanticIndependent.test_017_typed_and_document_limits) ... FAIL
+test_018_joint_profile_manifest_forgery (test_semantic_quality_independent.SemanticIndependent.test_018_joint_profile_manifest_forgery) ... ok
+test_019_publish_failure_preserves_unrelated (test_semantic_quality_independent.SemanticIndependent.test_019_publish_failure_preserves_unrelated) ... ok
+
+======================================================================
+ERROR: test_015_oneof_success_and_nonapplicable (test_semantic_quality_independent.SemanticIndependent.test_015_oneof_success_and_nonapplicable)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 127, in test_015_oneof_success_and_nonapplicable
+    f=copy.deepcopy(self.b['facts'][0]);f.update(id='FX',value='alternate');self.b['facts'].append(f);self.b['obligations'][0].update(operator='ONE_OF',expected_fact_ids=['F0','FX']);self.r['observations'][0]['value']='alternate';p,_=self.run_profile();self.expected(p,'O0','SEMANTIC','SATISFIED','SOURCE_BOUND_VALUE_MATCH')
+                                                                                                                                                                                                                                          ~~~~~~~~~~~~~~~~^^
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 51, in run_profile
+    self.n+=1;result=sq.evaluate_bundle(self.write(raw),self.out/str(self.n))
+                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-PR2\qa_master\semantic_quality.py", line 1009, in evaluate_bundle
+    return evaluate_state(_validate_bundle(bundle_path),output_root,derive_profile,_normalize,Path(__file__).read_bytes())
+                          ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\QA-Master-PR2\qa_master\semantic_quality.py", line 441, in _validate_bundle
+    state = validate_state(raw, bundle, response_raw, source_raw, fixed_assets())
+  File "D:\QA-Master-PR2\qa_master\semantic_quality.py", line 400, in validate_state
+    if row['source_ids'] != sorted({x for item in items for x in item['source_ids']}) or row['fact_ids'] != sorted({x for item in items for x in item['source_fact_ids'] + item['expected_fact_ids']}): _fail(code)
+                                                                                                                                                                                                        ~~~~~^^^^^^
+  File "D:\QA-Master-PR2\qa_master\semantic_quality.py", line 37, in _fail
+    def _fail(code): raise SemanticQualityError(code)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+qa_master.semantic_quality.SemanticQualityError: CATEGORY_OBLIGATION_MISMATCH
+
+======================================================================
+FAIL: test_017_typed_and_document_limits (test_semantic_quality_independent.SemanticIndependent.test_017_typed_and_document_limits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 140, in test_017_typed_and_document_limits
+    self.b['facts'][2]['value']=10**34;self.write();self.reject('COUNT_LIMIT')
+                                                    ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 58, in reject
+    self.assertEqual(cm.exception.code,code);self.assertFalse(self.out.exists())
+                                             ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 19 tests in 11.667s
+
+FAILED (failures=1, errors=1)

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "G-TARGET",
+    "type": "TARGET_INTERFACE_MISSING",
+    "scope": "all cases",
+    "question": "What exact interface evaluates batch size, rebate and lifecycle events?",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-ENV",
+    "type": "ENVIRONMENT_UNIDENTIFIED",
+    "scope": "all cases",
+    "question": "Which isolated build/environment is intended?",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-SETUP",
+    "type": "SETUP_FIXTURE_MISSING",
+    "scope": "all cases",
+    "question": "How are independent batch, rebate inputs and fresh documents prepared?",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-OBS",
+    "type": "OBSERVABLE_LOCATOR_MISSING",
+    "scope": "all cases",
+    "question": "Where are policy classification, rebate decision and status read reliably?",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-CLEANUP",
+    "type": "CLEANUP_OBLIGATIONS_MISSING",
+    "scope": "all cases",
+    "question": "What artifacts can actions create and what cleanup/reset is permitted?",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-AUTH",
+    "type": "AUTH_POLICY_UNCONFIRMED",
+    "scope": "all cases",
+    "question": "Which actor and authorization mechanics apply?",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-BASELINE",
+    "type": "REQUIREMENT_NOT_APPROVED",
+    "scope": "all cases",
+    "question": "Who will baseline the exact requirement and draft-case version?",
+    "source_ids": [
+      "source introductory paragraph"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-ERROR",
+    "type": "ERROR_SIGNAL_MISSING",
+    "scope": "invalid size and DRAFT publish",
+    "question": "What rejection signal or error contract exposes invalidity?",
+    "source_ids": [
+      "F-01",
+      "F-06"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-SIDEEFFECT",
+    "type": "SIDE_EFFECT_ORACLE_MISSING",
+    "scope": "DRAFT publish",
+    "question": "Beyond staying DRAFT, are persisted-data side effects forbidden, and how observed?",
+    "source_ids": [
+      "F-06"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-TYPE",
+    "type": "INPUT_REPRESENTATION_MISSING",
+    "scope": "REQ-B strict integer",
+    "question": "Strict integer excludes non-integer values: draft negative partitions include fractional 2.5, text \"2\", null and boolean true, but transport typing/coercion and rejection observables are absent. Define representations before executable cases.",
+    "source_ids": [
+      "F-01",
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-UNSPECIFIED",
+    "type": "TRANSITION_ORACLE_MISSING",
+    "scope": "REVIEW submit; PUBLISHED submit; PUBLISHED publish",
+    "question": "Specify outcomes and error/effect oracles for each pair. PUBLISHED terminal precludes valid outgoing lifecycle transitions but does not define rejection signals or side effects. No inferred denial cases.",
+    "source_ids": [
+      "F-03",
+      "F-06"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-NFR",
+    "type": "NFR_CONTRACT_MISSING",
+    "scope": "performance/load/stress/stability/compatibility",
+    "question": "Supply workload, thresholds, duration, capacity, observability, abort limits and supported platform matrix; no invented scenario counted as completed.",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-STRUCT",
+    "type": "STRUCTURAL_AND_INTEGRATION_SOURCE_MISSING",
+    "scope": "whitebox/integration",
+    "question": "Supply pinned implementation and interface/dependency contracts if these dimensions enter scope. Decision-table enumeration is not code branch or MC/DC coverage.",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-RECOVERY",
+    "type": "RECOVERY_OBJECTIVE_UNCONFIRMED",
+    "scope": "recovery",
+    "question": "Supply fault/recovery contract, restore objectives and safe target if applicable.",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  },
+  {
+    "id": "G-REGRESSION",
+    "type": "IMPACT_UNCONFIRMED",
+    "scope": "regression",
+    "question": "Supply before/after revisions and change scope; retain these policy drafts as future regression candidates.",
+    "source_ids": [
+      "F-07"
+    ],
+    "evidence_status": "PENDING",
+    "disposition": "Needs source owner clarification; do not invent behavior."
+  }
+]
