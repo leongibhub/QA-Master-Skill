@@ -4,7 +4,7 @@
 - Source subject: `0ae0ec0287a62d1b91e0c108c5d9def377cd70a2` before the current working-tree repair
 - Finding source: initial independent reviewer findings reported during PR2 review; formal reviewer report remains pending
 - Evidence Status: `OBSERVED`
-- Disposition: repair is present in the working tree and requires current tester evidence plus formal review; none of these items is resolved, closed, accepted, or a Gate decision.
+- Disposition: the repaired working-tree subject has current independent tester evidence and a formal `PASS WITH P3 FOLLOW-UP` review. The findings remain retained, rather than marked closed, because no committed-subject CI, release, acceptance, or formal defect-closure chain exists.
 
 | Defect | Affected trace | Observation | Current repair mapping | Required closure evidence |
 |---|---|---|---|---|
@@ -15,5 +15,9 @@
 
 The prior full-suite observation of 557 tests with two skipped link-creation cases
 means 555 successful tests on the pre-repair source. It does not verify these
-repairs. The contributor's nine focused developer checks and the successful remote
-CI matrix likewise precede the working-tree repair and remain separate evidence.
+repairs. The current repaired source is independently covered by 11 focused tests
+and a 562-test strict run with two ordinary symbolic-link setup branches
+`NOT_EXECUTED`; a Windows junction case passed. The current review reports no
+remaining P0/P1/P2 and retains P3 manual cleanup/lifecycle management of recovery
+trees. The contributor's nine focused developer checks and successful remote CI
+matrix precede the working-tree repair and remain separate evidence.
