@@ -88,3 +88,31 @@ Repair source SHA-256: `189835888693ad727c8fc1dea269fe99cb7672d025872e85fe962877
 Repair developer-test SHA-256: `54714ebcb202d122fe505fd90c2e6e9668fbc2c96405995875e55db53b38dc9e`.
 
 Only `qa_master/semantic_quality.py`, `tests/test_semantic_quality.py` and this appended report changed in the repair. Packaged assets, independent tests, frozen failed-attempt evidence and historical paired records were not modified. Independent re-test/re-review remain PENDING; no Runtime completion, defect closure, acceptance or superiority claim is made here.
+
+## Residual multi-obligation repair — work-7c5d54d2a889425487615af04970c4a2 v1 / attempt 1
+
+This appends the repair of the residual multi-obligation fanout found against `9085c5f`. Inputs include independent attempt-2 TC027 failure and `DOC-SEMANTIC-QUALITY-REPAIR-PRECHECK-001`. Earlier failure and developer evidence remain unchanged; no closure or Gate result is inferred.
+
+Item-wide case, gap and observation records now retain content validity separately from provenance validity. Reference lists, claims, sections, mapped-category/reason agreement and identity checks are evaluated during preparation. Bounded fact/source/obligation masks carry required-subset and binding information. Case gap-binding masks intersect the referenced gaps' obligation masks. Per-edge `_case_valid`, `_gap_valid` and `_artifact_provenance` use prepared fields and mask membership rather than rescanning serialized lists. The prior STRING_SET and strict manifest repairs remain in place.
+
+The same-kind repair rejects a duplicate referenced gap identity instead of allowing a dictionary overwrite to satisfy a case. This is required by DES-060's unique gap identity rule and was confirmed in the reviewer precheck exchange. Sibling-only gaps cannot satisfy another mapped obligation. Mixed known/unknown bindings affect known targets only; mixed readiness and gap reasons retain independent usability/provenance outcomes. Fatal normalization skips edge assessment of partially normalized channels.
+
+Final developer command: `D:\codex-rd-platform\.venv\Scripts\python.exe -m unittest tests.test_semantic_quality -q`.
+Observed: **53 tests passed in 22.934 seconds**. `git diff --check` passed.
+
+The structural regression instruments actual list iteration after normalization, including the new preparation functions, rather than merely counting the names of former validation helpers. It also guards all three per-edge validators and asserts that none iterates a watched serialized item list. Observed fixture counts:
+
+| Fixture | Mapped obligations | Mapping-list elements visited | Other item-list elements visited |
+| --- | ---: | ---: | ---: |
+| one case | 1 | 4 | 22 |
+| one case | 16 | 64 | 22 |
+| one case | 64 | 256 | 22 |
+| one case plus one gap | 1 | 9 | 29 |
+| one case plus one gap | 16 | 144 | 29 |
+| one case plus one gap | 64 | 576 | 29 |
+
+These are structural observations for these fixtures, not a timing benchmark or a universal complexity proof. Necessary output rows/pointers scale with the mapped output. Existing single-obligation 16/32/256 case-gap regressions also remain. Additional focused tests cover sibling gap membership, mixed unknown bindings, mixed gap reasons, mixed readiness, duplicate-gap isolation and fatal-channel preparation.
+
+Frozen candidate module SHA-256: `d567d26110eaca5637f54c0dc48994e881bfedce69eafd0c8aa809c41331018a`.
+Developer test SHA-256: `6fbc0a6e3c8be265976e8112eaca1a22d4aceb2cf9ace0784dd0f9df7be484e6`.
+Commit assignment is pending the orchestrator's freeze. Full-suite/fresh-wheel revalidation and independent re-review remain PENDING for these bytes. Only the module, developer tests and this appended report changed; independent records and packaged resources were not edited.

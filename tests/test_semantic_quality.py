@@ -418,3 +418,114 @@ class SemanticQualityTests(unittest.TestCase):
         for code in ('CONTRACT_ASSET_MISSING','CONTRACT_BINDING_MISMATCH','INVALID_BUNDLE','DUPLICATE_JSON_KEY'):
             with self.subTest(code=code), patch('qa_master.semantic_quality.fixed_assets',side_effect=SemanticQualityError(code)):
                 self.assertEqual(inspect_result(root),{'status':'MISMATCH','reason':'INSTALLED_DERIVER_MISMATCH'})
+    def test_residual_fanout_item_lists_visited_once_independent_of_edges(self):
+        import qa_master.semantic_quality as sq
+        from copy import deepcopy
+        original_ob=deepcopy(self.bundle['obligations'][0])
+        normalizer=sq._normalize
+        observations=[]
+        for mode in ('case','gap_and_case'):
+            counts=[]
+            for count in (1,16,64):
+                ids=['OB-'+str(i) for i in range(count)]
+                self.bundle['obligations']=[dict(original_ob,id=oid,check_id='CHECK-'+str(i)) for i,oid in enumerate(ids)]
+                self.response['observations']=[{'check_id':'CHECK-'+str(i),'value_type':'STRING','value':'yes','source_fact_ids':['F-1']} for i in range(count)]
+                case=self.complete_case();case['obligation_ids']=ids
+                self.response['cases']=[case];self.response['gaps']=[]
+                if mode=='gap_and_case':
+                    for ob in self.bundle['obligations']:
+                        ob.update(oracle_state='ORACLE_MISSING',check_id=None,operator=None,expected_fact_ids=[],required_gap_reason='ORACLE_MISSING',allowed_readiness=['BLOCKED_ORACLE_MISSING'])
+                    self.bundle['category_applicability'][1].update(state='ORACLE_MISSING',reason='missing oracle')
+                    self.response['observations']=[]
+                    case.update(readiness='BLOCKED_ORACLE_MISSING',missing_fields=['EXPECTED_ORACLE'],gap_ids=['GAP-MULTI'],expected_oracle={'state':'ORACLE_MISSING','items':[],'oracle_fact_ids':[],'reason':'oracle absent'})
+                    self.response['gaps']=[{'gap_id':'GAP-MULTI','obligation_ids':ids,'reason':'ORACLE_MISSING','fact_ids':['F-1'],'source_ids':['SRC-1'],'needed_evidence':'oracle','evidence_pointer':'source/rule.txt'}]
+                else:self.bundle['category_applicability'][1].update(state='APPLICABLE',reason=None)
+                self.update_response();state=sq._validate_bundle(self.write_bundle());state['implementation_raw']=Path(sq.__file__).read_bytes()
+                traversals=[]
+                class WatchedList(list):
+                    def __init__(self,values,label):super().__init__(values);self.label=label;self.visits=0;traversals.append(self)
+                    def __iter__(self):self.visits+=len(self);return super().__iter__()
+                def watch(value,label):
+                    if isinstance(value,dict):
+                        for key,child in list(value.items()):value[key]=watch(child,key)
+                    elif isinstance(value,list):return WatchedList([watch(child,label) for child in value],label)
+                    return value
+                def normalized(value):
+                    result=normalizer(value)
+                    for channel in ('cases','gaps'):
+                        for row in result['value'][channel]:watch(row,channel)
+                    return result
+                def edge_guard(function):
+                    def guarded(*args):
+                        before=[item.visits for item in traversals]
+                        result=function(*args)
+                        self.assertEqual(before,[item.visits for item in traversals],'edge traversed serialized item list')
+                        return result
+                    return guarded
+                with patch.object(sq,'_normalize',side_effect=normalized), patch.object(sq,'_case_valid',side_effect=edge_guard(sq._case_valid)), patch.object(sq,'_gap_valid',side_effect=edge_guard(sq._gap_valid)), patch.object(sq,'_artifact_provenance',side_effect=edge_guard(sq._artifact_provenance)):
+                    profile=sq.derive_profile(state)
+                mapping_visits=sum(item.visits for item in traversals if item.label=='obligation_ids')
+                other_visits=sum(item.visits for item in traversals if item.label!='obligation_ids')
+                counts.append((count,mapping_visits,other_visits))
+                self.assertEqual(len(profile['rows']),4*count)
+                self.assertTrue(all(row['outcome']=='SATISFIED' for row in profile['rows'] if row['dimension']=='PROVENANCE'))
+            self.assertEqual(len({visits//count for count,visits,_ in counts}),1)
+            self.assertEqual(len({other for _,_,other in counts}),1)
+            observations.append((mode,counts))
+        print('ITEM_FANOUT_VISITS',observations)
+
+    def test_residual_fanout_keeps_readiness_and_reference_dimensions_separate(self):
+        from copy import deepcopy
+        base=deepcopy(self.bundle['obligations'][0])
+        self.bundle['obligations']=[dict(base,id='OB-'+str(i),check_id='CHECK-'+str(i),allowed_readiness=['STATIC_REVIEW'] if i==0 else ['DESIGN_READY']) for i in range(16)]
+        self.response['observations']=[{'check_id':'CHECK-'+str(i),'value_type':'STRING','value':'yes','source_fact_ids':['F-1']} for i in range(16)]
+        case=self.complete_case();case['obligation_ids']=['OB-'+str(i) for i in range(16)];self.response['cases']=[case]
+        self.update_response();profile=self.profile()
+        rows={(row['obligation_id'],row['dimension']):row for row in profile['rows']}
+        self.assertEqual(rows['OB-0','USABILITY']['outcome'],'VIOLATED')
+        self.assertEqual(rows['OB-1','USABILITY']['outcome'],'SATISFIED')
+        self.assertTrue(all(row['outcome']=='SATISFIED' for row in profile['rows'] if row['dimension']=='PROVENANCE'))
+        case['actions'][0]['source_fact_ids']=['UNKNOWN'];self.update_response();profile=self.profile()
+        self.assertTrue(all(row['outcome']=='VIOLATED' for row in profile['rows'] if row['dimension']=='PROVENANCE'))
+        self.assertTrue(all(row['outcome']=='SATISFIED' for row in profile['rows'] if row['dimension']=='SEMANTIC'))
+    def test_residual_fanout_sibling_gap_binding_and_unknown_binding_isolation(self):
+        base=dict(self.bundle['obligations'][0])
+        self.bundle['obligations']=[dict(base,id='OB-0',check_id='CHECK-0'),dict(base,id='OB-1',check_id='CHECK-1')]
+        self.response['observations']=[{'check_id':'CHECK-'+str(i),'value_type':'STRING','value':'yes','source_fact_ids':['F-1']} for i in range(2)]
+        case=self.complete_case();case.update(obligation_ids=['OB-0','OB-1'],gap_ids=['GAP-0'])
+        self.response['cases']=[case]
+        self.response['gaps']=[{'gap_id':'GAP-0','obligation_ids':['OB-0'],'reason':'ORACLE_MISSING','fact_ids':['F-1'],'source_ids':['SRC-1'],'needed_evidence':'context','evidence_pointer':'source/rule.txt'}]
+        self.update_response();rows={(r['obligation_id'],r['dimension']):r for r in self.profile()['rows']}
+        self.assertEqual(rows['OB-0','USABILITY']['outcome'],'SATISFIED')
+        self.assertEqual(rows['OB-1','USABILITY']['outcome'],'VIOLATED')
+        case.update(obligation_ids=['OB-0','UNKNOWN'],gap_ids=[]);self.response['gaps']=[]
+        self.update_response();rows={(r['obligation_id'],r['dimension']):r for r in self.profile()['rows']}
+        self.assertEqual(rows['OB-0','PROVENANCE']['outcome'],'VIOLATED')
+        self.assertEqual(rows['OB-1','PROVENANCE']['outcome'],'SATISFIED')
+        self.assertEqual(rows['OB-1','USABILITY']['reason_code'],'CASE_NOT_REQUIRED')
+
+    def test_residual_fanout_mixed_gap_reasons_preserve_global_content_rule(self):
+        gap=self.missing_oracle();base=dict(self.bundle['obligations'][0])
+        self.bundle['obligations']=[dict(base,id='OB-0'),dict(base,id='OB-1',oracle_state='UNSCORABLE',required_gap_reason='UNSUPPORTED_CATEGORY',allowed_readiness=['STATIC_REVIEW'])]
+        self.bundle['category_applicability'][1].update(state='UNSCORABLE',reason='mixed source limits')
+        gap['obligation_ids']=['OB-0','OB-1'];self.response['gaps']=[gap]
+        self.update_response();rows={(r['obligation_id'],r['dimension']):r for r in self.profile()['rows']}
+        self.assertEqual(rows['OB-0','PROVENANCE']['reason_code'],'REQUIRED_GAP_MISSING')
+        self.assertEqual(rows['OB-1','PROVENANCE']['reason_code'],'SOURCE_BINDING_INVALID')
+    def test_residual_fanout_duplicate_gap_cannot_bind_case(self):
+        base=dict(self.bundle['obligations'][0]);self.bundle['obligations'].append(dict(base,id='OB-OTHER',check_id='CHECK-OTHER'))
+        self.response['observations'].append({'check_id':'CHECK-OTHER','value_type':'STRING','value':'yes','source_fact_ids':['F-1']})
+        case=self.complete_case();case['gap_ids']=['DUPLICATE'];self.response['cases']=[case]
+        gap={'gap_id':'DUPLICATE','obligation_ids':['OB-1'],'reason':'ORACLE_MISSING','fact_ids':['F-1'],'source_ids':['SRC-1'],'needed_evidence':'context','evidence_pointer':'source/rule.txt'}
+        self.response['gaps']=[gap,dict(gap)]
+        self.update_response();rows={(r['obligation_id'],r['dimension']):r for r in self.profile()['rows']}
+        self.assertEqual(rows['OB-1','USABILITY']['reason_code'],'OPTIONAL_CASE_INVALID')
+        self.assertEqual(rows['OB-1','PROVENANCE']['outcome'],'VIOLATED')
+        self.assertEqual(rows['OB-OTHER','PROVENANCE']['outcome'],'SATISFIED')
+
+    def test_residual_preparation_does_not_assess_partial_fatal_channels(self):
+        self.response['cases']=[self.complete_case()]
+        self.response['gaps']=[{}]*257
+        rows=self.dimensions()
+        self.assertEqual(rows['SHAPE']['reason_code'],'MALFORMED_KNOWN_RESPONSE_FATAL')
+        self.assertEqual(rows['USABILITY']['outcome'],'UNSCORABLE')

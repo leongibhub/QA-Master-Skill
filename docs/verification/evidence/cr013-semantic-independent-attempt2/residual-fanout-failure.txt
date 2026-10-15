@@ -1,0 +1,15 @@
+test_027_case_wide_reference_validation_independent_of_mapping_count (test_semantic_quality_independent.SemanticIndependent.test_027_case_wide_reference_validation_independent_of_mapping_count) ... FAIL
+
+======================================================================
+FAIL: test_027_case_wide_reference_validation_independent_of_mapping_count (test_semantic_quality_independent.SemanticIndependent.test_027_case_wide_reference_validation_independent_of_mapping_count)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 222, in test_027_case_wide_reference_validation_independent_of_mapping_count
+    self.assertEqual(visits[0],visits[1], 'Case-wide list validity must be cached independently of mapping count')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 10 != 130 : Case-wide list validity must be cached independently of mapping count
+
+----------------------------------------------------------------------
+Ran 1 test in 0.975s
+
+FAILED (failures=1)

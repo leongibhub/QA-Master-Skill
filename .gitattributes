@@ -1,0 +1,3 @@
+# These source-bound evidence inputs retain their captured byte hashes.
+docs/verification/semantic-quality-independent-attempt2.md -text -whitespace
+tests/test_semantic_quality_independent.py -text
