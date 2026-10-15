@@ -80,9 +80,13 @@ The developer repair is limited to all three types of work:
 2. strictly parse/classify malformed manifests before deterministic comparison;
 3. replace repeated case-by-gap validation with bounded indexed reuse.
 
-The failed attempt1 evidence remains immutable. A new TASK-062 attempt must be
-bound to the repaired source, execute fresh independent tests, and preserve
-the old failure rather than converting it into a pass. TASK-063 remains
-unclaimed until that new attempt is complete. No human assessment, holdout,
-quality comparison, overall V1, acceptance, release, or Gate conclusion is
-implied.
+The failed attempt1 evidence remains immutable. TASK-062 attempt3 later passed
+on final `a9df285`, and TASK-063 formally reviewed that bounded subject as
+`PASS WITH P3 FOLLOW-UP`; the P3 is missing semantic-evaluator-specific
+executed DES link/reparse-rejection fixture evidence. The three correctly
+mapped fact/observation/manifest Runtime defects remain OPEN because the
+platform closure workflow requires a canonical fix/retest test-execution chain
+that was not created; this is a platform-record limitation, not a claim that
+the defects remain reproduced on `a9df285`. The obsolete v1 fanout association
+remains non-authoritative. No human assessment, holdout, quality comparison,
+overall V1, acceptance, release, or Gate conclusion is implied.
