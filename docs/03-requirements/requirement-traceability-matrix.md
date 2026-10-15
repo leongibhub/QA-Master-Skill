@@ -66,7 +66,8 @@ is `0ae0ec0` plus an uncommitted four-defect preservation repair; developer obse
 and a successful remote CI matrix cover only the pre-repair base. The initial 557/2-skip
 tester run also predates repair and is not final verification. TASK-047 is now DONE with
 source-bound 562-test independent evidence; its two ordinary symbolic-link setup branches
-remain `NOT_EXECUTED`, while its junction case passed. TASK-048 is CLAIMED for formal
-review. It therefore remains `PARTIAL`; no statement
+remain `NOT_EXECUTED`, while its junction case passed. TASK-048 is DONE with a
+source-bound `PASS WITH P3 FOLLOW-UP` review: P0/P1/P2=0 and manual management of
+retained recovery trees is P3. It therefore remains `PARTIAL`; no statement
 about actual Codex task behaviour, model cost, Linux remote execution, enterprise
 compatibility, release, acceptance, or superiority follows from the installer work.
