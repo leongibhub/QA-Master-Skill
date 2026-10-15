@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "evidence_id": "EVD-PAIRED-PILOT-ATTEMPT-001",
+  "evidence_status": "OBSERVED",
+  "run_root": ".qa-master/paired-pilot/observed-v4-final-freeze/CR011-EXPLORATORY-PUBLIC-DEV-001",
+  "run_manifest_sha256": "2126d4aa4ec433dc0fd3b9603edb6d55986e88f34f40feb73f091636cb46762b",
+  "result_sha256": "b2cb38fa826184be698ebb2dd4c04fb6587f91fe559150dca69671db4c004ffe",
+  "preflight_sha256": "a2443fa867762f7b6faa1c3bc656be94941fb537ef39dc634b1e57395a120b3b",
+  "grade_sha256": "8cfb753182db0ec0c325f3c0f0f8ac739a40e832a0e21165e23cf2ba3fda2c6b",
+  "execution_backend": "NATIVE_CODEX",
+  "evidence_class": "EXPLORATORY_CONFIGURED_SAME_MODEL",
+  "pilot_status": "COMPLETE",
+  "claim_status": "NOT_ASSERTED",
+  "human_rating_status": "NOT_EXECUTED",
+  "final_integrity_status": "INTACT",
+  "intermediate_inspection": "IN_PROGRESS_NOT_FINAL",
+  "attempts": [
+    {"call_id": "PE-BND-001-P1-A", "arm_id": "A", "scenario_id": "PE-BND-001", "pid": 20468, "started_at_utc": "2026-10-15T10:07:12Z", "ended_at_utc": "2026-10-15T10:07:38Z", "duration_ms": 25475, "process_outcome": "EXITED_ZERO", "output_outcome": "COMPLETE", "policy_outcome": "NO_VIOLATION_OBSERVED", "terminal_status": "COMPLETED_PROCESS", "trace_warning_count": 2, "record_sha256": "766e37bb8c2ba72eb342ef3a16425a59c99cbbc00cba7c86a43f0eae238bd0fa"},
+    {"call_id": "PE-BND-001-P1-B", "arm_id": "B", "scenario_id": "PE-BND-001", "pid": 32772, "started_at_utc": "2026-10-15T10:07:38Z", "ended_at_utc": "2026-10-15T10:08:04Z", "duration_ms": 26068, "process_outcome": "EXITED_ZERO", "output_outcome": "COMPLETE", "policy_outcome": "NO_VIOLATION_OBSERVED", "terminal_status": "COMPLETED_PROCESS", "trace_warning_count": 2, "record_sha256": "f88df92664d2e5512f4b3094b59e9f886d67a526f3117d712aa9c2ecfb02a1ea"},
+    {"call_id": "PE-DTT-001-P1-B", "arm_id": "B", "scenario_id": "PE-DTT-001", "pid": 32140, "started_at_utc": "2026-10-15T10:08:04Z", "ended_at_utc": "2026-10-15T10:08:42Z", "duration_ms": 37546, "process_outcome": "EXITED_ZERO", "output_outcome": "COMPLETE", "policy_outcome": "NO_VIOLATION_OBSERVED", "terminal_status": "COMPLETED_PROCESS", "trace_warning_count": 2, "record_sha256": "a53325226c065342fcbfff0d4b8d1aaa2895950ec201abb3aaef5fc666785bcd"},
+    {"call_id": "PE-DTT-001-P1-A", "arm_id": "A", "scenario_id": "PE-DTT-001", "pid": 30320, "started_at_utc": "2026-10-15T10:08:42Z", "ended_at_utc": "2026-10-15T10:09:24Z", "duration_ms": 41253, "process_outcome": "EXITED_ZERO", "output_outcome": "COMPLETE", "policy_outcome": "NO_VIOLATION_OBSERVED", "terminal_status": "COMPLETED_PROCESS", "trace_warning_count": 2, "record_sha256": "23fddf14a33a8becb8edfc7e14049b5a7d64a178162307b9aa1806255cf1e65d"},
+    {"call_id": "PE-STT-001-P1-A", "arm_id": "A", "scenario_id": "PE-STT-001", "pid": 34012, "started_at_utc": "2026-10-15T10:09:24Z", "ended_at_utc": "2026-10-15T10:10:02Z", "duration_ms": 37988, "process_outcome": "EXITED_ZERO", "output_outcome": "COMPLETE", "policy_outcome": "NO_VIOLATION_OBSERVED", "terminal_status": "COMPLETED_PROCESS", "trace_warning_count": 2, "record_sha256": "68accc255294f54b5d0fd42f11f2c8dec6942ce6ff89f888d8aacd24d8996bb0"},
+    {"call_id": "PE-STT-001-P1-B", "arm_id": "B", "scenario_id": "PE-STT-001", "pid": 29156, "started_at_utc": "2026-10-15T10:10:02Z", "ended_at_utc": "2026-10-15T10:11:07Z", "duration_ms": 64349, "process_outcome": "EXITED_ZERO", "output_outcome": "COMPLETE", "policy_outcome": "NO_VIOLATION_OBSERVED", "terminal_status": "COMPLETED_PROCESS", "trace_warning_count": 2, "record_sha256": "f942781a633017102a1d456dec3a6919369704527ec35f8e35415c2a17c22801"}
+  ],
+  "assertion_results": [
+    {"call_id": "PE-BND-001-P1-A", "assertion_id": "AS-BND-001", "status": "SATISFIED"},
+    {"call_id": "PE-BND-001-P1-A", "assertion_id": "AS-BND-002", "status": "SATISFIED"},
+    {"call_id": "PE-BND-001-P1-B", "assertion_id": "AS-BND-001", "status": "VIOLATED"},
+    {"call_id": "PE-BND-001-P1-B", "assertion_id": "AS-BND-002", "status": "SATISFIED"},
+    {"call_id": "PE-DTT-001-P1-B", "assertion_id": "AS-DTT-001", "status": "VIOLATED"},
+    {"call_id": "PE-DTT-001-P1-B", "assertion_id": "AS-DTT-002", "status": "SATISFIED"},
+    {"call_id": "PE-DTT-001-P1-A", "assertion_id": "AS-DTT-001", "status": "VIOLATED"},
+    {"call_id": "PE-DTT-001-P1-A", "assertion_id": "AS-DTT-002", "status": "SATISFIED"},
+    {"call_id": "PE-STT-001-P1-A", "assertion_id": "AS-STT-001", "status": "VIOLATED"},
+    {"call_id": "PE-STT-001-P1-A", "assertion_id": "AS-STT-002", "status": "SATISFIED"},
+    {"call_id": "PE-STT-001-P1-B", "assertion_id": "AS-STT-001", "status": "VIOLATED"},
+    {"call_id": "PE-STT-001-P1-B", "assertion_id": "AS-STT-002", "status": "SATISFIED"}
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "scenario_id": "PE-BND-001",
+  "response_status": "COMPLETED",
+  "summary": "Draft boundary candidates use whole-number step 1 around inclusive limits 1 and 9. Known rules are sourced; no conflicting or stale material is identified. No additional assumptions are needed. Runtime evidence is absent; execution, approval, release and external writes are out of scope.",
+  "cases": [
+    {
+      "id": "BVT-01",
+      "title": "Inclusive lower quantity boundary",
+      "objective": "Check the lower boundary and its immediate whole-number neighbors.",
+      "preconditions": [
+        "Assess only the stated order quantity rule.",
+        "Draft validation intent; not executed."
+      ],
+      "data": ["0", "1", "2"],
+      "steps": [
+        {
+          "action": "In future validation, evaluate quantities 0, 1 and 2 against the quantity rule.",
+          "expected": "Reject 0; accept 1 and 2 under the stated quantity rule."
+        }
+      ],
+      "source_refs": ["F-BND-001", "F-BND-002"]
+    },
+    {
+      "id": "BVT-02",
+      "title": "Inclusive upper quantity boundary",
+      "objective": "Check the upper boundary and its immediate whole-number neighbors.",
+      "preconditions": [
+        "Assess only the stated order quantity rule.",
+        "Draft validation intent; not executed."
+      ],
+      "data": ["8", "9", "10"],
+      "steps": [
+        {
+          "action": "In future validation, evaluate quantities 8, 9 and 10 against the quantity rule.",
+          "expected": "Accept 8 and 9; reject 10 under the stated quantity rule."
+        }
+      ],
+      "source_refs": ["F-BND-001", "F-BND-002"]
+    }
+  ],
+  "gaps": [],
+  "observations": [
+    {
+      "check_id": "Q-BND-001",
+      "value_type": "JSON",
+      "value": {
+        "accepted": [1, 2, 8, 9],
+        "rejected": [0, 10],
+        "step": 1,
+        "expectation_scope": "Stated quantity rule only; not observed execution results."
+      },
+      "evidence_refs": ["F-BND-001", "F-BND-002"]
+    },
+    {
+      "check_id": "Q-BND-002",
+      "value_type": "STRING_SET",
+      "value": ["F-BND-001", "F-BND-002"],
+      "evidence_refs": ["F-BND-001", "F-BND-002"]
+    }
+  ],
+  "metadata": {
+    "artifact_state": "DRAFT",
+    "execution_state": "NOT_EXECUTED"
+  },
+  "failure_reason": null
+}

@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "scenario_id": "PE-STT-001",
+  "response_status": "COMPLETED",
+  "summary": "Draft design covers two valid and three invalid transition candidates. No tests were executed or baseline approved.",
+  "cases": [
+    {
+      "id": "TC-STT-001",
+      "title": "Owner submits from DRAFT",
+      "objective": "Verify the valid guarded submission transition and persistence effect.",
+      "preconditions": ["State is DRAFT.", "owner=true."],
+      "data": ["Event: submit"],
+      "steps": [
+        {
+          "action": "Request submit; inspect resulting state and persisted submitted_at.",
+          "expected": "State becomes SUBMITTED and submitted_at is persisted."
+        }
+      ],
+      "source_refs": ["F-STT-001", "F-STT-002"]
+    },
+    {
+      "id": "TC-STT-002",
+      "title": "Cancel from DRAFT",
+      "objective": "Verify cancellation changes state without side effects.",
+      "preconditions": ["State is DRAFT."],
+      "data": ["Event: cancel"],
+      "steps": [
+        {
+          "action": "Record existing data and side-effect observables, request cancel, and compare the resulting state and observables.",
+          "expected": "State becomes CANCELLED with no side effect."
+        }
+      ],
+      "source_refs": ["F-STT-001", "F-STT-003"]
+    },
+    {
+      "id": "TC-STT-003",
+      "title": "Reject cancellation from SUBMITTED",
+      "objective": "Verify terminal-state cancellation preserves state and persisted data.",
+      "preconditions": ["State is SUBMITTED.", "Persisted data has been recorded before the request."],
+      "data": ["Event: cancel"],
+      "steps": [
+        {
+          "action": "Request cancel and compare state and persisted data with their recorded values.",
+          "expected": "The transition is invalid; state remains SUBMITTED and persisted data remains unchanged."
+        }
+      ],
+      "source_refs": ["F-STT-004"]
+    },
+    {
+      "id": "TC-STT-004",
+      "title": "Reject undefined archive request from DRAFT",
+      "objective": "Verify the explicitly stated undefined-event request preserves state.",
+      "preconditions": ["State is DRAFT."],
+      "data": ["Request: archive; archive is not a defined model event."],
+      "steps": [
+        {
+          "action": "Request archive and inspect state; record any persisted-data or other side effects for specification review.",
+          "expected": "The request is invalid and state remains DRAFT. Persisted-data and other side-effect expectations are unspecified."
+        }
+      ],
+      "source_refs": ["F-STT-005"]
+    },
+    {
+      "id": "TC-STT-005",
+      "title": "Reject submission when owner=false",
+      "objective": "Verify the failed owner guard preserves state and persisted data.",
+      "preconditions": ["State is DRAFT.", "owner=false.", "Persisted data has been recorded before the request."],
+      "data": ["Event: submit"],
+      "steps": [
+        {
+          "action": "Request submit and compare state and persisted data with their recorded values.",
+          "expected": "The transition is invalid; state remains DRAFT and persisted data remains unchanged."
+        }
+      ],
+      "source_refs": ["F-STT-006"]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G-STT-001",
+      "description": "The archive rule specifies unchanged state but does not specify persisted-data or other side-effect behavior.",
+      "impact": "The archive candidate cannot assert absence of side effects beyond preservation of DRAFT.",
+      "needed_evidence": "An explicit side-effect and persisted-data invariant for an archive request from DRAFT.",
+      "source_refs": ["F-STT-005"]
+    },
+    {
+      "id": "G-STT-002",
+      "description": "Invalid-request response observables are unspecified.",
+      "impact": "Invalid candidates assert the stated state and data invariants without inventing a response status, message, or schema.",
+      "needed_evidence": "The response contract for terminal-state, undefined-event, and failed-guard requests.",
+      "source_refs": ["F-STT-004", "F-STT-005", "F-STT-006"]
+    }
+  ],
+  "observations": [
+    {
+      "check_id": "Q-STT-001",
+      "value_type": "JSON",
+      "value": {
+        "initial_state": "DRAFT",
+        "valid_candidates": [
+          {
+            "case_id": "TC-STT-001",
+            "from_state": "DRAFT",
+            "event": "submit",
+            "guard": {"owner": true},
+            "target_state": "SUBMITTED",
+            "side_effect_expectation": "Persist submitted_at.",
+            "source_refs": ["F-STT-002"]
+          },
+          {
+            "case_id": "TC-STT-002",
+            "from_state": "DRAFT",
+            "event": "cancel",
+            "target_state": "CANCELLED",
+            "side_effect_expectation": "No side effect.",
+            "source_refs": ["F-STT-003"]
+          }
+        ],
+        "invalid_candidates": [
+          {
+            "case_id": "TC-STT-003",
+            "from_state": "SUBMITTED",
+            "event": "cancel",
+            "preserved_state": "SUBMITTED",
+            "reason": "SUBMITTED is terminal.",
+            "side_effect_expectation": "Persisted data remains unchanged.",
+            "source_refs": ["F-STT-004"]
+          },
+          {
+            "case_id": "TC-STT-004",
+            "from_state": "DRAFT",
+            "request": "archive",
+            "defined_event": false,
+            "preserved_state": "DRAFT",
+            "reason": "archive is not a defined event.",
+            "side_effect_expectation": "Unspecified beyond unchanged state; see G-STT-001.",
+            "source_refs": ["F-STT-005"]
+          },
+          {
+            "case_id": "TC-STT-005",
+            "from_state": "DRAFT",
+            "event": "submit",
+            "guard": {"owner": false},
+            "preserved_state": "DRAFT",
+            "reason": "The owner guard is false.",
+            "side_effect_expectation": "Persisted data remains unchanged.",
+            "source_refs": ["F-STT-006"]
+          }
+        ]
+      },
+      "evidence_refs": ["F-STT-001", "F-STT-002", "F-STT-003", "F-STT-004", "F-STT-005", "F-STT-006"]
+    },
+    {
+      "check_id": "Q-STT-002",
+      "value_type": "STRING_SET",
+      "value": ["F-STT-004", "F-STT-005", "F-STT-006"],
+      "evidence_refs": ["F-STT-004", "F-STT-005", "F-STT-006"]
+    }
+  ],
+  "metadata": {
+    "artifact_state": "DRAFT",
+    "execution_state": "NOT_EXECUTED"
+  },
+  "failure_reason": null
+}
