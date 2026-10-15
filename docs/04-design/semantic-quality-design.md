@@ -720,10 +720,27 @@ file except the manifest itself and forbids extras.
 reparse point before following it. It strict-parses the manifest, canonical
 bundle and profile; re-hashes every retained byte; recomputes the result ID
 from retained inputs/assets/evaluator bytes; checks the directory basename;
-checks bundle/category/obligation identities; and verifies that the profile has
-exactly the manifest-declared four rows per obligation with identical category,
-outcome, reason and pointer values. It does not trust the ledger or re-run
-semantic evaluation.
+and checks bundle/category/obligation identities.
+
+It then compares the exact retained evaluator and six asset hashes with the
+currently installed registered version. A mismatch is
+`MISMATCH / INSTALLED_DERIVER_MISMATCH`; inspect never imports or executes the
+retained `contracts/evaluator.py`. When they match, inspect invokes the same
+side-effect-free `derive_profile` function used by `evaluate`, using only the
+retained bundle, response, opaque source bytes and registered assets. It
+re-derives canonical normalized-response and profile bytes, compares them
+byte-for-byte with the retained files, and cross-checks the manifest's profile
+hash, row count, category, outcome, reason and pointer values. Any difference
+is `MISMATCH / PROFILE_DERIVATION_MISMATCH`.
+
+This derivation is not a model call, external process, network action, historic
+CR-011 grader run or execution of retained code. It is required because a
+ledger-only check cannot detect a jointly rewritten profile and manifest.
+`INTACT` means that retained bytes agree with the current registered
+deterministic derivation. With no signature or external trust anchor, it does
+not authenticate the author or host and does not claim resistance to a party
+that replaces all retained inputs, the result-ID directory, external
+references and the current installed evaluator together.
 
 Inspection applies one deterministic boundary:
 
@@ -734,7 +751,7 @@ Inspection applies one deterministic boundary:
 | 1 | result root does not exist or is not a directory | `MISSING` |
 | 2 | `reservation.json` exists, manifest is absent/invalid, or manifest/result invariants cannot be established | `INCOMPLETE` |
 | 3 | valid manifest declares a file that is absent | `MISSING` |
-| 4 | declared size/hash/role, recomputed result ID, profile/category/row cross-check, asset or implementation binding differs | `MISMATCH` |
+| 4 | declared size/hash/role, recomputed result ID, profile/category/row cross-check, installed asset/implementation binding, or pure profile derivation differs | `MISMATCH` |
 | 5 | an undeclared file or directory exists | `UNDECLARED` |
 | 6 | all checks pass | `INTACT` |
 
@@ -807,7 +824,7 @@ reported as holdout evidence. At minimum, independent tests freeze cases for:
 | usability/category | every valid applicability state including mixed missing/conflict `UNSCORABLE`; each contradictory category/obligation combination; no rating/aggregate/winner fields |
 | installed assets | exact six-resource bytes/hashes through a fresh wheel, missing asset, mixed version, scanner/normalizer/projection drift, evaluator-byte drift |
 | provenance lifecycle | opaque non-JSON source bytes, one-byte bundle/response/source/schema drift, concurrent result-ID reservation with one winner, injected stage/reservation/manifest fault, no overwrite or auto-resume, input/output containment |
-| inspection | each status alone and mixed precedence, invalid/absent manifest, missing/hash/identity/profile/category/row/asset/implementation mismatch, undeclared file, link/reparse and I/O error boundary |
+| inspection | each status alone and mixed precedence, invalid/absent manifest, missing/hash/identity/profile/category/row/asset/implementation mismatch, coherent profile+manifest rewrite with unchanged retained inputs, undeclared file, link/reparse and I/O error boundary |
 | historical boundary | hashes for retained CR-011 raw/oracle/grade stay unchanged and no Phase 2 file is written under that root |
 
 Capacity boundary tests cover every maximum and maximum-plus-one. Metamorphic
