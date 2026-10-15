@@ -7,7 +7,7 @@
 - Change / task: `CR-008` / `TASK-028` (`work-11c7092fe12a4e2a8f52ac9cdbbc9621`)
 - Primary implementation subject: `79d8ce4076807dd05eea87fe3e36bc171e873365` (`CODE-JOB-SCHEDULER-CORE-001 v1`)
 - Test-plan input: `DOC-JOB-SCHEDULER-TEST-PLAN-001 v3`, SHA-256 `FBC8E0C340939B5E204BBE0D30998248874ADBA0B69BF8C70C61C7F92BA5FEB8`
-- Tester-owned overlay: `tests/test_job_scheduler_independent.py`, SHA-256 `E0923BD916B9B09F3C33E507E2E0E5CD471B664783FD78F64366FF9D204E4CCE`
+- Tester-owned overlay: `tests/test_job_scheduler_independent.py`, SHA-256 `5EC5BFBD70AAD7E208BBEE0BB56CE1C13F168EE8039349B0DDE61F5F54B3CB84`
 - Environment: Windows NT 10.0.26200.0, CPython 3.13.5, local synthetic ports only.
 - Execution window: 2026-10-15 11:22–11:27 +08:00.
 
@@ -43,6 +43,6 @@ The following observations are outside the primary scheduler subject and do not 
 - `python -m unittest -v tests.test_configuration` passed 12/12 in 3.139 seconds, including complete 65,537-byte POST returning 413, 1 MiB header-only/incomplete POST bounded to 413, and normal configuration POST/readback.
 - Final `python -W error::ResourceWarning -m unittest discover -s tests -v` passed 457/457 in 19.654 seconds on the current tree. This includes the tester overlay but is a regression observation on `3f83e9b`, not a claim that `79d8ce4` contained the overlay or BUG-008 repair.
 
-Earlier in this change, a full-suite run reported by the parent failed at the old oversized-POST test with Windows `WinError 10053` while awaiting the expected 413. That report is recorded as prior, non-pass context only; it is superseded for the separate BUG-008 repair by the independent 12/12 and 455/455 observations above. No claim is made for oversized actual bodies beyond the bounded-drain test contract.
+Earlier in this change, a full-suite run reported by the parent failed at the old oversized-POST test with Windows `WinError 10053` while awaiting the expected 413. That report is recorded as prior, non-pass context only; it is superseded for the separate BUG-008 repair by the independent 12/12 and 457/457 observations above. No claim is made for oversized actual bodies beyond the bounded-drain test contract.
 
 Remote transport, real worker execution, credentials/IAM, actual cancellation, evidence retention/verification, browser/enterprise integration, performance/load/stress and production validation remain `NOT_EXECUTED`.
