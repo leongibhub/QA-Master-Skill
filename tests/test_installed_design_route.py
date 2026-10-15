@@ -102,6 +102,10 @@ class InstalledDesignRouteTests(unittest.TestCase):
         abbreviated = self.run_helper("design", "--in", str(missing), "--output", str(output))
         self.assertEqual(abbreviated.returncode, 2)
         self.assertEqual(output.read_bytes(), b"PRESERVE")
+        global_abbreviated = self.run_helper("--sta", str(self.work / "state.json"), "design",
+                                             "--input", str(missing), "--output", str(output))
+        self.assertEqual(global_abbreviated.returncode, 2)
+        self.assertEqual(output.read_bytes(), b"PRESERVE")
         self.assertFalse(list(self.work.glob(".qa-master-*")))
 
     def test_tc_imd_009_direct_campaign_mode_remains_unchanged(self):

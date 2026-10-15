@@ -7,7 +7,7 @@ from .state_store import StateConflictError
 
 
 def main():
-    p = argparse.ArgumentParser(description='QA Master local workflow CLI (planning only)')
+    p = argparse.ArgumentParser(description='QA Master local workflow CLI (planning only)', allow_abbrev=False)
     p.add_argument('--state', default='.qa-master/campaign.json')
     sub = p.add_subparsers(dest='cmd', required=True)
     sub.add_parser('init').add_argument('name')

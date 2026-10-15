@@ -37,7 +37,7 @@ One final full local regression was then run after the projection-index change:
 D:\codex-rd-platform\.venv\Scripts\python.exe -X utf8 -m unittest discover -s tests -q
 ```
 
-Observed: 598 tests passed in 93.019 seconds, with 3 pre-existing
+Observed: 598 tests passed in 100.765 seconds, with 3 pre-existing
 platform-specific skips.
 
 The route-specific tests install a fresh Skill under a temporary unrelated
@@ -52,11 +52,11 @@ campaign compatibility. `py_compile` and `git diff --check` also passed.
 
 | Path | SHA-256 |
 | --- | --- |
-| `qa_master/__main__.py` | `37352C6AE304732A66DC24298F4D95AC01CEA772EF2209759E75EEAA762BBE2B` |
+| `qa_master/__main__.py` | `283DF2A52409C537090F26BCC9EFD4418660F91368CDDAD8E3103470654D203D` |
 | `qa_master/campaign_cli.py` | `630EAB0DB06D7C7A57A661F377E7089137353FD137872005F6B27379F3D93564` |
 | `qa_master/skills/codex/references/design-methods.md` | `0AC902F51EC4060A896ADE1284E1055633171D4AC385C5D5A3912F8AA8B5CE6F` |
 | `qa_master/skills/codex/examples/design-methods.json` | `D2F52BDE97B461C8EC49F264F05C0EBC8EE6BEA303F4990FE5B25DA2F1187F06` |
-| `tests/test_installed_design_route.py` | `DC2EC95FA71F8C28E11FCCC0EAD922FED4793B120BEF1A8679724436A10206EF` |
+| `tests/test_installed_design_route.py` | `9656E0F11DDFFB6CA9C7D09E501BB517B29B8054A98288D790B6FEAB62DD4C72` |
 
 ## Evidence boundary
 
