@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "scenario_id": "PE-DTT-001",
+  "response_status": "COMPLETED",
+  "summary": "Draft decision table identifies three legal combinations: two with unambiguous fees and one with conflicting outcomes. STANDARD/INTERNATIONAL is excluded. No tests were executed.",
+  "cases": [
+    {
+      "id": "TC-DTT-001",
+      "title": "MEMBER/DOMESTIC conflicting fee rules",
+      "objective": "Preserve both applicable outcomes without inventing precedence.",
+      "preconditions": ["Draft only; fee oracle remains unresolved."],
+      "data": ["plan=MEMBER", "destination=DOMESTIC"],
+      "steps": [
+        {
+          "action": "Map the combination to all stated applicable rules.",
+          "expected": "F-DTT-003 specifies a waived fee; F-DTT-006 specifies 8 USD. The combination is legal, but its expected fee is unresolved."
+        }
+      ],
+      "source_refs": ["F-DTT-001", "F-DTT-003", "F-DTT-006"]
+    },
+    {
+      "id": "TC-DTT-002",
+      "title": "MEMBER/INTERNATIONAL fee",
+      "objective": "Design a check for the stated 15 USD fee.",
+      "preconditions": ["Draft only."],
+      "data": ["plan=MEMBER", "destination=INTERNATIONAL"],
+      "steps": [
+        {
+          "action": "For future execution, supply this combination to the delivery-fee calculation and inspect the fee.",
+          "expected": "Delivery fee is 15 USD according to F-DTT-005."
+        }
+      ],
+      "source_refs": ["F-DTT-001", "F-DTT-005"]
+    },
+    {
+      "id": "TC-DTT-003",
+      "title": "STANDARD/DOMESTIC fee",
+      "objective": "Design a check for the stated 5 USD fee.",
+      "preconditions": ["Draft only."],
+      "data": ["plan=STANDARD", "destination=DOMESTIC"],
+      "steps": [
+        {
+          "action": "For future execution, supply this combination to the delivery-fee calculation and inspect the fee.",
+          "expected": "Delivery fee is 5 USD according to F-DTT-004."
+        }
+      ],
+      "source_refs": ["F-DTT-001", "F-DTT-004"]
+    },
+    {
+      "id": "TC-DTT-004",
+      "title": "STANDARD/INTERNATIONAL exclusion",
+      "objective": "Preserve the explicit exclusion from the legal rule universe.",
+      "preconditions": ["Static design review only."],
+      "data": ["plan=STANDARD", "destination=INTERNATIONAL"],
+      "steps": [
+        {
+          "action": "Compare the combination against the legal-universe restriction.",
+          "expected": "The combination is excluded as unsupported. No fee or runtime rejection behavior is specified."
+        }
+      ],
+      "source_refs": ["F-DTT-001", "F-DTT-002"]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G-DTT-001",
+      "description": "MEMBER/DOMESTIC has conflicting waived-fee and 8 USD rules with no stated precedence.",
+      "impact": "A single expected fee cannot be assigned to this legal combination.",
+      "needed_evidence": "A clarified rule resolving the conflict or explicitly defining precedence.",
+      "source_refs": ["F-DTT-003", "F-DTT-006"]
+    },
+    {
+      "id": "G-DTT-002",
+      "description": "Runtime behavior for the excluded STANDARD/INTERNATIONAL combination is unspecified.",
+      "impact": "Exclusion can be recorded, but a fee, error response, or rejection mechanism cannot be asserted.",
+      "needed_evidence": "An unsupported-input behavior contract if runtime negative testing is later requested.",
+      "source_refs": ["F-DTT-002"]
+    }
+  ],
+  "observations": [
+    {
+      "check_id": "Q-DTT-001",
+      "value_type": "JSON",
+      "value": {
+        "legal_combinations": [
+          {
+            "plan": "MEMBER",
+            "destination": "DOMESTIC",
+            "classification": "CONFLICTING_UNRESOLVED",
+            "candidate_outcomes": [
+              {"fee": "WAIVED", "source_ref": "F-DTT-003"},
+              {"fee_amount": 8, "currency": "USD", "source_ref": "F-DTT-006"}
+            ]
+          },
+          {
+            "plan": "MEMBER",
+            "destination": "INTERNATIONAL",
+            "classification": "UNAMBIGUOUS",
+            "fee_amount": 15,
+            "currency": "USD",
+            "source_ref": "F-DTT-005"
+          },
+          {
+            "plan": "STANDARD",
+            "destination": "DOMESTIC",
+            "classification": "UNAMBIGUOUS",
+            "fee_amount": 5,
+            "currency": "USD",
+            "source_ref": "F-DTT-004"
+          }
+        ],
+        "excluded_combinations": [
+          {
+            "plan": "STANDARD",
+            "destination": "INTERNATIONAL",
+            "classification": "EXCLUDED_UNSUPPORTED",
+            "source_ref": "F-DTT-002"
+          }
+        ]
+      },
+      "evidence_refs": ["F-DTT-001", "F-DTT-002", "F-DTT-003", "F-DTT-004", "F-DTT-005", "F-DTT-006"]
+    },
+    {
+      "check_id": "Q-DTT-002",
+      "value_type": "STRING_SET",
+      "value": ["F-DTT-003", "F-DTT-006"],
+      "evidence_refs": ["F-DTT-003", "F-DTT-006"]
+    }
+  ],
+  "metadata": {
+    "artifact_state": "DRAFT",
+    "execution_state": "NOT_EXECUTED"
+  },
+  "failure_reason": null
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "evidence_id": "EVD-PAIRED-PILOT-TRACE-INDEX-001",
+  "capture_root": ".qa-master/paired-pilot/observed-v4-final-freeze/CR011-EXPLORATORY-PUBLIC-DEV-001/attempts",
+  "captures": [
+    {"call_id": "PE-BND-001-P1-A", "stdout_jsonl_sha256": "9f1c3437edc77e859c1deeb901b634ec9d7176c1c10cfe32681d9b7420de7270", "stderr_txt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "final_txt_sha256": "31ebcb9a1b10262315b0499297143ce8d7b482655e6d0a96e342246eb2dcae4d", "envelope_json_sha256": "e38106a8135fcdbf068b2d9de9bb07286e3191954f305c057bd55c51886dd745"},
+    {"call_id": "PE-BND-001-P1-B", "stdout_jsonl_sha256": "8b980e003e0af817da11a29bea0076026cc1dd0900c61ca19cae4dca3061d4cf", "stderr_txt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "final_txt_sha256": "83bee59bb6ac1d7c530105127a4e35921085be859f594facced404109c78df71", "envelope_json_sha256": "627380608397a807b134cf8dbe9f0eaea88f038e81aab74a63dab999b1b77817"},
+    {"call_id": "PE-DTT-001-P1-B", "stdout_jsonl_sha256": "c2e2c66aff7f8e687e55e49664f923608d3f3070ad690118168a3be320b75e9b", "stderr_txt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "final_txt_sha256": "0a90dec8f758b9eb8344215f0668815ec8ac13f7a14c078a025d5560585bbd1c", "envelope_json_sha256": "730ec0d9445892b3256f5aac3a198aa9012c272a8eda16d65249562d23df9d67"},
+    {"call_id": "PE-DTT-001-P1-A", "stdout_jsonl_sha256": "3bcb373aa8c4f0b49ba20b18d8c5a4b8782b55aaf026c0a2cffb9db96083a30b", "stderr_txt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "final_txt_sha256": "54af8807268784bf818b1a05c658b5a78530fce224633960e371fc66cfeb7764", "envelope_json_sha256": "65fc0b2224202ad874e5ebeb4fc45b551522c9823dbea82b222537e4f561aa31"},
+    {"call_id": "PE-STT-001-P1-A", "stdout_jsonl_sha256": "6fe6433aa43b7eebbd72bceaa6d54b1dbea6518bae272b5dc0605f0772b8a1c5", "stderr_txt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "final_txt_sha256": "6a656922256cdce6385b61d2e493332bbae8d5207eaf5b3684a3d2c6ffd291de", "envelope_json_sha256": "35e900b32d61009ae7172058270c7f43eceb29b1cdd4aa79b04d60be5cce33c8"},
+    {"call_id": "PE-STT-001-P1-B", "stdout_jsonl_sha256": "f1988608133426ac11ff45b31ce306eca847c0e9826a25ed5c519755ebd06b7b", "stderr_txt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "final_txt_sha256": "6a58f9a753bde3f47a1c9cf976d1f1a7c4feea29f2fbe7ce6180832ae263e9b6", "envelope_json_sha256": "a5520c10edfd216b6c247169e058de51878185ab726a60583099390a8a2fafeb"}
+  ]
+}
