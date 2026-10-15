@@ -7,7 +7,11 @@
       "source": "declared/example-requirements.md",
       "approved": false,
       "dimension": "functional",
-      "acceptance": "Use only declared source and oracle references",
+      "dimensions": ["functional"],
+      "acceptance": "Amounts 1 through 9 are accepted; members receive discount, non-members receive normal outcome; submitting a draft order reaches submitted and undeclared state-trigger pairs are denied.",
+      "oracles": {"functional": "Amounts 1 through 9 are accepted; members receive discount, non-members receive normal outcome; submitting a draft order reaches submitted and undeclared state-trigger pairs are denied."},
+      "preconditions": "Draft review environment is identified by the task owner",
+      "test_data": "Declared finite model values",
       "priority": "P1"
     }
   ],

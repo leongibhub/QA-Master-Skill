@@ -1,0 +1,1638 @@
+{
+  "schema_version": 1,
+  "project": "Document release policy offline draft",
+  "input_sha256": "d63d4c7bdb3cfa87bcebf5773e73f6df4699e3528069c309a22ee612623eceaf",
+  "requirement_review": {
+    "findings": [
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-001",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_PROVENANCE",
+        "subject": "REQ-001",
+        "message": "缺少来源和版本"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_ACCEPTANCE",
+        "subject": "REQ-001",
+        "message": "缺少验收标准"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-002",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_PROVENANCE",
+        "subject": "REQ-002",
+        "message": "缺少来源和版本"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_ACCEPTANCE",
+        "subject": "REQ-002",
+        "message": "缺少验收标准"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-003",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_PROVENANCE",
+        "subject": "REQ-003",
+        "message": "缺少来源和版本"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_ACCEPTANCE",
+        "subject": "REQ-003",
+        "message": "缺少验收标准"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-004",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_PROVENANCE",
+        "subject": "REQ-004",
+        "message": "缺少来源和版本"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_ACCEPTANCE",
+        "subject": "REQ-004",
+        "message": "缺少验收标准"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-005",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_PROVENANCE",
+        "subject": "REQ-005",
+        "message": "缺少来源和版本"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_ACCEPTANCE",
+        "subject": "REQ-005",
+        "message": "缺少验收标准"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-006",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_PROVENANCE",
+        "subject": "REQ-006",
+        "message": "缺少来源和版本"
+      },
+      {
+        "severity": "MAJOR",
+        "code": "NO_ACCEPTANCE",
+        "subject": "REQ-006",
+        "message": "缺少验收标准"
+      }
+    ],
+    "approval": "PENDING_HUMAN",
+    "count": 6
+  },
+  "test_cases": [],
+  "coverage": {
+    "functional": {
+      "status": "BLOCKED",
+      "cases": [],
+      "gaps": [
+        {
+          "requirement": "REQ-001",
+          "dimension": "functional",
+          "code": "REQUIREMENT_NOT_APPROVED"
+        },
+        {
+          "requirement": "REQ-001",
+          "dimension": "functional",
+          "code": "ORACLE_MISSING"
+        },
+        {
+          "requirement": "REQ-002",
+          "dimension": "functional",
+          "code": "REQUIREMENT_NOT_APPROVED"
+        },
+        {
+          "requirement": "REQ-002",
+          "dimension": "functional",
+          "code": "ORACLE_MISSING"
+        },
+        {
+          "requirement": "REQ-003",
+          "dimension": "functional",
+          "code": "REQUIREMENT_NOT_APPROVED"
+        },
+        {
+          "requirement": "REQ-003",
+          "dimension": "functional",
+          "code": "ORACLE_MISSING"
+        },
+        {
+          "requirement": "REQ-004",
+          "dimension": "functional",
+          "code": "REQUIREMENT_NOT_APPROVED"
+        },
+        {
+          "requirement": "REQ-004",
+          "dimension": "functional",
+          "code": "ORACLE_MISSING"
+        },
+        {
+          "requirement": "REQ-005",
+          "dimension": "functional",
+          "code": "REQUIREMENT_NOT_APPROVED"
+        },
+        {
+          "requirement": "REQ-005",
+          "dimension": "functional",
+          "code": "ORACLE_MISSING"
+        },
+        {
+          "requirement": "REQ-006",
+          "dimension": "functional",
+          "code": "REQUIREMENT_NOT_APPROVED"
+        },
+        {
+          "requirement": "REQ-006",
+          "dimension": "functional",
+          "code": "ORACLE_MISSING"
+        }
+      ]
+    },
+    "api": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "whitebox": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "integration": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "performance": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "load": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "stress": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "stability": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "compatibility": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "negative": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "security": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "recovery": {
+      "status": "UNASSESSED",
+      "cases": []
+    },
+    "regression": {
+      "status": "UNASSESSED",
+      "cases": []
+    }
+  },
+  "case_review": {
+    "pass": true,
+    "issues": [],
+    "trace_matrix": {},
+    "case_count": 0,
+    "human_final_decision": "PENDING"
+  },
+  "unresolved": {
+    "requirement_blockers": [
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-001",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-002",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-003",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-004",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-005",
+        "message": "需求内容为空"
+      },
+      {
+        "severity": "BLOCKER",
+        "code": "EMPTY_REQUIREMENT",
+        "subject": "REQ-006",
+        "message": "需求内容为空"
+      }
+    ],
+    "design_gaps": [
+      {
+        "requirement": "REQ-001",
+        "dimension": "functional",
+        "code": "REQUIREMENT_NOT_APPROVED"
+      },
+      {
+        "requirement": "REQ-001",
+        "dimension": "functional",
+        "code": "ORACLE_MISSING"
+      },
+      {
+        "requirement": "REQ-002",
+        "dimension": "functional",
+        "code": "REQUIREMENT_NOT_APPROVED"
+      },
+      {
+        "requirement": "REQ-002",
+        "dimension": "functional",
+        "code": "ORACLE_MISSING"
+      },
+      {
+        "requirement": "REQ-003",
+        "dimension": "functional",
+        "code": "REQUIREMENT_NOT_APPROVED"
+      },
+      {
+        "requirement": "REQ-003",
+        "dimension": "functional",
+        "code": "ORACLE_MISSING"
+      },
+      {
+        "requirement": "REQ-004",
+        "dimension": "functional",
+        "code": "REQUIREMENT_NOT_APPROVED"
+      },
+      {
+        "requirement": "REQ-004",
+        "dimension": "functional",
+        "code": "ORACLE_MISSING"
+      },
+      {
+        "requirement": "REQ-005",
+        "dimension": "functional",
+        "code": "REQUIREMENT_NOT_APPROVED"
+      },
+      {
+        "requirement": "REQ-005",
+        "dimension": "functional",
+        "code": "ORACLE_MISSING"
+      },
+      {
+        "requirement": "REQ-006",
+        "dimension": "functional",
+        "code": "REQUIREMENT_NOT_APPROVED"
+      },
+      {
+        "requirement": "REQ-006",
+        "dimension": "functional",
+        "code": "ORACLE_MISSING"
+      }
+    ]
+  },
+  "workflow": {
+    "requirements_review": "WAITING_HUMAN_APPROVAL",
+    "test_design": "DRAFT_ONLY",
+    "execution": "NOT_AUTHORIZED",
+    "synapsert": "NOT_WRITTEN"
+  },
+  "formal_baseline_approved": false,
+  "method_design": {
+    "schema_version": 1,
+    "status": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "input_sha256": "64aed2c7b9fb28d2f8d8f273f929cd87fce80c4d8901946d0bb0fd4d5dbaa31e",
+    "model_results": [
+      {
+        "model_id": "M-boundary",
+        "method": "boundary",
+        "input_sha256": "c09a188af49b5e8aed4fb47c06e18283ef8f857bcc45f04b548780e1d085cd4a",
+        "candidate_ids": [
+          "TC-MD-1B13D0E1DE6C9B79F4B7",
+          "TC-MD-23EA5A0F21F4FD29094E",
+          "TC-MD-26EEC46FCEE4969A52B8",
+          "TC-MD-42B0E4AC96285095FDE3",
+          "TC-MD-9978AFFE135349E1F3A1",
+          "TC-MD-DC273814BFFF88B81260"
+        ],
+        "obligation_ids": [],
+        "coverage": {
+          "state": "ASSESSED",
+          "denominator_name": "distinct_points",
+          "denominator": 6,
+          "candidate_ready": 6,
+          "oracle_missing": 0,
+          "gap": 0,
+          "overlap": 0,
+          "conflict": 0,
+          "unevaluable": 0,
+          "unreachable": 0,
+          "out_of_scope": 0,
+          "ratio": {
+            "numerator": 6,
+            "denominator": 6
+          }
+        },
+        "analysis": {
+          "requested_positions": 6,
+          "distinct_points": 6,
+          "representable_points": 6,
+          "unrepresentable": 0,
+          "in_domain": 4,
+          "lower_invalid": 1,
+          "upper_invalid": 1,
+          "both_invalid": 0,
+          "candidate_ready": 6,
+          "oracle_missing": 0,
+          "points": [
+            {
+              "value": "1",
+              "class": "LOWER_INVALID",
+              "representable": true,
+              "origins": [
+                "lower"
+              ],
+              "candidate_id": "TC-MD-42B0E4AC96285095FDE3",
+              "obligation_ids": []
+            },
+            {
+              "value": "2",
+              "class": "IN_DOMAIN",
+              "representable": true,
+              "origins": [
+                "lower"
+              ],
+              "candidate_id": "TC-MD-9978AFFE135349E1F3A1",
+              "obligation_ids": []
+            },
+            {
+              "value": "3",
+              "class": "IN_DOMAIN",
+              "representable": true,
+              "origins": [
+                "lower"
+              ],
+              "candidate_id": "TC-MD-1B13D0E1DE6C9B79F4B7",
+              "obligation_ids": []
+            },
+            {
+              "value": "5",
+              "class": "IN_DOMAIN",
+              "representable": true,
+              "origins": [
+                "upper"
+              ],
+              "candidate_id": "TC-MD-26EEC46FCEE4969A52B8",
+              "obligation_ids": []
+            },
+            {
+              "value": "6",
+              "class": "IN_DOMAIN",
+              "representable": true,
+              "origins": [
+                "upper"
+              ],
+              "candidate_id": "TC-MD-23EA5A0F21F4FD29094E",
+              "obligation_ids": []
+            },
+            {
+              "value": "7",
+              "class": "UPPER_INVALID",
+              "representable": true,
+              "origins": [
+                "upper"
+              ],
+              "candidate_id": "TC-MD-DC273814BFFF88B81260",
+              "obligation_ids": []
+            }
+          ],
+          "classification_counts": {
+            "CANDIDATE_READY": 6,
+            "ORACLE_MISSING": 0,
+            "UNREPRESENTABLE": 0
+          }
+        }
+      },
+      {
+        "model_id": "M-decision",
+        "method": "decision_table",
+        "input_sha256": "2b20afa60b432a6b01618ed31f277f4bdd901a09f9784f6ca520499a5231cf58",
+        "candidate_ids": [
+          "TC-MD-20E450973DFD95647F4E",
+          "TC-MD-6DCA6333DA6F3C2499BF",
+          "TC-MD-87CEAA6F4504AF327797",
+          "TC-MD-AC2F0582BC7FFCCF623F"
+        ],
+        "obligation_ids": [],
+        "coverage": {
+          "state": "ASSESSED",
+          "denominator_name": "admissible_assignments",
+          "denominator": 4,
+          "candidate_ready": 4,
+          "oracle_missing": 0,
+          "gap": 0,
+          "overlap": 0,
+          "conflict": 0,
+          "unevaluable": 0,
+          "unreachable": 0,
+          "out_of_scope": 0,
+          "ratio": {
+            "numerator": 4,
+            "denominator": 4
+          }
+        },
+        "analysis": {
+          "universe_size": 4,
+          "excluded": 0,
+          "constraint_unevaluable": 0,
+          "admissible": 4,
+          "unique": 4,
+          "overlap": 0,
+          "conflict": 0,
+          "gap": 0,
+          "unique_oracle_ready": 4,
+          "unique_oracle_missing": 0,
+          "overlap_oracle_ready": 0,
+          "overlap_oracle_missing": 0,
+          "oracle_ready": 4,
+          "assignments": [
+            {
+              "values": {
+                "member": false,
+                "settled": false
+              },
+              "admissibility": "ADMISSIBLE",
+              "matched_rule_ids": [
+                "R-00"
+              ],
+              "classification": "UNIQUE_ORACLE_READY",
+              "candidate_id": "TC-MD-6DCA6333DA6F3C2499BF",
+              "obligation_ids": []
+            },
+            {
+              "values": {
+                "member": false,
+                "settled": true
+              },
+              "admissibility": "ADMISSIBLE",
+              "matched_rule_ids": [
+                "R-01"
+              ],
+              "classification": "UNIQUE_ORACLE_READY",
+              "candidate_id": "TC-MD-AC2F0582BC7FFCCF623F",
+              "obligation_ids": []
+            },
+            {
+              "values": {
+                "member": true,
+                "settled": false
+              },
+              "admissibility": "ADMISSIBLE",
+              "matched_rule_ids": [
+                "R-10"
+              ],
+              "classification": "UNIQUE_ORACLE_READY",
+              "candidate_id": "TC-MD-87CEAA6F4504AF327797",
+              "obligation_ids": []
+            },
+            {
+              "values": {
+                "member": true,
+                "settled": true
+              },
+              "admissibility": "ADMISSIBLE",
+              "matched_rule_ids": [
+                "R-11"
+              ],
+              "classification": "UNIQUE_ORACLE_READY",
+              "candidate_id": "TC-MD-20E450973DFD95647F4E",
+              "obligation_ids": []
+            }
+          ],
+          "classification_counts": {
+            "UNIQUE_ORACLE_READY": 4,
+            "UNIQUE_ORACLE_MISSING": 0,
+            "OVERLAP_ORACLE_READY": 0,
+            "OVERLAP_ORACLE_MISSING": 0,
+            "CONFLICT": 0,
+            "GAP": 0
+          }
+        }
+      },
+      {
+        "model_id": "M-state",
+        "method": "state_transition",
+        "input_sha256": "e8dcc20ad174b415da41b0689697b10107e6dd99289b8d3d1f899b773957afad",
+        "candidate_ids": [
+          "TC-MD-5E4CF69890F62C14DA68",
+          "TC-MD-5F07D40238F2B68078A9",
+          "TC-MD-B39F31CBBC34C6198B3E"
+        ],
+        "obligation_ids": [],
+        "coverage": {
+          "state": "ASSESSED",
+          "denominator_name": "logical_transition_keys",
+          "denominator": 3,
+          "candidate_ready": 3,
+          "oracle_missing": 0,
+          "gap": 0,
+          "overlap": 0,
+          "conflict": 0,
+          "unevaluable": 0,
+          "unreachable": 0,
+          "out_of_scope": 0,
+          "ratio": {
+            "numerator": 3,
+            "denominator": 3
+          }
+        },
+        "analysis": {
+          "state_count": 3,
+          "trigger_count": 2,
+          "explicit_records": 3,
+          "logical_keys": 3,
+          "closed_world_added": 0,
+          "reachable_states": [
+            "DRAFT",
+            "PUBLISHED",
+            "REVIEW"
+          ],
+          "unreachable_states": [],
+          "reachable_transitions": 2,
+          "unreachable_transitions": 0,
+          "logical_rows": [
+            {
+              "from_state": "DRAFT",
+              "trigger": "publish",
+              "record_ids": [
+                "T-invalid"
+              ],
+              "classification": "INVALID_READY",
+              "structurally_reachable": true,
+              "candidate_id": "TC-MD-5E4CF69890F62C14DA68",
+              "obligation_ids": []
+            },
+            {
+              "from_state": "DRAFT",
+              "trigger": "submit",
+              "record_ids": [
+                "T-submit"
+              ],
+              "classification": "VALID_READY",
+              "structurally_reachable": true,
+              "candidate_id": "TC-MD-5F07D40238F2B68078A9",
+              "obligation_ids": []
+            },
+            {
+              "from_state": "REVIEW",
+              "trigger": "publish",
+              "record_ids": [
+                "T-publish"
+              ],
+              "classification": "VALID_READY",
+              "structurally_reachable": true,
+              "candidate_id": "TC-MD-B39F31CBBC34C6198B3E",
+              "obligation_ids": []
+            }
+          ],
+          "classification_counts": {
+            "VALID_READY": 2,
+            "VALID_ORACLE_MISSING": 0,
+            "INVALID_READY": 1,
+            "INVALID_ORACLE_MISSING": 0,
+            "DUPLICATE_VALID_READY": 0,
+            "DUPLICATE_VALID_ORACLE_MISSING": 0,
+            "DUPLICATE_INVALID_READY": 0,
+            "DUPLICATE_INVALID_ORACLE_MISSING": 0,
+            "CONFLICT": 0
+          }
+        }
+      }
+    ],
+    "candidates": [
+      {
+        "id": "TC-MD-1B13D0E1DE6C9B79F4B7",
+        "title": "Batch integer range",
+        "priority": "P2",
+        "trace": [
+          "REQ-001"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "value": "3",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "lower"
+          ]
+        },
+        "steps": [
+          "Set Batch integer range to 3",
+          "Perform the scenario referenced by REQ-001",
+          "Collect evidence for oracle O-valid"
+        ],
+        "expected": "Satisfy oracle O-valid",
+        "model_id": "M-boundary",
+        "method": "boundary",
+        "source_refs": [
+          {
+            "id": "F-01",
+            "kind": "requirement",
+            "locator": "source-facts/F-01"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-valid",
+            "kind": "valid",
+            "locator": "source-facts/F-01/in-range"
+          }
+        ],
+        "method_data": {
+          "value": "3",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "lower"
+          ]
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-20E450973DFD95647F4E",
+        "title": "Member and settled rebate decision",
+        "priority": "P2",
+        "trace": [
+          "REQ-002"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "assignment": {
+            "member": true,
+            "settled": true
+          },
+          "outcome_id": "REBATE_ALLOWED"
+        },
+        "steps": [
+          "Prepare the declared finite scenario",
+          "Collect evidence for the referenced oracle"
+        ],
+        "expected": "Satisfy oracle O-allow",
+        "model_id": "M-decision",
+        "method": "decision_table",
+        "source_refs": [
+          {
+            "id": "F-02",
+            "kind": "requirement",
+            "locator": "source-facts/F-02"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-allow",
+            "kind": "outcome",
+            "locator": "source-facts/F-02/both-true"
+          }
+        ],
+        "method_data": {
+          "assignment": {
+            "member": true,
+            "settled": true
+          },
+          "outcome_id": "REBATE_ALLOWED"
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-23EA5A0F21F4FD29094E",
+        "title": "Batch integer range",
+        "priority": "P2",
+        "trace": [
+          "REQ-001"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "value": "6",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "upper"
+          ]
+        },
+        "steps": [
+          "Set Batch integer range to 6",
+          "Perform the scenario referenced by REQ-001",
+          "Collect evidence for oracle O-valid"
+        ],
+        "expected": "Satisfy oracle O-valid",
+        "model_id": "M-boundary",
+        "method": "boundary",
+        "source_refs": [
+          {
+            "id": "F-01",
+            "kind": "requirement",
+            "locator": "source-facts/F-01"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-valid",
+            "kind": "valid",
+            "locator": "source-facts/F-01/in-range"
+          }
+        ],
+        "method_data": {
+          "value": "6",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "upper"
+          ]
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-26EEC46FCEE4969A52B8",
+        "title": "Batch integer range",
+        "priority": "P2",
+        "trace": [
+          "REQ-001"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "value": "5",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "upper"
+          ]
+        },
+        "steps": [
+          "Set Batch integer range to 5",
+          "Perform the scenario referenced by REQ-001",
+          "Collect evidence for oracle O-valid"
+        ],
+        "expected": "Satisfy oracle O-valid",
+        "model_id": "M-boundary",
+        "method": "boundary",
+        "source_refs": [
+          {
+            "id": "F-01",
+            "kind": "requirement",
+            "locator": "source-facts/F-01"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-valid",
+            "kind": "valid",
+            "locator": "source-facts/F-01/in-range"
+          }
+        ],
+        "method_data": {
+          "value": "5",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "upper"
+          ]
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-42B0E4AC96285095FDE3",
+        "title": "Batch integer range",
+        "priority": "P2",
+        "trace": [
+          "REQ-001"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "value": "1",
+          "class": "LOWER_INVALID",
+          "originating_bound_positions": [
+            "lower"
+          ]
+        },
+        "steps": [
+          "Set Batch integer range to 1",
+          "Perform the scenario referenced by REQ-001",
+          "Collect evidence for oracle O-invalid"
+        ],
+        "expected": "Satisfy oracle O-invalid",
+        "model_id": "M-boundary",
+        "method": "boundary",
+        "source_refs": [
+          {
+            "id": "F-01",
+            "kind": "requirement",
+            "locator": "source-facts/F-01"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-invalid",
+            "kind": "invalid",
+            "locator": "source-facts/F-01/out-of-range"
+          }
+        ],
+        "method_data": {
+          "value": "1",
+          "class": "LOWER_INVALID",
+          "originating_bound_positions": [
+            "lower"
+          ]
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-5E4CF69890F62C14DA68",
+        "title": "Document lifecycle, explicit transitions only",
+        "priority": "P2",
+        "trace": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "from_state": "DRAFT",
+          "trigger": "publish",
+          "guard_refs": [],
+          "validity": "invalid",
+          "to_state": null
+        },
+        "steps": [
+          "Prepare the declared finite scenario",
+          "Collect evidence for the referenced oracle"
+        ],
+        "expected": "Satisfy oracle O-deny",
+        "model_id": "M-state",
+        "method": "state_transition",
+        "source_refs": [
+          {
+            "id": "F-03",
+            "kind": "requirement",
+            "locator": "source-facts/F-03"
+          },
+          {
+            "id": "F-04",
+            "kind": "requirement",
+            "locator": "source-facts/F-04"
+          },
+          {
+            "id": "F-05",
+            "kind": "requirement",
+            "locator": "source-facts/F-05"
+          },
+          {
+            "id": "F-06",
+            "kind": "requirement",
+            "locator": "source-facts/F-06"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-deny",
+            "kind": "denial",
+            "locator": "source-facts/F-06/stays-DRAFT"
+          }
+        ],
+        "method_data": {
+          "from_state": "DRAFT",
+          "trigger": "publish",
+          "guard_refs": [],
+          "validity": "invalid",
+          "to_state": null
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-5F07D40238F2B68078A9",
+        "title": "Document lifecycle, explicit transitions only",
+        "priority": "P2",
+        "trace": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "from_state": "DRAFT",
+          "trigger": "submit",
+          "guard_refs": [],
+          "validity": "valid",
+          "to_state": "REVIEW"
+        },
+        "steps": [
+          "Prepare the declared finite scenario",
+          "Collect evidence for the referenced oracle"
+        ],
+        "expected": "Satisfy oracle O-review",
+        "model_id": "M-state",
+        "method": "state_transition",
+        "source_refs": [
+          {
+            "id": "EFF-04",
+            "kind": "effect",
+            "locator": "source-facts/F-04/status-REVIEW"
+          },
+          {
+            "id": "F-03",
+            "kind": "requirement",
+            "locator": "source-facts/F-03"
+          },
+          {
+            "id": "F-04",
+            "kind": "requirement",
+            "locator": "source-facts/F-04"
+          },
+          {
+            "id": "F-05",
+            "kind": "requirement",
+            "locator": "source-facts/F-05"
+          },
+          {
+            "id": "F-06",
+            "kind": "requirement",
+            "locator": "source-facts/F-06"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-review",
+            "kind": "transition",
+            "locator": "source-facts/F-04/status-REVIEW"
+          }
+        ],
+        "method_data": {
+          "from_state": "DRAFT",
+          "trigger": "submit",
+          "guard_refs": [],
+          "validity": "valid",
+          "to_state": "REVIEW"
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-6DCA6333DA6F3C2499BF",
+        "title": "Member and settled rebate decision",
+        "priority": "P2",
+        "trace": [
+          "REQ-002"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "assignment": {
+            "member": false,
+            "settled": false
+          },
+          "outcome_id": "NO_REBATE"
+        },
+        "steps": [
+          "Prepare the declared finite scenario",
+          "Collect evidence for the referenced oracle"
+        ],
+        "expected": "Satisfy oracle O-no",
+        "model_id": "M-decision",
+        "method": "decision_table",
+        "source_refs": [
+          {
+            "id": "F-02",
+            "kind": "requirement",
+            "locator": "source-facts/F-02"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-no",
+            "kind": "outcome",
+            "locator": "source-facts/F-02/otherwise"
+          }
+        ],
+        "method_data": {
+          "assignment": {
+            "member": false,
+            "settled": false
+          },
+          "outcome_id": "NO_REBATE"
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-87CEAA6F4504AF327797",
+        "title": "Member and settled rebate decision",
+        "priority": "P2",
+        "trace": [
+          "REQ-002"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "assignment": {
+            "member": true,
+            "settled": false
+          },
+          "outcome_id": "NO_REBATE"
+        },
+        "steps": [
+          "Prepare the declared finite scenario",
+          "Collect evidence for the referenced oracle"
+        ],
+        "expected": "Satisfy oracle O-no",
+        "model_id": "M-decision",
+        "method": "decision_table",
+        "source_refs": [
+          {
+            "id": "F-02",
+            "kind": "requirement",
+            "locator": "source-facts/F-02"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-no",
+            "kind": "outcome",
+            "locator": "source-facts/F-02/otherwise"
+          }
+        ],
+        "method_data": {
+          "assignment": {
+            "member": true,
+            "settled": false
+          },
+          "outcome_id": "NO_REBATE"
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-9978AFFE135349E1F3A1",
+        "title": "Batch integer range",
+        "priority": "P2",
+        "trace": [
+          "REQ-001"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "value": "2",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "lower"
+          ]
+        },
+        "steps": [
+          "Set Batch integer range to 2",
+          "Perform the scenario referenced by REQ-001",
+          "Collect evidence for oracle O-valid"
+        ],
+        "expected": "Satisfy oracle O-valid",
+        "model_id": "M-boundary",
+        "method": "boundary",
+        "source_refs": [
+          {
+            "id": "F-01",
+            "kind": "requirement",
+            "locator": "source-facts/F-01"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-valid",
+            "kind": "valid",
+            "locator": "source-facts/F-01/in-range"
+          }
+        ],
+        "method_data": {
+          "value": "2",
+          "class": "IN_DOMAIN",
+          "originating_bound_positions": [
+            "lower"
+          ]
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-AC2F0582BC7FFCCF623F",
+        "title": "Member and settled rebate decision",
+        "priority": "P2",
+        "trace": [
+          "REQ-002"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "assignment": {
+            "member": false,
+            "settled": true
+          },
+          "outcome_id": "NO_REBATE"
+        },
+        "steps": [
+          "Prepare the declared finite scenario",
+          "Collect evidence for the referenced oracle"
+        ],
+        "expected": "Satisfy oracle O-no",
+        "model_id": "M-decision",
+        "method": "decision_table",
+        "source_refs": [
+          {
+            "id": "F-02",
+            "kind": "requirement",
+            "locator": "source-facts/F-02"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-no",
+            "kind": "outcome",
+            "locator": "source-facts/F-02/otherwise"
+          }
+        ],
+        "method_data": {
+          "assignment": {
+            "member": false,
+            "settled": true
+          },
+          "outcome_id": "NO_REBATE"
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-B39F31CBBC34C6198B3E",
+        "title": "Document lifecycle, explicit transitions only",
+        "priority": "P2",
+        "trace": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "from_state": "REVIEW",
+          "trigger": "publish",
+          "guard_refs": [],
+          "validity": "valid",
+          "to_state": "PUBLISHED"
+        },
+        "steps": [
+          "Prepare the declared finite scenario",
+          "Collect evidence for the referenced oracle"
+        ],
+        "expected": "Satisfy oracle O-published",
+        "model_id": "M-state",
+        "method": "state_transition",
+        "source_refs": [
+          {
+            "id": "EFF-05",
+            "kind": "effect",
+            "locator": "source-facts/F-05/status-PUBLISHED"
+          },
+          {
+            "id": "F-03",
+            "kind": "requirement",
+            "locator": "source-facts/F-03"
+          },
+          {
+            "id": "F-04",
+            "kind": "requirement",
+            "locator": "source-facts/F-04"
+          },
+          {
+            "id": "F-05",
+            "kind": "requirement",
+            "locator": "source-facts/F-05"
+          },
+          {
+            "id": "F-06",
+            "kind": "requirement",
+            "locator": "source-facts/F-06"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-published",
+            "kind": "transition",
+            "locator": "source-facts/F-05/status-PUBLISHED"
+          }
+        ],
+        "method_data": {
+          "from_state": "REVIEW",
+          "trigger": "publish",
+          "guard_refs": [],
+          "validity": "valid",
+          "to_state": "PUBLISHED"
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      },
+      {
+        "id": "TC-MD-DC273814BFFF88B81260",
+        "title": "Batch integer range",
+        "priority": "P2",
+        "trace": [
+          "REQ-001"
+        ],
+        "dimension": "functional",
+        "preconditions": "Review declared model preconditions",
+        "data": {
+          "value": "7",
+          "class": "UPPER_INVALID",
+          "originating_bound_positions": [
+            "upper"
+          ]
+        },
+        "steps": [
+          "Set Batch integer range to 7",
+          "Perform the scenario referenced by REQ-001",
+          "Collect evidence for oracle O-invalid"
+        ],
+        "expected": "Satisfy oracle O-invalid",
+        "model_id": "M-boundary",
+        "method": "boundary",
+        "source_refs": [
+          {
+            "id": "F-01",
+            "kind": "requirement",
+            "locator": "source-facts/F-01"
+          }
+        ],
+        "oracle_refs": [
+          {
+            "id": "O-invalid",
+            "kind": "invalid",
+            "locator": "source-facts/F-01/out-of-range"
+          }
+        ],
+        "method_data": {
+          "value": "7",
+          "class": "UPPER_INVALID",
+          "originating_bound_positions": [
+            "upper"
+          ]
+        },
+        "approval": "DRAFT",
+        "evidence_state": "PENDING",
+        "validation_action": "NOT_EXECUTED"
+      }
+    ],
+    "obligations": [],
+    "summary": {
+      "model_count": 3,
+      "candidate_count": 13,
+      "obligation_count": 0,
+      "by_method": {
+        "boundary": 1,
+        "decision_table": 1,
+        "state_transition": 1
+      }
+    }
+  },
+  "installed_design": {
+    "schema_version": 1,
+    "entry_point": "scripts/qa.py design",
+    "status": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "state_access": "NONE",
+    "external_writes": "REQUESTED_OUTPUT_ONLY",
+    "guides": [
+      {
+        "id": "functional-api-design",
+        "file": "functional-api.md",
+        "locator": "scripts/qa_master/skills/professional/functional-api.md",
+        "sha256": "28ae23ab80d819157f0630aa6e4579dd9d7fa21d54d7b8f40b6b583c4471207e",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002",
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-boundary",
+          "M-decision",
+          "M-state"
+        ]
+      },
+      {
+        "id": "requirements-review",
+        "file": "requirements-review.md",
+        "locator": "scripts/qa_master/skills/professional/requirements-review.md",
+        "sha256": "31f7fb509154d9d9756cfe43ed1c027a6470b15c6cab6bdb526b215fc3bf3c76",
+        "requirement_ids": [
+          "REQ-001",
+          "REQ-002",
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-boundary",
+          "M-decision",
+          "M-state"
+        ]
+      }
+    ],
+    "source_mapping": [
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "EFF-04",
+        "kind": "effect",
+        "locator": "source-facts/F-04/status-REVIEW",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-state"
+        ],
+        "candidate_ids": [
+          "TC-MD-5F07D40238F2B68078A9"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "EFF-05",
+        "kind": "effect",
+        "locator": "source-facts/F-05/status-PUBLISHED",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-state"
+        ],
+        "candidate_ids": [
+          "TC-MD-B39F31CBBC34C6198B3E"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "F-01",
+        "kind": "requirement",
+        "locator": "source-facts/F-01",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-001"
+        ],
+        "model_ids": [
+          "M-boundary"
+        ],
+        "candidate_ids": [
+          "TC-MD-1B13D0E1DE6C9B79F4B7",
+          "TC-MD-23EA5A0F21F4FD29094E",
+          "TC-MD-26EEC46FCEE4969A52B8",
+          "TC-MD-42B0E4AC96285095FDE3",
+          "TC-MD-9978AFFE135349E1F3A1",
+          "TC-MD-DC273814BFFF88B81260"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "F-02",
+        "kind": "requirement",
+        "locator": "source-facts/F-02",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-002"
+        ],
+        "model_ids": [
+          "M-decision"
+        ],
+        "candidate_ids": [
+          "TC-MD-20E450973DFD95647F4E",
+          "TC-MD-6DCA6333DA6F3C2499BF",
+          "TC-MD-87CEAA6F4504AF327797",
+          "TC-MD-AC2F0582BC7FFCCF623F"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "F-03",
+        "kind": "requirement",
+        "locator": "source-facts/F-03",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-state"
+        ],
+        "candidate_ids": [
+          "TC-MD-5E4CF69890F62C14DA68",
+          "TC-MD-5F07D40238F2B68078A9",
+          "TC-MD-B39F31CBBC34C6198B3E"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "F-04",
+        "kind": "requirement",
+        "locator": "source-facts/F-04",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-state"
+        ],
+        "candidate_ids": [
+          "TC-MD-5E4CF69890F62C14DA68",
+          "TC-MD-5F07D40238F2B68078A9",
+          "TC-MD-B39F31CBBC34C6198B3E"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "F-05",
+        "kind": "requirement",
+        "locator": "source-facts/F-05",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-state"
+        ],
+        "candidate_ids": [
+          "TC-MD-5E4CF69890F62C14DA68",
+          "TC-MD-5F07D40238F2B68078A9",
+          "TC-MD-B39F31CBBC34C6198B3E"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "F-06",
+        "kind": "requirement",
+        "locator": "source-facts/F-06",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "model_ids": [
+          "M-state"
+        ],
+        "candidate_ids": [
+          "TC-MD-5E4CF69890F62C14DA68",
+          "TC-MD-5F07D40238F2B68078A9",
+          "TC-MD-B39F31CBBC34C6198B3E"
+        ],
+        "obligation_ids": []
+      },
+      {
+        "origin": "DESIGN_MODEL_SOURCE",
+        "source_id": "F-07",
+        "kind": "requirement",
+        "locator": "source-facts/F-07",
+        "sha256": null,
+        "binding_state": "DECLARED",
+        "requirement_ids": [],
+        "model_ids": [],
+        "candidate_ids": [],
+        "obligation_ids": []
+      }
+    ],
+    "gaps": [
+      {
+        "code": "METHOD_OUTPUT_REQUIRES_CASE_COMPLETION"
+      }
+    ],
+    "method_output": {
+      "present": true,
+      "candidate_ids": [
+        "TC-MD-1B13D0E1DE6C9B79F4B7",
+        "TC-MD-20E450973DFD95647F4E",
+        "TC-MD-23EA5A0F21F4FD29094E",
+        "TC-MD-26EEC46FCEE4969A52B8",
+        "TC-MD-42B0E4AC96285095FDE3",
+        "TC-MD-5E4CF69890F62C14DA68",
+        "TC-MD-5F07D40238F2B68078A9",
+        "TC-MD-6DCA6333DA6F3C2499BF",
+        "TC-MD-87CEAA6F4504AF327797",
+        "TC-MD-9978AFFE135349E1F3A1",
+        "TC-MD-AC2F0582BC7FFCCF623F",
+        "TC-MD-B39F31CBBC34C6198B3E",
+        "TC-MD-DC273814BFFF88B81260"
+      ],
+      "obligation_ids": [],
+      "usable_case_claim": false,
+      "executable_case_claim": false
+    }
+  }
+}

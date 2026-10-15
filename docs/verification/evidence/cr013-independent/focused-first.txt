@@ -1,0 +1,12 @@
+test_tc_imd_001_002_isolated_three_methods_equivalence (tests.test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_001_002_isolated_three_methods_equivalence) ... ok
+test_tc_imd_003_004_missing_models_sources_dimensions_honest (tests.test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_003_004_missing_models_sources_dimensions_honest) ... ok
+test_tc_imd_005_008_guide_source_binding_determinism (tests.test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_005_008_guide_source_binding_determinism) ... ok
+test_tc_imd_006_cli_exact_options_samepath_io (tests.test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_006_cli_exact_options_samepath_io) ... ok
+test_tc_imd_006_invalid_preserves_output_and_state (tests.test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_006_invalid_preserves_output_and_state) ... ok
+test_tc_imd_007_no_state_network_process_adapter (tests.test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_007_no_state_network_process_adapter) ... ok
+test_tc_imd_009_012_reference_example_and_claim_boundaries (tests.test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_009_012_reference_example_and_claim_boundaries) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 4.100s
+
+OK

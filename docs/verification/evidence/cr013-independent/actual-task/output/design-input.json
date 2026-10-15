@@ -1,0 +1,336 @@
+{
+  "project": "Document release policy offline draft",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "title": "Strict integer batch size 2 through 6 inclusive, step 1 origin 0.",
+      "dimension": "functional",
+      "approved": false
+    },
+    {
+      "id": "REQ-002",
+      "title": "Rebate allowed exactly when member and settled are true.",
+      "dimension": "functional",
+      "approved": false
+    },
+    {
+      "id": "REQ-003",
+      "title": "DRAFT initial; REVIEW; PUBLISHED terminal.",
+      "dimension": "functional",
+      "approved": false
+    },
+    {
+      "id": "REQ-004",
+      "title": "submit in DRAFT changes status to REVIEW, no guard declared.",
+      "dimension": "functional",
+      "approved": false
+    },
+    {
+      "id": "REQ-005",
+      "title": "publish in REVIEW changes status to PUBLISHED, no guard declared.",
+      "dimension": "functional",
+      "approved": false
+    },
+    {
+      "id": "REQ-006",
+      "title": "publish in DRAFT invalid; stays DRAFT. Other combinations unspecified.",
+      "dimension": "functional",
+      "approved": false
+    }
+  ],
+  "design_models": {
+    "schema_version": 1,
+    "source_refs": [
+      {
+        "id": "F-01",
+        "kind": "requirement",
+        "locator": "source-facts/F-01"
+      },
+      {
+        "id": "F-02",
+        "kind": "requirement",
+        "locator": "source-facts/F-02"
+      },
+      {
+        "id": "F-03",
+        "kind": "requirement",
+        "locator": "source-facts/F-03"
+      },
+      {
+        "id": "F-04",
+        "kind": "requirement",
+        "locator": "source-facts/F-04"
+      },
+      {
+        "id": "F-05",
+        "kind": "requirement",
+        "locator": "source-facts/F-05"
+      },
+      {
+        "id": "F-06",
+        "kind": "requirement",
+        "locator": "source-facts/F-06"
+      },
+      {
+        "id": "F-07",
+        "kind": "requirement",
+        "locator": "source-facts/F-07"
+      },
+      {
+        "id": "EFF-04",
+        "kind": "effect",
+        "locator": "source-facts/F-04/status-REVIEW"
+      },
+      {
+        "id": "EFF-05",
+        "kind": "effect",
+        "locator": "source-facts/F-05/status-PUBLISHED"
+      }
+    ],
+    "oracle_refs": [
+      {
+        "id": "O-valid",
+        "kind": "valid",
+        "locator": "source-facts/F-01/in-range"
+      },
+      {
+        "id": "O-invalid",
+        "kind": "invalid",
+        "locator": "source-facts/F-01/out-of-range"
+      },
+      {
+        "id": "O-allow",
+        "kind": "outcome",
+        "locator": "source-facts/F-02/both-true"
+      },
+      {
+        "id": "O-no",
+        "kind": "outcome",
+        "locator": "source-facts/F-02/otherwise"
+      },
+      {
+        "id": "O-review",
+        "kind": "transition",
+        "locator": "source-facts/F-04/status-REVIEW"
+      },
+      {
+        "id": "O-published",
+        "kind": "transition",
+        "locator": "source-facts/F-05/status-PUBLISHED"
+      },
+      {
+        "id": "O-deny",
+        "kind": "denial",
+        "locator": "source-facts/F-06/stays-DRAFT"
+      }
+    ],
+    "models": [
+      {
+        "id": "M-boundary",
+        "method": "boundary",
+        "title": "Batch integer range",
+        "dimension": "functional",
+        "requirement_ids": [
+          "REQ-001"
+        ],
+        "source_refs": [
+          "F-01"
+        ],
+        "spec": {
+          "numeric_type": "integer",
+          "origin": 0,
+          "step": 1,
+          "lower": {
+            "value": 2,
+            "inclusive": true
+          },
+          "upper": {
+            "value": 6,
+            "inclusive": true
+          },
+          "oracle_by_class": {
+            "IN_DOMAIN": "O-valid",
+            "LOWER_INVALID": "O-invalid",
+            "UPPER_INVALID": "O-invalid"
+          }
+        }
+      },
+      {
+        "id": "M-decision",
+        "method": "decision_table",
+        "title": "Member and settled rebate decision",
+        "dimension": "functional",
+        "requirement_ids": [
+          "REQ-002"
+        ],
+        "source_refs": [
+          "F-02"
+        ],
+        "spec": {
+          "conditions": [
+            {
+              "id": "member",
+              "values": [
+                false,
+                true
+              ]
+            },
+            {
+              "id": "settled",
+              "values": [
+                false,
+                true
+              ]
+            }
+          ],
+          "constraints": [],
+          "rules": [
+            {
+              "id": "R-00",
+              "when": {
+                "member": false,
+                "settled": false
+              },
+              "outcome_id": "NO_REBATE",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-no"
+            },
+            {
+              "id": "R-01",
+              "when": {
+                "member": false,
+                "settled": true
+              },
+              "outcome_id": "NO_REBATE",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-no"
+            },
+            {
+              "id": "R-10",
+              "when": {
+                "member": true,
+                "settled": false
+              },
+              "outcome_id": "NO_REBATE",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-no"
+            },
+            {
+              "id": "R-11",
+              "when": {
+                "member": true,
+                "settled": true
+              },
+              "outcome_id": "REBATE_ALLOWED",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-allow"
+            }
+          ]
+        }
+      },
+      {
+        "id": "M-state",
+        "method": "state_transition",
+        "title": "Document lifecycle, explicit transitions only",
+        "dimension": "functional",
+        "requirement_ids": [
+          "REQ-003",
+          "REQ-004",
+          "REQ-005",
+          "REQ-006"
+        ],
+        "source_refs": [
+          "F-03",
+          "F-04",
+          "F-05",
+          "F-06"
+        ],
+        "spec": {
+          "states": [
+            {
+              "id": "DRAFT",
+              "terminal": false,
+              "source_refs": [
+                "F-03"
+              ]
+            },
+            {
+              "id": "REVIEW",
+              "terminal": false,
+              "source_refs": [
+                "F-03"
+              ]
+            },
+            {
+              "id": "PUBLISHED",
+              "terminal": true,
+              "source_refs": [
+                "F-03"
+              ]
+            }
+          ],
+          "initial_state": "DRAFT",
+          "triggers": [
+            "submit",
+            "publish"
+          ],
+          "transitions": [
+            {
+              "id": "T-submit",
+              "validity": "valid",
+              "from_state": "DRAFT",
+              "to_state": "REVIEW",
+              "trigger": "submit",
+              "guard_refs": [],
+              "effect_refs": [
+                "EFF-04"
+              ],
+              "source_refs": [
+                "F-04"
+              ],
+              "oracle_ref": "O-review"
+            },
+            {
+              "id": "T-publish",
+              "validity": "valid",
+              "from_state": "REVIEW",
+              "to_state": "PUBLISHED",
+              "trigger": "publish",
+              "guard_refs": [],
+              "effect_refs": [
+                "EFF-05"
+              ],
+              "source_refs": [
+                "F-05"
+              ],
+              "oracle_ref": "O-published"
+            },
+            {
+              "id": "T-invalid",
+              "validity": "invalid",
+              "from_state": "DRAFT",
+              "to_state": null,
+              "trigger": "publish",
+              "guard_refs": [],
+              "effect_refs": [],
+              "source_refs": [
+                "F-06"
+              ],
+              "oracle_ref": "O-deny"
+            }
+          ],
+          "closed_world": false,
+          "closed_world_deny_oracle_ref": null
+        }
+      }
+    ]
+  }
+}

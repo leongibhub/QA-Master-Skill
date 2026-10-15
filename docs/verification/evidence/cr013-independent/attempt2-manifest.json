@@ -1,0 +1,142 @@
+[
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\focused-first.txt",
+    "sha256": "84F4335621BDFA258CA50CB2B5F8E137F79BA810F9AFB01088FA2DC243CBB5E9",
+    "bytes": 1390
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\fresh-wheel-tests.txt",
+    "sha256": "1D7CE1D5DE18110837A08F0E6593CD87621ED8EA7F11BE6C0D7B6D3F6A3D182D",
+    "bytes": 1364
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\full-strict.txt",
+    "sha256": "22DFE4EAF2062561A46283BBFB7973D0A5A3960DBC948D5788289B6A53E06DE7",
+    "bytes": 76199
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\isolated-skill-install.txt",
+    "sha256": "CE7C0F2EECC1A51BEE5BFB5DFCF5677255B97F9E77053C35C347DF10DA01898F",
+    "bytes": 263
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\run-installed-tests.py",
+    "sha256": "6C0ED07DD0661B5D8078AB3B7F68D83F2A376E4252AECF29B2E7C5EEAC8C43BF",
+    "bytes": 509
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\skill-install.txt",
+    "sha256": "C516BDB6DA31F1B22C7A0CBDFC498D7538082C37B91224A34C9C4AD43848D662",
+    "bytes": 240
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\source-facts.md",
+    "sha256": "A52B944D6A6D406C40090AED4C4E2680263D8A9BA96955571421A72631284B7C",
+    "bytes": 2154
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\task-review-ledger.md",
+    "sha256": "3865D38B9C605CD8C0DF3ABB83B6D86B01E24D3E7229608A4C48DEF666ABF0C6",
+    "bytes": 2148
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\wheel-build.txt",
+    "sha256": "67B11D525AFCFCC7A3B6F6A67D7BB3CA789DCCD5B5FECD57BA5941FA7E5CDE57",
+    "bytes": 807
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\wheel-install.txt",
+    "sha256": "6B540E9B874466B5834756991C8ACA7753585F864EB5E3CE36034A5C4B76D707",
+    "bytes": 198
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\instruction-boundary.md",
+    "sha256": "CE4CAD1072B9DBDC7EB867AFA96BE2A97FFA552C504209FF0B78A2F354D52324",
+    "bytes": 1102
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\artifact-authoring-error.txt",
+    "sha256": "E25B496391F31F25EC81796BB900FF3AF8F7AE46DCFDDC5BF5810CF35FF1C128",
+    "bytes": 286
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\author-input.py",
+    "sha256": "5C738FC8BF34E299A8D64FC50984AC078649FDE92C7036A28B7D75AFE994D4CE",
+    "bytes": 3578
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\command-evidence.json",
+    "sha256": "4A63789B744B53A2B407D89020C40C86A4C91A8EB797B100F4E4E6530823890D",
+    "bytes": 610
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\command.txt",
+    "sha256": "C4B259D831B88DCE087ACB8EF9CCC7625D81495C41CC443152949F82A39FB565",
+    "bytes": 374
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\complete-drafts.py",
+    "sha256": "2C842B194964A859AB090A1287702EE98DCA13EC9733A55DE7F3E4CD2E91654B",
+    "bytes": 14466
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\design-input.json",
+    "sha256": "3866DC762C9949DBBBCA6649B7172EDD658E2172870095028EEC7AEBD79010BA",
+    "bytes": 8504
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\design-review.md",
+    "sha256": "3FFA45856ABEA5E619516FFF61EF9C7557204AA967498BD189FC0EBE6FDB6062",
+    "bytes": 12142
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\draft-cases.json",
+    "sha256": "2E5995EF67BAF9B8588B40AC8B9A6EDBDE01A368208B6C6CDCABB28500D75AAD",
+    "bytes": 19157
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\handoff.json",
+    "sha256": "98C010E1CF72368E76B88D720A430DAB3A3506F0D635C7990C85D66758B7D685",
+    "bytes": 4869
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\helper-report.json",
+    "sha256": "94874EA6E8EAA2F7084FF91BF199303DE00A7F37E3FAF0BF34F4C559AE028966",
+    "bytes": 45923
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\read-audit.json",
+    "sha256": "0F9F0919AD20B0C7257ED4A492760E951B3C181961E4BE9CE97D5C6A674B7838",
+    "bytes": 2031
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\stderr.txt",
+    "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "bytes": 0
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\stdout.txt",
+    "sha256": "1A85FC0BEE898EFB7EBBC1825AA9BB128BC1C8316A502AADF02086B90E47EB9B",
+    "bytes": 420
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\cr013-independent\\actual-task\\output\\typed-gaps.json",
+    "sha256": "E23640798240ED5A379E5655E0D979BD1D2C7C1C7C3453F598B4811DCCFF3D26",
+    "bytes": 3124
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\tests\\test_installed_method_independent.py",
+    "sha256": "FB8C7504C02F3C980AB8959971E60ADD22D5A56A184C9648C0E7BAB52057658C",
+    "bytes": 11785
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\cr013-independent\\wheels\\qa_master_skill-0.1.0-py3-none-any.whl",
+    "sha256": "965F721F3D01091DFE62332D4E9C7896457DBA030C2079DC2F08D4C68BD02E34",
+    "bytes": 132954
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\installed-method-independent-attempt2.md",
+    "sha256": "CC65CC9A1B8C6FF01470FB37500792DDEC6BA726E0F19A12319ACDC00C032E97",
+    "bytes": 5286
+  }
+]
