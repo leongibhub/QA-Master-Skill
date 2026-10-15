@@ -220,3 +220,35 @@ class SemanticIndependent(unittest.TestCase):
             with patch.object(sq,'_valid_refs',side_effect=observe):self.run_profile()
             visits.append(count[0])
         self.assertEqual(visits[0],visits[1], 'Case-wide list validity must be cached independently of mapping count')
+
+    def test_028_shared_case_mixed_readiness_and_unknown_refs(self):
+        ob=copy.deepcopy(self.b['obligations'][0]);ob.update(id='OX',check_id='QX',allowed_readiness=['STATIC_REVIEW']);self.b['obligations'].append(ob)
+        obs=copy.deepcopy(self.r['observations'][0]);obs['check_id']='QX';self.r['observations'].append(obs)
+        self.r['cases'][0]['obligation_ids']=['O0','OX'];p,_=self.run_profile()
+        self.expected(p,'O0','USABILITY','SATISFIED','USABLE_DRAFT_ARTIFACT_PRESENT');self.expected(p,'OX','USABILITY','VIOLATED','MAPPED_CASE_INVALID')
+        self.expected(p,'OX','PROVENANCE','SATISFIED','SOURCE_BINDING_COMPLETE')
+        self.r['cases'][0]['source_fact_ids']=['F0','UNKNOWN'];p,_=self.run_profile()
+        for oid in ('O0','OX'):self.expected(p,oid,'PROVENANCE','VIOLATED','SOURCE_BINDING_INVALID')
+        self.assertTrue(all(x['outcome']=='SATISFIED' for x in p['rows'] if x['obligation_id']=='O1'))
+    def test_029_shared_gap_honesty_and_unknown_refs(self):
+        self.missing_oracle();ob=copy.deepcopy(self.b['obligations'][5]);ob['id']='OX';self.b['obligations'].append(ob);self.r['gaps'][0]['obligation_ids']=['O5','OX'];p,_=self.run_profile()
+        for oid in ('O5','OX'):
+            self.expected(p,oid,'SEMANTIC','ORACLE_MISSING','SOURCE_ORACLE_MISSING');self.expected(p,oid,'PROVENANCE','SATISFIED','MISSING_ORACLE_HONESTLY_REPORTED')
+        self.r['gaps'][0]['source_ids']=['S','UNKNOWN'];p,_=self.run_profile()
+        for oid in ('O5','OX'):self.expected(p,oid,'PROVENANCE','VIOLATED','SOURCE_BINDING_INVALID')
+        self.assertTrue(all(x['outcome']=='SATISFIED' for x in p['rows'] if x['obligation_id']=='O1'))
+    def test_030_gap_wide_reference_validation_independent_of_mapping_count(self):
+        visits=[]
+        for n in (4,64):
+            self.b,self.r=fixture();self.missing_oracle();base=self.b['obligations'].pop(5);ids=[f'X{i:02}' for i in range(n)]
+            for oid in ids:
+                ob=copy.deepcopy(base);ob['id']=oid;self.b['obligations'].append(ob)
+            self.r['gaps'][0]['obligation_ids']=ids
+            original=sq._valid_refs;count=[0]
+            def observe(value):
+                if value==ids:count[0]+=1
+                return original(value)
+            with patch.object(sq,'_valid_refs',side_effect=observe):p,_=self.run_profile()
+            self.assertTrue(all(x['outcome']=='SATISFIED' for x in p['rows'] if x['dimension']=='PROVENANCE'))
+            visits.append(count[0])
+        self.assertEqual(visits[0],visits[1], 'Gap-wide reference validity must be cached independently of mapping count')
