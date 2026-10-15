@@ -5,6 +5,25 @@ from qa_master._paired_contract import PairedEvaluationError, strict_json, typed
 
 
 class NativeValueContractTests(unittest.TestCase):
+    def test_integer_digit_limit_is_explicit_and_independent_of_python_configuration(self):
+        import sys
+        previous = sys.get_int_max_str_digits() if hasattr(sys, 'get_int_max_str_digits') else None
+        try:
+            for setting in ([640, 0] if previous is not None else [None]):
+                if setting is not None:
+                    sys.set_int_max_str_digits(setting)
+                for sign in ('', '-'):
+                    typed('INTEGER', strict_json((sign + '9' * 34).encode()))
+                    with self.assertRaisesRegex(PairedEvaluationError, 'INTEGER_DIGIT_LIMIT'):
+                        strict_json((sign + '1' * 35).encode())
+                    with self.assertRaisesRegex(PairedEvaluationError, 'INTEGER_DIGIT_LIMIT'):
+                        typed('INTEGER', 10 ** 34)
+                if setting is not None:
+                    self.assertEqual(sys.get_int_max_str_digits(), setting)
+        finally:
+            if previous is not None:
+                sys.set_int_max_str_digits(previous)
+
     def test_negative_zero_is_rejected_before_integer_information_is_lost(self):
         for raw in (b'-0', b'{"n":-0}', b'[1,-0]'):
             with self.subTest(raw=raw), self.assertRaisesRegex(

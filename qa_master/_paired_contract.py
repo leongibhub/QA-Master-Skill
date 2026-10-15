@@ -13,6 +13,7 @@ PROMPT_LIMIT = 6 * 1024 * 1024
 SECRET_KEYS = frozenset(('password passwd token access_token refresh_token api_key '
                          'authorization cookie private_key client_secret credential presigned_url').split())
 VALUE_TYPES = ['BOOLEAN', 'INTEGER', 'DECIMAL', 'STRING', 'STRING_SET', 'JSON']
+INTEGER_MAX = 10 ** 34 - 1
 CLAIM_KEYS = frozenset('rating score winner quality_grade approval execution_result superiority'.split())
 DISABLED_FEATURES = sorted(('apps browser_use browser_use_external code_mode_host computer_use '
                            'hooks image_generation memories multi_agent plugins shell_tool skill_search '
@@ -52,6 +53,8 @@ def strict_json(raw, *, sensitive=True):
     def parsed_integer(raw_integer):
         if raw_integer == '-0':
             fail('NONCANONICAL_INTEGER')
+        if len(raw_integer.lstrip('-')) > 34:
+            fail('INTEGER_DIGIT_LIMIT')
         return int(raw_integer)
     try:
         if len(raw) > LIMIT:
@@ -192,7 +195,7 @@ def _array(items, maximum):
 _REFS = _array(_STRING, 64)
 _VALUE_SCHEMAS = {
     'BOOLEAN': {'type': 'boolean'},
-    'INTEGER': {'type': 'integer'},
+    'INTEGER': {'type': 'integer', 'minimum': -INTEGER_MAX, 'maximum': INTEGER_MAX},
     'DECIMAL': _STRING,
     'STRING': _STRING,
     'STRING_SET': _array(_STRING, 256),
@@ -223,7 +226,8 @@ PROMPT_TEMPLATE_V1 = (
     'Return exactly one JSON object, without Markdown fences, following the neutral response contract. '
     'This is draft test design, never an executed test result. '
     'Answer the named checks with typed observations and source evidence references. '
-    'BOOLEAN is a native JSON boolean; INTEGER is a JSON integer (not boolean or negative zero); '
+    'BOOLEAN is a native JSON boolean; INTEGER is a JSON integer (not boolean or negative zero), '
+    'with at most 34 magnitude digits excluding its sign; '
     'DECIMAL is canonical plain decimal text; STRING is literal text. '
     'STRING_SET is a sorted unique native string array; JSON is a native value, not encoded text, '
     'with no fractional numbers, at most 16 container levels and 4096 nodes including object keys. '
@@ -265,6 +269,8 @@ def typed(value_type, value):
         fail('VALUE_TYPE_MISMATCH')
     if value_type == 'INTEGER' and type(value) is not int:
         fail('VALUE_TYPE_MISMATCH')
+    if value_type == 'INTEGER' and not -INTEGER_MAX <= value <= INTEGER_MAX:
+        fail('INTEGER_DIGIT_LIMIT')
     if value_type in ('STRING', 'DECIMAL'):
         text(value)
     if value_type == 'DECIMAL' and (not re.fullmatch(r'-?(?:0|[1-9][0-9]*)(?:\.[0-9]*[1-9])?', value) or value == '-0'):

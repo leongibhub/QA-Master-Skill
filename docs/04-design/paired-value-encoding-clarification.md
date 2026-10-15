@@ -51,7 +51,7 @@ compatibility or coercion is permitted.
 | `value_type` | Required outer JSON value | Validation and canonical form |
 |---|---|---|
 | `BOOLEAN` | JSON boolean | Only `true` or `false`; integer `0`/`1` and strings are rejected. |
-| `INTEGER` | JSON integer | Boolean, negative zero, and float/exponent forms are rejected. Normalize as the mathematical integer serialized in canonical base-10 JSON. |
+| `INTEGER` | JSON integer | Boolean, negative zero, and float/exponent forms are rejected. The canonical base-10 magnitude has 1–34 digits, excluding the optional minus sign. Normalize as the mathematical integer serialized in canonical base-10 JSON. |
 | `DECIMAL` | JSON string | Match `-?(0|[1-9][0-9]*)(\.[0-9]*[1-9])?`, rejecting `-0`, exponent, plus sign, leading integer zero, and redundant fractional trailing zero. `"1"` remains distinct from integer `1`. |
 | `STRING` | JSON string | Literal nonempty string under the existing 20,000-character bound; never reparsed. |
 | `STRING_SET` | JSON array of strings | Zero to 256 unique nonempty strings, each within the string bound, sorted in ascending Unicode scalar-value sequence. |
@@ -78,6 +78,18 @@ unescaped Unicode scalar values. It rejects duplicate keys, floats,
 array element, object key, and object value. Depth is one at the root and rises
 by one for every nested array or object. Observation and assertion values use
 identical rules.
+
+The 34-digit integer limit matches the existing deterministic finite-method
+numeric bound and is part of the wire contract, not a Python runtime default.
+The JSON loader must inspect the original integer token with a dedicated
+`parse_int` callback, reject noncanonical syntax, negative zero, and 35 or more
+digits, and only then convert the at-most-34-digit token. It must not rely on or
+modify `sys.get_int_max_str_digits()` / `sys.set_int_max_str_digits()` or an
+equivalent process-global setting. This ordering keeps acceptance stable when
+the host's global integer-string limit differs.
+This shared controlled-JSON decoder limit applies to every integer token,
+including integers nested inside a `JSON` typed value; manifest and envelope
+fields may additionally impose smaller semantic ranges after decoding.
 
 ## 4. Schema and parser responsibilities
 
@@ -150,7 +162,9 @@ Independent tests must cover:
 1. valid native boolean, integer, string set, structured JSON, decimal string,
    and ordinary string on both observation and assertion sides;
 2. every cross-type representation, including boolean-as-integer, plus integer
-   negative-zero and exponent forms;
+   negative-zero, exponent, 34-digit accepted, and 35-digit rejected cases on
+   both observation and assertion paths under differing process-global integer
+   string limits;
 3. decimal exponent/zero/non-finite negatives;
 4. string-set ordering, uniqueness, length, and item types;
 5. JSON duplicate-key, float, prohibited-key, surrogate, depth 16/17, and node
