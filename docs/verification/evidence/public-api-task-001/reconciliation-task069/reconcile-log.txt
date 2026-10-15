@@ -1,0 +1,9 @@
+{
+  "result": "BYTE_AND_DECLARED_BOUNDARY_RECONCILED",
+  "retained_files": 8,
+  "installed_files": 59,
+  "allowed_inputs": 3,
+  "declared_read_files": 12,
+  "matched_wheel": "D:\\QA-Master-PR2\\.qa-master\\cr013-semantic-independent-attempt3\\wheels\\qa_master_skill-0.1.0-py3-none-any.whl",
+  "quality_status": "OUTPUT_RETAINED_NOT_ASSESSED"
+}
