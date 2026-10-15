@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "C:\\Program Files\\Python\\python.exe",
+    "-I",
+    "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa.py",
+    "design",
+    "--input",
+    "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\input-original.json",
+    "--output",
+    "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\report-original.json"
+  ],
+  "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\unrelated-cwd",
+  "exit_code": 0,
+  "timestamp_utc": "2026-10-15T11:03:42.390075+00:00",
+  "input_sha256": "323862779382aa11b0943ba00fbd0e93faadb96dde96a6e3563796784d959a15",
+  "report_sha256": "449f33ab98aa894b2e8df0de68e4d800e2217ae0db1f13509f5d2ab3f5211d32",
+  "meaning": "Offline helper invocation only; product tests NOT_EXECUTED"
+}

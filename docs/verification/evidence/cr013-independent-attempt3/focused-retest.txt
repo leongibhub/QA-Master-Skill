@@ -1,0 +1,13 @@
+test_tc_imd_001_002_isolated_three_methods_equivalence (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_001_002_isolated_three_methods_equivalence) ... ok
+test_tc_imd_003_004_missing_models_sources_dimensions_honest (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_003_004_missing_models_sources_dimensions_honest) ... ok
+test_tc_imd_005_008_guide_source_binding_determinism (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_005_008_guide_source_binding_determinism) ... ok
+test_tc_imd_006_cli_exact_options_samepath_io (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_006_cli_exact_options_samepath_io) ... ok
+test_tc_imd_006_invalid_preserves_output_and_state (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_006_invalid_preserves_output_and_state) ... ok
+test_tc_imd_007_no_state_network_process_adapter (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_007_no_state_network_process_adapter) ... ok
+test_tc_imd_009_012_reference_example_and_claim_boundaries (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_009_012_reference_example_and_claim_boundaries) ... ok
+test_tc_imd_013_legacy_semantics_documented_and_observable (test_installed_method_independent.InstalledMethodIndependent.test_tc_imd_013_legacy_semantics_documented_and_observable) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 4.926s
+
+OK

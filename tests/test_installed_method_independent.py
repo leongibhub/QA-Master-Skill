@@ -118,3 +118,25 @@ with patch.object(socket,'socket',side_effect=AssertionError('network')),patch.o
             self.input.write_text(json.dumps(b),encoding='utf-8')
             script="import sys,json;sys.path.insert(0,sys.argv[1]);from qa_master.campaign_cli import write_campaign;write_campaign(sys.argv[2],sys.argv[3])"
             out=self.area/'direct.json';p=subprocess.run([sys.executable,'-I','-c',script,str(self.skill/'scripts'),str(self.input),str(out)],cwd=self.cwd,capture_output=True);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(json.loads(out.read_bytes()),prepare_campaign(b));self.assertNotIn('installed_design',json.loads(out.read_bytes()))
+
+    def test_tc_imd_013_legacy_semantics_documented_and_observable(self):
+        ref=(self.skill/'references/design-methods.md').read_text(encoding='utf-8')
+        for token in ('`text`','`source`','`acceptance`','NO_PROVENANCE','NO_ACCEPTANCE','declared provenance'):
+            self.assertIn(token,ref)
+        b=bundle();b['requirements'][0]['acceptance']='The finite policy outcome is observable.'
+        r,_=self.report(b)
+        self.assertEqual(r['requirement_review']['findings'],[])
+        self.assertEqual(r['case_review']['case_count'],1)
+        self.assertFalse(r['formal_baseline_approved'])
+        for field,code in [('text','EMPTY_REQUIREMENT'),('source','NO_PROVENANCE'),('acceptance','NO_ACCEPTANCE')]:
+            with self.subTest(field=field):
+                absent=copy.deepcopy(b);del absent['requirements'][0][field]
+                observed,_=self.report(absent)
+                self.assertIn(code,{f['code'] for f in observed['requirement_review']['findings']})
+                self.assertFalse(observed['formal_baseline_approved'])
+        example=json.loads((self.skill/'examples/design-methods.json').read_bytes())
+        r,_=self.report(example)
+        self.assertEqual(r['requirement_review']['findings'],[])
+        self.assertEqual(r['case_review']['case_count'],len(example['requirements']))
+        self.assertTrue(all(req['approved'] is False for req in example['requirements']))
+        self.assertFalse(r['formal_baseline_approved'])

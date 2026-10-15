@@ -1,0 +1,62 @@
+[
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\SKILL.md",
+    "sha256": "626e0506a5b5e4992057596fc57ec69676c1a86b0a99943504a8ddbd7e4ddd6f",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\references\\work-protocol.md",
+    "sha256": "ba232063489db733eeea68c46bd4b812a33c982ba36e7440149b1e7deca549ec",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\references\\domains.md",
+    "sha256": "5b4ff7b66ed7d7b7503ea11d8e30699b09b20d8ee6c8704238fa4260abe9c9c1",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\references\\design-methods.md",
+    "sha256": "128df839da4b48df2b40de1b943ee0e1c1b76573fdaaaef2717e5e8087f4265f",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md",
+    "sha256": "31f7fb509154d9d9756cfe43ed1c027a6470b15c6cab6bdb526b215fc3bf3c76",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md",
+    "sha256": "28ae23ab80d819157f0630aa6e4579dd9d7fa21d54d7b8f40b6b583c4471207e",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\structural-integration.md",
+    "sha256": "3e393e1775242e807a3244dbaa2f56553c5c6a88564e6e2228ec12df4bc97615",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\nonfunctional-compatibility.md",
+    "sha256": "352ab77dbcbf8029f33fd316030226614e92042a35cbc2f8217a8a250e69bef2",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\security-recovery.md",
+    "sha256": "dcc0fcffa0f2d16b3952f91296dac0d71311c3de173dccfc9956259532cfbb59",
+    "read": true,
+    "scope": "full document"
+  },
+  {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\regression-evidence.md",
+    "sha256": "c11547b88ccfb79551229390b8147d4c395e7f23548e04f40f5c28942ddb6619",
+    "read": true,
+    "scope": "full document"
+  }
+]
