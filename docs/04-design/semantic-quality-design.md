@@ -117,7 +117,10 @@ The bundle has exactly:
     "projection_sha256": "<sha256>",
     "normalizer_id": "qa-quality-normalizer-v1",
     "normalizer_sha256": "<sha256>",
-    "result_schema_sha256": "<sha256>"
+    "result_schema_id": "semantic-quality-result-v1",
+    "result_schema_sha256": "<sha256>",
+    "secret_scanner_id": "qa-quality-secret-scanner-v1",
+    "secret_scanner_sha256": "<sha256>"
   },
   "response": {
     "state": "PRESENT",
@@ -140,10 +143,13 @@ outside this module.
 
 `created_at_utc` is whole-second RFC 3339 UTC with literal `Z`; it is retained
 metadata and never read from the host clock for identity. Contract digests must
-equal the module's fixed shipped artifacts. Callers cannot substitute a schema
-or executable normalizer. A syntactically valid but unregistered projection ID
-can be evaluated only as unsupported under section 8; a known ID with the wrong
-digest is `PROJECTION_BINDING_MISMATCH` and rejects the bundle.
+equal the module's fixed shipped artifacts. Callers cannot substitute a schema,
+scanner or executable normalizer. The schema-v1 registry contains exactly two
+projection IDs: supported `qa-quality-case-gap-v1` and known legacy
+`paired-neutral-envelope-v1`. Any other ID rejects the bundle with
+`UNKNOWN_PROJECTION`; it cannot publish a profile without registered bytes.
+Either registered ID with the wrong digest is `PROJECTION_BINDING_MISMATCH` and
+rejects the bundle.
 
 ### 4.1 Response descriptor
 
@@ -208,12 +214,27 @@ The array contains exactly one row for each category, sorted in this order:
 6. `NON_FUNCTIONAL`
 7. `DELIVERABLE_USABILITY`
 
-Each row has `category`, `state`, `reason`, and `fact_ids`. `state` is
-`APPLICABLE`, `NOT_APPLICABLE`, `ORACLE_MISSING`, or `UNSCORABLE`.
-`NOT_APPLICABLE` requires a nonempty source-linked reason; `APPLICABLE`
-requires at least one obligation. `ORACLE_MISSING` requires at least one
-matching missing-oracle obligation. No category is silently omitted. The array
-is an applicability register, not a score or coverage percentage.
+Each row has `category`, `state`, `reason`, `source_ids`, and `fact_ids`.
+`state` is
+`APPLICABLE`, `NOT_APPLICABLE`, `ORACLE_MISSING`, or `UNSCORABLE`. The bundle
+validator enforces this complete partition:
+
+| State | Exact obligation invariant | Reason |
+|---|---|---|
+| `APPLICABLE` | at least one obligation in the category and at least one has `oracle_state=DETERMINATE` | null |
+| `ORACLE_MISSING` | at least one obligation and every obligation has `oracle_state=ORACLE_MISSING` | nonempty and source-linked |
+| `UNSCORABLE` | at least one obligation, none is `DETERMINATE`, and at least one is `CONFLICT` or `UNSCORABLE`; other obligations may be `ORACLE_MISSING` | nonempty and source-linked |
+| `NOT_APPLICABLE` | no obligation in the category | nonempty and source-linked |
+
+Every obligation names one registered category and every registered category
+appears exactly once. For a category with obligations, `source_ids` and
+`fact_ids` are the sorted unique unions of the corresponding obligation
+bindings. For `NOT_APPLICABLE`, `source_ids` is nonempty and `fact_ids` is a
+possibly empty list of same-category facts supporting the reason. Every listed
+fact belongs to a listed source. Any other category/state/obligation or linkage
+combination rejects the bundle with `CATEGORY_OBLIGATION_MISMATCH`. No category
+is silently omitted.
+The array is an applicability register, not a score or coverage percentage.
 
 ### 4.4 Obligations and source-bound comparison
 
@@ -224,8 +245,10 @@ Every obligation has exactly:
   "id": "OB-1",
   "category": "FUNCTIONAL_API_INTEGRATION",
   "interpretation": "Published rule stated for reviewers",
+  "source_ids": ["SRC-1"],
   "source_fact_ids": ["F-1"],
   "oracle_state": "DETERMINATE",
+  "required_gap_reason": null,
   "check_id": "CHECK-1",
   "operator": "EQUALS",
   "expected_fact_ids": ["F-1"],
@@ -235,17 +258,31 @@ Every obligation has exactly:
 ```
 
 `oracle_state` is `DETERMINATE`, `ORACLE_MISSING`, `CONFLICT`, or
-`UNSCORABLE`. A determinate obligation requires a unique `check_id`, an
-operator and available expected facts. Other states use null `check_id` and
-operator; `expected_fact_ids` is empty for missing/unsupported and contains all
-conflicting facts for `CONFLICT`.
+`UNSCORABLE`. Its members obey this exact partition:
+
+| Oracle state | `source_ids` | `check_id` / `operator` | `expected_fact_ids` | `required_gap_reason` |
+|---|---|---|---|---|
+| `DETERMINATE` | nonempty, all `AVAILABLE`; includes every source behind bound facts | unique non-null check plus `EQUALS` or `ONE_OF` | one or more available facts as required by the operator | null |
+| `ORACLE_MISSING` | nonempty, all `AVAILABLE`, identifying inspected scope | both null | empty; `source_fact_ids` identifies the inspected scope that lacks the oracle | `ORACLE_MISSING` |
+| `CONFLICT` | at least two `AVAILABLE` sources | both null | at least two same-typed, canonically unequal facts from at least two available sources | `CONFLICT` |
+| `UNSCORABLE` + `SOURCE_MISSING` | at least one `NOT_AVAILABLE` source; no output can promote it | both null | empty; `source_fact_ids` may identify only available contextual scope | `SOURCE_MISSING` |
+| `UNSCORABLE` + `UNSUPPORTED_CATEGORY` | nonempty registered sources identifying the unsupported scope | both null | empty; `source_fact_ids` may identify available context | `UNSUPPORTED_CATEGORY` |
+
+Every expected/source fact used by an obligation has the same category as the
+obligation. Violations reject the bundle with `INVALID_ORACLE_STATE` rather
+than becoming response-quality rows.
 
 Schema v1 permits only two operators:
 
 - `EQUALS`: one expected fact; observed type and canonical native value must be
   identical;
-- `ONE_OF`: one to 16 expected facts of the same type; the observation must
-  equal exactly one canonical value.
+- `ONE_OF`: one to 16 expected facts of the same type; their
+  `(value_type, canonical value)` pairs must be pairwise distinct, and the
+  observation must equal exactly one pair. Two different fact IDs with the
+  same typed canonical value reject the evaluator bundle with
+  `DUPLICATE_EXPECTED_VALUE`; values are never silently deduplicated. When
+  multiple sources corroborate one value, use `EQUALS` with one expected fact
+  and retain every corroborating fact in `source_fact_ids` for provenance.
 
 Complex rules are normalized by the published projection to a typed JSON or
 string-set fact and then compared with these operators. There is no expression,
@@ -281,14 +318,27 @@ secret-safe JSON and is retained but ignored by semantic comparison. Correct
 extra detail there cannot create a semantic violation. Unknown members outside
 published extension locations are a shape violation.
 
-The published projection deliberately separates **envelope structure** from
-**assessable content**. The outer object and its eight members are required;
-`observations`, `cases`, and `gaps` must be bounded arrays and each element must
-be an object. Item schemas allow only their published member names, but content
+The published projection deliberately separates **envelope identity**,
+**independent content channels**, and **assessable item content**. The published
+response has nine members, but only parseable JSON object, `schema_version`,
+and `artifact_id` are required to identify a response globally. Missing or
+wrong-type `summary`, `artifact_state`, `execution_state`, `extensions`, or one
+content channel produces a bounded diagnostic rather than erasing intact
+channels. Item schemas allow only their published member names, but content
 members may be absent, null, wrong-enum strings or unknown references so the
 normalizer can retain a deterministic diagnostic instead of hiding a
 SEMANTIC/USABILITY/PROVENANCE defect behind global parse failure. It never
 inserts a default or repairs a value.
+
+`observations`, `cases`, and `gaps` are independent channels. A valid channel
+is a bounded array; a wrong-type or missing channel is marked unavailable.
+Valid sibling channels remain assessable. An item that is not an object is a
+recoverable shape diagnostic within only that channel and is otherwise ignored.
+`artifact_state` or `execution_state` different from `DRAFT_UNAPPROVED` /
+`NOT_EXECUTED` is an assessable claim-policy defect. It violates recoverable
+SHAPE and is never trusted as an execution fact. It does not select an
+obligation or change SEMANTIC/USABILITY/PROVENANCE unless a separate published
+obligation and observation independently establish such a row.
 
 An observation's published members are `check_id`, `value_type`, `value`, and
 `source_fact_ids`. A well-formed observation supplies all four. Missing or
@@ -296,6 +346,14 @@ duplicate check identity makes that check absent/ambiguous for semantic
 evaluation. Unknown `check_id`, mismatched `value_type`, invalid typed value or
 insufficient/unknown fact refs is an assessable semantic/provenance defect, not
 a fatal envelope error.
+
+An observation whose valid `check_id` is not declared by any obligation is an
+`UNBOUND_OBSERVATION` item diagnostic. It cannot satisfy any obligation and
+does not alter any unrelated obligation's four rows. If the response therefore
+lacks the observation required by a declared obligation, that obligation alone
+receives the normal missing-observation `SEMANTIC=VIOLATED` result. Unknown
+fact refs on an unbound observation remain attached to that diagnostic; they
+do not create a global provenance violation.
 
 ### 5.1 Case projection
 
@@ -346,7 +404,12 @@ A gap's published members are `gap_id`, `obligation_ids`, `reason`, `fact_ids`,
 A conforming gap maps at least one obligation. Missing identity/content,
 invalid reason or unknown refs is retained as an item diagnostic and cannot
 satisfy the affected obligation. A gap never satisfies semantic truth or
-creates a case, but an exact gap can satisfy provenance honesty.
+creates a case, but an exact gap can satisfy provenance honesty. An exact gap's
+`reason` equals every mapped obligation's `required_gap_reason`, its `fact_ids`
+include every required available contextual/conflicting fact, and its
+`source_ids` include every obligation `source_id`. A gap may name a
+`NOT_AVAILABLE` source only for `SOURCE_MISSING`; this binds absence declared by
+the bundle and never lets response text promote that source to available.
 
 ## 6. Validation and normalization
 
@@ -356,38 +419,106 @@ states, operator compatibility, response descriptor integrity, registered
 contract hashes, containment and absence of prohibited input patterns. It
 returns only IDs, safe counts, hashes and limitations.
 
-The normalizer is code-owned and selected by the fixed projection registry.
-It does not execute bundle-supplied code. For the supported v1 projection it
-validates the response and returns ID-indexed typed observations, cases and
-gaps plus sorted `shape_diagnostics` and `item_diagnostics`. It preserves
-source bytes and records normalized canonical bytes/hash separately.
+Every `AVAILABLE` source is opened as opaque bytes: the evaluator applies
+length, containment, link/reparse, digest and scanner checks but never parses it
+as JSON or assigns meaning beyond the frozen visible fact. Exact source bytes
+are retained in the result. A source read failure or digest change rejects the
+command before any result reservation.
 
-Diagnostics are classified before evaluation:
+The normalizer is code-owned and selected by the fixed projection registry. It
+does not execute bundle-supplied code. For the supported projection it returns
+three independent channel objects (`AVAILABLE` with normalized rows, or
+`UNAVAILABLE` with a diagnostic), plus sorted diagnostics. It never inserts a
+default, coerces a type or discards a valid sibling channel.
+
+Typed equality is `(value_type, canonical-native-value)` equality from
+`DOC-PAIRED-VALUE-ENCODING-CLARIFICATION-001`: booleans are distinct from
+integers; integer tokens are canonical and at most 34 magnitude digits;
+decimals are canonical decimal strings; strings compare exact Unicode scalar
+sequences; string sets are sorted unique strings; JSON compares canonical JSON
+bytes with array order significant. Python `==` is not the comparison oracle.
+
+### 6.1 Frozen installed assets
+
+The wheel contains these exact package resources under
+`qa_master/semantic_quality_assets/`:
+
+| Resource | Registered identity and purpose |
+|---|---|
+| `contract.json` | `semantic-quality-v1`; exact bundle and item contract |
+| `projection.json` | `qa-quality-case-gap-v1`; supported response projection |
+| `legacy-paired-projection.json` | `paired-neutral-envelope-v1`; known unsupported compatibility descriptor |
+| `result-schema.json` | exact profile, diagnostic and manifest member contract |
+| `normalizer.json` | `qa-quality-normalizer-v1`; declarative canonicalization and reason-map revision |
+| `secret-scanner.json` | `qa-quality-secret-scanner-v1`; scanner rule IDs, key classes and byte-pattern classes |
+
+Each resource is canonical compact JSON: UTF-8, sorted object keys, unescaped
+Unicode, compact separators and exactly one terminal LF. Its SHA-256 is over
+those installed bytes, not a reconstructed object. Assets are loaded only with
+`importlib.resources.files("qa_master").joinpath("semantic_quality_assets",
+name)`. Packaging explicitly includes `semantic_quality_assets/*.json`.
+Missing resources reject with `CONTRACT_ASSET_MISSING`; a byte mismatch rejects
+with `CONTRACT_BINDING_MISMATCH` or `PROJECTION_BINDING_MISMATCH`.
+
+`normalizer_sha256` binds `normalizer.json`, never a Python string constant.
+`secret_scanner_sha256` binds `secret-scanner.json`; scanner executable logic
+is also covered by the evaluator implementation hash. The evaluator
+implementation hash is SHA-256 over exact installed
+`qa_master/semantic_quality.py` bytes. Fresh-wheel verification must read all
+six resources through `importlib.resources` and reproduce these hashes.
+
+### 6.2 Diagnostic compartments
+
+Security-policy failures (`PROHIBITED_FIELD` or `PROHIBITED_INPUT_PATTERN`) are
+command preflight rejections with no profile. They are outside the following
+response-quality diagnostics.
 
 | Class | Exact conditions | Downstream effect |
 |---|---|---|
-| `FATAL_STRUCTURE` | invalid UTF-8/JSON, duplicate key, over-limit bytes/nodes/depth, top level not an object, missing/wrong-type outer member, wrong schema/artifact/execution state, or `observations`/`cases`/`gaps` not an array | all SHAPE rows `VIOLATED`; other dimensions `UNSCORABLE` |
-| `RECOVERABLE_SHAPE` | an array item is not an object, or a published item has an unknown member outside `extensions` | SHAPE rows `VIOLATED`; valid known portions remain assessable |
-| `SEMANTIC_DEFECT` | unknown/missing/duplicate check, value-type mismatch, invalid typed value, unequal source-bound value | SHAPE unaffected; relevant SEMANTIC row is `VIOLATED` |
-| `USABILITY_DEFECT` | missing/invalid case identity, obligation mapping, readiness, section, action, expected oracle, cleanup, or matching gap | SHAPE unaffected; relevant USABILITY row is `VIOLATED` or its declared missing-oracle outcome |
-| `PROVENANCE_DEFECT` | unknown/insufficient source, fact, oracle or gap reference, or an invented expected fact | SHAPE unaffected; relevant PROVENANCE row is `VIOLATED` |
+| `GLOBAL_UNINTERPRETABLE` | invalid UTF-8/JSON, duplicate key, response byte/node/depth limit, top level not an object, or missing/invalid `schema_version` or `artifact_id` | every SHAPE row `VIOLATED/MALFORMED_KNOWN_RESPONSE_FATAL`; other dimensions `UNSCORABLE/RESPONSE_SHAPE_DEPENDENCY` |
+| `RECOVERABLE_SHAPE` | missing/wrong-type `summary`, `artifact_state`, `execution_state`, or `extensions`; missing/wrong-type channel; non-object channel item; unknown member outside an item `extensions` | every SHAPE row `VIOLATED/MALFORMED_KNOWN_RESPONSE_RECOVERABLE`; safely normalized sibling content remains assessable |
+| `CLAIM_POLICY_DEFECT` | `artifact_state` is not `DRAFT_UNAPPROVED` or `execution_state` is not `NOT_EXECUTED` | SHAPE is recoverably violated with `MALFORMED_KNOWN_RESPONSE_RECOVERABLE`; no execution claim is trusted and no obligation-local row changes solely from this outer field |
+| `SEMANTIC_DEFECT` | missing/duplicate declared check, value-type mismatch, invalid typed value, or unequal source-bound value | only the mapped SEMANTIC row is violated |
+| `USABILITY_DEFECT` | missing/invalid case identity, obligation/category mapping, readiness, section, action, expected oracle, cleanup, or required gap | only mapped USABILITY rows change |
+| `PROVENANCE_DEFECT` | unknown/insufficient source, fact, oracle or gap reference, invented expected fact, or missing required honest gap | only mapped PROVENANCE rows change |
 
-If one item has defects in several classes, each applicable dimension receives
-its own deterministic row; a lower-level content defect never erases a
-higher-value assessable finding. Duplicate item identities are ambiguous only
-for that identity: the corresponding semantic/usability/provenance rows are
-evaluated as absent/ambiguous, while unrelated obligations remain assessable.
-Prohibited claim/secret keys or byte patterns are security-policy preflight
-rejections under precedence rule 1, before shape normalization; they publish no
-profile and never appear as `FATAL_STRUCTURE` quality observations.
+The three channel states are independent. `observations` unavailable affects
+only determinate semantic rows and provenance that requires an observation;
+`cases` unavailable affects only case-required usability and case provenance;
+`gaps` unavailable affects only obligations whose source state requires a gap.
+A definite mapped defect in an available channel is retained even if another
+channel is unavailable. Unknown-only items remain diagnostics and cannot change
+an unrelated obligation. Extra **known** source/fact references are retained
+and permitted; the required references must be a subset. Any unknown reference
+is a provenance defect.
 
-`paired-neutral-envelope-v1` and all CR-011 artifacts are legacy inputs for
-this evaluator. They are never coerced into the new case schema. A bundle may
-bind their hash and projection ID to demonstrate the compatibility boundary;
-all Phase 2 dimensions are `UNSCORABLE` with `LEGACY_PROJECTION_UNSUPPORTED`,
-and no new interpretation is attached to the old grade.
+For valid channel arrays, an observation is content-valid only with a unique
+registered `check_id`, a registered `value_type`, a valid native `value`, and a
+bounded unique `source_fact_ids` array. A case is content-valid only with a
+unique `case_id`, nonempty known `obligation_ids`, one matching `category`, a
+registered readiness, all section objects/arrays from section 5.1, and bounded
+unique reference arrays. A gap is content-valid only with a unique `gap_id`,
+nonempty known `obligation_ids`, registered reason, bounded known fact/source
+IDs, nonempty `needed_evidence`, and a controlled relative or opaque
+`evidence_pointer`. Invalid content is retained as an item diagnostic; it is
+never repaired into a valid item.
+
+`paired-neutral-envelope-v1` is the only registered legacy projection. Its
+registered asset is retained in `contracts/projection.json`; all Phase 2 rows
+are `UNSCORABLE/LEGACY_PROJECTION_UNSUPPORTED`. It is never coerced into the
+new case schema and no new interpretation is attached to the old grade.
 
 ## 7. Four-dimensional evaluation
+
+`profile.json` has exactly `schema_version`, `result_id`, `evaluation_id`,
+`fixture_class`, `evaluation_state`, `execution_state`, `claim_status`,
+`human_rating_status`, `legacy_grade_changed`, `response_mode`,
+`category_applicability`, `shape_diagnostics`, `item_diagnostics`, `rows`, and
+`limitations`. `response_mode` is `SUPPORTED`, `ABSENT`, or
+`LEGACY_UNSUPPORTED`. A diagnostic has exactly `code`, `channel`, `index`,
+`item_id`, and `member`; nullable fields stay explicit. Diagnostics are sorted
+by `(code, channel, index-or--1, item_id-or-empty, member-or-empty)` and contain
+no source text or typed value.
 
 The profile contains exactly four rows per obligation, sorted by obligation ID
 then `SHAPE`, `SEMANTIC`, `USABILITY`, `PROVENANCE`. Each row has
@@ -395,87 +526,115 @@ then `SHAPE`, `SEMANTIC`, `USABILITY`, `PROVENANCE`. Each row has
 `source_fact_ids`, and `evidence_pointers`. Outcome is exactly `SATISFIED`,
 `VIOLATED`, `ORACLE_MISSING`, or `UNSCORABLE`.
 
+Each dimension uses the first matching row in its ordered table. This prevents
+an implementation from replacing a definite defect with a dependency outcome.
+
 ### 7.1 SHAPE
 
-- supported projection, present response and valid published form:
-  `SATISFIED`;
-- present response declared as the supported projection with any
-  `FATAL_STRUCTURE` diagnostic:
-  `VIOLATED / MALFORMED_KNOWN_RESPONSE_FATAL`;
-- present response with only `RECOVERABLE_SHAPE` diagnostics:
-  `VIOLATED / MALFORMED_KNOWN_RESPONSE_RECOVERABLE`; other dimensions still
-  evaluate normalized known content;
-- response descriptor state `ABSENT`: `UNSCORABLE / RESPONSE_ABSENT`;
-- syntactically valid unregistered or legacy projection:
-  `UNSCORABLE / PROJECTION_UNSUPPORTED`.
+| Order | Condition | Outcome / reason |
+|---:|---|---|
+| 1 | response descriptor is `ABSENT` | `UNSCORABLE / RESPONSE_ABSENT` |
+| 2 | registered legacy projection | `UNSCORABLE / LEGACY_PROJECTION_UNSUPPORTED` |
+| 3 | any `GLOBAL_UNINTERPRETABLE` diagnostic | `VIOLATED / MALFORMED_KNOWN_RESPONSE_FATAL` |
+| 4 | any `RECOVERABLE_SHAPE` or `CLAIM_POLICY_DEFECT` diagnostic | `VIOLATED / MALFORMED_KNOWN_RESPONSE_RECOVERABLE` |
+| 5 | supported projection with no shape diagnostic | `SATISFIED / PROJECTED_SHAPE_VALID` |
 
 Malformed known response does not reject an otherwise valid evaluator bundle.
-Fatal structure makes `SEMANTIC`, `USABILITY`, and `PROVENANCE`
-`UNSCORABLE / RESPONSE_SHAPE_DEPENDENCY`. Recoverable item shape does not: the
-evaluator assesses every safely normalized known member and records an
-obligation-specific defect where identity/binding is unavailable. By contrast,
-bundle corruption, input hash drift, mixed contract digests or prohibited data
-rejects evaluation atomically and publishes no profile.
+Only `GLOBAL_UNINTERPRETABLE` makes all other dimensions dependency-
+`UNSCORABLE`; missing summary, a bad state enum, an unavailable channel or an
+invalid item never suppresses intact sibling content. Bundle corruption, hash
+drift, mixed contract digests or prohibited data rejects evaluation atomically
+and publishes no profile.
 
 ### 7.2 SEMANTIC
 
-For a valid supported response:
+| Order | Obligation-local condition | Outcome / reason |
+|---:|---|---|
+| 1 | `oracle_state=ORACLE_MISSING` | `ORACLE_MISSING / SOURCE_ORACLE_MISSING` |
+| 2 | `oracle_state=CONFLICT` | `UNSCORABLE / SOURCE_FACT_CONFLICT` |
+| 3 | `oracle_state=UNSCORABLE` | `UNSCORABLE / SEMANTIC_RULE_UNAVAILABLE` |
+| 4 | observations channel unavailable for a determinate obligation | `UNSCORABLE / OBSERVATIONS_CHANNEL_UNAVAILABLE` |
+| 5 | more than one row has the declared `check_id` | `VIOLATED / OBSERVATION_AMBIGUOUS` |
+| 6 | no row has the declared `check_id` | `VIOLATED / OBSERVATION_MISSING` |
+| 7 | matched row has invalid/mismatched `value_type` or invalid native value | `VIOLATED / OBSERVED_VALUE_INVALID` |
+| 8 | valid typed value does not satisfy `EQUALS`/`ONE_OF` | `VIOLATED / OBSERVED_VALUE_MISMATCH` |
+| 9 | valid typed value satisfies the operator | `SATISFIED / SOURCE_BOUND_VALUE_MATCH` |
 
-- `DETERMINATE`: exactly one matching typed observation that satisfies the
-  source-bound operator and required fact refs is `SATISFIED`; absent,
-  contradictory or insufficiently bound observation is `VIOLATED`;
-- `ORACLE_MISSING`: `ORACLE_MISSING` regardless of participant wording;
-- `CONFLICT` or `UNSCORABLE`: `UNSCORABLE`.
-
-The evaluator never derives a missing expected value from a case sentence,
-nearby fact, code behavior, historic grade or another participant.
+Observation reference defects are assessed independently under PROVENANCE. A
+typed value can therefore be semantically correct while its provenance is
+violated, or semantically wrong while its known references are honest. The
+evaluator never derives a missing expected value from prose, code, a historic
+grade or another participant.
 
 ### 7.3 USABILITY
 
-- determinate case-required obligation with at least one structurally complete,
-  source-linked case at an allowed readiness is `SATISFIED`;
-- determinate case-required obligation with no case, `cases: []`, analysis
-  only, invalid readiness, missing required member or only an unrelated gap is
-  `VIOLATED`;
-- explicit missing oracle/source with a matching case/gap is
-  `ORACLE_MISSING`, never `SATISFIED`;
-- conflict/unsupported category with an honest matching gap is `UNSCORABLE`;
-- a non-case obligation with a valid permitted static review artifact is
-  `SATISFIED`.
+| Order | Obligation-local condition | Outcome / reason |
+|---:|---|---|
+| 1 | `oracle_state=ORACLE_MISSING` | `ORACLE_MISSING / USABLE_ORACLE_UNAVAILABLE` |
+| 2 | `oracle_state=CONFLICT` | `UNSCORABLE / USABLE_OUTCOME_CONFLICTING` |
+| 3 | `oracle_state=UNSCORABLE` | `UNSCORABLE / USABILITY_RULE_UNAVAILABLE` |
+| 4 | determinate, `case_required=false`, no case mapped | `SATISFIED / CASE_NOT_REQUIRED` |
+| 5 | required cases channel is unavailable | `UNSCORABLE / CASES_CHANNEL_UNAVAILABLE` |
+| 6 | no case maps a case-required obligation | `VIOLATED / REQUIRED_CASE_MISSING` |
+| 7 | `case_required=true` and any mapped case has ambiguous identity, wrong category/obligation mapping, invalid readiness, missing section/action/oracle/cleanup, or a concrete incomplete section | `VIOLATED / MAPPED_CASE_INVALID` |
+| 8 | a mapped case exists when `case_required=false` and is invalid | `VIOLATED / OPTIONAL_CASE_INVALID` |
+| 9 | at least one mapped case is complete and its readiness is allowed | `SATISFIED / USABLE_DRAFT_ARTIFACT_PRESENT` |
 
-Completeness does not imply executable readiness. No schema-v1 outcome says a
-test can run.
+An unrelated gap never satisfies a case obligation. A source-level missing
+oracle remains `ORACLE_MISSING`, and a conflict/unsupported rule remains
+`UNSCORABLE`, whether or not the response supplies a gap; gap honesty is a
+PROVENANCE concern. Completeness does not imply executable readiness.
 
 ### 7.4 PROVENANCE
 
-- every observation/case claim uses known facts required by the obligation and
-  no unsupported expected fact: `SATISFIED`;
-- missing, unknown, mismatched or fabricated source/oracle refs, or a source
-  gap presented as a determinate expectation: `VIOLATED`;
-- missing oracle with an exact `ORACLE_MISSING`/`SOURCE_MISSING` gap, or conflict
-  with a gap citing all conflicting facts: `SATISFIED` for honesty while the
-  semantic/usability rows retain their own non-success outcomes;
-- response/projection unavailable: `UNSCORABLE`.
+For each obligation, relevant artifacts are its declared-check observation,
+every case naming the obligation, and every gap naming the obligation. The
+first matching condition applies:
 
-This dimension assesses binding and gap honesty, not the truth of natural
-language prose.
+| Order | Obligation-local condition | Outcome / reason |
+|---:|---|---|
+| 1 | any relevant artifact uses an unknown source/fact/gap/obligation ID, omits a required fact, maps the wrong category, fabricates an expected fact, or presents a gap as a determinate expectation | `VIOLATED / SOURCE_BINDING_INVALID` |
+| 2 | `ORACLE_MISSING`, `CONFLICT`, or `UNSCORABLE` has an available gaps channel but no exact matching gap | `VIOLATED / REQUIRED_GAP_MISSING` |
+| 3 | a channel required to assess the obligation's relevant artifacts is unavailable and no definite violation above exists | `UNSCORABLE / PROVENANCE_CHANNEL_UNAVAILABLE` |
+| 4 | missing-oracle obligation has an exact `ORACLE_MISSING` gap citing its available source facts | `SATISFIED / MISSING_ORACLE_HONESTLY_REPORTED` |
+| 5 | conflict obligation has an exact `CONFLICT` gap citing all conflicting facts and sources | `SATISFIED / CONFLICT_HONESTLY_REPORTED` |
+| 6 | unscorable obligation has an exact gap matching its declared `SOURCE_MISSING` or `UNSUPPORTED_CATEGORY` reason | `SATISFIED / UNSCORABLE_GAP_HONESTLY_REPORTED` |
+| 7 | determinate obligation's relevant artifacts contain all required known refs | `SATISFIED / SOURCE_BINDING_COMPLETE` |
+
+Extra known references do not violate provenance. Unknown-only observations,
+cases with no valid obligation binding, and unrelated gaps are retained as
+diagnostics but do not change unrelated obligation rows. Invalid observed value
+or readiness with otherwise valid references may therefore yield
+`SEMANTIC=VIOLATED` or `USABILITY=VIOLATED` while `PROVENANCE=SATISFIED`.
+
+### 7.5 Evidence pointers and totality
+
+`evidence_pointers` is a sorted unique array of evaluator-created logical IDs,
+never caller path text: `bundle:obligation/<id>`, `bundle:fact/<id>`,
+`response:observation/<zero-based-index>`, `response:case/<index>`,
+`response:gap/<index>`, or `diagnostic:<code>/<channel>/<index-or-root>`.
+SHAPE rows point to every applicable shape diagnostic (or
+`diagnostic:PROJECTED_SHAPE_VALID/root/root`). SEMANTIC rows point to the
+obligation, expected facts and matched observation/absence diagnostic.
+USABILITY rows point to the obligation and mapped cases/gaps or channel/missing
+diagnostic. PROVENANCE rows point to the obligation and every reference-bearing
+artifact used by its decision. Each row always has at least one pointer.
 
 ## 8. Precedence and total result derivation
 
-Evaluation applies this exact precedence:
+Evaluation applies this exact global precedence:
 
-1. invalid bundle, input integrity, contract binding, security or output-path
-   precondition → reject; no result directory;
-2. response `ABSENT` or projection unsupported/legacy → all four rows
-   `UNSCORABLE` with the corresponding reason;
-3. response present for known projection with `FATAL_STRUCTURE` →
-   `SHAPE=VIOLATED`, other three rows `UNSCORABLE`;
-4. response with `RECOVERABLE_SHAPE` → `SHAPE=VIOLATED`, then assess valid
-   known members independently; unbindable item content cannot satisfy an
-   obligation but does not suppress unrelated results;
-5. structurally usable response, including content-level semantic, usability
-   or provenance defects → `SHAPE=SATISFIED`, then apply section 7 to produce
-   the relevant `VIOLATED`, `ORACLE_MISSING`, or `UNSCORABLE` rows.
+1. invalid bundle, input integrity, contract/asset binding, security or
+   output-path precondition → command rejection; no result directory;
+2. response `ABSENT` → every row `UNSCORABLE/RESPONSE_ABSENT`;
+3. registered legacy projection → every row
+   `UNSCORABLE/LEGACY_PROJECTION_UNSUPPORTED`;
+4. supported response with `GLOBAL_UNINTERPRETABLE` → SHAPE is
+   `VIOLATED/MALFORMED_KNOWN_RESPONSE_FATAL`; other dimensions are
+   `UNSCORABLE/RESPONSE_SHAPE_DEPENDENCY`;
+5. identified supported response → derive SHAPE and every obligation-local
+   dimension independently from section 7. A recoverable/channel/item defect
+   never suppresses an intact sibling result.
 
 An explicitly inspected visible source that lacks an expected oracle produces
 `ORACLE_MISSING`. A source artifact that is unavailable or an unsupported
@@ -493,52 +652,114 @@ of SHA-256 over canonical JSON containing:
 
 - exact source bundle SHA-256 and canonical bundle SHA-256;
 - response state and exact response SHA-256 when present;
-- every referenced source/projection artifact digest;
-- contract, projection, normalizer and result-schema digests;
+- the sorted `(source-id, source-byte-digest)` list;
+- contract, selected projection, normalizer, result-schema and secret-scanner
+  installed-byte digests;
 - evaluator implementation SHA-256.
 
 A one-byte change creates a different result ID. Re-evaluating identical bytes
 derives the same ID; if that directory already exists, `RESULT_EXISTS` returns
 without reading it as success or overwriting it.
 
-`evaluate` fully parses/evaluates in memory, then stages a sibling private
-directory containing:
+`evaluate` fully parses/evaluates in memory, then stages a unique sibling
+private directory containing:
 
 ```text
 <result-id>/
   bundle.source.json
   response.source.json       # only when PRESENT
   sources/<source-sha256>.source # exact bytes for each AVAILABLE source
+  contracts/contract.json
   contracts/projection.json
   contracts/result-schema.json
+  contracts/normalizer.json
+  contracts/secret-scanner.json
+  contracts/evaluator.py
   bundle.canonical.json
-  response.normalized.json   # only when valid and supported
+  response.normalized.json   # only when globally interpretable and supported
   profile.json
   manifest.json
 ```
 
-Available source bytes and the module-owned schema bytes are copied only after
-their length/hash and prohibited-pattern checks succeed. Their controlled
-ledger locators derive from lowercase content hashes, never from caller paths.
-Identical source bytes are retained once and may serve multiple source IDs.
-This lets `inspect`
-reconcile every retained source/schema hash without reopening the original
-location. The normalizer is code, not a copied executable artifact; its module
-hash and source revision remain explicit manifest dependencies.
+Available source bytes are copied exactly and are never JSON-decoded. Assets
+and evaluator bytes are copied exactly after their length/hash and scanner
+checks succeed. Controlled ledger locators derive from lowercase hashes or the
+fixed names above, never caller paths. Identical source bytes are retained once
+and may serve multiple source IDs.
 
-Before publication it checks the 16 MiB total, closes/fsyncs files where the host
-supports it, re-reads every file and records length, SHA-256 and role. It then
-renames the complete staging directory to the non-existing result path. Any
-failure deletes only its own staging directory and leaves inputs, previous
-results and destination unchanged. Abrupt host loss may leave a named staging
-directory; `inspect` reports it as `INCOMPLETE` and never promotes or repairs it.
+Before publication the evaluator checks the 16 MiB total, closes/fsyncs files
+where supported, re-reads every staged file and records length, SHA-256 and
+role. Publication uses this cross-platform logical commit protocol:
+
+1. Create the final `<output-root>/<result-id>` with exclusive `mkdir`. An
+   existing file or directory makes the caller the loser: delete only its own
+   staging directory and return `RESULT_EXISTS`; never inspect, repair or
+   replace the existing result.
+2. Create-exclusive `reservation.json` containing result ID and a random
+   owner nonce. Copy each staged non-manifest file into the reserved directory
+   with create-exclusive semantics and verify it again.
+3. Only the process holding the exact nonce may clean up that incomplete final
+   directory after an ordinary failure. A crash may leave it permanently
+   `INCOMPLETE`; no later evaluation resumes or overwrites it.
+4. Remove `reservation.json`, then atomically rename a fully written temporary
+   manifest within the reserved directory to `manifest.json`. Manifest
+   presence is the sole logical commit marker. After it appears, no file is
+   mutated.
+
+This protocol does not claim an atomic whole-directory rename. It guarantees a
+single result-ID owner, no replacement of a concurrent winner, and no partial
+directory being reported as committed.
 
 `manifest.json` binds the result ID, input/canonical/normalized hashes,
 contract identities, evaluator implementation, file ledger, fixture class,
-category applicability, row IDs/outcomes and all limitations. It contains no
-aggregate. `inspect_result` rejects links/reparse points, recomputes every file
-and manifest identity, identifies missing/mismatched/undeclared files, and
-never evaluates or rewrites a profile.
+category applicability, exact diagnostic set, row IDs/outcomes/reasons/pointers
+and all limitations. It contains no aggregate. The ledger covers every retained
+file except the manifest itself and forbids extras.
+
+`inspect_result` is process-free and never repairs. It rejects any symlink or
+reparse point before following it. It strict-parses the manifest, canonical
+bundle and profile; re-hashes every retained byte; recomputes the result ID
+from retained inputs/assets/evaluator bytes; checks the directory basename;
+and checks bundle/category/obligation identities.
+
+It then compares the exact retained evaluator and six asset hashes with the
+currently installed registered version. A mismatch is
+`MISMATCH / INSTALLED_DERIVER_MISMATCH`; inspect never imports or executes the
+retained `contracts/evaluator.py`. When they match, inspect invokes the same
+side-effect-free `derive_profile` function used by `evaluate`, using only the
+retained bundle, response, opaque source bytes and registered assets. It
+re-derives canonical normalized-response and profile bytes, compares them
+byte-for-byte with the retained files, and cross-checks the manifest's profile
+hash, row count, category, outcome, reason and pointer values. Any difference
+is `MISMATCH / PROFILE_DERIVATION_MISMATCH`.
+
+This derivation is not a model call, external process, network action, historic
+CR-011 grader run or execution of retained code. It is required because a
+ledger-only check cannot detect a jointly rewritten profile and manifest.
+`INTACT` means that retained bytes agree with the current registered
+deterministic derivation. With no signature or external trust anchor, it does
+not authenticate the author or host and does not claim resistance to a party
+that replaces all retained inputs, the result-ID directory, external
+references and the current installed evaluator together.
+
+Inspection applies one deterministic boundary:
+
+| Precedence | Condition | Result |
+|---:|---|---|
+| command | any path component is a link/reparse point, or traversal/absolute-path policy fails | reject `LINK_FORBIDDEN` or `PATH_ESCAPE`; no integrity status |
+| command | an existing path cannot be opened/read because of local I/O | reject `LOCAL_IO_FAILURE`; no integrity status |
+| 1 | result root does not exist or is not a directory | `MISSING` |
+| 2 | `reservation.json` exists, manifest is absent/invalid, or manifest/result invariants cannot be established | `INCOMPLETE` |
+| 3 | valid manifest declares a file that is absent | `MISSING` |
+| 4 | declared size/hash/role, recomputed result ID, profile/category/row cross-check, installed asset/implementation binding, or pure profile derivation differs | `MISMATCH` |
+| 5 | an undeclared file or directory exists | `UNDECLARED` |
+| 6 | all checks pass | `INTACT` |
+
+For mixed retained defects the status precedence is
+`INCOMPLETE > MISSING > MISMATCH > UNDECLARED > INTACT`. A missing input path
+to `validate`/`evaluate` is instead a command rejection
+`LOCAL_INPUT_MISSING`; an input/output link is `LINK_FORBIDDEN`; an existing
+non-directory output root is `OUTPUT_PATH_CONFLICT`.
 
 The output root must be outside every bundle/response/source path and outside
 any CR-011 run/evidence root supplied as an input. The evaluator has no delete,
@@ -551,13 +772,18 @@ exit 2. They do not echo source text, typed values, locators or exception
 representations. Required codes include:
 
 - `INVALID_BUNDLE`, `DUPLICATE_JSON_KEY`, `SIZE_LIMIT`, `COUNT_LIMIT`;
-- `UNKNOWN_REFERENCE`, `INVALID_OPERATOR`, `INVALID_ORACLE_STATE`;
+- `UNKNOWN_REFERENCE`, `INVALID_OPERATOR`, `INVALID_ORACLE_STATE`,
+  `DUPLICATE_EXPECTED_VALUE`, `CATEGORY_OBLIGATION_MISMATCH`;
 - `SOURCE_INTEGRITY_FAILURE`, `RESPONSE_INTEGRITY_FAILURE`;
-- `CONTRACT_BINDING_MISMATCH`, `PROJECTION_BINDING_MISMATCH`;
+- `CONTRACT_ASSET_MISSING`, `CONTRACT_BINDING_MISMATCH`,
+  `PROJECTION_BINDING_MISMATCH`, `UNKNOWN_PROJECTION`;
 - `PROHIBITED_FIELD`, `PROHIBITED_INPUT_PATTERN`;
-- `PATH_ESCAPE`, `LINK_FORBIDDEN`, `OUTPUT_PATH_CONFLICT`;
-- `RESULT_EXISTS`, `RESULT_SIZE_LIMIT`, `LOCAL_IO_FAILURE`;
-- `RESULT_INTEGRITY_FAILURE` for failed inspection parsing/invariants.
+- `PATH_ESCAPE`, `LINK_FORBIDDEN`, `LOCAL_INPUT_MISSING`,
+  `OUTPUT_PATH_CONFLICT`;
+- `RESULT_EXISTS`, `RESULT_SIZE_LIMIT`, `LOCAL_IO_FAILURE`.
+
+Readable retained-result defects are always represented by the fixed `inspect`
+status table; they are not converted into a second, overlapping command error.
 
 Malformed known response is deliberately a profile outcome, not a command
 error. Safe stdout exposes only result/evaluation IDs, counts, operation status
@@ -585,18 +811,20 @@ reported as holdout evidence. At minimum, independent tests freeze cases for:
 
 | Family | Required oracle |
 |---|---|
-| shape/projection | valid v1, permitted extension detail, fatal duplicate/outer/container failure, recoverable unknown item member, absent response, unsupported and legacy projection |
-| semantic | exact typed match, mismatch, `ONE_OF`, missing/duplicate observation, value-type mismatch, invalid typed value, missing oracle, conflicting facts, unsupported rule/side-effect invariant |
-| usability | complete design-ready case, permitted static review, analysis-only/empty cases, missing case content, invalid readiness, missing/duplicate identity, matching and unrelated gaps |
-| provenance | complete fact binding, missing/unknown/insufficient ref, invented expected fact, honest source/oracle gap, complete conflict citation |
+| shape/projection | valid v1, permitted extension detail, global invalid JSON/identity, each unavailable channel with intact siblings, missing summary/extensions, wrong artifact/execution state, recoverable unknown/non-object item, absent response, registered legacy projection, unregistered projection rejection |
+| semantic | exact canonical typed match including boolean/integer/JSON lookalikes, mismatch, `ONE_OF`, duplicate canonical expected value rejection, missing/duplicate declared observation, unbound-only observation isolation, value-type mismatch with valid provenance, invalid typed value, missing oracle, conflicting facts, unsupported rule/side-effect invariant |
+| usability | complete design-ready case, permitted static review, `case_required=false` with no artifact, invalid optional artifact, analysis-only/empty cases, unavailable cases channel, missing case content, invalid readiness with valid provenance, missing/duplicate identity, matching and unrelated gaps |
+| provenance | complete binding, extra known refs, missing/unknown/insufficient ref, invented expected fact, unknown-only item isolation, honest source/oracle gap, conflict/unsupported with and without the required gap, unavailable gaps channel |
 | requirements/conflicts | compound/conflicting rules and missing acceptance fact |
 | method selection | applicable finite method with candidate-to-case mapping and candidate-only violation |
 | functional/API/integration | supplied observable versus missing endpoint/response contract |
 | security/scope/authority | no-execution preserved; draft/process exit never becomes authorization or security proof |
 | recovery/regression | supplied change/evidence mapping and absent failure/recovery semantics |
 | non-functional | visible threshold and `NON_FUNCTIONAL_THRESHOLD` missing-oracle case |
-| usability/category | every category present, reasoned N/A, invalid silent omission, no rating/aggregate/winner fields |
-| provenance lifecycle | one-byte bundle/response/source/schema drift, mixed version, result collision, staging fault, ledger mismatch, input/output containment |
+| usability/category | every valid applicability state including mixed missing/conflict `UNSCORABLE`; each contradictory category/obligation combination; no rating/aggregate/winner fields |
+| installed assets | exact six-resource bytes/hashes through a fresh wheel, missing asset, mixed version, scanner/normalizer/projection drift, evaluator-byte drift |
+| provenance lifecycle | opaque non-JSON source bytes, one-byte bundle/response/source/schema drift, concurrent result-ID reservation with one winner, injected stage/reservation/manifest fault, no overwrite or auto-resume, input/output containment |
+| inspection | each status alone and mixed precedence, invalid/absent manifest, missing/hash/identity/profile/category/row/asset/implementation mismatch, coherent profile+manifest rewrite with unchanged retained inputs, undeclared file, link/reparse and I/O error boundary |
 | historical boundary | hashes for retained CR-011 raw/oracle/grade stay unchanged and no Phase 2 file is written under that root |
 
 Capacity boundary tests cover every maximum and maximum-plus-one. Metamorphic

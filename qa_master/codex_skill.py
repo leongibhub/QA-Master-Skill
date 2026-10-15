@@ -50,6 +50,8 @@ def skill_bundle():
             result['scripts/qa_master/' + item.name] = item.read_bytes()
     for name, data in _files(package.joinpath('skills', 'professional')):
         result['scripts/qa_master/skills/professional/' + name] = data
+    for name, data in _files(package.joinpath('semantic_quality_assets')):
+        result['scripts/qa_master/semantic_quality_assets/' + name] = data
     result['scripts/qa.py'] = (
         'from pathlib import Path\n'
         'import sys\n'
