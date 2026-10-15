@@ -1,0 +1,213 @@
+openapi: 3.1.0
+x-evaluation-classification: PUBLIC_DEVELOPMENT
+x-execution-state: NOT_EXECUTED
+info:
+  title: Collaborator Document API
+  version: 1.4-draft
+  description: Public-development interface draft for offline QA design.
+paths:
+  /v1/documents:
+    post:
+      operationId: createDocument
+      summary: Create a tenant-scoped draft document.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentInput'
+      responses:
+        '201':
+          description: A new draft document.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          description: Invalid request.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '401':
+          description: Missing or unusable bearer token.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '403':
+          description: Caller lacks document:write.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+  /v1/documents/{documentId}:
+    get:
+      operationId: getDocument
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+      responses:
+        '200':
+          description: The requested document.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          description: Missing or unusable bearer token.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '403':
+          description: Caller lacks document:read or is not in the document tenant.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '404':
+          description: Document is absent.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+    patch:
+      operationId: editDocument
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentInput'
+      responses:
+        '200':
+          description: The edited document.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          description: Invalid request.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '401':
+          description: Missing or unusable bearer token.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '403':
+          description: Caller lacks document:write.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '412':
+          description: The supplied version does not match the current document.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+  /v1/documents/{documentId}:publish:
+    post:
+      operationId: publishDocument
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '200':
+          description: The document was published.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          description: Missing or unusable bearer token.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '403':
+          description: Caller lacks document:publish.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '409':
+          description: The document is already published.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+        '412':
+          description: The supplied version does not match the current document.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/RequestId'
+components:
+  parameters:
+    DocumentId:
+      name: documentId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+  headers:
+    RequestId:
+      required: true
+      schema:
+        type: string
+        minLength: 1
+  schemas:
+    DocumentInput:
+      type: object
+      additionalProperties: false
+      required: [title, body]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 120
+        body:
+          type: string
+          minLength: 1
+          maxLength: 10000
+    Document:
+      type: object
+      required: [id, title, body, state, version]
+      properties:
+        id:
+          type: string
+          minLength: 1
+        title:
+          type: string
+        body:
+          type: string
+        state:
+          type: string
+          enum: [DRAFT, PUBLISHED]
+        version:
+          type: integer
+          minimum: 1

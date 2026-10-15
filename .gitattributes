@@ -2,3 +2,4 @@
 docs/verification/semantic-quality-independent-attempt2.md -text -whitespace
 docs/verification/semantic-quality-independent-attempt3.md -text -whitespace
 tests/test_semantic_quality_independent.py -text
+docs/01-research/public-development-api-qa-evaluation-plan.md -text -whitespace
