@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "task_id": "linux-task-001-docsync-rolling-upgrade-qa-design",
+  "stage": "WAITING_FOR_REVIEW",
+  "classification": "PUBLIC_DEVELOPMENT; DRAFT_UNAPPROVED; NOT_EXECUTED",
+  "scope": {
+    "execute_tests": false,
+    "network": false,
+    "external_writes": false,
+    "credentials": false
+  },
+  "execution": "NOT_EXECUTED",
+  "artifacts": [
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\output\\01-review-and-strategy.md",
+      "sha256": "F92005272A5BBF5287C9432DDF3957F343F9681E969FE0465BC4F185A4B86B38",
+      "role": "requirements/source review: source notation, atomic candidate facts, typed conflicts-and-gaps register, method applicability"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\output\\02-draft-cases.md",
+      "sha256": "A0C43D7E813DA0A47889D5FCE37F9C9D0EBE009620A9804877E32293DEE75E35",
+      "role": "draft test case families TC-LU-001..TC-LU-018, upgrade/rollback readiness view, regression impact map"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\output\\03-review-and-handoff.md",
+      "sha256": "5E597295569C1C6A35B3BE2B7371C217972FE9E101006BBB2B37DA7BD0FDC4ED",
+      "role": "self-review: interpretation limits, pending decisions, next actions, deliverable boundaries"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\output\\read-audit.md",
+      "sha256": "B48F6B5C7EAF21A4E52725553DFDB9BBE135B5B7164B5002268FF339279B4BD6",
+      "role": "audit table of every file read with SHA256 of actual bytes"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\output\\handoff.json",
+      "sha256": "SELF",
+      "role": "machine-readable handoff (this file); hash cannot include itself and is to be computed after write"
+    }
+  ],
+  "sources": [
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\participant-task.md",
+      "sha256": "9EF1D4EEC587B34471B6A56A179FD99734A1A3DDED161D6BC80FE05E5DCF45E5",
+      "role": "task definition"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\release-notes.md",
+      "sha256": "FA1481EFE9420EBA9C23FF5144F8AB39B8C31E1FF677618BBC1DDF486F528F4F",
+      "role": "input source: change scope, supported upgrade path, migration/rollback boundary, client boundary"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\upgrade-runbook.md",
+      "sha256": "A7621F2401646CAE76E33024D8F857D742EA169A6C0D172F3619778177797C32",
+      "role": "input source: draft rolling-upgrade sequence, config-migrate statement, env precedence, access boundary"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\support-and-config.md",
+      "sha256": "1C2DBBEA6050B115C1CF30A016258EA0F8D8F845F032D419EDB98ED5357E8B8C",
+      "role": "input source: support matrix, cluster shape, v2 config fields, observable service data"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\incident-excerpts.md",
+      "sha256": "F527DB21D24F5F3624E376C6C555E1B714B7584B1FD2D00D26B6136B9611E569",
+      "role": "input source: declared synthetic scenario material, NOT_OPERATIONAL_EVIDENCE; used as scenario motivation only"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\SKILL.md",
+      "sha256": "626E0506A5B5E4992057596FC57EC69676C1A86B0A99943504A8DDBD7E4DDD6F",
+      "role": "installed skill guidance"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\references\\work-protocol.md",
+      "sha256": "BA232063489DB733EEEA68C46BD4B812A33C982BA36E7440149B1E7DECA549EC",
+      "role": "installed skill guidance: work protocol"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\references\\domains.md",
+      "sha256": "5B4FF7B66ED7D7B7503EA11D8E30699B09B20D8EE6C8704238FA4260ABE9C9C1",
+      "role": "installed skill guidance: domain profiles (Linux/system software)"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\references\\design-methods.md",
+      "sha256": "128DF839DA4B48DF2B40DE1B943EE0E1C1B76573FDAAAEF2717E5E8087F4265F",
+      "role": "installed skill guidance: offline deterministic design helper contract (helper not executed)"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md",
+      "sha256": "31F7FB509154D9D9756CFE43ED1C027A6470B15C6CAB6BDB526B215FC3BF3C76",
+      "role": "installed professional guide: requirements/source review"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md",
+      "sha256": "28AE23AB80D819157F0630AA6E4579DD9D7FA21D54D7B8F40B6B583C4471207E",
+      "role": "installed professional guide: functional/boundary/negative design"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\structural-integration.md",
+      "sha256": "3E393E1775242E807A3244DBAA2F56553C5C6A88564E6E2228EC12DF4BC97615",
+      "role": "installed professional guide: structural/integration design"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\nonfunctional-compatibility.md",
+      "sha256": "352AB77DBCBF8029F33FD316030226614E92042A35CBC2F8217A8A250E69BEF2",
+      "role": "installed professional guide: non-functional/compatibility design"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\security-recovery.md",
+      "sha256": "DCC0FCFFA0F2D16B3952F91296DAC0D71311C3DE173DCCFC9956259532CFBB59",
+      "role": "installed professional guide: security/recovery design"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\regression-evidence.md",
+      "sha256": "C11547B88CCFB79551229390B8147D4C395E7F23548E04F40F5C28942DDB6619",
+      "role": "installed professional guide: regression impact/defect/evidence reporting"
+    }
+  ],
+  "answers": {},
+  "human_decisions": [],
+  "open_questions": [
+    "SOURCE_CONFLICT G-01: is data/config-v2.yaml created automatically at first 2.4.0 start (release-notes) or must docsync config-migrate run before start (upgrade-runbook)? Preserved as conflict; both drafted as variants TC-LU-006 / TC-LU-009; not resolved.",
+    "ORACLE_MISSING G-02: no observable for 'membership metadata migrated' (the rollback boundary); TC-LU-011 boundary check blocked, TC-LU-012 undefined.",
+    "ORACLE_MISSING G-03: rejection observables (log, error code, service state, prior-config usability) for v2 configs missing required fields; TC-LU-007 partially blocked.",
+    "RECOVERY_OBJECTIVE_UNCONFIRMED G-04/G-05: no post-rollback health/data-reconciliation oracle, no backup integrity verification, no RPO/RTO, no recovery owner.",
+    "PROCEDURE_UNDEFINED G-06: post-membership-metadata rollback not defined by any source.",
+    "AUTHORIZATION_MISSING G-07: no target, account, host list, credential, maintenance window, abort owner, or operator authorization; no execution possible from this package.",
+    "ORACLE_MISSING G-08: no command, traffic-drain mechanism, quorum query, or leader-election observer for the two-ready-member precondition and out-of/return-to-service transitions.",
+    "ORACLE_MISSING/POLICY_UNCONFIRMED G-09/G-10: no default port, no effective-config inspection command, no statement of how env values are supplied or who may change them; TC-LU-010 observation method pending.",
+    "ORACLE_MISSING G-11 / CONCURRENCY_POLICY_MISSING G-17: partial-migration behavior and concurrent-operator migration locking not stated.",
+    "CONTRACT_MISSING G-13: no CLI command/output contract and no protocol-negotiation observable; TC-LU-013 stays at scenario level.",
+    "THRESHOLD_UNCONFIRMED G-14: no latency/error-rate/disk/inode/memory/CPU/network thresholds and no capacity limits; performance/load/stress/stability not applicable.",
+    "BEHAVIOR_UNSPECIFIED G-15: leader election, partition behavior, replication factor, write consistency, membership metadata format, degraded-service behavior unspecified; mixed-version case limited to readiness observables.",
+    "SECURITY_POLICY_UNCONFIRMED G-16: config ownership, permissions, SELinux policy, storage requirements not stated; no security case designable.",
+    "EVIDENCE_UNVERIFIED G-18 / VERSION_PROVENANCE_UNCONFIRMED G-19: incident excerpts are declared synthetic and excluded from any final-build evidence base; build=2.4.0-rc2 appears in no supported matrix.",
+    "ENVIRONMENT_UNIDENTIFIED G-20 / TEST_DATA_MISSING G-22: no build identity, pinned revision, or environment exists; no representative config/port/document values supplied, so none were invented.",
+    "Pending human decisions D-01..D-10 listed in 03-review-and-handoff.md, including baseline approval of the draft case set."
+  ],
+  "next_action": "Human review of the draft package; resolve conflicts/decisions D-01..D-10 (migration-trigger conflict first); only then consider a separately authorized execution packet with a real build, environment, and operator authorization.",
+  "notes": "All content DRAFT_UNAPPROVED and NOT_EXECUTED. Offline design only: no command was run against any host or service; no SSH, systemctl, package, migration, backup, restore, traffic, network, disk, or fault operation; no credentials; no network. No upgrade, recovery, defect, security finding, approval, result, acceptance, release, comparison, or superiority conclusion is claimed. The installed offline helper scripts/qa.py was not executed; its possible future use for a finite state-transition model of the member upgrade lifecycle is noted in the artifacts, and its output would be a draft planning input only."
+}

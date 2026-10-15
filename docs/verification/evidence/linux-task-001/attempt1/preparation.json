@@ -1,0 +1,12 @@
+{
+  "kind": "PUBLIC_DEVELOPMENT_NONCOMPARISON_PREPARATION",
+  "source_commit": "a9df28513d4ae808d687718bfc4f6069a32ee767",
+  "installed_file_count": 59,
+  "installed_matches_current_bundle": true,
+  "manifest_sha256": "9c1c9ea78f1dc4cd177ea71316c589a36e4eb255ed90404d6fd6529a893467d7",
+  "wheel_sha256": "cfd10bcdd3d6269303c52caf0985c208f1b2b547bb762832a4289279a9e3d163",
+  "skill_root": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\.agents\\skills\\qa-master",
+  "installation": "INSTALLED",
+  "product_task": "NOT_EXECUTED",
+  "isolation": "PROMPT_SCOPED_NOT_OS_ENFORCED"
+}

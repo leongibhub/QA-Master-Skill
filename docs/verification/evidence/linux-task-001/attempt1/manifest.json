@@ -1,0 +1,52 @@
+{
+    "classification": "PUBLIC_DEVELOPMENT_NONCOMPARISON",
+    "work": "TASK-071",
+    "participant": "/root/qa_linux_trial",
+    "source_freeze_commit": "2f9ec205446b03f1871dc5e5784e8d3724c90ad3",
+    "product_source": "a9df28513d4ae808d687718bfc4f6069a32ee767",
+    "isolation": "PROMPT_SCOPED_NOT_OS_ENFORCED",
+    "read_audit": "PARTICIPANT_DECLARED_NOT_HOST_ACCESS_ATTESTATION",
+    "status": "OUTPUT_RETAINED_NOT_ASSESSED",
+    "files": [
+        {
+            "path": "01-review-and-strategy.md",
+            "sha256": "f92005272a5bbf5287c9432ddf3957f343f9681e969fe0465bc4f185a4b86b38",
+            "bytes": 28413
+        },
+        {
+            "path": "02-draft-cases.md",
+            "sha256": "a0c43d7e813da0a47889d5fce37f9c9d0ebe009620a9804877e32293dee75e35",
+            "bytes": 37426
+        },
+        {
+            "path": "03-review-and-handoff.md",
+            "sha256": "5e597295569c1c6a35b3be2b7371c217972fe9e101006bbb2b37da7bd0fdc4ed",
+            "bytes": 10246
+        },
+        {
+            "path": "handoff.json",
+            "sha256": "de5827d570018b8796c83869a14f8e84c16fd650abcc61a844876fb6ff5d098a",
+            "bytes": 10419
+        },
+        {
+            "path": "read-audit.md",
+            "sha256": "b48f6b5c7eaf21a4e52725553dfdb9bbe135b5b7164b5002268ff339279b4bd6",
+            "bytes": 4169
+        },
+        {
+            "path": "preparation.json",
+            "sha256": "af23ed5dbe93ab844951e418b9c5838c576078e25afad0336875ba49fb838f27",
+            "bytes": 592
+        },
+        {
+            "path": "input-copy.json",
+            "sha256": "feace91ee835da085736ea71ef3523dad0e9eac28af971cfcec641894250395a",
+            "bytes": 1181
+        },
+        {
+            "path": "postcheck.json",
+            "sha256": "747932564d7cec1f294a745397d853cb1233076f458e50cd3629836ea613039b",
+            "bytes": 187
+        }
+    ]
+}
