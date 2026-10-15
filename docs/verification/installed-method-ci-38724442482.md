@@ -19,7 +19,7 @@
 | `116386696761` | Windows / 3.12 | completed / success | 605 tests, 87.601 seconds, `OK` |
 
 This CI record is distinct from the prior 598-test run at the earlier
-`f62932b` subject. It is remote regression evidence only. TASK-057 attempt 3
-remains pending and will supply separately scoped independent fresh-install and
-actual-task evidence; this record is not a defect closure, Gate, acceptance,
-quality evaluation, comparison, or release decision.
+`f62932b` subject. It is remote regression evidence only. TASK-057 attempt 3 later supplied separately scoped independent fresh-install and
+actual-task evidence, and TASK-058 independently reviewed it. This CI record is
+still remote regression evidence only; it is not a semantic quality evaluation,
+comparison, Gate, acceptance or release decision.
