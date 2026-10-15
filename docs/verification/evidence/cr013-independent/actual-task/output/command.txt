@@ -1,0 +1,1 @@
+python -I "C:\Users\LEON~1.WAN\AppData\Local\Temp\qa-master-cr013-acceptance-b8wwvs6j\project\.agents\skills\qa-master\scripts\qa.py" design --input "C:\Users\LEON~1.WAN\AppData\Local\Temp\qa-master-cr013-acceptance-b8wwvs6j\task-output\design-input.json" --output "C:\Users\LEON~1.WAN\AppData\Local\Temp\qa-master-cr013-acceptance-b8wwvs6j\task-output\helper-report.json"

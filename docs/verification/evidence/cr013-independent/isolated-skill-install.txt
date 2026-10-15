@@ -1,0 +1,8 @@
+{
+  "status": "INSTALLED",
+  "target": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master",
+  "files": 52,
+  "backup": null,
+  "recovery_directory": null,
+  "execution": "NOT_EXECUTED"
+}

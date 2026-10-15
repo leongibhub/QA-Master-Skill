@@ -1,0 +1,551 @@
+[
+  {
+    "id": "TC-B-01",
+    "helper_candidate_id": "TC-MD-42B0E4AC96285095FDE3",
+    "method": "boundary",
+    "source_ids": [
+      "F-01"
+    ],
+    "type": "negative",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Off-by-one acceptance or rejection around declared bounds.",
+    "preconditions": "Use a fresh independent validation scenario; supply a strict integer, not a string.",
+    "data": {
+      "value": "1",
+      "class": "LOWER_INVALID",
+      "originating_bound_positions": [
+        "lower"
+      ]
+    },
+    "actions": [
+      "Supply integer batch size 1 to the batch-size validation operation once its interface is defined.",
+      "Observe the size acceptance classification through the agreed observable."
+    ],
+    "expected_policy_observable": "Batch size 1 is invalid (outside inclusive 2..6).",
+    "oracle_source_ids": [
+      "F-01"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11",
+      "GAP-06"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-B-02",
+    "helper_candidate_id": "TC-MD-9978AFFE135349E1F3A1",
+    "method": "boundary",
+    "source_ids": [
+      "F-01"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Off-by-one acceptance or rejection around declared bounds.",
+    "preconditions": "Use a fresh independent validation scenario; supply a strict integer, not a string.",
+    "data": {
+      "value": "2",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "lower"
+      ]
+    },
+    "actions": [
+      "Supply integer batch size 2 to the batch-size validation operation once its interface is defined.",
+      "Observe the size acceptance classification through the agreed observable."
+    ],
+    "expected_policy_observable": "Batch size 2 is valid (inside inclusive 2..6).",
+    "oracle_source_ids": [
+      "F-01"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-B-03",
+    "helper_candidate_id": "TC-MD-1B13D0E1DE6C9B79F4B7",
+    "method": "boundary",
+    "source_ids": [
+      "F-01"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Off-by-one acceptance or rejection around declared bounds.",
+    "preconditions": "Use a fresh independent validation scenario; supply a strict integer, not a string.",
+    "data": {
+      "value": "3",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "lower"
+      ]
+    },
+    "actions": [
+      "Supply integer batch size 3 to the batch-size validation operation once its interface is defined.",
+      "Observe the size acceptance classification through the agreed observable."
+    ],
+    "expected_policy_observable": "Batch size 3 is valid (inside inclusive 2..6).",
+    "oracle_source_ids": [
+      "F-01"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-B-05",
+    "helper_candidate_id": "TC-MD-26EEC46FCEE4969A52B8",
+    "method": "boundary",
+    "source_ids": [
+      "F-01"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Off-by-one acceptance or rejection around declared bounds.",
+    "preconditions": "Use a fresh independent validation scenario; supply a strict integer, not a string.",
+    "data": {
+      "value": "5",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "upper"
+      ]
+    },
+    "actions": [
+      "Supply integer batch size 5 to the batch-size validation operation once its interface is defined.",
+      "Observe the size acceptance classification through the agreed observable."
+    ],
+    "expected_policy_observable": "Batch size 5 is valid (inside inclusive 2..6).",
+    "oracle_source_ids": [
+      "F-01"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-B-06",
+    "helper_candidate_id": "TC-MD-23EA5A0F21F4FD29094E",
+    "method": "boundary",
+    "source_ids": [
+      "F-01"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Off-by-one acceptance or rejection around declared bounds.",
+    "preconditions": "Use a fresh independent validation scenario; supply a strict integer, not a string.",
+    "data": {
+      "value": "6",
+      "class": "IN_DOMAIN",
+      "originating_bound_positions": [
+        "upper"
+      ]
+    },
+    "actions": [
+      "Supply integer batch size 6 to the batch-size validation operation once its interface is defined.",
+      "Observe the size acceptance classification through the agreed observable."
+    ],
+    "expected_policy_observable": "Batch size 6 is valid (inside inclusive 2..6).",
+    "oracle_source_ids": [
+      "F-01"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-B-07",
+    "helper_candidate_id": "TC-MD-DC273814BFFF88B81260",
+    "method": "boundary",
+    "source_ids": [
+      "F-01"
+    ],
+    "type": "negative",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Off-by-one acceptance or rejection around declared bounds.",
+    "preconditions": "Use a fresh independent validation scenario; supply a strict integer, not a string.",
+    "data": {
+      "value": "7",
+      "class": "UPPER_INVALID",
+      "originating_bound_positions": [
+        "upper"
+      ]
+    },
+    "actions": [
+      "Supply integer batch size 7 to the batch-size validation operation once its interface is defined.",
+      "Observe the size acceptance classification through the agreed observable."
+    ],
+    "expected_policy_observable": "Batch size 7 is invalid (outside inclusive 2..6).",
+    "oracle_source_ids": [
+      "F-01"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11",
+      "GAP-06"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-D-00",
+    "helper_candidate_id": "TC-MD-6DCA6333DA6F3C2499BF",
+    "method": "decision_table",
+    "source_ids": [
+      "F-02"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Incorrect conjunction grants or withholds rebate.",
+    "preconditions": "Prepare independent boolean member and settled inputs; all four combinations are allowed.",
+    "data": {
+      "assignment": {
+        "member": false,
+        "settled": false
+      },
+      "outcome_id": "NO_REBATE"
+    },
+    "actions": [
+      "Set member=false and settled=false.",
+      "Request the rebate decision through the future agreed interface; observe whether rebate is allowed."
+    ],
+    "expected_policy_observable": "No rebate.",
+    "oracle_source_ids": [
+      "F-02"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-D-01",
+    "helper_candidate_id": "TC-MD-AC2F0582BC7FFCCF623F",
+    "method": "decision_table",
+    "source_ids": [
+      "F-02"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Incorrect conjunction grants or withholds rebate.",
+    "preconditions": "Prepare independent boolean member and settled inputs; all four combinations are allowed.",
+    "data": {
+      "assignment": {
+        "member": false,
+        "settled": true
+      },
+      "outcome_id": "NO_REBATE"
+    },
+    "actions": [
+      "Set member=false and settled=true.",
+      "Request the rebate decision through the future agreed interface; observe whether rebate is allowed."
+    ],
+    "expected_policy_observable": "No rebate.",
+    "oracle_source_ids": [
+      "F-02"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-D-10",
+    "helper_candidate_id": "TC-MD-87CEAA6F4504AF327797",
+    "method": "decision_table",
+    "source_ids": [
+      "F-02"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Incorrect conjunction grants or withholds rebate.",
+    "preconditions": "Prepare independent boolean member and settled inputs; all four combinations are allowed.",
+    "data": {
+      "assignment": {
+        "member": true,
+        "settled": false
+      },
+      "outcome_id": "NO_REBATE"
+    },
+    "actions": [
+      "Set member=true and settled=false.",
+      "Request the rebate decision through the future agreed interface; observe whether rebate is allowed."
+    ],
+    "expected_policy_observable": "No rebate.",
+    "oracle_source_ids": [
+      "F-02"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-D-11",
+    "helper_candidate_id": "TC-MD-20E450973DFD95647F4E",
+    "method": "decision_table",
+    "source_ids": [
+      "F-02"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Incorrect conjunction grants or withholds rebate.",
+    "preconditions": "Prepare independent boolean member and settled inputs; all four combinations are allowed.",
+    "data": {
+      "assignment": {
+        "member": true,
+        "settled": true
+      },
+      "outcome_id": "REBATE_ALLOWED"
+    },
+    "actions": [
+      "Set member=true and settled=true.",
+      "Request the rebate decision through the future agreed interface; observe whether rebate is allowed."
+    ],
+    "expected_policy_observable": "Rebate is allowed.",
+    "oracle_source_ids": [
+      "F-02"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-S-01",
+    "helper_candidate_id": "TC-MD-5F07D40238F2B68078A9",
+    "method": "state_transition",
+    "source_ids": [
+      "F-03",
+      "F-04"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Invalid publication or incorrect lifecycle transition.",
+    "preconditions": "Fresh document in DRAFT; fixture creation and state observation require agreement.",
+    "data": {
+      "from_state": "DRAFT",
+      "trigger": "submit",
+      "guard_refs": [],
+      "validity": "valid",
+      "to_state": "REVIEW"
+    },
+    "actions": [
+      "Observe initial status DRAFT.",
+      "Trigger submit while status is DRAFT.",
+      "Observe document status through the agreed status observable."
+    ],
+    "expected_policy_observable": "Status becomes REVIEW (F-04).",
+    "oracle_source_ids": [
+      "F-03",
+      "F-04"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-S-02",
+    "helper_candidate_id": "TC-MD-B39F31CBBC34C6198B3E",
+    "method": "state_transition",
+    "source_ids": [
+      "F-03",
+      "F-05",
+      "F-04"
+    ],
+    "type": "functional",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Invalid publication or incorrect lifecycle transition.",
+    "preconditions": "Fresh document in DRAFT; fixture creation and state observation require agreement.",
+    "data": {
+      "from_state": "REVIEW",
+      "trigger": "publish",
+      "guard_refs": [],
+      "validity": "valid",
+      "to_state": "PUBLISHED"
+    },
+    "actions": [
+      "Observe initial status DRAFT.",
+      "Trigger submit, then observe status REVIEW (F-04).",
+      "Trigger publish while status is REVIEW.",
+      "Observe document status through the agreed status observable."
+    ],
+    "expected_policy_observable": "Status becomes PUBLISHED (F-05).",
+    "oracle_source_ids": [
+      "F-03",
+      "F-05",
+      "F-04"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  },
+  {
+    "id": "TC-S-03",
+    "helper_candidate_id": "TC-MD-5E4CF69890F62C14DA68",
+    "method": "state_transition",
+    "source_ids": [
+      "F-03",
+      "F-06"
+    ],
+    "type": "negative",
+    "priority": "P2",
+    "priority_basis": "Proposed by agent for draft review; business severity not supplied. Invalid publication or incorrect lifecycle transition.",
+    "preconditions": "Fresh document in DRAFT; fixture creation and state observation require agreement.",
+    "data": {
+      "from_state": "DRAFT",
+      "trigger": "publish",
+      "guard_refs": [],
+      "validity": "invalid",
+      "to_state": null
+    },
+    "actions": [
+      "Observe initial status DRAFT.",
+      "Trigger publish while status is DRAFT.",
+      "Observe document status through the agreed status observable."
+    ],
+    "expected_policy_observable": "Transition is invalid; document status remains DRAFT (F-06). No particular error signal or persisted-data effect is asserted.",
+    "oracle_source_ids": [
+      "F-03",
+      "F-06"
+    ],
+    "cleanup": "PENDING: GAP-04; agree fixture lifecycle before execution.",
+    "automation_candidate": "Conditional on interface, setup, observability and cleanup resolution; no executable script supplied.",
+    "gaps": [
+      "GAP-01",
+      "GAP-02",
+      "GAP-03",
+      "GAP-04",
+      "GAP-05",
+      "GAP-11",
+      "GAP-06",
+      "GAP-07"
+    ],
+    "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+    "review": "AGENT_REVIEW_ONLY",
+    "approval": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED"
+  }
+]

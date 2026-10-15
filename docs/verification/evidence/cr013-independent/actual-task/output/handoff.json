@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "task_id": "document-release-policy-offline-design",
+  "stage": "DRAFT_DESIGN_REVIEW",
+  "scope": {
+    "execute_tests": false,
+    "external_writes": false,
+    "state_mutation": false
+  },
+  "sources": [
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\source-facts.md",
+      "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c",
+      "role": "supplied-draft-facts",
+      "version": "current-bytes"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\artifact-authoring-error.txt",
+      "sha256": "e25b496391f31f25ec81796bb900ff3af8f7ae46dcfddc5bf5810cf35ff1c128",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\author-input.py",
+      "sha256": "5c738fc8bf34e299a8d64fc50984ac078649fde92c7036a28b7d75afe994d4ce",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\command-evidence.json",
+      "sha256": "4a63789b744b53a2b407d89020c40c86a4c91a8eb797b100f4e4e6530823890d",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\command.txt",
+      "sha256": "c4b259d831b88dce087acb8ef9ccc7625d81495c41cc443152949f82a39fb565",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\complete-drafts.py",
+      "sha256": "2c842b194964a859ab090a1287702ee98dca13ec9733a55de7f3e4cd2e91654b",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\design-input.json",
+      "sha256": "3866dc762c9949dbbbca6649b7172edd658e2172870095028eec7aebd79010ba",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\design-review.md",
+      "sha256": "3ffa45856abea5e619516fff61ef9c7557204aa967498bd189fc0ebe6fdb6062",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\draft-cases.json",
+      "sha256": "2e5995ef67baf9b8588b40ac8b9a6edbde01a368208b6c6cdcabb28500d75aad",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\helper-report.json",
+      "sha256": "94874ea6e8eaa2f7084ff91bf199303de00a7f37e3faf0bf34f4c559ae028966",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\read-audit.json",
+      "sha256": "0f9f0919ad20b0c7257ed4a492760e951b3c181961e4be9ce97d5c6a674b7838",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\stdout.txt",
+      "sha256": "1a85fc0bee898efb7ebbc1825aa9bb128bc1c8316a502aadf02086b90e47eb9b",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\typed-gaps.json",
+      "sha256": "e23640798240ed5a379e5655e0d979bd1d2c7c1c7c3453f598b4811dccff3d26",
+      "role": "offline-design-artifact",
+      "version": "current-bytes"
+    }
+  ],
+  "review": "AGENT_REVIEW_ONLY",
+  "execution": "NOT_EXECUTED",
+  "readiness": "REVIEWABLE_POLICY_DRAFT_WITH_EXECUTION_GAPS",
+  "next_action": "Resolve typed gaps from an agreed interface/setup/observable/cleanup contract, and submit this exact draft scope for human baseline review. No execution authorization is implied."
+}

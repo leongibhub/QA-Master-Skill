@@ -1,0 +1,33 @@
+{
+  "installed_documents_read": [
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master\\SKILL.md",
+      "sha256": "626e0506a5b5e4992057596fc57ec69676c1a86b0a99943504a8ddbd7e4ddd6f"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master\\references\\work-protocol.md",
+      "sha256": "ba232063489db733eeea68c46bd4b812a33c982ba36e7440149b1e7deca549ec"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master\\references\\domains.md",
+      "sha256": "5b4ff7b66ed7d7b7503ea11d8e30699b09b20d8ee6c8704238fa4260abe9c9c1"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master\\references\\design-methods.md",
+      "sha256": "d128bdcfcc17aad064693e73e56af8ef907596fa563cfa815c9e5af2daf682b4"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md",
+      "sha256": "28ae23ab80d819157f0630aa6e4579dd9d7fa21d54d7b8f40b6b583c4471207e"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md",
+      "sha256": "31f7fb509154d9d9756cfe43ed1c027a6470b15c6cab6bdb526b215fc3bf3c76"
+    }
+  ],
+  "source_read": {
+    "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\source-facts.md",
+    "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+  },
+  "other_material_read": "Own authored input and helper output only; no repository, developer tests or evaluator material inspected."
+}

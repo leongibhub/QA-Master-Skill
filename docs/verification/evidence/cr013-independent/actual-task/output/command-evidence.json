@@ -1,0 +1,6 @@
+{
+  "cwd": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\unrelated-cwd",
+  "python": "C:\\Program Files\\Python\\python.exe",
+  "command": "python -I \"C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\project\\.agents\\skills\\qa-master\\scripts\\qa.py\" design --input \"C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\design-input.json\" --output \"C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-acceptance-b8wwvs6j\\task-output\\helper-report.json\"",
+  "exit_code": 0
+}

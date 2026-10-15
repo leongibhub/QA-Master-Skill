@@ -1,0 +1,79 @@
+[
+  {
+    "id": "GAP-01",
+    "type": "TARGET_MISSING",
+    "scope": "All cases",
+    "detail": "Target interface and environment absent (F-07); no endpoint or UI interaction can be supplied.",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-02",
+    "type": "OBSERVABLE_MISSING",
+    "scope": "All cases",
+    "detail": "Actual acceptance, decision and status observation mechanisms/locators absent (F-01,F-07).",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-03",
+    "type": "SETUP_MISSING",
+    "scope": "All cases",
+    "detail": "No fixtures or means to create fresh documents and set rebate conditions supplied (F-07).",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-04",
+    "type": "CLEANUP_MISSING",
+    "scope": "All cases",
+    "detail": "Cleanup obligations/permissions absent; do not assume deletion is safe or no cleanup is necessary (F-07).",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-05",
+    "type": "AUTH_POLICY_UNCONFIRMED",
+    "scope": "All cases",
+    "detail": "Actor and authorization mechanics absent; no inferred role restrictions or credential tests (F-07).",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-06",
+    "type": "CONTRACT_MISSING",
+    "scope": "Invalid size; DRAFT publish",
+    "detail": "Error signal/code/message unspecified (F-01,F-06); only policy invalidity or DRAFT state invariant can be asserted.",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-07",
+    "type": "EFFECT_ORACLE_MISSING",
+    "scope": "DRAFT publish",
+    "detail": "No persisted-data side-effect rule (F-06). Do not assert no writes, no audit event, or no other effects.",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-08",
+    "type": "TRANSITION_RULE_UNSPECIFIED",
+    "scope": "REVIEW/submit; PUBLISHED/submit; PUBLISHED/publish",
+    "detail": "F-06 leaves other pairs unspecified. F-03 terminal prohibits valid outgoing state transitions, but does not establish error, ignored-event or retry/idempotency behavior. No closed-world denials added.",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-09",
+    "type": "TYPE_CONTRACT_MISSING",
+    "scope": "Strict integer batch inputs",
+    "detail": "F-01 excludes nonintegers at policy level. Representation/coercion rules for 2.0, string 2, boolean, null or omitted input need an interface contract; fractional 2.5 is outside strict integer domain. Helper integer grid does not cover this obligation.",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-10",
+    "type": "THRESHOLD_AND_WORKLOAD_MISSING",
+    "scope": "Performance/load/stress/stability",
+    "detail": "F-07 supplies no workload, target, duration or thresholds; these dimensions are deferred, no passing judgement available.",
+    "evidence_status": "PENDING"
+  },
+  {
+    "id": "GAP-11",
+    "type": "BASELINE_UNAPPROVED",
+    "scope": "All cases",
+    "detail": "Source facts explicitly draft-only. This artifact is AGENT_REVIEW_ONLY; formal case baseline remains unapproved.",
+    "evidence_status": "PENDING"
+  }
+]

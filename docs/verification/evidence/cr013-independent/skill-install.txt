@@ -1,0 +1,8 @@
+{
+  "status": "INSTALLED",
+  "target": "D:\\QA-Master-PR2\\.qa-master\\cr013-independent\\isolated-project\\.agents\\skills\\qa-master",
+  "files": 52,
+  "backup": null,
+  "recovery_directory": null,
+  "execution": "NOT_EXECUTED"
+}
