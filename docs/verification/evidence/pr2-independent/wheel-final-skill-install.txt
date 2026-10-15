@@ -1,0 +1,8 @@
+{
+  "status": "INSTALLED",
+  "target": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-task047-wheel-final-010783e6bc9549d58a80630b734c4130\\target-project\\.agents\\skills\\qa-master",
+  "files": 50,
+  "backup": null,
+  "recovery_directory": null,
+  "execution": "NOT_EXECUTED"
+}

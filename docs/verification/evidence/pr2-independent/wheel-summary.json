@@ -1,0 +1,9 @@
+{
+  "wheel": "qa_master_skill-0.1.0-py3-none-any.whl",
+  "test_python": "Python 3.13.5",
+  "build_python": "Python 3.13.5",
+  "wheel_sha256": "C812B873CB1EC8BDDA61945A355DE0E918C95A357141FB607E7014C4CF8C4B7A",
+  "work_directory": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-wheel-success-e7fe719b0d6f4e5aa092dc1aa8e99995",
+  "first_attempt": "ENVIRONMENT_PREREQUISITE_FAILURE: D:\\codex-rd-platform .venv lacks setuptools.build_meta for no-build-isolation wheel construction",
+  "helper": "C:\\Users\\leon.wang\\AppData\\Local\\Temp\\qa-master-pr2-wheel-success-e7fe719b0d6f4e5aa092dc1aa8e99995\\target project\\.agents\\skills\\qa-master\\scripts\\qa.py"
+}

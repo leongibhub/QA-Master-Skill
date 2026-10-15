@@ -76,7 +76,7 @@ The existing CI matrix runs the complete suite on Windows/Ubuntu with Python
 behaviour, installed discovery in a new Codex session, paired comparison, Linux SSH
 workers and real Jira/SynapseRT/Wiki integration remain unverified.
 
-## Remote synchronization blocker
+## Historical remote synchronization blocker
 
 Creating the remote Git tree returned HTTP 403 `Resource not accessible by
 integration`. Repository metadata confirms `pull: true`, `push: false` for the
@@ -95,3 +95,22 @@ the browser runtime failed to initialize twice. Fork creation is not yet complet
 The fork must include the existing `codex/qa-master-v1-continuation` branch, not
 just `main`. The README target is prepared for that fork and is not a claim that
 the fork or remote changes already exist.
+
+## Subsequent remote readback — 2026-10-15
+
+The preceding blocker is retained as a historical observation. It no longer
+describes the current PR2 branch state. The user-provided fork is now
+`scienceluo/QA-Master-Skill`, and the checked-out integration branch points to
+commit `0ae0ec0287a62d1b91e0c108c5d9def377cd70a2`. The commit follows the
+self-contained Codex skill implementation at `b18099a` and adds a Windows
+canonical-path comparison correction.
+
+The current host's GitHub API readback observed workflow run `38706851785` as
+`completed` / `success` for that commit. Its four completed successful jobs were
+`116328268151` (Windows, Python 3.12), `116328268416` (Ubuntu, Python 3.12),
+`116328268737` (Windows, Python 3.10), and `116328268876` (Ubuntu, Python 3.10).
+Those jobs include installation and strict-unit-test steps. The API job summary
+does not expose an asserted test count, so the contributor's local 493/551 count
+is not inferred from this readback. This is remote CI source evidence, not an
+independent tester result, a model-behaviour observation, an enterprise
+integration result, a release, or acceptance.

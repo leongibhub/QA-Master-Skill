@@ -1,0 +1,16 @@
+test_double_publication_and_rollback_failure_retains_recovery_directory (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_double_publication_and_rollback_failure_retains_recovery_directory) ... ok
+test_failed_publication_rolls_back_exact_original_directory (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_failed_publication_rolls_back_exact_original_directory) ... ok
+test_install_is_self_contained_and_reports_planning_only (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_install_is_self_contained_and_reports_planning_only) ... ok
+test_managed_update_replaces_bundle_and_keeps_complete_backup (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_managed_update_replaces_bundle_and_keeps_complete_backup) ... ok
+test_manifest_covers_every_installed_managed_file (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_manifest_covers_every_installed_managed_file) ... ok
+test_nested_symlink_is_refused_without_following_it (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_nested_symlink_is_refused_without_following_it) ... skipped "symlink creation unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\\\Users\\\\leon.wang\\\\AppData\\\\Local\\\\Temp\\\\qa-master-pr2-independent-y38bofvt\\\\outside' -> 'C:\\\\Users\\\\leon.wang\\\\AppData\\\\Local\\\\Temp\\\\qa-master-pr2-independent-y38bofvt\\\\project\\\\.agents\\\\skills\\\\qa-master\\\\unmanaged-link'"
+test_post_detach_edit_during_archive_is_rejected_and_restored (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_post_detach_edit_during_archive_is_rejected_and_restored) ... ok
+test_target_symlink_is_refused_without_following_it (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_target_symlink_is_refused_without_following_it) ... skipped "symlink creation unavailable: [WinError 1314] 客户端没有所需的特权。: 'C:\\\\Users\\\\leon.wang\\\\AppData\\\\Local\\\\Temp\\\\qa-master-pr2-independent-i8ri2wkm\\\\outside' -> 'C:\\\\Users\\\\leon.wang\\\\AppData\\\\Local\\\\Temp\\\\qa-master-pr2-independent-i8ri2wkm\\\\project\\\\.agents\\\\skills\\\\qa-master'"
+test_update_rejects_edit_in_the_verify_to_publish_window (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_update_rejects_edit_in_the_verify_to_publish_window) ... ok
+test_update_rejects_user_file_hidden_under_pycache (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_update_rejects_user_file_hidden_under_pycache) ... ok
+test_windows_junction_target_is_refused_without_mutating_destination (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_windows_junction_target_is_refused_without_mutating_destination) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 4.680s
+
+OK (skipped=2)
