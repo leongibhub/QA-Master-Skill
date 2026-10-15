@@ -5,9 +5,11 @@ import os
 import subprocess
 import sys
 import tempfile
+import threading
 import unittest
 from dataclasses import asdict
 from pathlib import Path
+from unittest.mock import patch
 
 from qa_master.application import CampaignApplicationService as Service
 from qa_master.state_store import StateConflictError
@@ -128,6 +130,40 @@ class CanonicalWorkflowIndependentTests(unittest.TestCase):
         self.assertEqual(document["answers"]["source"]["value"], "spec-v1")
         self.assertFalse(list(self.path.parent.glob(".qa-master-state-*.json")))
 
+    def test_tc_sm_005_parallel_init_has_one_winner_without_partial_state(self):
+        barrier = threading.Barrier(2)
+        outcomes = []
+
+        def initializer(project):
+            barrier.wait()
+            try:
+                outcomes.append(("created", Service.initialize(self.path, project).status()["project"]))
+            except StateConflictError:
+                outcomes.append(("conflict", project))
+
+        threads = [threading.Thread(target=initializer, args=(project,)) for project in ("left", "right")]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+        self.assertEqual(sorted(kind for kind, _ in outcomes), ["conflict", "created"])
+        self.assertIn(Service.load(self.path).status()["project"], {"left", "right"})
+        self.assertFalse(list(self.path.parent.glob(".qa-master-state-*.json")))
+
+    def test_tc_sm_013_failed_migration_write_retains_legacy_bytes_and_recovers(self):
+        self._write_legacy_campaign()
+        original = self.path.read_bytes()
+        service = Service.load(self.path)
+        with patch("qa_master.state_store.os.replace", side_effect=OSError("injected")):
+            with self.assertRaises(OSError):
+                service.mutate("pause", reason="fault injection")
+        self.assertEqual(self.path.read_bytes(), original)
+        backups = list(self.path.parent.glob("campaign.json.legacy-*.json"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_bytes(), original)
+        Service.load(self.path).mutate("pause", reason="recovery")
+        self.assertEqual(Service.load(self.path).status()["mode"], "PAUSED")
+
     def test_tc_sm_007_to_009_read_only_commands_do_not_migrate_or_overwrite_existing_state(self):
         self._write_legacy_campaign()
         before_bytes = self.path.read_bytes()
@@ -186,6 +222,25 @@ class CanonicalWorkflowIndependentTests(unittest.TestCase):
         self.assertEqual(workflow.evaluate_exact("design", artifacts, scopes), "STALE")
         self.assertEqual(workflow.steps["design"].status, "PENDING")
         self.assertNotEqual(workflow.evaluate_exact("baseline", artifacts, scopes), "DONE")
+
+    def test_tc_sm_002_migrated_done_steps_are_persisted_as_needs_revalidation(self):
+        workflow = Workflow("demo")
+        workflow.request(["execution"])
+        for step in workflow.steps.values():
+            step.status = "DONE"
+            step.result_ref = "legacy-result"
+            step.completion_binding = {"legacy": "binding"}
+            step.execution_receipt = {"issuer": "legacy"}
+        raw = asdict(workflow)
+        self.path.write_text(json.dumps(raw), encoding="utf-8")
+        service = Service.load(self.path)
+        self.assertEqual(service.document["legacy_payload"], raw)
+        self.assertTrue(all(step["status"] == "NEEDS_REVALIDATION" for step in service.document["steps"].values()))
+        service.mutate("pause", reason="persist migration")
+        persisted = json.loads(self.path.read_text(encoding="utf-8"))
+        self.assertTrue(all(step["status"] == "NEEDS_REVALIDATION" for step in persisted["steps"].values()))
+        self.assertTrue(all(step["result_ref"] == "legacy-result" for step in persisted["steps"].values()))
+        self.assertNotIn(Service.load(self.path).check("execution")["state"], ("READY", "DONE"))
 
     def test_tc_sm_013_legacy_secret_value_is_not_rendered_by_status(self):
         secret = "qa-master-independent-secret-marker"
