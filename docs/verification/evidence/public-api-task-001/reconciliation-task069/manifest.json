@@ -1,0 +1,32 @@
+[
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\reconciliation-task069\\.gitattributes",
+    "sha256": "DA58495F036DC48CA26F8178779ED701D0A2284187A78BC0FBF75460C8BAF399",
+    "bytes": 43
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\reconciliation-task069\\installed-manifest.json",
+    "sha256": "9C1C9EA78F1DC4CD177EA71316C589A36E4EB255ED90404D6FD6529A893467D7",
+    "bytes": 6779
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\reconciliation-task069\\reconcile-log.txt",
+    "sha256": "3BEF291C0D85E85F5CEFDA7A9CAAEE2A23BFCCEA7E8864B3E1B248F4579DE982",
+    "bytes": 354
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\reconciliation-task069\\reconcile.py",
+    "sha256": "0ABCEE72467CD5F11C4CEB5A2A44038927EF3175B1A3CFCAF547417992B630CE",
+    "bytes": 6288
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\reconciliation-task069\\reconciliation.json",
+    "sha256": "6A0D8FF4E95BCA4FDA5E06DC15E703DCDEE43E0AA402326B0E583A8D70D8D0FC",
+    "bytes": 23226
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\public-api-task069-reconciliation.md",
+    "sha256": "F300B8A3897C6C0BAAAF81096090C6E5F19ADA1BE59335E5B896B5E9F0809393",
+    "bytes": 5545
+  }
+]

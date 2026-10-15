@@ -1,0 +1,15 @@
+2026-10-15T13:01:04.9626088Z HEAD is now at 53ceda1 Merge 66ae928c70b94830ccbbfe1e5f2ebd47776bca85 into 77e3b5d4e8be8076720ebfd2f0338db73dac2079
+2026-10-15T13:01:08.9733758Z test_windows_junction_target_is_refused_without_mutating_destination (test_codex_skill_independent.IndependentCodexSkillInstallTests) ... skipped 'Windows junction test'
+2026-10-15T13:01:25.9616232Z test_secret_skipped (test_reverse_requirements.TestReverseRequirements) ... ok
+2026-10-15T13:01:40.0825430Z test_junction_bundle (test_semantic_quality_links_independent.SemanticLinkIndependent) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:40.1771424Z test_junction_inspect (test_semantic_quality_links_independent.SemanticLinkIndependent) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:40.1782113Z test_junction_output (test_semantic_quality_links_independent.SemanticLinkIndependent) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:40.1791370Z test_junction_response (test_semantic_quality_links_independent.SemanticLinkIndependent) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:40.1800936Z test_junction_source (test_semantic_quality_links_independent.SemanticLinkIndependent) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:40.1812279Z test_symlink_bundle (test_semantic_quality_links_independent.SemanticLinkIndependent) ... ok
+2026-10-15T13:01:40.2482591Z test_symlink_inspect (test_semantic_quality_links_independent.SemanticLinkIndependent) ... ok
+2026-10-15T13:01:40.2835474Z test_symlink_output (test_semantic_quality_links_independent.SemanticLinkIndependent) ... ok
+2026-10-15T13:01:40.3085872Z test_symlink_response (test_semantic_quality_links_independent.SemanticLinkIndependent) ... ok
+2026-10-15T13:01:40.3473774Z test_symlink_source (test_semantic_quality_links_independent.SemanticLinkIndependent) ... ok
+2026-10-15T13:01:40.4954479Z Ran 699 tests in 33.131s
+2026-10-15T13:01:40.4954672Z OK (skipped=6)

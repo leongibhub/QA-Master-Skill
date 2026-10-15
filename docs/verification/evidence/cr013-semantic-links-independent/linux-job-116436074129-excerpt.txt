@@ -1,0 +1,15 @@
+2026-10-15T13:01:06.3427557Z HEAD is now at 53ceda1 Merge 66ae928c70b94830ccbbfe1e5f2ebd47776bca85 into 77e3b5d4e8be8076720ebfd2f0338db73dac2079
+2026-10-15T13:01:12.0835251Z test_windows_junction_target_is_refused_without_mutating_destination (test_codex_skill_independent.IndependentCodexSkillInstallTests.test_windows_junction_target_is_refused_without_mutating_destination) ... skipped 'Windows junction test'
+2026-10-15T13:01:35.0448816Z test_secret_skipped (test_reverse_requirements.TestReverseRequirements.test_secret_skipped) ... ok
+2026-10-15T13:01:55.7805584Z test_junction_bundle (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_bundle) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:55.8835147Z test_junction_inspect (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_inspect) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:55.8857914Z test_junction_output (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_output) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:55.8869943Z test_junction_response (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_response) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:55.8883116Z test_junction_source (test_semantic_quality_links_independent.SemanticLinkIndependent.test_junction_source) ... skipped 'NOT_APPLICABLE: junction is Windows-specific'
+2026-10-15T13:01:55.8900290Z test_symlink_bundle (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_bundle) ... ok
+2026-10-15T13:01:55.9936067Z test_symlink_inspect (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_inspect) ... ok
+2026-10-15T13:01:56.0609967Z test_symlink_output (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_output) ... ok
+2026-10-15T13:01:56.1028530Z test_symlink_response (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_response) ... ok
+2026-10-15T13:01:56.1693170Z test_symlink_source (test_semantic_quality_links_independent.SemanticLinkIndependent.test_symlink_source) ... ok
+2026-10-15T13:01:56.3576215Z Ran 699 tests in 46.754s
+2026-10-15T13:01:56.3576826Z OK (skipped=6)

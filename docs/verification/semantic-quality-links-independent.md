@@ -10,9 +10,21 @@ Five genuine Windows junctions were created with mklink /J and verified with the
 
 Five real directory-symlink attempts received Windows error1314. They are NOT_EXECUTED/skipped, not PASS. Junction success does not stand in for symlink execution. Test fixtures do not mock links or error results.
 
-## Linux boundary
+## Linux actual CI readback
 
-Linux CI actual execution/readback is PENDING until these tests are published. Linux should skip the five Windows-specific junction scenarios as NOT_APPLICABLE and execute the five actual symlink scenarios. No earlier CI run is claimed as evidence for this new test file.
+Tester independently fetched decoded GitHub Actions job logs and job metadata for run38739167991 after publication. Both Ubuntu jobs execute all five semantic evaluator symlink scenarios successfully, and skip five Windows-only junction scenarios as NOT_APPLICABLE. Each full suite has699tests/6skips; the sixth is the unrelated installer Windows-junction test. Ubuntu3.10 job116436073554:33.131s, success. Ubuntu3.12 job116436074129:46.754s, success.
+
+Logs identify checkout merge53ceda1 of remote66ae928c70b94830ccbbfe1e5f2ebd47776bca85 into77e3b5d4e8be8076720ebfd2f0338db73dac2079. Root reports local40908ea is tree-equivalent to remote66ae928 (tree96fb9674e6e0e921a17626127348a62b7157019e); that equivalence is root-attributed, while tester independently read actual job/test execution. Required decoded excerpts are retained in the evidence directory.
+
+[Ubuntu3.10 job](https://github.com/leongibhub/QA-Master-Skill/actions/runs/38739167991/job/116436073554) and [Ubuntu3.12 job](https://github.com/leongibhub/QA-Master-Skill/actions/runs/38739167991/job/116436074129). Windows CI subsequently completed and was independently read back as described below. Local Windows symlink skips remain NOT_EXECUTED and are not rewritten as successes.
+
+## Windows CI actual execution and bounded conclusion
+
+Tester independently fetched both Windows decoded job logs and final jobs metadata. Windows3.10 job116436073865:699tests138.763s, OK with no skips. Windows3.12 job116436073916:699tests136.580s, OK with no skips. Each explicitly reports all five semantic junction and all five semantic symlink tests `ok`; the CI hosts permit real symlink creation, unlike the local workstation. Necessary test excerpts and final summaries are preserved separately.
+
+[Windows3.10 job](https://github.com/leongibhub/QA-Master-Skill/actions/runs/38739167991/job/116436073865) and [Windows3.12 job](https://github.com/leongibhub/QA-Master-Skill/actions/runs/38739167991/job/116436073916). Final jobs API reports success for all four jobs in run38739167991. This is live independent readback of the new tests, not prior CI inference.
+
+Bounded verification result: PASS for the five parent-path rejection scenarios on actual Windows junctions and permitted Windows/Linux symlinks. Local symlink execution remains NOT_EXECUTED; Linux junctions remain NOT_APPLICABLE. No source change was needed or made. Governance/reviewer owns disposition; this report does not close a defect, change a Gate or establish full product acceptance.
 
 ## Evidence and limits
 

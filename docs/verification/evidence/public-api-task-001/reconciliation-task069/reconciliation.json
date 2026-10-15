@@ -1,0 +1,451 @@
+{
+  "work": "TASK-069",
+  "result": "BYTE_AND_DECLARED_BOUNDARY_RECONCILED",
+  "participant_quality_status": "OUTPUT_RETAINED_NOT_ASSESSED",
+  "retained_manifest": {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\manifest.json",
+    "sha256": "503717dcbd6a5c123f461f479870a4f83a9b32366e7e4853f8dc2ee91a781021",
+    "bytes": 1699
+  },
+  "retained_files": [
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\01-review-and-strategy.md",
+      "sha256": "4ca5d1b47e1b4030eec7444f1b435efe727417111c1814091b9eb0179bc69dcd",
+      "bytes": 11938
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\02-draft-cases.md",
+      "sha256": "2874ac38eda7dbf1e8d404d309596104c947593dce3cf1618c3a760e5ba83fff",
+      "bytes": 21279
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\03-review-and-handoff.md",
+      "sha256": "b6b98b815e9d3e7b05b6bc00d238002b5bc571fcf7d9c799fbceda44af6a7ffa",
+      "bytes": 5167
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\handoff.json",
+      "sha256": "78599ce0fc9ee3a2bb00f642b6b07c96c1c20c49b85226dc4ff578b2f6f842a2",
+      "bytes": 5751
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\read-audit.md",
+      "sha256": "9344268e31af5c7da9670322065c9a15a3db962d26c440826e6fc0d848859f25",
+      "bytes": 2635
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\preparation.json",
+      "sha256": "71abddeb93db5c83ef3ae7dab0a351f5ade010f238e9aef7f56a4407f9b90921",
+      "bytes": 602
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\input-copy.json",
+      "sha256": "89282a7a6f82cc371d4d9c38fedf522dd2ed41093dc767847c3b02efe2f08039",
+      "bytes": 639
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\public-api-task-001\\attempt1\\postcheck.json",
+      "sha256": "747932564d7cec1f294a745397d853cb1233076f458e50cd3629836ea613039b",
+      "bytes": 187
+    }
+  ],
+  "installed_manifest": {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\.qa-master-install.json",
+    "sha256": "9c1c9ea78f1dc4cd177ea71316c589a36e4eb255ed90404d6fd6529a893467d7",
+    "bytes": 6779
+  },
+  "installed_inventory": [
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\SKILL.md",
+      "sha256": "626e0506a5b5e4992057596fc57ec69676c1a86b0a99943504a8ddbd7e4ddd6f",
+      "bytes": 5775
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\examples\\design-methods.json",
+      "sha256": "3c90119659c20a35b7a9178a0224d4d3fc5ab4456e331b8a9c25e1a60fb38e64",
+      "bytes": 4136
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\references\\design-methods.md",
+      "sha256": "128df839da4b48df2b40de1b943ee0e1c1b76573fdaaaef2717e5e8087f4265f",
+      "bytes": 11361
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\references\\domains.md",
+      "sha256": "5b4ff7b66ed7d7b7503ea11d8e30699b09b20d8ee6c8704238fa4260abe9c9c1",
+      "bytes": 3320
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\references\\work-protocol.md",
+      "sha256": "ba232063489db733eeea68c46bd4b812a33c982ba36e7440149b1e7deca549ec",
+      "bytes": 5431
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa.py",
+      "sha256": "85e8b4647110c4c2f32335a053e905583612d58cc040e523154f47d8ef117d5d",
+      "bytes": 185
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\__init__.py",
+      "sha256": "067ca2e9823bd4119c5e7a7e52e1cb56245e73447eaaf708ecb030e092279423",
+      "bytes": 78
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\__main__.py",
+      "sha256": "283df2a52409c537090f26bcc9efd4418660f91368cddad8e3103470654d203d",
+      "bytes": 5364
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\_paired_contract.py",
+      "sha256": "4d8ada7cd03e62ce1bebca5865e878ef895c9fcf33847bb41e1495d92f3bd235",
+      "bytes": 13341
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\_paired_process.py",
+      "sha256": "3155104b5625f99a9fb60a125f9078315d1092a65317d92a9b1bc5afeae8e700",
+      "bytes": 14897
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\api_codegen.py",
+      "sha256": "41637b3afda970f8699d73e95bb428ac5046c703158b1cd6c56cfd53711dc7c1",
+      "bytes": 3973
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\api_intel.py",
+      "sha256": "2d92333d16d0588affe81e4dbc4bb762cc77d96e31f796e7957ad6c285e8320a",
+      "bytes": 1338
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\application.py",
+      "sha256": "fe90a8539201f3ad539cc9ede18e955bed66a49693b7e5364dd7b2041e7f8917",
+      "bytes": 19804
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\approval.py",
+      "sha256": "a9063d4d4858a78c15122bfe9fdb6936174df15686d145db3952d91bb0937f49",
+      "bytes": 2061
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\benchmark.py",
+      "sha256": "d2b359e686da418033d25b99f38eb055579a46f3e25ee1f3491a81b053134969",
+      "bytes": 9751
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\campaign_cli.py",
+      "sha256": "630eab0db06d7c7a57a661f377e7089137353fd137872005f6b27379f3d93564",
+      "bytes": 11858
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\ci_artifacts.py",
+      "sha256": "5b1e9474a55b0f7ac59befcd1d734f756b90da4cfb75344190416fd6a5718c24",
+      "bytes": 3318
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\ci_attestation.py",
+      "sha256": "dc1173fca4b243086b34daa87e45031d5b9f759fb26f23cd3b956548ec777de6",
+      "bytes": 4030
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\code_intel.py",
+      "sha256": "91ae40d6967ba4fe3f9369832858f164fd6f9347111a853112f14a5a89b47e34",
+      "bytes": 1649
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\codex_skill.py",
+      "sha256": "4e12419dd1658e48a4ab382c14eadc4a21468c877a5dd48efe9be316bf7870aa",
+      "bytes": 7377
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\config_ui.py",
+      "sha256": "7edd58ab4e376c1c562f1e21c5930e4eb578bb4b2db986c48828ff19b2c31953",
+      "bytes": 8888
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\configuration.py",
+      "sha256": "fce2248afbfda85c21a725934b0d53a181ada37e090b973be44d44a6502e77ad",
+      "bytes": 8449
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\core.py",
+      "sha256": "31681975dc09ed8a9dcddc0fee946f4a95c4e5329f2d3e565b20135376318551",
+      "bytes": 7598
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\coverage_design.py",
+      "sha256": "4203e3cf61d01ba2148d35606f7d30d5671b18c7349a5a16c169d68cc4bc7fdc",
+      "bytes": 3177
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\design_methods.py",
+      "sha256": "63f12c1b36bb0f9da2b8f13d1cff687dd2cac9debe1a71c963b5bdce5378ee93",
+      "bytes": 36138
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\enterprise.py",
+      "sha256": "fa5d04c439906a736fec44c0a1d13ae183fcbabd6ef20aa38833fbf3c63b1112",
+      "bytes": 3771
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\evidence_binding.py",
+      "sha256": "9311e226eadfae993cb3a7c26a0585370aa6b491207f17a771cf0942038ad502",
+      "bytes": 2855
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\generator.py",
+      "sha256": "a395e1194e87f8f3384f94034f5ec40147058cb5488c76b594445a6986df692b",
+      "bytes": 2403
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\gitlab_adapter.py",
+      "sha256": "34184a249963b003f9d3be72f47dd7239bc795f82f3fc09bd2a607cba78ebffc",
+      "bytes": 5696
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\http_transport.py",
+      "sha256": "d491981c098404ce39a4ade888f7f97182da478108b8b059954c9226f3cd77d9",
+      "bytes": 817
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\intent.py",
+      "sha256": "7654257de48c74ea03cac9906c93bd467a5871a813f5fdece6f85c3c37090863",
+      "bytes": 3665
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\jira_adapter.py",
+      "sha256": "f321dcd4f5869807125bc0994a89c095b031ac8453abdda49cff6e6f95b2f348",
+      "bytes": 10111
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\job_scheduler.py",
+      "sha256": "0ef9b36fd191fe18dd5f111d997d3561b9de4cd35921278640614db72f20678a",
+      "bytes": 35605
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\junit_ingest.py",
+      "sha256": "770b28a810925f04d03ea7463036b43cb19c6a569fa29d93938a9889595dd8c9",
+      "bytes": 3087
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\local_runner.py",
+      "sha256": "b4360d5e3d5b41cebf67be427991a69012cdc2a3dfcf035a3c2193960ca99f8e",
+      "bytes": 14291
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\paired_evaluation.py",
+      "sha256": "0401c3aa4814cc46c250c546ea414643d5076d6608b049bbb3d2f4b601bca8ef",
+      "bytes": 45044
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\quality.py",
+      "sha256": "a88880be14e1880854e9a29515d32dd084a39b8f1203fcf1694bfd3f60a21396",
+      "bytes": 5073
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\release_gate.py",
+      "sha256": "e0b2c920ee73c94c16ab397165cab0b6a0579228701c7ecb1cd4b280c143b26d",
+      "bytes": 4606
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\reverse_requirements.py",
+      "sha256": "fb68d859ff96cf33d20831d58dfd90fc8f307431fdf05fa35ff2b07c88f7fd3f",
+      "bytes": 3516
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\review_packet.py",
+      "sha256": "4dd9ad53ae57e1db2fa92adb3bd876775e6edf51f53bb2ab3a2ccdfa967cd6ca",
+      "bytes": 3654
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\semantic_quality.py",
+      "sha256": "d567d26110eaca5637f54c0dc48994e881bfedce69eafd0c8aa809c41331018a",
+      "bytes": 70234
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\semantic_quality_assets\\contract.json",
+      "sha256": "ec9d623230989ab75d0526a64531680280bfb38dde4e4b9f1a1c502e0433804a",
+      "bytes": 1918
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\semantic_quality_assets\\legacy-paired-projection.json",
+      "sha256": "de207a596e3e39203a0b6fecd2955a066c68e0096897d3695caa74fbbbe1f8f3",
+      "bytes": 222
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\semantic_quality_assets\\normalizer.json",
+      "sha256": "a3c9d024e130425c3bc9594e775021e06869485c1f0681655971b97527b2c2d9",
+      "bytes": 2733
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\semantic_quality_assets\\projection.json",
+      "sha256": "25aa3f1b01dbbe36d75c3e73f73d9256ded70a1d1780804d4f8c93c217ca4c55",
+      "bytes": 1214
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\semantic_quality_assets\\result-schema.json",
+      "sha256": "fd356165b1a97c7cd6f7e66aa7e326d3a427d890b5f57e4e7281e703af36247d",
+      "bytes": 1395
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\semantic_quality_assets\\secret-scanner.json",
+      "sha256": "fb26ef33f478e3c0340e02f70c0039cebb1b409b58991a2f68225d586fbd2176",
+      "bytes": 734
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skill_registry.py",
+      "sha256": "ac852416dbf7cd270abc0319b76d020ecc133f4092a382aa81376dca955eaed2",
+      "bytes": 6040
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md",
+      "sha256": "28ae23ab80d819157f0630aa6e4579dd9d7fa21d54d7b8f40b6b583c4471207e",
+      "bytes": 2795
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\nonfunctional-compatibility.md",
+      "sha256": "352ab77dbcbf8029f33fd316030226614e92042a35cbc2f8217a8a250e69bef2",
+      "bytes": 2850
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\regression-evidence.md",
+      "sha256": "c11547b88ccfb79551229390b8147d4c395e7f23548e04f40f5c28942ddb6619",
+      "bytes": 2737
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md",
+      "sha256": "31f7fb509154d9d9756cfe43ed1c027a6470b15c6cab6bdb526b215fc3bf3c76",
+      "bytes": 2672
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\security-recovery.md",
+      "sha256": "dcc0fcffa0f2d16b3952f91296dac0d71311c3de173dccfc9956259532cfbb59",
+      "bytes": 2720
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\structural-integration.md",
+      "sha256": "3e393e1775242e807a3244dbaa2f56553c5c6a88564e6e2228ec12df4bc97615",
+      "bytes": 2773
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\state_store.py",
+      "sha256": "94660a7f7171442e19dc40c2e67e5892bb5d7c37b17ead00bab1b1446998c911",
+      "bytes": 5047
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\sync_journal.py",
+      "sha256": "8d7b8e27f172a94e348984e5561e239c24b7343f9b90fa6fee3456a616c549cc",
+      "bytes": 11735
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\whitebox.py",
+      "sha256": "f033a64e639ddb582f02f34d300963e50116c8b4c638dcb9a1d8fb26b535d263",
+      "bytes": 2578
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\wiki_adapter.py",
+      "sha256": "367d6c6010c6dd5c09f30a57a3e9579544cc470acbfee58e3684fc5065d93b4c",
+      "bytes": 1547
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\workflow.py",
+      "sha256": "7953b0e5a43d0b38a88df86dbb5ebbd09f8aae9f4685b6458a1876251a3aa740",
+      "bytes": 10895
+    }
+  ],
+  "wheel": {
+    "path": "D:\\QA-Master-PR2\\.qa-master\\cr013-semantic-independent-attempt3\\wheels\\qa_master_skill-0.1.0-py3-none-any.whl",
+    "sha256": "cfd10bcdd3d6269303c52caf0985c208f1b2b547bb762832a4289279a9e3d163",
+    "bytes": 157196
+  },
+  "sources": [
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\requirements.md",
+      "sha256": "c2edcb918f408f88091c1ca1217d269b6d8fca4f0a9d9abf6b46f63f43883d47",
+      "bytes": 2618
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\openapi.yaml",
+      "sha256": "6d83f43c638e4f8481f3ee405f18b21b1bcc23858d2b6d46bcecaa498d7ea007",
+      "bytes": 6091
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\participant-task.md",
+      "sha256": "141bf089f672d6a20c6e9e4d8b54e896f0329cdefc3fa1e188a89f9a98e3baed",
+      "bytes": 1494
+    }
+  ],
+  "declared_read_audit": [
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\participant-task.md",
+      "sha256": "141bf089f672d6a20c6e9e4d8b54e896f0329cdefc3fa1e188a89f9a98e3baed",
+      "bytes": 1494
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\requirements.md",
+      "sha256": "c2edcb918f408f88091c1ca1217d269b6d8fca4f0a9d9abf6b46f63f43883d47",
+      "bytes": 2618
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\openapi.yaml",
+      "sha256": "6d83f43c638e4f8481f3ee405f18b21b1bcc23858d2b6d46bcecaa498d7ea007",
+      "bytes": 6091
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\SKILL.md",
+      "sha256": "626e0506a5b5e4992057596fc57ec69676c1a86b0a99943504a8ddbd7e4ddd6f",
+      "bytes": 5775
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\references\\work-protocol.md",
+      "sha256": "ba232063489db733eeea68c46bd4b812a33c982ba36e7440149b1e7deca549ec",
+      "bytes": 5431
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\references\\domains.md",
+      "sha256": "5b4ff7b66ed7d7b7503ea11d8e30699b09b20d8ee6c8704238fa4260abe9c9c1",
+      "bytes": 3320
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md",
+      "sha256": "31f7fb509154d9d9756cfe43ed1c027a6470b15c6cab6bdb526b215fc3bf3c76",
+      "bytes": 2672
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md",
+      "sha256": "28ae23ab80d819157f0630aa6e4579dd9d7fa21d54d7b8f40b6b583c4471207e",
+      "bytes": 2795
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\structural-integration.md",
+      "sha256": "3e393e1775242e807a3244dbaa2f56553c5c6a88564e6e2228ec12df4bc97615",
+      "bytes": 2773
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\nonfunctional-compatibility.md",
+      "sha256": "352ab77dbcbf8029f33fd316030226614e92042a35cbc2f8217a8a250e69bef2",
+      "bytes": 2850
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\security-recovery.md",
+      "sha256": "dcc0fcffa0f2d16b3952f91296dac0d71311c3de173dccfc9956259532cfbb59",
+      "bytes": 2720
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\regression-evidence.md",
+      "sha256": "c11547b88ccfb79551229390b8147d4c395e7f23548e04f40f5c28942ddb6619",
+      "bytes": 2737
+    }
+  ],
+  "source_freeze_commit": "962637b046350100c9e40e180252ea3b229c6cec",
+  "product_source": "a9df28513d4ae808d687718bfc4f6069a32ee767",
+  "postcheck_claims_match_current_bytes": true,
+  "only_three_files_in_input_directory": true,
+  "installed_inventory_matches_frozen_product_and_wheel": true,
+  "limits": [
+    "No participant rerun or output edit",
+    "Fresh-install chronology is preparation-owner provenance, not independently observed here",
+    "Read audit is participant declaration, not host/OS isolation or comprehensive access proof",
+    "Before/after records corroborated by frozen/current bytes; no continuous write-monitoring claim",
+    "Withheld ledger/checklist content not read or used as a conformance or scoring oracle",
+    "No quality score/comparison/acceptance/Gate/release/product-validity conclusion"
+  ]
+}
