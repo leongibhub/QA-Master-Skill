@@ -120,7 +120,9 @@ class ApplicationTests(unittest.TestCase):
         self.path.write_text(json.dumps(raw))
         service = Service.load(self.path)
         self.assertEqual(service.document['legacy_payload'], raw)
-        self.assertEqual(service.document['steps'], raw['steps'])
+        for key, step in service.document['steps'].items():
+            expected = dict(raw['steps'][key], status='NEEDS_REVALIDATION')
+            self.assertEqual(step, expected)
         self.assertNotIn(service.check('execution')['state'], ('READY', 'DONE'))
         self.assertEqual(service.document['approvals'], {})
 
@@ -141,6 +143,38 @@ class ApplicationTests(unittest.TestCase):
         result = service.mutate('approve', kind='execution', version='v1')
         self.assertEqual(result['state'], 'RECORDED_UNVERIFIED')
         self.assertEqual(service.document['approvals'], {})
+
+    def test_status_does_not_echo_saved_answer_values(self):
+        service = Service.initialize(self.path, 'demo')
+        for key in ('token', 'gitlab', 'arbitrary'):
+            service.mutate('answer', key=key, value='private-fixture-value')
+        service.mutate('answer', key='requirements', value='没有')
+        status = Service.load(self.path).status()
+        self.assertNotIn('private-fixture-value', json.dumps(status))
+        self.assertEqual(status['known']['gitlab']['value'], '[stored]')
+        self.assertIsNone(status['known']['requirements']['value'])
+        self.assertEqual(service.document['answers']['token']['value'], 'private-fixture-value')
+
+    def test_questions_persist_and_refresh_after_answer(self):
+        service = Service.initialize(self.path, 'demo')
+        output = service.mutate('plan', prompt='只生成测试用例')
+        self.assertEqual(Service.load(self.path).status()['questions'], output['questions'])
+        service.mutate('answer', key='gitlab', value='group/repo')
+        self.assertIn('正式需求', service.status()['questions'][0])
+        service.mutate('answer', key='requirements', value='没有')
+        self.assertEqual(Service.load(self.path).status()['questions'], [])
+
+    def test_contract_requires_exact_schema_and_stage_members(self):
+        document = Service.initialize(self.path, 'demo').document
+        for change in ('missing-version', 'bad-stage', 'extra', 'numeric-false'):
+            bad = deepcopy(document)
+            contract = bad['task_contract']
+            if change == 'missing-version': contract.pop('schema_version')
+            if change == 'bad-stage': contract['stages'] = [123]
+            if change == 'extra': contract['override'] = True
+            if change == 'numeric-false': contract['capabilities']['execute'] = 0
+            self.path.write_text(json.dumps(bad), encoding='utf-8')
+            with self.assertRaises(ValueError): Service.load(self.path)
 
     def test_recursive_exact_ancestor_change_invalidates_completed_descendant(self):
         workflow = Workflow('demo'); workflow.request(['design'])

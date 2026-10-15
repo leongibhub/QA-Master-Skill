@@ -21,7 +21,7 @@ from .workflow import STEPS, Step, Workflow
 SCHEMA = 'qa-master.campaign'
 FIELDS = {'schema_name', 'schema_version', 'campaign_id', 'project', 'revision',
           'mode', 'pause', 'task_contract', 'answers', 'steps', 'approvals',
-          'events', 'event_sequence', 'legacy_assertions', 'legacy_payload', 'migration'}
+          'events', 'event_sequence', 'legacy_assertions', 'legacy_payload', 'migration', 'questions'}
 
 
 def _contract():
@@ -37,7 +37,7 @@ def _new(project, campaign_id=None):
             'campaign_id': campaign_id or str(uuid4()), 'project': project,
             'revision': 0, 'mode': 'ACTIVE', 'pause': None,
             'task_contract': _contract(), 'answers': {}, 'steps': {}, 'approvals': {},
-            'events': [], 'event_sequence': 0, 'legacy_assertions': [],
+            'events': [], 'event_sequence': 0, 'legacy_assertions': [], 'questions': [],
             'legacy_payload': None, 'migration': None}
 
 
@@ -71,16 +71,22 @@ def _validate(document):
     for key in ('answers', 'steps', 'approvals', 'task_contract'):
         if not isinstance(document[key], dict):
             raise ValueError('Invalid state mapping')
-    for key in ('events', 'legacy_assertions'):
+    for key in ('events', 'legacy_assertions', 'questions'):
         if not isinstance(document[key], list):
             raise ValueError('Invalid state history')
     contract = document['task_contract']
-    if (contract.get('capabilities') != {'execute': False, 'external_write': False}
+    if (set(contract) != set(_contract())
+            or type(contract.get('schema_version')) is not int or contract['schema_version'] != 1
+            or contract.get('capabilities') != {'execute': False, 'external_write': False}
+            or any(type(value) is not bool for value in contract['capabilities'].values())
             or contract.get('authority') != 'PLANNING_ONLY'
             or type(contract.get('no_execution')) is not bool
             or type(contract.get('no_external_writes')) is not bool
-            or not isinstance(contract.get('stages'), list)):
+            or not isinstance(contract.get('stages'), list)
+            or any(not isinstance(stage, str) or stage not in (*STEPS, 'discovery') for stage in contract['stages'])):
         raise ValueError('Unsupported task authority')
+    if any(not isinstance(question, str) for question in document['questions']):
+        raise ValueError('Invalid questions')
     for key, answer in document['answers'].items():
         if not isinstance(key, str) or not isinstance(answer, dict) or set(answer) != {'state', 'value'} or answer['state'] not in ('PROVIDED', 'CONFIRMED_NONE'):
             raise ValueError('Invalid answer')
@@ -94,7 +100,7 @@ def _validate(document):
         for attr in ('id', 'depends_on', 'required', 'approvals', 'side_effect'):
             if getattr(step, attr) != getattr(definition, attr):
                 raise ValueError('Unsupported step definition')
-        if step.status not in ('PENDING', 'DONE') or any(dep not in document['steps'] for dep in step.depends_on):
+        if step.status not in ('PENDING', 'DONE', 'NEEDS_REVALIDATION', 'STALE') or any(dep not in document['steps'] for dep in step.depends_on):
             raise ValueError('Invalid workflow dependency or status')
         if step.result_ref is not None and not isinstance(step.result_ref, str):
             raise ValueError('Invalid result reference')
@@ -124,13 +130,29 @@ def _project_source(workflow):
         workflow.answer('source', None)
 
 
+def _known(workflow):
+    known = {key: answer['value'] for key, answer in workflow.answers.items()}
+    if workflow.answers.get('requirements', {}).get('state') == 'CONFIRMED_NONE':
+        known['requirements_status'] = 'CONFIRMED_NONE'
+    return known
+
+
 def migrate(raw, digest):
     """Pure, repeatable projection. Never authenticates historical assertions."""
     if not isinstance(raw, dict):
         raise ValueError('UNSUPPORTED_SCHEMA')
     _revision(raw.get('revision', 0))
     if 'schema_name' in raw or 'schema_version' in raw:
+        raw = deepcopy(raw)
+        # An optional projection added during the schema-v2 development cycle.
+        # No legacy data is discarded and read-only loading still never saves.
+        if raw.get('schema_name') == SCHEMA and raw.get('schema_version') == 2 and 'questions' not in raw:
+            raw['questions'] = []
         _validate(raw)
+        if raw['migration'] is not None:
+            for step in raw['steps'].values():
+                if step['status'] == 'DONE':
+                    step['status'] = 'NEEDS_REVALIDATION'
         return deepcopy(raw), False
     campaign_markers = {'name', 'known', 'history'}
     workflow_markers = {'project', 'steps', 'answers', 'events'}
@@ -176,6 +198,9 @@ def migrate(raw, digest):
         if not isinstance(document['steps'], dict):
             raise ValueError('Invalid legacy graph')
         document['steps'] = {key: asdict(Step(**value)) for key, value in document['steps'].items()}
+        for step in document['steps'].values():
+            if step['status'] == 'DONE':
+                step['status'] = 'NEEDS_REVALIDATION'
     else:
         raise ValueError('UNSUPPORTED_SCHEMA')
     approvals = raw.get('approvals', {})
@@ -192,6 +217,7 @@ def migrate(raw, digest):
     # Old Step bytes/receipts remain in legacy_payload and active projection.
     # Readiness below never accepts legacy completions as new trusted evidence.
     _event(document, 'migrated', source_format=source_format, source_sha256=digest)
+    document['questions'] = plan_task('discovery', _known(_workflow(document)))['questions']
     _validate(document)
     return document, True
 
@@ -241,11 +267,10 @@ class CampaignApplicationService:
                 _project_source(workflow)
             if key == 'build':
                 workflow.answer('build_ref', value)
+            document['questions'] = plan_task('discovery', _known(workflow))['questions']
         elif command == 'plan':
-            known = {key: answer['value'] for key, answer in workflow.answers.items()}
-            if workflow.answers.get('requirements', {}).get('state') == 'CONFIRMED_NONE':
-                known['requirements_status'] = 'CONFIRMED_NONE'
-            output = plan_task(payload['prompt'], known)
+            output = plan_task(payload['prompt'], _known(workflow))
+            document['questions'] = deepcopy(output['questions'])
             workflow.request([stage for stage in output['stages'] if stage in STEPS])
             contract = document['task_contract']
             old_contract = deepcopy(contract)
@@ -292,6 +317,8 @@ class CampaignApplicationService:
             raise ValueError('Cyclic workflow')
         seen = seen | {step}
         item = workflow.steps[step]
+        if item.status in ('NEEDS_REVALIDATION', 'STALE'):
+            return item.status
         dependencies = [self._readiness(workflow, dep, seen) for dep in item.depends_on]
         if any(state in ('STALE', 'NEEDS_REVALIDATION') for state in dependencies):
             return 'STALE'
@@ -332,8 +359,9 @@ class CampaignApplicationService:
         return {'project': document['project'], 'schema_version': 2,
                 'revision': document['revision'], 'mode': document['mode'],
                 'pause': deepcopy(document['pause']),
-                'known': {key: {'status': answer['state'], 'value': answer['value']}
+                'known': {key: {'status': answer['state'], 'value': None if answer['state'] == 'CONFIRMED_NONE' else '[stored]'}
                           for key, answer in document['answers'].items()},
+                'questions': deepcopy(document['questions']),
                 'approvals': {}, 'legacy_assertion_count': len(document['legacy_assertions']),
                 'task_contract': deepcopy(document['task_contract']), 'execution_authorized': False,
                 'steps': {key: self._readiness(workflow, key) for key in workflow.steps}}

@@ -26,11 +26,14 @@ python -m qa_master plan "先评审需求并生成用例，严禁执行测试"
 | 入口 | 能做什么 | 边界 |
 |---|---|---|
 | `python -m qa_master plan "任务"` | 规划阶段、信息缺口、专业指南，保存禁止执行/写入的任务范围 | 保守规则解析，不授权执行 |
+| `python -m qa_master pause "等待资料"` / `resume` | 保存暂停状态，恢复后重新检查流程条件 | 暂停期间拒绝推进；恢复不增加授权 |
 | `python -m qa_master.campaign_cli --input examples/campaign.json --output .qa-master/design.json` | 结构化需求生成草稿、追踪、覆盖及缺口 | 草稿，不能代替人类批准 |
 | `python -m qa_master.config_ui --config .qa-master/config.json` | 本机配置页面，默认 http://127.0.0.1:8765 | 仅非秘密配置和凭据环境变量引用 |
 | `python -m qa_master.benchmark --help` | 同题、同模型、同设置的双边评测资料校验 | 缺少双方实际输出时不能得出优劣 |
 
 内置指南覆盖需求冲突、功能边界/状态、API、白盒、集成、性能/负载/压力/稳定性、兼容性、安全/恢复、回归与证据报告。见 [专业能力](docs/SKILL_CAPABILITIES.md)。这些指南和确定性生成器不等于完整语义 Agent。
+
+正式 CLI 使用统一的 schema v2 状态。旧 Campaign/Workflow 文件在查看时不改写，首次修改时保留同目录字节备份再迁移；已有状态不能被 `init` 覆盖。旧审批和执行记录仅保留历史，不自动获得可信授权。迁移与恢复边界见 [实现记录](docs/verification/schema-migration-implementation.md)。
 
 ## 集成与执行
 

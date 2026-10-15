@@ -17,6 +17,7 @@ The following are implemented local product surfaces, subject to current source 
 - local configuration persistence and a loopback-only JSON configuration UI, which stores credential references rather than credential values;
 - local Jira/Confluence/SynapseRT adapter contracts, operation journaling/readback controls, and a bounded local-runner contract;
 - professional planning-guide registry and a paired-comparison harness that validates experiment completeness.
+- a schema-v2 canonical CLI/application-service migration and persistent pause/resume implementation at `830d231`, pending independent verification.
 
 These surfaces do not prove deployment, authenticated identity, live third-party compatibility, production safety, or product acceptance.
 
@@ -30,6 +31,7 @@ The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-
 | Enterprise adapter contracts | OBSERVED | Local code and contract tests may exist; no live Jira, Confluence, SynapseRT, GitLab, SSH, WinRM, or remote-runner result is asserted. |
 | Local configuration UI | OBSERVED | A loopback-only JSON UI is implemented locally. The final 385-test suite includes 11 `test_configuration` automated cases, and `docs/verification/config-browser-smoke.md` records one empty-config form-save smoke without enterprise contact. Full GUI multi-user authorization is not implemented. |
 | Current local regression, package smoke and CI | OBSERVED | `73a86bb` has an independent strict 385-test local result and fresh-wheel ASCII/Chinese JSON smoke; `d0ff0a` has two successful GitHub CI API readbacks, including a four-cell Linux/Windows matrix. |
+| Schema migration/pause-resume increment | OBSERVED | `830d231` is a developer handoff with a reported 395-test local run, compileall and diff check. TASK-021 independent testing and TASK-022 review are PENDING; no acceptance result is inferred. |
 | Independent implementation review | OBSERVED | The portability re-review found no new P0–P3 in the final four-file source difference. The bounded local review separately concludes full V1 is `FAIL` because required capabilities and lifecycle evidence are absent. |
 | Remote execution | NOT_EXECUTED | No authorized remote scheduling, monitoring, retention, or network execution is recorded. |
 | Performance, load, stress, stability, compatibility | NOT_EXECUTED | No approved environment, thresholds, or execution evidence is recorded. |
@@ -49,7 +51,7 @@ The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-
 
 ## Current V1 evaluation
 
-The independent review evaluates the full stated V1 as **FAIL**. The bounded local increment is safer and locally verified, but authenticated authority, remote execution, a single canonical workflow, enterprise staging validation, complete professional methods, paired evaluation, formal requirement baselines, acceptance, and release evidence remain absent. This is an evaluation conclusion, not a Gate decision.
+The independent review evaluates the full stated V1 as **FAIL**. The bounded local increment has a new canonical-workflow implementation handoff awaiting independent verification; authenticated authority, remote execution, enterprise staging validation, complete professional methods, paired evaluation, formal requirement baselines, acceptance, and release evidence remain absent. This is an evaluation conclusion, not a Gate decision.
 
 ## Historical source record
 

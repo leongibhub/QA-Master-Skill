@@ -106,6 +106,12 @@ def save_document(path: str | os.PathLike[str], document: dict, *, expected_revi
                 output.flush()
                 os.fsync(output.fileno())
             os.replace(temporary_name, destination)
+            if os.name == 'posix':
+                directory_fd = os.open(destination.parent, os.O_RDONLY | os.O_DIRECTORY)
+                try:
+                    os.fsync(directory_fd)
+                finally:
+                    os.close(directory_fd)
         finally:
             if os.path.exists(temporary_name):
                 os.unlink(temporary_name)
