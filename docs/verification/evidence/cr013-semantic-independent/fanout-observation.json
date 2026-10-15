@@ -1,0 +1,15 @@
+{
+  "scope": "Structural call-count observation, not runtime benchmark or acceptance threshold",
+  "rows": [
+    {
+      "mapped_cases": 4,
+      "mapped_gaps": 4,
+      "gap_validation_calls": 40
+    },
+    {
+      "mapped_cases": 8,
+      "mapped_gaps": 8,
+      "gap_validation_calls": 144
+    }
+  ]
+}

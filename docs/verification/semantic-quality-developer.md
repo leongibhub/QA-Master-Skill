@@ -71,3 +71,20 @@ The initial report command named a nonexistent `docs/verification/evidence/cr011
 | `benchmarks/paired-pilot/public-development/oracles/PE-BND-001.public-oracle.json` | `2ced8951c7fbce2b8830fa90df20f4b3e6abe9b067721b15efef21ca617a6a12` |
 | `benchmarks/paired-pilot/public-development/oracles/PE-DTT-001.public-oracle.json` | `ce63e126ded22e18fcf740054059cf7205b9a1a46e0fddc33d5f6612cc722081` |
 | `benchmarks/paired-pilot/public-development/oracles/PE-STT-001.public-oracle.json` | `50916d0d622854bc4d3057855b4dd3cd9fe6ddf5d6ac050e2870d38fc67299fd` |
+
+## TASK-061 scoped repair — work-c016bfd9674149e6ac1bbc0cf685dbb0 v2 / attempt 2
+
+This section appends repair evidence to the original developer record; the earlier source hashes, wheel and test outcomes remain historical. The repair starts from frozen `6905e02`. Its implementation commit is pending orchestrator freeze.
+
+The independent attempt found two STRING_SET boundary manifestations (TC021 fact and TC022 observation) and malformed-manifest classification (TC023). A separate independent review identified case/gap fanout; that review finding was not an executed independent TC. This repair covers those three scoped defect types only:
+
+- STRING_SET now allows at most 256 elements, consistently for facts and observations. A 257-member fact rejects validation; a 257-member observation receives OBSERVED_VALUE_INVALID.
+- Inspection validates manifest field types and nested contract, digest, category, diagnostic, row, pointer-list, limitation and role structures before retained-file checks. Malformed manifests yield INCOMPLETE even with a missing retained file. Valid metadata that contradicts retained derivation continues to yield MISMATCH. Missing, changed or malformed installed assets yield MISMATCH / INSTALLED_DERIVER_MISMATCH; link/path/I/O command errors retain their own boundary.
+- Derivation indexes mapped gaps once per obligation, caches exact gap validity and each case/obligation validity, and reuses the results for usability and diagnostics. Each case no longer rescans sibling gaps. Instrumented developer fixtures at 16, 32 and 256 cases/gaps verify exactly one _gap_valid and one _case_valid call per mapped item while preserving usability/provenance outcomes.
+
+Actual developer verification: `D:\codex-rd-platform\.venv\Scripts\python.exe -m unittest tests.test_semantic_quality -q` completed with **47 tests passed in 21.505 seconds**. The preceding 46-test run passed in 23.606 seconds before the installed-asset-reason regression was added. `git diff --check` passed. No full-suite rerun or repaired fresh-wheel validation was performed in this developer repair; those belong to the separately frozen independent revalidation. The prior 648-test / original wheel results above do not validate these repaired bytes.
+
+Repair source SHA-256: `189835888693ad727c8fc1dea269fe99cb7672d025872e85fe962877875070d8`.
+Repair developer-test SHA-256: `54714ebcb202d122fe505fd90c2e6e9668fbc2c96405995875e55db53b38dc9e`.
+
+Only `qa_master/semantic_quality.py`, `tests/test_semantic_quality.py` and this appended report changed in the repair. Packaged assets, independent tests, frozen failed-attempt evidence and historical paired records were not modified. Independent re-test/re-review remain PENDING; no Runtime completion, defect closure, acceptance or superiority claim is made here.

@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\docs\verification\evidence\cr013-semantic-independent\fanout-observation.py", line 4, in <module>
+    spec=importlib.util.spec_from_file_location('independent','D:/QA-Master-PR2/tests/test_semantic_quality_independent.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+                                                                                                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "D:/QA-Master-PR2/tests/test_semantic_quality_independent.py", line 13, in <module>
+    from qa_master import semantic_quality as sq
+ModuleNotFoundError: No module named 'qa_master'

@@ -1,0 +1,53 @@
+test_020_json_depth_nodes_and_case_limit (test_semantic_quality_independent.SemanticIndependent.test_020_json_depth_nodes_and_case_limit) ... ok
+test_021_string_set_fact_256_257 (test_semantic_quality_independent.SemanticIndependent.test_021_string_set_fact_256_257) ... FAIL
+test_022_string_set_observation_257_invalid (test_semantic_quality_independent.SemanticIndependent.test_022_string_set_observation_257_invalid) ... FAIL
+test_023_malformed_manifest_is_incomplete (test_semantic_quality_independent.SemanticIndependent.test_023_malformed_manifest_is_incomplete) ... FAIL
+
+======================================================================
+FAIL: test_021_string_set_fact_256_257 (test_semantic_quality_independent.SemanticIndependent.test_021_string_set_fact_256_257)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 179, in test_021_string_set_fact_256_257
+    with self.assertRaises(sq.SemanticQualityError):sq.validate_bundle(self.inputs/'bundle.json')
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: SemanticQualityError not raised
+
+======================================================================
+FAIL: test_022_string_set_observation_257_invalid (test_semantic_quality_independent.SemanticIndependent.test_022_string_set_observation_257_invalid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 181, in test_022_string_set_observation_257_invalid
+    self.r['observations'][1]['value']=[f'v{i:03}' for i in range(257)];p,_=self.run_profile();self.expected(p,'O1','SEMANTIC','VIOLATED','OBSERVED_VALUE_INVALID')
+                                                                                               ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 55, in expected
+    row=self.row(p,o,d);self.assertEqual((row['outcome'],row['reason_code']),(outcome,reason));self.assertTrue(row['evidence_pointers'])
+                        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('VIOLATED', 'OBSERVED_VALUE_MISMATCH') != ('VIOLATED', 'OBSERVED_VALUE_INVALID')
+
+First differing element 1:
+'OBSERVED_VALUE_MISMATCH'
+'OBSERVED_VALUE_INVALID'
+
+- ('VIOLATED', 'OBSERVED_VALUE_MISMATCH')
+?                              - ^^ ^^^
+
++ ('VIOLATED', 'OBSERVED_VALUE_INVALID')
+?                               ^^ ^^^
+
+
+======================================================================
+FAIL: test_023_malformed_manifest_is_incomplete (test_semantic_quality_independent.SemanticIndependent.test_023_malformed_manifest_is_incomplete)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_semantic_quality_independent.py", line 183, in test_023_malformed_manifest_is_incomplete
+    _,d=self.run_profile();m=json.loads((d/'manifest.json').read_bytes());m['evaluation_id']=[];(d/'manifest.json').write_bytes(canonical(m));self.assertEqual(sq.inspect_result(d)['status'],'INCOMPLETE')
+                                                                                                                                              ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'MISMATCH' != 'INCOMPLETE'
+- MISMATCH
++ INCOMPLETE
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 4.483s
+
+FAILED (failures=3)
