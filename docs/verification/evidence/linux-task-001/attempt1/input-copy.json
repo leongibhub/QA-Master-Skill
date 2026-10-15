@@ -1,27 +1,30 @@
-[
+{
+  "source_commit": "2f9ec205446b03f1871dc5e5784e8d3724c90ad3",
+  "files": [
     {
-        "path":  "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\incident-excerpts.md",
-        "sha256":  "f527db21d24f5f3624e376c6c555e1b714b7584b1fd2d00d26b6136b9611e569",
-        "bytes":  876
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\incident-excerpts.md",
+      "sha256": "f527db21d24f5f3624e376c6c555e1b714b7584b1fd2d00d26b6136b9611e569",
+      "bytes": 876
     },
     {
-        "path":  "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\participant-task.md",
-        "sha256":  "9ef1d4eec587b34471b6a56a179fd99734a1a3dded161d6bc80fe05e5dcf45e5",
-        "bytes":  1672
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\participant-task.md",
+      "sha256": "9ef1d4eec587b34471b6a56a179fd99734a1a3dded161d6bc80fe05e5dcf45e5",
+      "bytes": 1672
     },
     {
-        "path":  "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\release-notes.md",
-        "sha256":  "fa1481efe9420eba9c23ff5144f8ab39b8c31e1ff677618bbc1ddf486f528f4f",
-        "bytes":  2335
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\release-notes.md",
+      "sha256": "fa1481efe9420eba9c23ff5144f8ab39b8c31e1ff677618bbc1ddf486f528f4f",
+      "bytes": 2335
     },
     {
-        "path":  "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\support-and-config.md",
-        "sha256":  "1c2dbbea6050b115c1cf30a016258ea0f8d8f845f032d419edb98ed5357e8b8c",
-        "bytes":  1644
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\support-and-config.md",
+      "sha256": "1c2dbbea6050b115c1cf30a016258ea0f8d8f845f032d419edb98ed5357e8b8c",
+      "bytes": 1644
     },
     {
-        "path":  "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\upgrade-runbook.md",
-        "sha256":  "a7621f2401646cae76e33024d8f857d742ea169a6c0d172f3619778177797c32",
-        "bytes":  2055
+      "path": "D:\\QA-Master-PR2\\.qa-master\\linux-task-001\\participant\\inputs\\upgrade-runbook.md",
+      "sha256": "a7621f2401646cae76e33024d8f857d742ea169a6c0d172f3619778177797c32",
+      "bytes": 2055
     }
-]
+  ]
+}
