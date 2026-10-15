@@ -80,3 +80,25 @@ repair is committed. Process or machine loss after detaching the old tree is als
 an automatic-recovery guarantee; the design preserves the old bytes in the hidden
 recovery directory but may require manual restoration after an interrupted process.
 
+## Addendum: platform-specific test correction
+
+GitHub Actions run `38713031168` at commit `74d6a25` exposed a test-only portability
+defect: `test_windows_junction_target_is_refused_without_mutating_destination`
+invoked Windows `cmd /c mklink` on Ubuntu and failed with `FileNotFoundError`. Both
+Windows jobs passed. The installer source reviewed above is unchanged at SHA-256
+`E008FBD1263BD32CBE9E7C62C688F3D4CDAD3B15D2CAEB4BC21DDC24C1B3F93F`.
+
+The test now has `@unittest.skipUnless(os.name == "nt", "Windows junction test")`.
+The corrected working-tree test file has SHA-256
+`E33E26BEAFD2ECD39841B176A41A9823BE935FA3F93C1FFCE699A850AC28D8B5`
+and Git blob ID `877c28a1dddcfa36600cb84a820b57b717d5fd12`. Reviewer execution on
+Windows ran 11 focused tests: 9 passed, the two ordinary-symbolic-link cases remained
+skipped for `WinError 1314`, and the Windows junction test executed and passed.
+`git diff --check` passed for the test correction.
+
+This correction is appropriate: Ubuntu will skip only the Windows junction fixture,
+while its ordinary POSIX symbolic-link tests remain eligible to execute; Windows will
+continue executing the real junction case. The bounded source-review conclusion is
+unchanged. A successful rerun is still required before describing the corrected
+cross-platform CI result as verified.
+
