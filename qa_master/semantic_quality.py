@@ -239,7 +239,7 @@ def _typed(kind, value):
         return isinstance(value, str) and bool(re.fullmatch(r'-?(?:0|[1-9][0-9]*)(?:\.[0-9]*[1-9])?', value)) and value != '-0'
     if kind == 'STRING': return isinstance(value, str) and bool(value)
     if kind == 'STRING_SET':
-        return isinstance(value, list) and all(isinstance(x, str) and x for x in value) and value == sorted(set(value))
+        return isinstance(value, list) and len(value) <= 256 and all(isinstance(x, str) and x for x in value) and value == sorted(set(value))
     return kind == 'JSON'
 
 
@@ -588,8 +588,8 @@ def _case_valid(case,ob,state,normal):
     missing=case.get('missing_fields')
     if not _valid_refs(missing) or missing!=sorted(missing) or set(missing)-_MISSING_FIELDS: return False
     if not _claims_valid(case.get('preconditions'),state) or not _claims_valid(case.get('actions'),state) or not case['actions']: return False
-    gaps={g['gap_id']:g for _,g in normal['gaps'].get(ob['id'],[]) if _valid_id(g.get('gap_id'))}
-    exact_gaps=[g for g in gaps.values() if _gap_valid(g,ob,state,normal)]
+    gaps=normal['gap_index'][ob['id']]
+    exact_gaps=normal['exact_gap'][ob['id']]
     for name in ('setup','data','cleanup'):
         sec=case.get(name)
         if not isinstance(sec,dict) or set(sec)!={'state','items','reason'}: return False
@@ -641,6 +641,19 @@ def _artifact_provenance(row,channel,ob,state,normal):
 def derive_profile(state):
     """Pure deterministic profile derivation: no I/O and no retained code execution."""
     normal=_normalize(state); bundle=state['bundle']; rows=[]
+    # Each mapped gap/case is validated once; cases never rescan sibling gaps.
+    normal['gap_index']={}
+    normal['exact_gap']={}
+    gap_validity={}
+    case_validity={}
+    for oid,ob in state['obligations'].items():
+        mapped_gaps=normal['gaps'].get(oid,[])
+        normal['gap_index'][oid]={g['gap_id']:g for _,g in mapped_gaps if _valid_id(g.get('gap_id'))}
+        for index,gap in mapped_gaps:
+            gap_validity[oid,index]=_gap_valid(gap,ob,state,normal)
+        normal['exact_gap'][oid]=any(gap_validity[oid,index] for index,_ in mapped_gaps)
+        for index,case in normal['cases'].get(oid,[]):
+            case_validity[oid,index]=_case_valid(case,ob,state,normal)
     result_id='SQ-'+_identity(state)[:32]
     response_mode='ABSENT' if bundle['response']['state']=='ABSENT' else 'SUPPORTED' if state['supported'] else 'LEGACY_UNSUPPORTED'
     for oid,ob in sorted(state['obligations'].items()):
@@ -679,16 +692,16 @@ def derive_profile(state):
             if not ob['case_required'] and not cases: emit('USABILITY','SATISFIED','CASE_NOT_REQUIRED')
             elif not normal['channels'].get('cases'): emit('USABILITY','UNSCORABLE','CASES_CHANNEL_UNAVAILABLE')
             elif not cases: emit('USABILITY','VIOLATED','REQUIRED_CASE_MISSING')
-            elif any(not _case_valid(c,ob,state,normal) for _,c in cases): emit('USABILITY','VIOLATED','MAPPED_CASE_INVALID' if ob['case_required'] else 'OPTIONAL_CASE_INVALID')
+            elif any(not case_validity[oid,index] for index,_ in cases): emit('USABILITY','VIOLATED','MAPPED_CASE_INVALID' if ob['case_required'] else 'OPTIONAL_CASE_INVALID')
             else: emit('USABILITY','SATISFIED','USABLE_DRAFT_ARTIFACT_PRESENT')
         bad=False
         for channel,items in [('observations',obs),('cases',cases),('gaps',gaps)]:
             for index,row in items:
                 if not _artifact_provenance(row,channel,ob,state,normal):
                     bad=True; normal['items'].append(_diagnostic('SOURCE_BINDING_INVALID',channel,index,row.get({'observations':'check_id','cases':'case_id','gaps':'gap_id'}[channel])))
-                if channel=='cases' and not _case_valid(row,ob,state,normal): normal['items'].append(_diagnostic('MAPPED_CASE_INVALID',channel,index,row.get('case_id')))
-                if channel=='gaps' and not _gap_valid(row,ob,state,normal): normal['items'].append(_diagnostic('MAPPED_GAP_INVALID',channel,index,row.get('gap_id')))
-        exact=any(_gap_valid(g,ob,state,normal) for _,g in gaps)
+                if channel=='cases' and not case_validity[oid,index]: normal['items'].append(_diagnostic('MAPPED_CASE_INVALID',channel,index,row.get('case_id')))
+                if channel=='gaps' and not gap_validity[oid,index]: normal['items'].append(_diagnostic('MAPPED_GAP_INVALID',channel,index,row.get('gap_id')))
+        exact=normal['exact_gap'][oid]
         if bad: emit('PROVENANCE','VIOLATED','SOURCE_BINDING_INVALID')
         elif oracle!='DETERMINATE' and normal['channels'].get('gaps') and not exact: emit('PROVENANCE','VIOLATED','REQUIRED_GAP_MISSING')
         elif (oracle=='DETERMINATE' and not normal['channels'].get('observations')) or (ob['case_required'] and not normal['channels'].get('cases')) or (oracle!='DETERMINATE' and not normal['channels'].get('gaps')): emit('PROVENANCE','UNSCORABLE','PROVENANCE_CHANNEL_UNAVAILABLE')
@@ -887,6 +900,65 @@ def evaluate_state(state, output_root, derive_profile, normalize, implementation
             "row_count": len(profile["rows"])}
 
 
+def _sq_manifest_structure(manifest):
+    """Validate types and controlled shapes before inspecting retained evidence."""
+    def require(condition):
+        if not condition:
+            raise ValueError()
+    def digest(value):
+        return isinstance(value,str) and bool(_HEX.fullmatch(value))
+    def sequence(value, maximum):
+        require(isinstance(value,list) and len(value)<=maximum)
+    try:
+        _document_safe(manifest)
+        require(_valid_id(manifest['evaluation_id']))
+        require(manifest['fixture_class'] in ('PUBLIC_DEVELOPMENT','INDEPENDENT_HOLDOUT','PRODUCT_TEST'))
+        for key in ('identity_sha256','bundle_sha256','canonical_bundle_sha256','profile_sha256','implementation_sha256'):
+            require(digest(manifest[key]))
+        for key in ('response_sha256','normalized_response_sha256'):
+            require(manifest[key] is None or digest(manifest[key]))
+        contract=manifest['contract']
+        require(isinstance(contract,dict) and set(contract)=={name+suffix for name in ('contract','projection','normalizer','result_schema','secret_scanner') for suffix in ('_id','_sha256')})
+        for key,value in contract.items():
+            require(digest(value) if key.endswith('_sha256') else _valid_id(value))
+        assets=manifest['asset_sha256']
+        require(isinstance(assets,dict) and set(assets)==set(_SQ_ASSETS))
+        require(all(digest(value) for value in assets.values()))
+        count=manifest['profile_row_count']
+        require(type(count) is int and 0<=count<=1024)
+        categories=manifest['category_applicability']
+        sequence(categories,7)
+        require(len(categories)==7)
+        for row in categories:
+            require(isinstance(row,dict) and set(row)=={'category','state','reason','source_ids','fact_ids'})
+            require(row['category'] in _CATEGORIES and row['state'] in ('APPLICABLE','NOT_APPLICABLE','ORACLE_MISSING','UNSCORABLE'))
+            require(row['reason'] is None or isinstance(row['reason'],str) and 0<len(row['reason'])<=20000)
+            require(_valid_refs(row['source_ids']) and _valid_refs(row['fact_ids']))
+        for key in ('shape_diagnostics','item_diagnostics'):
+            sequence(manifest[key],65536)
+            for row in manifest[key]:
+                require(isinstance(row,dict) and set(row)=={'code','channel','index','item_id','member'})
+                require(_valid_id(row['code']) and row['channel'] in ('root','observations','cases','gaps'))
+                require(row['index'] is None or type(row['index']) is int and 0<=row['index']<256)
+                require(row['item_id'] is None or _valid_id(row['item_id']))
+                require(row['member'] is None or _valid_id(row['member']))
+        sequence(manifest['rows'],1024)
+        for row in manifest['rows']:
+            require(isinstance(row,dict) and set(row)=={'obligation_id','category','dimension','outcome','reason_code','source_fact_ids','evidence_pointers'})
+            require(_valid_id(row['obligation_id']) and row['category'] in _CATEGORIES and row['dimension'] in _DIMENSIONS)
+            require(row['outcome'] in ('SATISFIED','VIOLATED','ORACLE_MISSING','UNSCORABLE') and _valid_id(row['reason_code']))
+            require(_valid_refs(row['source_fact_ids']))
+            sequence(row['evidence_pointers'],4096)
+            require(bool(row['evidence_pointers']) and all(isinstance(v,str) and 0<len(v)<=512 for v in row['evidence_pointers']))
+        sequence(manifest['limitations'],64)
+        require(all(_valid_id(value) for value in manifest['limitations']))
+        for row in manifest['files']:
+            require(isinstance(row,dict) and isinstance(row.get('role'),str) and row['role'] in set(_SQ_ROLES.values())|{'SOURCE_BYTES'})
+        return True
+    except (ValueError,TypeError,KeyError,RecursionError):
+        return False
+
+
 def inspect_result_state(result_root, derive_profile, normalize, implementation_bytes):
     root = _sq_check_path(result_root)
     if not root.exists() or not root.is_dir():
@@ -931,6 +1003,8 @@ def inspect_result_state(result_root, derive_profile, normalize, implementation_
             raise ValueError()
         if not isinstance(manifest["files"], list) or len(manifest["files"]) > 1024:
             raise ValueError()
+        if not _sq_manifest_structure(manifest):
+            raise ValueError()
         declared = {}
         for row in manifest["files"]:
             if not isinstance(row, dict) or set(row) != {"path", "sha256", "byte_count", "role"}:
@@ -965,7 +1039,12 @@ def inspect_result_state(result_root, derive_profile, normalize, implementation_
         profile = _sq_json(actual["profile.json"])
         if canonical != bundle or actual["bundle.canonical.json"] != _canon(bundle):
             return mismatch("CANONICAL_BUNDLE_MISMATCH")
-        installed = fixed_assets()
+        try:
+            installed = fixed_assets()
+        except SemanticQualityError as error:
+            if error.code not in {'LINK_FORBIDDEN','PATH_ESCAPE','LOCAL_IO_FAILURE'}:
+                return mismatch("INSTALLED_DERIVER_MISMATCH")
+            raise
         selected = _sq_selected_assets(installed, bundle)
         if actual["contracts/evaluator.py"] != implementation_bytes or any(actual[name] != data for name, data in selected.items()):
             return mismatch("INSTALLED_DERIVER_MISMATCH")
@@ -992,6 +1071,10 @@ def inspect_result_state(result_root, derive_profile, normalize, implementation_
             expected_files["response.normalized.json"] = normalized
         if manifest != _sq_manifest(replay, expected_profile, expected_files):
             return mismatch("PROFILE_DERIVATION_MISMATCH")
+    except SemanticQualityError as error:
+        if error.code in {'LINK_FORBIDDEN','PATH_ESCAPE','LOCAL_IO_FAILURE'}:
+            raise
+        return mismatch("PROFILE_DERIVATION_MISMATCH")
     except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
         return mismatch("PROFILE_DERIVATION_MISMATCH")
     expected_directories = {str(Path(name).parent).replace("\\", "/") for name in declared if "/" in name}

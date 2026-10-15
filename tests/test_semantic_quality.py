@@ -363,3 +363,58 @@ class SemanticQualityTests(unittest.TestCase):
         with patch.object(socket,'socket',side_effect=AssertionError('network forbidden')), patch.object(subprocess,'Popen',side_effect=AssertionError('process forbidden')):
             result=evaluate_bundle(self.write_bundle(),self.output())
             self.assertEqual(inspect_result(Path(result['profile_path']).parent)['status'],'INTACT')
+    def test_repair_string_set_256_fact_and_observation_boundary(self):
+        values=['value-%03d'%i for i in range(256)]
+        self.bundle['facts'][0].update(value_type='STRING_SET',value=values)
+        self.response['observations'][0].update(value_type='STRING_SET',value=values)
+        self.assertEqual(self.dimensions()['SEMANTIC']['outcome'],'SATISFIED')
+        self.response['observations'][0]['value']=values+['value-256']
+        self.assertEqual(self.dimensions()['SEMANTIC']['reason_code'],'OBSERVED_VALUE_INVALID')
+        self.bundle['facts'][0]['value']=values+['value-256']
+        with self.assertRaisesRegex(SemanticQualityError,'INVALID_BUNDLE'):
+            validate_bundle(self.write_bundle())
+
+    def test_repair_manifest_nested_types_are_incomplete_before_missing(self):
+        from copy import deepcopy
+        result=evaluate_bundle(self.write_bundle(),self.output())
+        root=Path(result['profile_path']).parent
+        original=json.loads((root/'manifest.json').read_bytes())
+        (root/'profile.json').unlink()
+        changes=[('evaluation_id',[]),('fixture_class',None),('identity_sha256',17),('profile_row_count',True),('contract',[]),('asset_sha256',{}),('category_applicability',[]),('shape_diagnostics',[{'code':'x'}]),('rows',[{'dimension':'SEMANTIC'}]),('limitations',{})]
+        for key,value in changes:
+            with self.subTest(key=key):
+                manifest=deepcopy(original);manifest[key]=value
+                (root/'manifest.json').write_bytes(canon(manifest))
+                self.assertEqual(inspect_result(root)['status'],'INCOMPLETE')
+        manifest=deepcopy(original);manifest['rows'][0]['evidence_pointers']=[3]
+        (root/'manifest.json').write_bytes(canon(manifest))
+        self.assertEqual(inspect_result(root)['status'],'INCOMPLETE')
+        (root/'manifest.json').write_bytes(canon(original))
+        self.assertEqual(inspect_result(root)['status'],'MISSING')
+
+    def test_repair_manifest_valid_but_changed_metadata_remains_mismatch(self):
+        result=evaluate_bundle(self.write_bundle(),self.output());root=Path(result['profile_path']).parent
+        manifest=json.loads((root/'manifest.json').read_bytes())
+        manifest['evaluation_id']='ANOTHER-VALID-ID'
+        (root/'manifest.json').write_bytes(canon(manifest))
+        self.assertEqual(inspect_result(root)['status'],'MISMATCH')
+
+    def test_repair_case_gap_validation_visits_each_mapping_once(self):
+        import qa_master.semantic_quality as sq
+        for count in (16,32,256):
+            with self.subTest(count=count):
+                self.response['cases']=[dict(self.complete_case(),case_id='CASE-'+str(i)) for i in range(count)]
+                self.response['gaps']=[{'gap_id':'GAP-'+str(i),'obligation_ids':['OB-1'],'reason':'ORACLE_MISSING','fact_ids':['F-1'],'source_ids':['SRC-1'],'needed_evidence':'context','evidence_pointer':'source/rule.txt'} for i in range(count)]
+                self.update_response();state=sq._validate_bundle(self.write_bundle());state['implementation_raw']=Path(sq.__file__).read_bytes()
+                with patch.object(sq,'_gap_valid',wraps=sq._gap_valid) as gap_check, patch.object(sq,'_case_valid',wraps=sq._case_valid) as case_check:
+                    profile=sq.derive_profile(state)
+                self.assertEqual(gap_check.call_count,count)
+                self.assertEqual(case_check.call_count,count)
+                rows={r['dimension']:r for r in profile['rows']}
+                self.assertEqual(rows['USABILITY']['outcome'],'SATISFIED')
+                self.assertEqual(rows['PROVENANCE']['reason_code'],'SOURCE_BINDING_INVALID')
+    def test_repair_installed_asset_failure_has_deriver_reason(self):
+        result=evaluate_bundle(self.write_bundle(),self.output());root=Path(result['profile_path']).parent
+        for code in ('CONTRACT_ASSET_MISSING','CONTRACT_BINDING_MISMATCH','INVALID_BUNDLE','DUPLICATE_JSON_KEY'):
+            with self.subTest(code=code), patch('qa_master.semantic_quality.fixed_assets',side_effect=SemanticQualityError(code)):
+                self.assertEqual(inspect_result(root),{'status':'MISMATCH','reason':'INSTALLED_DERIVER_MISMATCH'})
