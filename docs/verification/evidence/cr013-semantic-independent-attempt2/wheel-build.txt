@@ -1,0 +1,12 @@
+Processing .\.
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: qa-master-skill
+  Building wheel for qa-master-skill (pyproject.toml): started
+  Building wheel for qa-master-skill (pyproject.toml): finished with status 'done'
+  Created wheel for qa-master-skill: filename=qa_master_skill-0.1.0-py3-none-any.whl size=156133 sha256=c1aa82dee8512c3c45e6cb377bddadafdf26a4720e8ef2c1bbb9574ace353017
+  Stored in directory: c:\users\leon.wang\appdata\local\pip\cache\wheels\38\48\a9\7ea4ddd86d44411ae5ed7eb3c8dd82722160c99d90d4bf1bea
+Successfully built qa-master-skill
+
+[notice] A new release of pip is available: 26.1.2 -> 26.2.1
+[notice] To update, run: python.exe -m pip install --upgrade pip

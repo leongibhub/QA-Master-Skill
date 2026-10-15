@@ -181,3 +181,42 @@ class SemanticIndependent(unittest.TestCase):
         self.r['observations'][1]['value']=[f'v{i:03}' for i in range(257)];p,_=self.run_profile();self.expected(p,'O1','SEMANTIC','VIOLATED','OBSERVED_VALUE_INVALID')
     def test_023_malformed_manifest_is_incomplete(self):
         _,d=self.run_profile();m=json.loads((d/'manifest.json').read_bytes());m['evaluation_id']=[];(d/'manifest.json').write_bytes(canonical(m));self.assertEqual(sq.inspect_result(d)['status'],'INCOMPLETE')
+
+    def test_024_fanout_validation_once_per_mapped_artifact(self):
+        counts=[]
+        for n in (4,8,16):
+            self.b,self.r=fixture();original=self.r['cases'][0];self.r['cases']=[]
+            for i in range(n):
+                c=copy.deepcopy(original);c['case_id']='CX'+str(i);self.r['cases'].append(c)
+            self.r['gaps']=[dict(gap_id='G'+str(i),obligation_ids=['O0'],reason='ORACLE_MISSING',fact_ids=['F0'],source_ids=['S'],needed_evidence='Review gap',evidence_pointer='source:scope') for i in range(n)]
+            with patch.object(sq,'_gap_valid',wraps=sq._gap_valid) as gaps,patch.object(sq,'_case_valid',wraps=sq._case_valid) as cases:self.run_profile()
+            counts.append((n,gaps.call_count,cases.call_count));self.assertEqual((gaps.call_count,cases.call_count),(n,n))
+        self.assertEqual(counts,[(4,4,4),(8,8,8),(16,16,16)])
+    def test_025_manifest_types_enums_and_precedence(self):
+        _,d=self.run_profile();original=json.loads((d/'manifest.json').read_bytes())
+        edits=[lambda m:m.update(evaluation_id=[]),lambda m:m.update(profile_row_count=True),lambda m:m['contract'].update(contract_sha256=[]),lambda m:m['rows'][0].update(outcome='PASS'),lambda m:m['rows'][0].update(evidence_pointers=None),lambda m:m['category_applicability'][0].update(state='UNKNOWN'),lambda m:m['files'][0].update(role='UNKNOWN'),lambda m:m.update(limitations={}),lambda m:m.pop('contract')]
+        for i,edit in enumerate(edits):
+            with self.subTest(mutation=i):
+                m=copy.deepcopy(original);edit(m);(d/'manifest.json').write_bytes(canonical(m));self.assertEqual(sq.inspect_result(d)['status'],'INCOMPLETE')
+        (d/'unexpected').write_bytes(b'extra');(d/'profile.json').unlink();m=copy.deepcopy(original);m['evaluation_id']=[];(d/'manifest.json').write_bytes(canonical(m));self.assertEqual(sq.inspect_result(d)['status'],'INCOMPLETE')
+    def test_026_installed_deriver_mismatch(self):
+        _,d=self.run_profile();altered=self.root/'other-evaluator.py';altered.write_bytes(Path(sq.__file__).read_bytes()+b'\n# different bytes\n')
+        with patch.object(sq,'__file__',str(altered)):
+            result=sq.inspect_result(d)
+        self.assertEqual(result['status'],'MISMATCH');self.assertIn('INSTALLED_DERIVER_MISMATCH',json.dumps(result))
+
+    def test_027_case_wide_reference_validation_independent_of_mapping_count(self):
+        visits=[]
+        for n in (4,64):
+            self.b,self.r=fixture();base=self.b['obligations'].pop(0);observation=self.r['observations'].pop(0);ids=[f'X{i:02}' for i in range(n)]
+            for i,oid in enumerate(ids):
+                ob=copy.deepcopy(base);ob.update(id=oid,check_id='CHECK'+str(i));self.b['obligations'].append(ob)
+                obs=copy.deepcopy(observation);obs['check_id']='CHECK'+str(i);self.r['observations'].append(obs)
+            self.r['cases'][0]['obligation_ids']=ids
+            original=sq._valid_refs;count=[0]
+            def observe(value):
+                if value==ids:count[0]+=1
+                return original(value)
+            with patch.object(sq,'_valid_refs',side_effect=observe):self.run_profile()
+            visits.append(count[0])
+        self.assertEqual(visits[0],visits[1], 'Case-wide list validity must be cached independently of mapping count')
