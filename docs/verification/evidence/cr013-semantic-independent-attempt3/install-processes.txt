@@ -1,0 +1,11 @@
+{
+  "resource_bytes_equal": 6,
+  "module_equal": true,
+  "fresh_processes": 2,
+  "all_retained_bytes_equal": true,
+  "retained_files": 13,
+  "secret_field_atomic_rejection": {
+    "status": "REJECTED",
+    "error": "PROHIBITED_INPUT_PATTERN"
+  }
+}
