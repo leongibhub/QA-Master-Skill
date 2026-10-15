@@ -237,6 +237,7 @@ class IndependentCodexSkillInstallTests(unittest.TestCase):
         self.assertTrue(edited)
         self.assertEqual((self.target / "SKILL.md").read_text(encoding="utf-8"), "late open-writer edit")
 
+    @unittest.skipUnless(os.name == "nt", "Windows junction test")
     def test_windows_junction_target_is_refused_without_mutating_destination(self):
         outside = self.root / "junction destination"
         outside.mkdir()

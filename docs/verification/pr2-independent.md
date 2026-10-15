@@ -1,6 +1,6 @@
 # PR2 independent installer verification
 
-**Evidence ID:** `EVD-PR2-INDEPENDENT-001` v2  
+**Evidence ID:** `EVD-PR2-INDEPENDENT-001` v3
 **Task:** `TASK-047`, independent tester `/root/pr2_test`  
 **Final tested subject:** base commit `0ae0ec0287a62d1b91e0c108c5d9def377cd70a2` with the uncommitted repair `qa_master/codex_skill.py` SHA-256 `E008FBD1263BD32CBE9E7C62C688F3D4CDAD3B15D2CAEB4BC21DDC24C1B3F93F`.  
 **Environment:** Windows and `D:\codex-rd-platform\.venv\Scripts\python.exe` (Python 3.13.5). No model, enterprise system, user-wide installation, or external write was invoked.
@@ -19,6 +19,18 @@
 The two skipped cases require ordinary filesystem symbolic-link creation. This
 Windows session returned `WinError 1314`; these branches are **NOT EXECUTED**.
 The junction case was executed separately and passed.
+
+## Remote CI compatibility regression
+
+GitHub Actions run `38713031168` for head
+`74d6a25e6d36ffeac16722fad849a396e9dd4fbb` completed both Windows matrix
+jobs successfully and both Ubuntu jobs with one error: the Windows-only junction
+test attempted to launch `cmd`, which is unavailable on Ubuntu. The exact retained
+excerpt is `evidence/pr2-independent/ci-38713031168-ubuntu-junction-failure-excerpt.txt`.
+The tester repaired only this test's portability guard with
+`@unittest.skipUnless(os.name == "nt", ...)`; product source is unchanged.
+This local Windows focused rerun validates the corrected guard. Remote CI for the
+new test revision remains pending and is not claimed here.
 
 ## Repair history and limits
 
