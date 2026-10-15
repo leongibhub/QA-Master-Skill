@@ -30,8 +30,9 @@ The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-
 | Enterprise E2E | NOT_EXECUTED | No authorized staging target, dedicated account, or operation authorization is recorded. This does not block local product development. |
 | Enterprise adapter contracts | OBSERVED | Local code and contract tests may exist; no live Jira, Confluence, SynapseRT, GitLab, SSH, WinRM, or remote-runner result is asserted. |
 | Local configuration UI | OBSERVED | A loopback-only JSON UI is implemented locally. The final 385-test suite includes 11 `test_configuration` automated cases, and `docs/verification/config-browser-smoke.md` records one empty-config form-save smoke without enterprise contact. Full GUI multi-user authorization is not implemented. |
-| Current local regression, package smoke and CI | OBSERVED | `73a86bb` has an independent strict 385-test local result and fresh-wheel ASCII/Chinese JSON smoke; `d0ff0a` has two successful GitHub CI API readbacks, including a four-cell Linux/Windows matrix. |
+| Historical local regression, package smoke and CI baseline | OBSERVED | `73a86bb` has the historical independent strict 385-test local result and fresh-wheel ASCII/Chinese JSON smoke; `d0ff0a` has two successful GitHub CI API readbacks. The later CR-007 subject has separate 411-test evidence. |
 | Schema migration/pause-resume increment | OBSERVED | `830d231` is a developer handoff with a reported 395-test local run, compileall and diff check. TASK-021 independent testing and TASK-022 review are PENDING; no acceptance result is inferred. |
+| Repaired schema migration increment | OBSERVED | `1c35b25` independently retested 13 focused/411 strict tests plus compileall/fresh-wheel smoke; CI `38673109313` and `38673113192` succeeded. Bounded review is PASS WITH P3 FOLLOW-UP, not full-V1 acceptance. |
 | Independent implementation review | OBSERVED | The portability re-review found no new P0–P3 in the final four-file source difference. The bounded local review separately concludes full V1 is `FAIL` because required capabilities and lifecycle evidence are absent. |
 | Remote execution | NOT_EXECUTED | No authorized remote scheduling, monitoring, retention, or network execution is recorded. |
 | Performance, load, stress, stability, compatibility | NOT_EXECUTED | No approved environment, thresholds, or execution evidence is recorded. |
@@ -51,7 +52,7 @@ The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-
 
 ## Current V1 evaluation
 
-The independent review evaluates the full stated V1 as **FAIL**. The bounded local increment has a new canonical-workflow implementation handoff awaiting independent verification; authenticated authority, remote execution, enterprise staging validation, complete professional methods, paired evaluation, formal requirement baselines, acceptance, and release evidence remain absent. This is an evaluation conclusion, not a Gate decision.
+The independent review evaluates the full stated V1 as **FAIL**. The bounded CR-007 canonical-workflow increment is independently retested and reviewed with two P3 follow-ups; authenticated authority, remote execution, enterprise staging validation, complete professional methods, paired evaluation, formal requirement baselines, acceptance, and release evidence remain absent. This is an evaluation conclusion, not a Gate decision.
 
 ## Historical source record
 

@@ -13,11 +13,11 @@ Gate Status is controlled to `PASS`, `FAIL`, or `BLOCKED`. No Gate has an eviden
 | G1 Research | BLOCKED | NOT_AVAILABLE | No current source-backed market, competitor, technology, or feasibility evidence is registered for V1. |
 | G2 Product | BLOCKED | PENDING | `PRD-001` is inferred from user direction and awaits product-owner review. |
 | G3 Requirements | BLOCKED | PENDING | Initial RTM exists; formal requirement baseline and requirement review are pending. |
-| G4 Architecture & Design | BLOCKED | NOT_AVAILABLE | Existing source layout is observable, but no current HLD/LLD/ADR or architecture review baseline is registered. |
+| G4 Architecture & Design | BLOCKED | OBSERVED | DES-019/ADR-001/ADR-002 are DRAFT CR-007 design candidates; requirements baseline and Gate decision remain absent. |
 | G5 Planning | BLOCKED | PENDING | Initial continuation tasks exist; dependency map and approved implementation plan are pending audit outcomes. |
-| G6 Development | BLOCKED | OBSERVED | Local `73a86bb` and remote-equivalent `d0ff0a` have current code/task/change records, but required lifecycle baselines and full V1 capabilities remain incomplete. |
-| G7 Test | BLOCKED | OBSERVED | `EV-BASE-017` records 385 strict local tests at `73a86bb`. GitHub API readback records two successful `d0ff0a` matrix runs. Enterprise E2E, remote execution and nonfunctional scope remain `NOT_EXECUTED`. |
-| G8 Independent Review | BLOCKED | OBSERVED | The portability re-review covers the `73a86bb` tree and found no new P0–P3; the full-V1 conclusion remains `FAIL` for missing capabilities and incomplete lifecycle evidence. |
+| G6 Development | BLOCKED | OBSERVED | CR-007 repair `1c35b25` is implemented and CI-covered; required lifecycle baselines and full V1 capabilities remain incomplete. |
+| G7 Test | BLOCKED | OBSERVED | CR-007 independent retest records 13 focused/411 strict tests, compileall and fresh-wheel smoke; CI `38673109313`/`38673113192` succeed. Enterprise E2E, remote execution and nonfunctional scope remain `NOT_EXECUTED`. |
+| G8 Independent Review | BLOCKED | OBSERVED | CR-007 bounded review is PASS WITH P3 FOLLOW-UP (no P0/P1/P2); full-V1 remains FAIL for missing capabilities and incomplete lifecycle evidence. |
 | G9 Acceptance | BLOCKED | NOT_AVAILABLE | No authenticated human acceptance evidence is available. |
 | G10 Release | BLOCKED | NOT_EXECUTED | V1 is not release-ready; no release manifest, deployment, or rollback execution exists. |
 | G11 Project Closure | BLOCKED | NOT_EXECUTED | Project remains active; archive and closure evidence are not due. |
