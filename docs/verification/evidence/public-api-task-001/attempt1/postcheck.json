@@ -1,0 +1,6 @@
+{
+  "sources_unchanged": true,
+  "installed_bundle_unchanged": true,
+  "checked_installed_files": 59,
+  "boundary": "No host-level filesystem access audit or OS isolation is asserted."
+}

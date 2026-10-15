@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "human_decisions": [],
+  "open_questions": [
+    "G01-G15 in 01-review-and-strategy.md"
+  ],
+  "artifacts": [
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\output\\01-review-and-strategy.md",
+      "role": "draft review artifact",
+      "sha256": "4CA5D1B47E1B4030EEC7444F1B435EFE727417111C1814091B9EB0179BC69DCD",
+      "version": "initial draft"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\output\\02-draft-cases.md",
+      "role": "draft review artifact",
+      "sha256": "2874AC38EDA7DBF1E8D404D309596104C947593DCE3CF1618C3A760E5BA83FFF",
+      "version": "initial draft"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\output\\03-review-and-handoff.md",
+      "role": "draft review artifact",
+      "sha256": "B6B98B815E9D3E7B05B6BC00D238002B5BC571FCF7D9C799FBCEDA44AF6A7FFA",
+      "version": "initial draft"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\output\\read-audit.md",
+      "role": "draft review artifact",
+      "sha256": "9344268E31AF5C7DA9670322065C9A15A3DB962D26C440826E6FC0D848859F25",
+      "version": "initial draft"
+    }
+  ],
+  "stage": "WAITING_FOR_BUILD",
+  "scope": {
+    "execute_tests": false,
+    "network": false,
+    "external_writes": false,
+    "credentials": false
+  },
+  "task_id": "api-task-001",
+  "next_action": "Verify source/artifact hashes, reconcile specification gaps and review the bounded draft baseline before separately authorized execution planning",
+  "stage_note": "Offline design package ready for review; actual build availability unknown and specification decisions pending",
+  "answers": {
+    "execution_authorized": false,
+    "human_approval": "not supplied",
+    "cleanup": "unknown",
+    "target": "unknown"
+  },
+  "execution": "NOT_EXECUTED",
+  "sources": [
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\participant-task.md",
+      "role": "task/source",
+      "sha256": "141BF089F672D6A20C6E9E4D8B54E896F0329CDEFC3FA1E188A89F9A98E3BAED",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\requirements.md",
+      "role": "task/source",
+      "sha256": "C2EDCB918F408F88091C1CA1217D269B6D8FCA4F0A9D9ABF6B46F63F43883D47",
+      "version": "1.4 proposal"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\inputs\\openapi.yaml",
+      "role": "task/source",
+      "sha256": "6D83F43C638E4F8481F3EE405F18B21B1BCC23858D2B6D46BCECAA498D7EA007",
+      "version": "1.4-draft / OpenAPI3.1.0"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\SKILL.md",
+      "role": "installed guidance",
+      "sha256": "626E0506A5B5E4992057596FC57EC69676C1A86B0A99943504A8DDBD7E4DDD6F",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\references\\work-protocol.md",
+      "role": "installed guidance",
+      "sha256": "BA232063489DB733EEEA68C46BD4B812A33C982BA36E7440149B1E7DECA549EC",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\references\\domains.md",
+      "role": "installed guidance",
+      "sha256": "5B4FF7B66ED7D7B7503EA11D8E30699B09B20D8EE6C8704238FA4260ABE9C9C1",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\requirements-review.md",
+      "role": "installed guidance",
+      "sha256": "31F7FB509154D9D9756CFE43ED1C027A6470B15C6CAB6BDB526B215FC3BF3C76",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\functional-api.md",
+      "role": "installed guidance",
+      "sha256": "28AE23AB80D819157F0630AA6E4579DD9D7FA21D54D7B8F40B6B583C4471207E",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\structural-integration.md",
+      "role": "installed guidance",
+      "sha256": "3E393E1775242E807A3244DBAA2F56553C5C6A88564E6E2228EC12DF4BC97615",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\nonfunctional-compatibility.md",
+      "role": "installed guidance",
+      "sha256": "352AB77DBCBF8029F33FD316030226614E92042A35CBC2F8217A8A250E69BEF2",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\security-recovery.md",
+      "role": "installed guidance",
+      "sha256": "DCC0FCFFA0F2D16B3952F91296DAC0D71311C3DE173DCCFC9956259532CFBB59",
+      "version": "content-hash pinned"
+    },
+    {
+      "path": "D:\\QA-Master-PR2\\.qa-master\\api-task-001\\participant\\.agents\\skills\\qa-master\\scripts\\qa_master\\skills\\professional\\regression-evidence.md",
+      "role": "installed guidance",
+      "sha256": "C11547B88CCFB79551229390B8147D4C395E7F23548E04F40F5C28942DDB6619",
+      "version": "content-hash pinned"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "classification": "PUBLIC_DEVELOPMENT_NONCOMPARISON",
+  "work": "TASK-066",
+  "participant": "/root/qa_user_trial",
+  "source_freeze_commit": "962637b046350100c9e40e180252ea3b229c6cec",
+  "product_source": "a9df28513d4ae808d687718bfc4f6069a32ee767",
+  "isolation": "PROMPT_SCOPED_NOT_OS_ENFORCED",
+  "read_audit": "PARTICIPANT_DECLARED_NOT_HOST_ACCESS_ATTESTATION",
+  "status": "OUTPUT_RETAINED_NOT_ASSESSED",
+  "files": [
+    {
+      "path": "01-review-and-strategy.md",
+      "sha256": "4ca5d1b47e1b4030eec7444f1b435efe727417111c1814091b9eb0179bc69dcd",
+      "bytes": 11938
+    },
+    {
+      "path": "02-draft-cases.md",
+      "sha256": "2874ac38eda7dbf1e8d404d309596104c947593dce3cf1618c3a760e5ba83fff",
+      "bytes": 21279
+    },
+    {
+      "path": "03-review-and-handoff.md",
+      "sha256": "b6b98b815e9d3e7b05b6bc00d238002b5bc571fcf7d9c799fbceda44af6a7ffa",
+      "bytes": 5167
+    },
+    {
+      "path": "handoff.json",
+      "sha256": "78599ce0fc9ee3a2bb00f642b6b07c96c1c20c49b85226dc4ff578b2f6f842a2",
+      "bytes": 5751
+    },
+    {
+      "path": "read-audit.md",
+      "sha256": "9344268e31af5c7da9670322065c9a15a3db962d26c440826e6fc0d848859f25",
+      "bytes": 2635
+    },
+    {
+      "path": "preparation.json",
+      "sha256": "71abddeb93db5c83ef3ae7dab0a351f5ade010f238e9aef7f56a4407f9b90921",
+      "bytes": 602
+    },
+    {
+      "path": "input-copy.json",
+      "sha256": "89282a7a6f82cc371d4d9c38fedf522dd2ed41093dc767847c3b02efe2f08039",
+      "bytes": 639
+    },
+    {
+      "path": "postcheck.json",
+      "sha256": "747932564d7cec1f294a745397d853cb1233076f458e50cd3629836ea613039b",
+      "bytes": 187
+    }
+  ]
+}
