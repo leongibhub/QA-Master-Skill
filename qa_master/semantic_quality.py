@@ -568,87 +568,172 @@ def _claims_valid(items,state):
     return isinstance(items,list) and len(items)<=64 and all(isinstance(x,dict) and set(x)=={'text','source_fact_ids'} and isinstance(x['text'],str) and 0<len(x['text'])<=20000 and _valid_refs(x['source_fact_ids']) and bool(x['source_fact_ids']) for x in items)
 
 
+def _indexed_refs(value, universe):
+    """Read one serialized reference list once; masks have at most 256 bits."""
+    syntax=_valid_refs(value)
+    mask=0
+    known=syntax
+    if syntax:
+        for ref in value:
+            bit=universe.get(ref)
+            if bit is None: known=False
+            else: mask |= bit
+    return {'syntax':syntax,'known':known,'mask':mask,'nonempty':syntax and bool(value)}
+
+
+def _mask_contains(actual, required):
+    return actual & required == required
+
+
+def _prepare_items(state, normal):
+    """Index item-wide shape/binding once; edge validators only read these records."""
+    facts={key:1<<index for index,key in enumerate(state['facts'])}
+    sources={key:1<<index for index,key in enumerate(state['sources'])}
+    obligations={key:1<<index for index,key in enumerate(state['obligations'])}
+    all_obligations=(1<<len(obligations))-1
+    normal['obligation_index']={}
+    for oid,ob in state['obligations'].items():
+        normal['obligation_index'][oid]={
+            'bit':obligations[oid],
+            'required':sum(facts[ref] for ref in set(ob['source_fact_ids'])|set(ob['expected_fact_ids'])),
+            'expected':sum(facts[ref] for ref in ob['expected_fact_ids']),
+            'sources':sum(sources[ref] for ref in ob['source_ids']),
+        }
+    unavailable=sum(sources[sid] for sid,row in state['sources'].items() if row['state']!='AVAILABLE')
+    prepared={channel:{} for channel in ('observations','cases','gaps')}
+    normal['prepared']=prepared
+    raw=normal.get('value') or {}
+    def items(channel):
+        return [row for row in raw.get(channel,[]) if isinstance(row,dict)] if normal['channels'].get(channel) else []
+    gap_membership={}
+    for row in items('gaps'):
+        bindings=_indexed_refs(row.get('obligation_ids'),obligations)
+        # Even a malformed item can have valid partial mappings; these match
+        # the normalizer's retained, un-repaired binding edges.
+        partial=0
+        if isinstance(row.get('obligation_ids'),list):
+            for oid in row['obligation_ids']:
+                if isinstance(oid,str): partial |= obligations.get(oid,0)
+        gid=row.get('gap_id')
+        if _valid_id(gid): gap_membership[gid]=gap_membership.get(gid,0)|partial
+        fact_refs=_indexed_refs(row.get('fact_ids'),facts)
+        source_refs=_indexed_refs(row.get('source_ids'),sources)
+        reason=row.get('reason')
+        agreement=bindings['known'] and all(state['obligations'][oid]['required_gap_reason']==reason for oid in row['obligation_ids'])
+        available=reason=='SOURCE_MISSING' or not(source_refs['mask'] & unavailable)
+        pointer=row.get('evidence_pointer')
+        content=(set(row)==_GAP_KEYS and _valid_id(gid) and len(normal.get('gaps_ids',{}).get(gid,[]))==1
+                 and bindings['nonempty'] and agreement and fact_refs['known'] and source_refs['known'] and available
+                 and isinstance(row.get('needed_evidence'),str) and 0<len(row['needed_evidence'])<=20000
+                 and isinstance(pointer,str) and 0<len(pointer)<=512 and not any(c in pointer for c in ('\\','\n','\r')) and not pointer.startswith('/') and '..' not in pointer.split('/'))
+        prepared['gaps'][id(row)]={'content':content,'provenance':bindings['known'] and bindings['nonempty'] and fact_refs['known'] and source_refs['known'] and available,
+                                  'facts':fact_refs['mask'],'sources':source_refs['mask'],'reason':reason}
+    gap_ids={key:1<<index for index,key in enumerate(normal.get('gaps_ids',{}))}
+    for row in items('observations'):
+        refs=_indexed_refs(row.get('source_fact_ids'),facts)
+        prepared['observations'][id(row)]={'provenance':refs['known'],'facts':refs['mask']}
+    for row in items('cases'):
+        bindings=_indexed_refs(row.get('obligation_ids'),obligations)
+        fact_refs=_indexed_refs(row.get('source_fact_ids'),facts)
+        gap_refs=_indexed_refs(row.get('gap_ids'),gap_ids)
+        missing=row.get('missing_fields')
+        missing_valid=_valid_refs(missing) and missing==sorted(missing) and not(set(missing)-_MISSING_FIELDS)
+        category=row.get('category')
+        agreement=bindings['known'] and all(state['obligations'][oid]['category']==category for oid in row['obligation_ids'])
+        cid=row.get('case_id')
+        content=(set(row)==_CASE_KEYS and _valid_id(cid) and len(normal.get('cases_ids',{}).get(cid,[]))==1
+                 and bindings['nonempty'] and agreement and isinstance(row.get('extensions'),dict)
+                 and fact_refs['syntax'] and gap_refs['syntax'] and missing_valid)
+        provenance=bindings['known'] and bindings['nonempty'] and fact_refs['known'] and gap_refs['known']
+        def claims(value):
+            good=isinstance(value,list) and len(value)<=64
+            honest=True
+            if isinstance(value,list):
+                for claim in value:
+                    if not isinstance(claim,dict): good=False;continue
+                    refs=_indexed_refs(claim.get('source_fact_ids'),facts)
+                    good=good and set(claim)=={'text','source_fact_ids'} and isinstance(claim.get('text'),str) and 0<len(claim['text'])<=20000 and refs['syntax'] and refs['nonempty']
+                    honest=honest and refs['known'] and refs['nonempty']
+            return good,honest
+        needs_gap=False
+        source_missing=False
+        for name in ('preconditions','actions','setup','data','cleanup','expected_oracle'):
+            section=row.get(name)
+            section_items=section.get('items') if isinstance(section,dict) else section
+            good,honest=claims(section_items)
+            provenance=provenance and honest
+            if name in ('preconditions','actions'):
+                content=content and good and (name!='actions' or bool(section_items))
+                continue
+            allowed={'state','items','reason','oracle_fact_ids'} if name=='expected_oracle' else {'state','items','reason'}
+            section_shape=isinstance(section,dict) and set(section)==allowed
+            if not section_shape:
+                content=False
+                continue
+            section_state=section.get('state')
+            if section_state=='DEFINED':
+                content=content and good and bool(section_items) and section.get('reason') is None
+            elif section_state in (('ORACLE_MISSING','CONFLICT') if name=='expected_oracle' else ('NOT_APPLICABLE','SOURCE_MISSING')):
+                content=content and section_items==[] and isinstance(section.get('reason'),str) and bool(section['reason'])
+                if name!='expected_oracle': needs_gap=needs_gap or not fact_refs['nonempty']
+            else: content=False
+            if name!='expected_oracle' and section_state=='SOURCE_MISSING': source_missing=True
+        oracle=row.get('expected_oracle')
+        oracle_refs=_indexed_refs(oracle.get('oracle_fact_ids') if isinstance(oracle,dict) else None,facts)
+        oracle_defined=isinstance(oracle,dict) and oracle.get('state')=='DEFINED'
+        content=content and oracle_refs['syntax'] and (not oracle_defined or oracle_refs['nonempty'])
+        if isinstance(oracle,dict): provenance=provenance and oracle_refs['known']
+        readiness=row.get('readiness')
+        if readiness=='DESIGN_READY':
+            content=content and oracle_defined and not source_missing and missing_valid and not(set(missing)&{'SOURCE','SETUP','DATA','EXPECTED_ORACLE','CLEANUP_INVENTORY','NON_FUNCTIONAL_THRESHOLD'})
+        if readiness=='BLOCKED_ORACLE_MISSING':
+            content=content and missing_valid and bool(missing)
+            needs_gap=True
+        gap_mapping=all_obligations
+        if gap_refs['syntax']:
+            for gid in row['gap_ids']:
+                if len(normal.get('gaps_ids',{}).get(gid,[]))!=1:
+                    gap_mapping=0
+                    provenance=False
+                else: gap_mapping &= gap_membership.get(gid,0)
+        else: gap_mapping=0
+        prepared['cases'][id(row)]={'content':content,'provenance':provenance,'facts':fact_refs['mask'],
+                                    'oracle':oracle_refs['mask'],'oracle_defined':oracle_defined,
+                                    'category':category,'readiness':readiness,'needs_gap':needs_gap,'gap_mapping':gap_mapping}
+
+
 def _gap_valid(gap,ob,state,normal):
-    if set(gap)!=_GAP_KEYS or not _valid_id(gap.get('gap_id')) or len(normal.get('gaps_ids',{}).get(gap['gap_id'],[]))!=1: return False
-    if not _binding(gap.get('obligation_ids'),state['obligations']) or not gap['obligation_ids']: return False
-    if any(state['obligations'][ref]['required_gap_reason']!=gap.get('reason') for ref in gap['obligation_ids']): return False
-    required=set(ob['source_fact_ids'])|set(ob['expected_fact_ids'])
-    if not _binding(gap.get('fact_ids'),state['facts'],required) or not _binding(gap.get('source_ids'),state['sources'],ob['source_ids']): return False
-    if gap.get('reason')!='SOURCE_MISSING' and any(state['sources'][ref]['state']!='AVAILABLE' for ref in gap['source_ids']): return False
-    pointer=gap.get('evidence_pointer')
-    return isinstance(gap.get('needed_evidence'),str) and 0<len(gap['needed_evidence'])<=20000 and isinstance(pointer,str) and 0<len(pointer)<=512 and not any(c in pointer for c in ('\\','\n','\r')) and not pointer.startswith('/') and '..' not in pointer.split('/')
+    item=normal['prepared']['gaps'][id(gap)]
+    binding=normal['obligation_index'][ob['id']]
+    return item['content'] and _mask_contains(item['facts'],binding['required']) and _mask_contains(item['sources'],binding['sources'])
 
 
 def _case_valid(case,ob,state,normal):
-    if set(case)!=_CASE_KEYS or not _valid_id(case.get('case_id')) or len(normal.get('cases_ids',{}).get(case['case_id'],[]))!=1: return False
-    if not _binding(case.get('obligation_ids'),state['obligations']) or not case['obligation_ids']: return False
-    if any(state['obligations'][x]['category']!=case.get('category') for x in case['obligation_ids']): return False
-    if case.get('readiness') not in ob['allowed_readiness']: return False
-    if not isinstance(case.get('extensions'),dict) or not _valid_refs(case.get('source_fact_ids')) or not _valid_refs(case.get('gap_ids')): return False
-    missing=case.get('missing_fields')
-    if not _valid_refs(missing) or missing!=sorted(missing) or set(missing)-_MISSING_FIELDS: return False
-    if not _claims_valid(case.get('preconditions'),state) or not _claims_valid(case.get('actions'),state) or not case['actions']: return False
-    gaps=normal['gap_index'][ob['id']]
-    exact_gaps=normal['exact_gap'][ob['id']]
-    for name in ('setup','data','cleanup'):
-        sec=case.get(name)
-        if not isinstance(sec,dict) or set(sec)!={'state','items','reason'}: return False
-        if sec.get('state')=='DEFINED':
-            if not _claims_valid(sec.get('items'),state) or not sec['items'] or sec.get('reason') is not None: return False
-        elif sec.get('state') in {'NOT_APPLICABLE','SOURCE_MISSING'}:
-            if sec.get('items')!=[] or not isinstance(sec.get('reason'),str) or not sec['reason'] or not (case['source_fact_ids'] or exact_gaps): return False
-            if sec['state']=='SOURCE_MISSING' and case['readiness']=='DESIGN_READY': return False
-        else: return False
-    oracle=case.get('expected_oracle')
-    if not isinstance(oracle,dict) or set(oracle)!={'state','items','oracle_fact_ids','reason'} or not _valid_refs(oracle.get('oracle_fact_ids')): return False
-    if oracle['state']=='DEFINED':
-        if not _claims_valid(oracle['items'],state) or not oracle['items'] or not oracle['oracle_fact_ids'] or oracle['reason'] is not None: return False
-    elif oracle['state'] in {'ORACLE_MISSING','CONFLICT'}:
-        if oracle['items']!=[] or not isinstance(oracle['reason'],str) or not oracle['reason']: return False
-    else: return False
-    if case['readiness']=='DESIGN_READY':
-        if oracle['state']!='DEFINED' or set(missing)&{'SOURCE','SETUP','DATA','EXPECTED_ORACLE','CLEANUP_INVENTORY','NON_FUNCTIONAL_THRESHOLD'}: return False
-    if case['readiness']=='BLOCKED_ORACLE_MISSING' and (not exact_gaps or not missing): return False
-    if any(ref not in gaps for ref in case['gap_ids']): return False
-    return True
+    item=normal['prepared']['cases'][id(case)]
+    return (item['content'] and item['readiness'] in ob['allowed_readiness']
+            and (not item['needs_gap'] or normal['exact_gap'][ob['id']])
+            and bool(item['gap_mapping'] & normal['obligation_index'][ob['id']]['bit']))
 
 
 def _artifact_provenance(row,channel,ob,state,normal):
-    required=set(ob['source_fact_ids'])|set(ob['expected_fact_ids'])
-    if channel=='observations': return _binding(row.get('source_fact_ids'),state['facts'],required)
-    if not _binding(row.get('obligation_ids'),state['obligations']) or not row['obligation_ids']: return False
-    if channel=='gaps':
-        if not _binding(row.get('fact_ids'),state['facts'],required) or not _binding(row.get('source_ids'),state['sources'],ob['source_ids']): return False
-        if row.get('reason')!=ob['required_gap_reason']: return False
-        return row.get('reason')=='SOURCE_MISSING' or all(state['sources'][r]['state']=='AVAILABLE' for r in row['source_ids'])
-    if row.get('category')!=ob['category'] or not _binding(row.get('source_fact_ids'),state['facts'],required): return False
-    all_gaps=normal.get('gaps_ids',{})
-    if not _binding(row.get('gap_ids'),all_gaps): return False
-    for member in ('setup','data','cleanup','preconditions','actions','expected_oracle'):
-        section=row.get(member)
-        items=section.get('items') if isinstance(section,dict) else section
-        if isinstance(items,list):
-            for claim in items:
-                if isinstance(claim,dict) and (not _binding(claim.get('source_fact_ids'),state['facts']) or not claim.get('source_fact_ids')): return False
-    oracle=row.get('expected_oracle')
-    if isinstance(oracle,dict):
-        refs=oracle.get('oracle_fact_ids')
-        if not _binding(refs,state['facts']): return False
-        if oracle.get('state')=='DEFINED' and (ob['oracle_state']!='DETERMINATE' or not set(ob['expected_fact_ids'])<=set(refs)): return False
-    return True
+    item=normal['prepared'][channel][id(row)]
+    binding=normal['obligation_index'][ob['id']]
+    if not item['provenance'] or not _mask_contains(item['facts'],binding['required']): return False
+    if channel=='observations': return True
+    if channel=='gaps': return item['reason']==ob['required_gap_reason'] and _mask_contains(item['sources'],binding['sources'])
+    return item['category']==ob['category'] and (not item['oracle_defined'] or ob['oracle_state']=='DETERMINATE' and _mask_contains(item['oracle'],binding['expected']))
 
 
 def derive_profile(state):
     """Pure deterministic profile derivation: no I/O and no retained code execution."""
     normal=_normalize(state); bundle=state['bundle']; rows=[]
-    # Each mapped gap/case is validated once; cases never rescan sibling gaps.
-    normal['gap_index']={}
+    # Item-wide work is independent of mapping fan-out.
+    _prepare_items(state,normal)
     normal['exact_gap']={}
     gap_validity={}
     case_validity={}
-    for oid,ob in state['obligations'].items():
+    for oid,ob in (state['obligations'].items() if not normal['fatal'] else ()):
         mapped_gaps=normal['gaps'].get(oid,[])
-        normal['gap_index'][oid]={g['gap_id']:g for _,g in mapped_gaps if _valid_id(g.get('gap_id'))}
         for index,gap in mapped_gaps:
             gap_validity[oid,index]=_gap_valid(gap,ob,state,normal)
         normal['exact_gap'][oid]=any(gap_validity[oid,index] for index,_ in mapped_gaps)
