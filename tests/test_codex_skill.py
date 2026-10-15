@@ -32,7 +32,10 @@ class CodexSkillTests(unittest.TestCase):
         self.assertEqual(len(value['guides']), 6)
         self.assertEqual(value['gaps'], [])
         for guide in value['guides']:
-            self.assertTrue(Path(guide['path']).is_relative_to(self.target))
+            # Windows TEMP may use an 8.3 alias; the helper resolves __file__.
+            # Compare existing canonical paths, retaining the containment check.
+            guide_path = Path(guide['path']).resolve(strict=True)
+            self.assertTrue(guide_path.is_relative_to(self.target.resolve(strict=True)))
 
     def test_installed_cli_preserves_no_execution_and_pause(self):
         install_skill(self.target)
