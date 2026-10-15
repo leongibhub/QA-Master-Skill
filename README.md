@@ -40,6 +40,7 @@ python -m qa_master plan "先评审需求并生成用例，严禁执行测试"
 - [企业接口](docs/ENTERPRISE_ADAPTERS.md)：Jira 读取/受控写入、Confluence Cloud 读取、SynapseRT 显式部署接口契约、写入日志和读回。请求成功不能直接当作读回验证，响应丢失不会自动重复写入。
 - [GitLab CI 核验](docs/GITLAB_CI_ATTESTATION.md)：读取项目、Job、Pipeline、保护规则，再获取 JUnit 制品。外部制品保持未认证来源。
 - [本机 Runner](docs/LOCAL_RUNNER.md)：可信宿主授权、源码/执行程序绑定、有限输出、环境隔离和超时清理。进程成功不是业务测试通过。
+- [本地任务生命周期核心](docs/JOB_SCHEDULER.md)：保存派发前状态、按序观察、显式恢复、取消与超时；并发冲突或响应丢失后不会自动重复派发。它是供宿主集成的库，尚未连接 CLI、远程传输或真实 Worker。
 - [安全约束](docs/SECURITY_CONTINUATION.md)：执行回执和结果来源由宿主验证，默认拒绝；任何 JSON 布尔值或审批人文本均不能证明真实身份。
 
 企业写入、执行和发布判断的宿主验证接口需要可信集成方实现。当前不提供默认放行器；单独填写 `approved_by`、设置环境变量或调用旧版 `approve` 命令不能获得实际执行权限。

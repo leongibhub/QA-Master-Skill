@@ -6,6 +6,7 @@ import sys
 import tempfile
 import threading
 import unittest
+import socket
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -172,6 +173,21 @@ class ConfigurationUiTests(unittest.TestCase):
         self.assertEqual(self.request("POST", "/save", body, headers)[0], 413)
         with self.assertRaises(ValueError):
             create_server(self.path, "0.0.0.0", 0)
+
+    def test_oversized_incomplete_request_has_bounded_413_response(self):
+        with socket.create_connection(("127.0.0.1", self.port), timeout=2) as connection:
+            connection.sendall(
+                (
+                    "POST /save HTTP/1.1\r\n"
+                    f"Host: 127.0.0.1:{self.port}\r\n"
+                    f"Origin: http://127.0.0.1:{self.port}\r\n"
+                    "Content-Length: 1048576\r\n"
+                    "\r\n"
+                ).encode("ascii")
+            )
+            connection.settimeout(1)
+            response = connection.recv(4096)
+        self.assertIn(b" 413 ", response)
 
     def test_module_cli_exposes_config_and_port_options(self):
         result = subprocess.run(

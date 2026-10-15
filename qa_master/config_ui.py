@@ -14,6 +14,7 @@ from .configuration import ConfigurationError, load_configuration, save_configur
 
 
 MAX_BODY_BYTES = 64 * 1024
+OVERSIZED_DRAIN_TIMEOUT_SECONDS = 0.25
 
 
 def _is_loopback(host: str | None) -> bool:
@@ -83,8 +84,21 @@ def make_handler(config_path, csrf_token: str):
                 "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
             )
             self.send_header("X-Frame-Options", "DENY")
+            if self.close_connection:
+                self.send_header("Connection", "close")
             self.end_headers()
             self.wfile.write(encoded)
+
+        def _discard_oversized_body(self, length: int):
+            """Consume a bounded amount before closing, without waiting indefinitely."""
+            original_timeout = self.connection.gettimeout()
+            self.connection.settimeout(OVERSIZED_DRAIN_TIMEOUT_SECONDS)
+            try:
+                self.rfile.read(min(length, MAX_BODY_BYTES + 1))
+            except OSError:
+                pass
+            finally:
+                self.connection.settimeout(original_timeout)
 
         def _page(self, message: str = "", status: HTTPStatus = HTTPStatus.OK):
             try:
@@ -121,6 +135,9 @@ def make_handler(config_path, csrf_token: str):
             except ValueError:
                 length = -1
             if length < 0 or length > MAX_BODY_BYTES:
+                if length > MAX_BODY_BYTES:
+                    self._discard_oversized_body(length)
+                self.close_connection = True
                 self._reply(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, "Request too large", "text/plain; charset=utf-8")
                 return
             try:
