@@ -1,4 +1,7 @@
-"""Dependency-aware persistent QA workflow planner. Planning has no side effects."""
+"""Legacy library workflow API; installed CLI uses application.CampaignApplicationService.
+
+Retained for compatibility. Local records do not authenticate a human or host.
+"""
 from dataclasses import dataclass,field,asdict
 from pathlib import Path
 import json
@@ -93,6 +96,12 @@ class Workflow:
             affected.update(k for k,v in self.steps.items() if any(d in affected for d in v.depends_on))
             if len(affected)==old:break
         for name in affected:
+            prior=self.steps[name]
+            if prior.result_ref is not None or prior.execution_receipt is not None:
+                self.events.append({'action':'invalidated_completion','step':name,
+                                    'result_ref':prior.result_ref,
+                                    'completion_binding':prior.completion_binding,
+                                    'execution_receipt':prior.execution_receipt})
             self.steps[name].status='PENDING';self.steps[name].result_ref=None
             self.steps[name].completion_binding=None
             self.steps[name].execution_receipt=None
@@ -124,6 +133,14 @@ class Workflow:
     def evaluate_exact(self,step,artifacts,scopes):
         """Fail closed on legacy version-only approvals and any stale artifact."""
         from .approval import check_approval
+        # Validate bound ancestors first, including when this step is already DONE.
+        # Unbound legacy-library completions retain their compatibility behavior;
+        # the canonical application never accepts them as revalidated evidence.
+        for dependency in self.steps[step].depends_on:
+            ancestor=self.steps[dependency]
+            if ancestor.status=='DONE' and ancestor.completion_binding is not None:
+                if self.evaluate_exact(dependency,artifacts,scopes)=='STALE':
+                    return 'STALE'
         if self.steps[step].status=='DONE':
             if self.steps[step].completion_binding != self._completion_binding(step,artifacts,scopes):
                 self.invalidate(step)

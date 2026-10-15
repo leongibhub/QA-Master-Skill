@@ -1,4 +1,4 @@
-"""QA Master v0.1: deterministic guardrails for AI-assisted testing.
+"""Deprecated Campaign compatibility API; installed CLI uses the application service.
 No external side effect is performed by this module.
 """
 from __future__ import annotations
