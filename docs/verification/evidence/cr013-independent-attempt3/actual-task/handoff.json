@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "task_id": "installed-qa-attempt3",
+  "stage": "DRAFT_REVIEW_PENDING_INPUTS",
+  "review_mode": "AGENT_REVIEW_ONLY",
+  "scope": {
+    "execute_tests": false,
+    "external_writes": false,
+    "campaign_state_mutation": false
+  },
+  "sources": [
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\source-facts.md",
+      "version": "supplied attempt3 facts",
+      "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c",
+      "role": "sole product-fact source"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\author-design.py",
+      "sha256": "caa2e15228b869d7340e8afbae3205246c0af023dda7c2092e8f7280190bc00e",
+      "role": "author-design",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\command-evidence.json",
+      "sha256": "6ffb3ee98a1230def65b120badf0c6d1d68c2ba6dfc127ac58f37d7f44f7fbd1",
+      "role": "command-evidence",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\complete-drafts.py",
+      "sha256": "011bde49df7541b89e092e874479b409054fcb222ca4a81a4feedcbaf5a3015e",
+      "role": "complete-drafts",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\final-cases.json",
+      "sha256": "9dc0e6c59ca275f09c74d229ba9ac9dcee4067703a29ec0d2d5f318054e74bcb",
+      "role": "final-cases",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\final-cases.md",
+      "sha256": "056cdec3b2c4375c1b076c4549d552a21d25fb5c8267b47f63f02a1be6dceb73",
+      "role": "final-cases",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\input-original.json",
+      "sha256": "323862779382aa11b0943ba00fbd0e93faadb96dde96a6e3563796784d959a15",
+      "role": "input-original",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\read-documents.json",
+      "sha256": "74f6f15f6dffafa2fcd9d835d614f12f0d6e79ae4a4e3185a9ef492910b288e3",
+      "role": "read-documents",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\report-original.json",
+      "sha256": "449f33ab98aa894b2e8df0de68e4d800e2217ae0db1f13509f5d2ab3f5211d32",
+      "role": "report-original",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\review.json",
+      "sha256": "b3d40843c806bd2f13d5b25a226d02b5ceb4b63f4a7fab1b334dafade53c41fe",
+      "role": "review",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\source-facts-preserved.md",
+      "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c",
+      "role": "source-facts-preserved",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "stderr",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\stdout.txt",
+      "sha256": "b8f7d0e171c0bc70f14628536b0268c842d695c7b4812bd14b3ef2fd8b58775b",
+      "role": "stdout",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\typed-gaps.json",
+      "sha256": "2d3cc9d5cb7c99858340b5b6877326de569308c17f6e29d8aae818f3e53bc012",
+      "role": "typed-gaps",
+      "version": "attempt3"
+    },
+    {
+      "path": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\artifact-manifest.json",
+      "version": "attempt3",
+      "sha256": "d5b72cc56eb50eabc725895a9743256fbc57aad70e9a1cac380d9d7a3e14241d",
+      "role": "artifact byte manifest"
+    }
+  ],
+  "read_documents_record": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\read-documents.json",
+  "answers": {
+    "target": "unknown",
+    "cleanup": "unknown",
+    "declared_transition_guards": "none",
+    "excluded_boolean_combinations": "none"
+  },
+  "human_decisions": [],
+  "open_questions": [
+    "G-TARGET",
+    "G-ENV",
+    "G-SETUP",
+    "G-OBS",
+    "G-CLEANUP",
+    "G-AUTH",
+    "G-BASELINE",
+    "G-ERROR",
+    "G-SIDEEFFECT",
+    "G-TYPE",
+    "G-UNSPECIFIED",
+    "G-NFR",
+    "G-STRUCT",
+    "G-RECOVERY",
+    "G-REGRESSION"
+  ],
+  "next_action": "Independent tester reviews retained artifacts; source owner supplies missing target/oracle/setup/cleanup facts before executable binding and human baseline. No product execution authorized.",
+  "execution": "NOT_EXECUTED",
+  "readiness": "INCOMPLETE_TARGET_BINDING"
+}

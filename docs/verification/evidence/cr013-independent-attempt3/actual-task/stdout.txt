@@ -1,0 +1,13 @@
+{
+  "project": "Document release policy offline draft",
+  "counts": {
+    "test_cases": 3,
+    "requirement_findings": 0,
+    "unresolved_design": 3,
+    "method_candidates": 13,
+    "method_obligations": 0
+  },
+  "status": "DRAFT_UNAPPROVED",
+  "execution": "NOT_EXECUTED",
+  "output": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-master-cr013-attempt3-2fjk27p3\\task-output\\report-original.json"
+}

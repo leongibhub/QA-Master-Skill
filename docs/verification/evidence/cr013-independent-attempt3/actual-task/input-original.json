@@ -1,0 +1,340 @@
+{
+  "project": "Document release policy offline draft",
+  "requirements": [
+    {
+      "id": "REQ-B",
+      "text": "Batch size is strict integer on origin 0 step 1 with inclusive bounds 2 and 6.",
+      "acceptance": "Integers 2 through 6 are accepted; below 2 or above 6 invalid (F-01).",
+      "source": "source-facts.md",
+      "dimension": "functional",
+      "approved": false,
+      "priority": "P1"
+    },
+    {
+      "id": "REQ-D",
+      "text": "Rebate depends on independent booleans member and settled.",
+      "acceptance": "Rebate only for both true; all other combinations no rebate (F-02).",
+      "source": "source-facts.md",
+      "dimension": "functional",
+      "approved": false,
+      "priority": "P1"
+    },
+    {
+      "id": "REQ-S",
+      "text": "Initial DRAFT; submit reaches REVIEW, publish from REVIEW reaches terminal PUBLISHED; publish from DRAFT invalid.",
+      "acceptance": "Status follows F-03 through F-06; unspecified pairs remain unspecified.",
+      "source": "source-facts.md",
+      "dimension": "functional",
+      "approved": false,
+      "priority": "P1"
+    }
+  ],
+  "design_models": {
+    "schema_version": 1,
+    "source_refs": [
+      {
+        "id": "F-01",
+        "kind": "requirement",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "F-02",
+        "kind": "requirement",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "F-03",
+        "kind": "requirement",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "F-04",
+        "kind": "requirement",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "F-05",
+        "kind": "requirement",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "F-06",
+        "kind": "requirement",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "F-07",
+        "kind": "requirement",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "E-REVIEW",
+        "kind": "effect",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "E-PUBLISHED",
+        "kind": "effect",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      }
+    ],
+    "oracle_refs": [
+      {
+        "id": "O-VALID",
+        "kind": "valid",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "O-INVALID",
+        "kind": "invalid",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "O-REBATE",
+        "kind": "outcome",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "O-NOREBATE",
+        "kind": "outcome",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "O-REVIEW",
+        "kind": "transition",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "O-PUBLISHED",
+        "kind": "transition",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      },
+      {
+        "id": "O-DENY",
+        "kind": "denial",
+        "locator": "source-facts.md",
+        "sha256": "a52b944d6a6d406c40090aed4c4e2680263d8a9ba96955571421a72631284b7c"
+      }
+    ],
+    "models": [
+      {
+        "id": "M-B",
+        "method": "boundary",
+        "title": "Batch integer limits",
+        "dimension": "functional",
+        "requirement_ids": [
+          "REQ-B"
+        ],
+        "source_refs": [
+          "F-01"
+        ],
+        "spec": {
+          "numeric_type": "integer",
+          "origin": 0,
+          "step": 1,
+          "lower": {
+            "value": 2,
+            "inclusive": true
+          },
+          "upper": {
+            "value": 6,
+            "inclusive": true
+          },
+          "oracle_by_class": {
+            "IN_DOMAIN": "O-VALID",
+            "LOWER_INVALID": "O-INVALID",
+            "UPPER_INVALID": "O-INVALID"
+          }
+        }
+      },
+      {
+        "id": "M-D",
+        "method": "decision_table",
+        "title": "Rebate complete boolean table",
+        "dimension": "functional",
+        "requirement_ids": [
+          "REQ-D"
+        ],
+        "source_refs": [
+          "F-02"
+        ],
+        "spec": {
+          "conditions": [
+            {
+              "id": "member",
+              "values": [
+                false,
+                true
+              ]
+            },
+            {
+              "id": "settled",
+              "values": [
+                false,
+                true
+              ]
+            }
+          ],
+          "constraints": [],
+          "rules": [
+            {
+              "id": "R-00",
+              "when": {
+                "member": false,
+                "settled": false
+              },
+              "outcome_id": "NO_REBATE",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-NOREBATE"
+            },
+            {
+              "id": "R-01",
+              "when": {
+                "member": false,
+                "settled": true
+              },
+              "outcome_id": "NO_REBATE",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-NOREBATE"
+            },
+            {
+              "id": "R-10",
+              "when": {
+                "member": true,
+                "settled": false
+              },
+              "outcome_id": "NO_REBATE",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-NOREBATE"
+            },
+            {
+              "id": "R-11",
+              "when": {
+                "member": true,
+                "settled": true
+              },
+              "outcome_id": "REBATE",
+              "source_refs": [
+                "F-02"
+              ],
+              "oracle_ref": "O-REBATE"
+            }
+          ]
+        }
+      },
+      {
+        "id": "M-S",
+        "method": "state_transition",
+        "title": "Declared lifecycle only",
+        "dimension": "functional",
+        "requirement_ids": [
+          "REQ-S"
+        ],
+        "source_refs": [
+          "F-03",
+          "F-04",
+          "F-05",
+          "F-06"
+        ],
+        "spec": {
+          "states": [
+            {
+              "id": "DRAFT",
+              "terminal": false,
+              "source_refs": [
+                "F-03"
+              ]
+            },
+            {
+              "id": "REVIEW",
+              "terminal": false,
+              "source_refs": [
+                "F-03"
+              ]
+            },
+            {
+              "id": "PUBLISHED",
+              "terminal": true,
+              "source_refs": [
+                "F-03"
+              ]
+            }
+          ],
+          "initial_state": "DRAFT",
+          "triggers": [
+            "submit",
+            "publish"
+          ],
+          "transitions": [
+            {
+              "id": "T-SUBMIT",
+              "validity": "valid",
+              "from_state": "DRAFT",
+              "to_state": "REVIEW",
+              "trigger": "submit",
+              "guard_refs": [],
+              "effect_refs": [
+                "E-REVIEW"
+              ],
+              "source_refs": [
+                "F-04"
+              ],
+              "oracle_ref": "O-REVIEW"
+            },
+            {
+              "id": "T-PUBLISH",
+              "validity": "valid",
+              "from_state": "REVIEW",
+              "to_state": "PUBLISHED",
+              "trigger": "publish",
+              "guard_refs": [],
+              "effect_refs": [
+                "E-PUBLISHED"
+              ],
+              "source_refs": [
+                "F-05"
+              ],
+              "oracle_ref": "O-PUBLISHED"
+            },
+            {
+              "id": "T-DENY",
+              "validity": "invalid",
+              "from_state": "DRAFT",
+              "to_state": null,
+              "trigger": "publish",
+              "guard_refs": [],
+              "effect_refs": [],
+              "source_refs": [
+                "F-06"
+              ],
+              "oracle_ref": "O-DENY"
+            }
+          ],
+          "closed_world": false,
+          "closed_world_deny_oracle_ref": null
+        }
+      }
+    ]
+  }
+}
