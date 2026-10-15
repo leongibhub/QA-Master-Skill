@@ -1,0 +1,6 @@
+test_tc_sm_005_parallel_init_has_one_winner_without_partial_state (tests.test_application_independent.CanonicalWorkflowIndependentTests.test_tc_sm_005_parallel_init_has_one_winner_without_partial_state) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.017s
+
+OK

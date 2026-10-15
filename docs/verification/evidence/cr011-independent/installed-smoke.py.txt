@@ -1,0 +1,19 @@
+import importlib.util,json,sys,io
+from pathlib import Path
+from contextlib import redirect_stdout
+from unittest.mock import patch
+import subprocess
+base=Path(__file__).resolve().parent
+spec=importlib.util.spec_from_file_location('independent_fixture',base/'independent-fixture.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+assert 'site-packages' in m.pe.__file__,m.pe.__file__
+f=m.Fixture(base/'fixture')
+results=[]
+with patch.object(subprocess,'Popen',side_effect=AssertionError('NO CHILD PROCESS ALLOWED')):
+ for name,args in [('validate',['validate',str(f.manifest_path)]),('materialize',['materialize',str(f.manifest_path),'--exclusions',str(f.exclusions),'--output',str(base/'preview')]),('inspect',['inspect',str(base/'preview')])]:
+  with redirect_stdout(io.StringIO()) as buf: code=m.pe.main(args)
+  assert code==0,(name,buf.getvalue());results.append({'command':name,'exit':code,'summary':json.loads(buf.getvalue())['status']})
+ f.manifest['token']='SYNTHETIC_SHOULD_BE_REDACTED';f.save()
+ with redirect_stdout(io.StringIO()) as buf:code=m.pe.main(['validate',str(f.manifest_path)])
+ assert code==2 and 'SYNTHETIC_SHOULD_BE_REDACTED' not in buf.getvalue()
+ results.append({'command':'validate-rejection','exit':code,'summary':json.loads(buf.getvalue())['code']})
+print(json.dumps({'import_path':m.pe.__file__,'cases':results,'model_calls':0,'outcome':'PASS'},indent=2))

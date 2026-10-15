@@ -1,0 +1,7 @@
+test_zero_byte_lock_concurrent_processes_and_settled_reuse (tests.test_state_lock_independent.IndependentStateLockTests.test_zero_byte_lock_concurrent_processes_and_settled_reuse) ... ok
+test_zero_byte_lock_concurrent_threads_yield_one_winner_and_conflict (tests.test_state_lock_independent.IndependentStateLockTests.test_zero_byte_lock_concurrent_threads_yield_one_winner_and_conflict) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.710s
+
+OK
