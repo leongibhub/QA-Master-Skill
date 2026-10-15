@@ -1,12 +1,13 @@
 import argparse
 import json
 from .application import CampaignApplicationService
+from .design_methods import DesignMethodError
 from .skill_registry import discover_skills
 from .state_store import StateConflictError
 
 
 def main():
-    p = argparse.ArgumentParser(description='QA Master local workflow CLI (planning only)')
+    p = argparse.ArgumentParser(description='QA Master local workflow CLI (planning only)', allow_abbrev=False)
     p.add_argument('--state', default='.qa-master/campaign.json')
     sub = p.add_subparsers(dest='cmd', required=True)
     sub.add_parser('init').add_argument('name')
@@ -18,6 +19,10 @@ def main():
     destination.add_argument('--project', help='Install under PROJECT/.agents/skills')
     destination.add_argument('--target', help='Explicit skill directory')
     install.add_argument('--update', action='store_true', help='Update an unchanged managed install; keep backup')
+    design = sub.add_parser('design', help='Generate an offline draft from a strict campaign bundle', allow_abbrev=False)
+    # append lets us reject duplicate options instead of silently accepting the last one.
+    design.add_argument('--input', action='append', required=True)
+    design.add_argument('--output', action='append', required=True)
     sub.add_parser('plan').add_argument('prompt')
     a = sub.add_parser('answer'); a.add_argument('key'); a.add_argument('value')
     a = sub.add_parser('approve'); a.add_argument('kind'); a.add_argument('version')
@@ -26,8 +31,34 @@ def main():
     sub.add_parser('pause').add_argument('reason')
     sub.add_parser('resume')
     args = p.parse_args()
+    if args.cmd == 'design' and (len(args.input) != 1 or len(args.output) != 1):
+        p.error('design requires exactly one --input and one --output')
     try:
-        if args.cmd == 'install-codex':
+        if args.cmd == 'design':
+            from .campaign_cli import write_campaign
+            try:
+                report = write_campaign(args.input[0], args.output[0], installed_projection=True)
+            except DesignMethodError as error:
+                print(json.dumps({'status': 'REJECTED', 'error': error.code}, ensure_ascii=True))
+                return 2
+            except (ValueError, TypeError, KeyError):
+                print(json.dumps({'status': 'REJECTED', 'error': 'INVALID_CAMPAIGN_INPUT'}, ensure_ascii=True))
+                return 2
+            except OSError:
+                print(json.dumps({'status': 'REJECTED', 'error': 'CAMPAIGN_IO_ERROR'}, ensure_ascii=True))
+                return 2
+            output = {
+                'project': report['project'],
+                'counts': {
+                    'test_cases': len(report['test_cases']),
+                    'requirement_findings': len(report['requirement_review']['findings']),
+                    'unresolved_design': len(report['unresolved']['design_gaps']),
+                    'method_candidates': len(report.get('method_design', {}).get('candidates', [])),
+                    'method_obligations': len(report.get('method_design', {}).get('obligations', [])),
+                },
+                'status': 'DRAFT_UNAPPROVED', 'execution': 'NOT_EXECUTED', 'output': args.output[0],
+            }
+        elif args.cmd == 'install-codex':
             from .codex_skill import install_skill, SkillInstallError
             try:
                 output = install_skill(args.target, user=args.user, project=args.project, update=args.update)

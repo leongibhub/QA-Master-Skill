@@ -69,6 +69,18 @@ what is unverified instead of assuming unchanged content.
 
 ## Optional local state helper
 
+For a stateless offline design bundle, first read `design-methods.md` and the
+applicable professional guide. Then use the single installed command:
+
+```text
+python -I "<skill>/scripts/qa.py" design --input bundle.json --output report.json
+```
+
+This command never opens or changes Campaign state. Its candidates and declared
+guide/source mapping remain draft planning inputs; complete them into usable
+draft cases or explicit typed gaps after reviewing the supplied source. Do not
+present its output as approval, execution, or an executable-case claim.
+
 Run in the tested project's working directory, with an absolute helper path:
 
 ```text

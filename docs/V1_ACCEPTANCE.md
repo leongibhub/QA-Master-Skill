@@ -20,7 +20,8 @@ The following are implemented local product surfaces, subject to current source 
 - a schema-v2 canonical CLI/application-service migration and persistent pause/resume repair at `1c35b25`, with bounded local independent evidence; broader acceptance remains pending.
 - a local reconciliation-first job scheduler core at `79d8ce4`, tested only with synthetic ports and default-port denial; and a bounded configuration-UI oversized-POST repair at `a3905d3`.
 - a deterministic local structured boundary/decision/state draft engine at `e619c79` and its installed Campaign CLI projection at `8e6ab51`, independently verified only for the bounded CR-010 contract.
-- a bounded local paired-evaluation runtime, repaired and frozen at `96926a2`; TASK-042 independently passed 25 focused checks (one Windows link branch `NOT_EXECUTED`), 595 strict checks (three Windows link branches `NOT_EXECUTED`) and four fresh-wheel CLI checks without model calls. TASK-043 independent review is `PASS WITH P3 FOLLOW-UP`; its controlled exploratory pilot is in progress and has no result here.
+- a bounded local paired-evaluation runtime, repaired and frozen at `96926a2`; TASK-042 independently passed 25 focused checks (one Windows link branch `NOT_EXECUTED`), 595 strict checks (three Windows link branches `NOT_EXECUTED`) and four fresh-wheel CLI checks without model calls. TASK-043 independent review is `PASS WITH P3 FOLLOW-UP`; TASK-044 completed one authorized six-call public-development exploratory pilot, with process/capture evidence only and no semantic score, winner, strict-comparison or acceptance conclusion.
+- DRAFT CR-013 quality requirements/design for an installed offline `design --input --output` route. The initial TASK-056 subject `a6f4e33` is retained as developer-only history; a later P2 packaged-reference gap requires a bounded repair before independent test/review.
 - a self-contained Codex Skill installer repair committed at `5ca82a3`; TASK-047 independently passed 11 focused and 562 strict checks (two symbolic-link setup branches `NOT_EXECUTED`) with fresh-wheel smoke, and TASK-048 is `PASS WITH P3 FOLLOW-UP`. These remain bounded installation evidence, not V1 acceptance.
 
 These surfaces do not prove deployment, authenticated identity, live third-party compatibility, production safety, or product acceptance.
@@ -44,7 +45,7 @@ The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-
 | Independent implementation review | OBSERVED | The portability re-review found no new P0–P3 in the final four-file source difference. The bounded local review separately concludes full V1 is `FAIL` because required capabilities and lifecycle evidence are absent. |
 | Remote execution | NOT_EXECUTED | No authorized remote scheduling, monitoring, retention, or network execution is recorded. |
 | Performance, load, stress, stability, compatibility | NOT_EXECUTED | No approved environment, thresholds, or execution evidence is recorded. |
-| Competitor comparison | NOT_EXECUTED | No same-model, same-input paired outputs with completed expert ratings and execution artifacts exist. No superiority claim is permitted. |
+| Competitor comparison | OBSERVED | One CR-011 public-development exploratory six-call capture exists, but provider revision/system baseline are unavailable and there are no independently held inputs, completed expert ratings or human decision. No superiority claim is permitted. |
 | Release and acceptance | NOT_EXECUTED | No release decision, deployment, rollback, authenticated human acceptance, or project Gate PASS exists. |
 
 ## V1 release evidence still required

@@ -39,6 +39,21 @@ the relevant guides and apply them to the supplied sources; listing guides is no
 completing the work. If Python is unavailable, read the bundled guide files directly
 under `scripts/qa_master/skills/professional/` and report the unavailable helper.
 
+For a deterministic offline finite-model design, read
+`references/design-methods.md`, select the applicable guide below, create the
+strict non-secret bundle from supplied facts, and run:
+
+```text
+python -I "<skill>/scripts/qa.py" design --input bundle.json --output report.json
+```
+
+Review both `method_design` and `installed_design`. They identify draft method
+candidates, declared source/guide mapping, and typed gaps; they do not prove a
+case usable or executable. Produce a usable draft case for each determinable
+obligation, or state the missing target, observable, cleanup, source, or oracle
+fact as a typed gap. The packaged example at `examples/design-methods.json` is
+instructional data only and has no approved requirement baseline.
+
 | Work | Guide under `scripts/qa_master/skills/professional/` |
 | --- | --- |
 | Sources, conflicts, reverse requirements, missing rules | `requirements-review.md` |
