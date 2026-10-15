@@ -21,3 +21,5 @@
 | RISK-013 | CR-010 does not state whether an emitted integer boundary value is JSON integer or canonical numeric text. | REQ-014, REQ-018, NFR-005 | The frozen engine emits canonical text. TASK-036 retained its initial type-expectation mismatch as a tester-oracle correction; TASK-037 reports a P3 interface ambiguity. | VERIFIED | Define output JSON type in a controlled DES/ADR revision and update consumers/tests deliberately |
 
 No defect is created from a suspected gap until an actual test or review finding is recorded. No item in this register is closed without supporting evidence.
+
+| RISK-014 | Paired pilot may be mislabeled as a strict same-model comparison despite unknown provider revision/system baseline or sandbox-only isolation. | High | High | CR-011 requires `EXPLORATORY_CONFIGURED_SAME_MODEL`, explicit missing provenance, separate arm roots/asset hashes, and prohibition on rating/superiority; TASK-044 cannot claim before TASK-041–043 DONE. | PENDING |
