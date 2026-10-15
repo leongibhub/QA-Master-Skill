@@ -29,10 +29,16 @@ python -m qa_master install-codex --user
 | `python -m qa_master plan "任务"` | 规划阶段、信息缺口、专业指南，保存禁止执行/写入的任务范围 | 保守规则解析，不授权执行 |
 | `python -m qa_master pause "等待资料"` / `resume` | 保存暂停状态，恢复后重新检查流程条件 | 暂停期间拒绝推进；恢复不增加授权 |
 | `python -m qa_master.campaign_cli --input examples/campaign.json --output .qa-master/design.json` | 结构化需求生成草稿、追踪、覆盖及缺口 | 草稿，不能代替人类批准 |
+| `python -I <skill-root>/scripts/qa.py design --input bundle.json --output report.json` | 已安装 Skill 的离线有限模型草稿设计，复用既有严格引擎 | 仅本地草稿；不读状态、不执行、不批准、不产生可用或可执行用例结论 |
 | `python -m qa_master.config_ui --config .qa-master/config.json` | 本机配置页面，默认 http://127.0.0.1:8765 | 仅非秘密配置和凭据环境变量引用 |
 | `python -m qa_master.benchmark --help` | 同题、同模型、同设置的双边评测资料校验 | 缺少双方实际输出时不能得出优劣 |
 
 内置指南覆盖需求冲突、功能边界/状态、API、白盒、集成、性能/负载/压力/稳定性、兼容性、安全/恢复、回归与证据报告。见 [专业能力](docs/SKILL_CAPABILITIES.md)。这些指南和确定性生成器不等于完整语义 Agent。
+
+安装后的有限模型输入、字段、上限、错误和草案边界见 Skill 内的
+`references/design-methods.md`；`examples/design-methods.json` 包含边界、
+决策表和状态迁移三个非秘密教学模型。运行后仍须阅读适用指南和提供的
+来源，将确定性候选补为可审查草稿用例或明确的类型化缺口。
 
 正式 CLI 使用统一的 schema v2 状态。旧 Campaign/Workflow 文件在查看时不改写，首次修改时保留同目录字节备份再迁移；已有状态不能被 `init` 覆盖。旧审批和执行记录仅保留历史，不自动获得可信授权。迁移与恢复边界见 [实现记录](docs/verification/schema-migration-implementation.md)。
 

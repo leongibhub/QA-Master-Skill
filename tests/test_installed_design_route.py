@@ -46,6 +46,14 @@ class InstalledDesignRouteTests(unittest.TestCase):
                          sorted(item["id"] for item in report["method_design"]["candidates"]))
         self.assertEqual(projection["method_output"]["obligation_ids"],
                          sorted(item["id"] for item in report["method_design"]["obligations"]))
+        self.assertEqual({item["method"] for item in report["method_design"]["model_results"]},
+                         {"boundary", "decision_table", "state_transition"})
+        reference = (self.target / "references" / "design-methods.md").read_text(encoding="utf-8")
+        for required in ("decision_table", "state_transition", "source_refs", "oracle_refs",
+                         "closed_world_deny_oracle_ref", "DECISION_LIMIT_EXCEEDED",
+                         "STATE_LIMIT_EXCEEDED", "METHOD_MODELS_NOT_SUPPLIED",
+                         "DRAFT_UNAPPROVED", "NOT_EXECUTED"):
+            self.assertIn(required, reference)
         guide = next(item for item in projection["guides"] if item["id"] == "functional-api-design")
         self.assertEqual(guide["locator"], "scripts/qa_master/skills/professional/functional-api.md")
         expected = hashlib.sha256((self.target / "scripts" / "qa_master" / "skills" / "professional" /

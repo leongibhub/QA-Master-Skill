@@ -64,3 +64,34 @@ This is developer-owned local verification only. It does not establish the
 separate independent test or review tasks, a representative task-level Codex
 artifact, human assessment, any Gate result, product quality, or superiority
 over Awesome QA Skills. Those items remain pending or not executed.
+
+## v2 packaged-reference repair
+
+Formal review found that the initial installed reference did not give an
+installed-only user enough exact information to construct a decision-table or
+state-transition model. The v2 repair expands only the packaged reference and
+example, its installed-route regression, and the small README entry. It now
+records all 13 dimension literals; source/oracle kind enums; exact top-level,
+boundary, decision, and state field grammar; permitted empty arrays; finite
+limits; stable wrapper gaps/errors; and the `installed_design` guide/source
+mapping fields and declared-binding meaning. The packaged example now actually
+constructs all three methods with `approved: false`.
+
+The final v2 related suite was run after this repair: 20 tests passed in 5.565
+seconds. It covers successful parsing and execution of all three packaged
+example models, installed-reference contract terms, direct campaign
+compatibility, and Skill installation behavior. It is developer verification,
+not independent testing or a task-level Codex acceptance artifact.
+
+After the reviewer-corrected no-dimension wording, the installed-route subset
+was rerun: 3 tests passed in 2.016 seconds. This textual correction does not
+alter the engine, installed wrapper, or example data.
+
+v2 working-file hashes before commit:
+
+| Path | SHA-256 |
+| --- | --- |
+| `README.md` | `E2E080D3D5EA4A54768D8381F31B2C759F14400AF80867ABEE429257745E7C3F` |
+| `qa_master/skills/codex/references/design-methods.md` | `D128BDCFCC17AAD064693E73E56AF8EF907596FA563CFA815C9E5AF2DAF682B4` |
+| `qa_master/skills/codex/examples/design-methods.json` | `805B3A6EB2C2AD37FFE4DFFFBA3BDAD6B3BDF47A94F8FD9246894211284085C3` |
+| `tests/test_installed_design_route.py` | `88F048205A607E456CBDB67C0BA2EF1FFB1E9EC9D59B73CDDD00F7E85CA8BD38` |
