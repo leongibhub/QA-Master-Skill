@@ -24,10 +24,6 @@ def _file_lock(path: Path):
     lock_path = path.with_name(path.name + ".lock")
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     with lock_path.open("a+b") as lock:
-        if os.fstat(lock.fileno()).st_size == 0:
-            lock.seek(0)
-            lock.write(b"0")
-            lock.flush()
         lock.seek(0)
         if os.name == "nt":
             import msvcrt
@@ -36,6 +32,10 @@ def _file_lock(path: Path):
             import fcntl
             fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
         try:
+            if os.fstat(lock.fileno()).st_size == 0:
+                lock.seek(0)
+                lock.write(b"0")
+                lock.flush()
             yield
         finally:
             if os.name == "nt":
