@@ -4,9 +4,9 @@
 - Document State: `DRAFT`
 - Evaluation State: `IN_REVIEW`
 - Change: `CR-012`
-- Observed base: `codex/pr2-integration` at `0ae0ec0287a62d1b91e0c108c5d9def377cd70a2`
-- Source relationship: the user identified a colleague-generated continuation; its
-  implementation commit is `b18099a`, with Windows path correction `0ae0ec0`.
+- Historical base: `codex/pr2-integration` at `0ae0ec0287a62d1b91e0c108c5d9def377cd70a2`
+- Repaired source: `5ca82a368a7089207cc753afdad4bb3450b7db3c` (parent `0ae0ec0`), retaining the colleague-generated implementation `b18099a` and Windows correction `0ae0ec0`.
+- Remote synchronization: the installer repair and final independent evidence were synchronized to PR1; the later CI `38717537656` concerns a CR-011 paired-runtime fixture and is not installer evidence.
 
 ## Scope and adoption decision
 
@@ -42,10 +42,10 @@ is in this change's test scope.
 
 | Existing requirement | Bounded acceptance criterion for CR-012 | Subject / planned verification | Traceability | Evidence Status |
 |---|---|---|---|---|
-| PRD-001 | A single installed QA Master entry can carry the required local Skill assets without a separate QA-Skill repository. | `b18099a` package resources and `install-codex`; developer observations in `docs/verification/codex-core-installation.md`; TASK-047 independent install from a disposable directory. | PARTIAL | OBSERVED |
-| REQ-010 | Installation is documented and invalid or locally modified managed installs are rejected with an actionable result. | Installer tests cover first install, idempotence, modified/unknown install refusal including arbitrary data beneath `__pycache__`, persistent previous-directory and ZIP preservation outside the discovery directory, publication rollback, and an explicit recovery locator if rollback itself fails. TASK-047 must reproduce through public CLI/package interfaces. | PARTIAL | OBSERVED |
-| NFR-001 | A local helper or CI exit code is not described as model-task completion, acceptance, or release. | This record and TASK-048 check that documentation keeps the execution and approval boundaries. | PARTIAL | OBSERVED |
-| NFR-003 | Installer artifacts must not introduce credentials, tokens, cookies, or private keys into the package or installer records. | TASK-047 performs a bounded package/install inspection and verifies that symlink/reparse-point destinations are rejected without following external content; TASK-048 reviews the result and source diff. | PARTIAL | PENDING |
+| PRD-001 | A single installed QA Master entry can carry the required local Skill assets without a separate QA-Skill repository. | TASK-047 independently exercised the repaired package/install interfaces from a disposable directory and preserved raw evidence. | PARTIAL | VERIFIED |
+| REQ-010 | Installation is documented and invalid or locally modified managed installs are rejected with an actionable result. | TASK-047 verified first install, idempotence, modified/unknown refusal including non-`.pyc` `__pycache__`, persistent previous-directory/ZIP preservation outside discovery, rollback and recovery locator behavior through public CLI/package interfaces. | PARTIAL | VERIFIED |
+| NFR-001 | A local helper or CI exit code is not described as model-task completion, acceptance, or release. | TASK-048 bounded review confirmed the claim boundary; no model-task, acceptance, release or Gate result was created. | PARTIAL | VERIFIED |
+| NFR-003 | Installer artifacts must not introduce credentials, tokens, cookies, or private keys into the package or installer records. | TASK-047 bounded package/install inspection and TASK-048 source review covered the repaired subject and reparse rejection without asserting enterprise scope. | PARTIAL | VERIFIED |
 
 ## Observed evidence and limits
 
@@ -54,37 +54,26 @@ is in this change's test scope.
    `OBSERVED` statements in the developer record. The reported first 499-test
    socket failure, incomplete full-suite attempt, native-probe access denial and
    missing PyYAML validator dependency remain retained limitations.
-2. GitHub API readback recorded workflow `38706851785` successful at the stated
-   subject, with Windows/Ubuntu and Python 3.10/3.12 job success. It establishes
-   only that remote CI executed its configured steps successfully; it does not
-   establish the contributor's local count, independent test, model behaviour,
-   enterprise compatibility, release, or acceptance.
-3. The initial full independent discovery observed `557` tests with `2` skipped
-   symbolic-link branches, therefore 555 successful tests. That was before the
-   four preservation defects were identified, so it is retained only as a
-   pre-repair baseline and is not the repaired-subject verification result.
-4. `tests/test_codex_skill_independent.py` now contains tester-owned repair cases
-   for persistent previous-directory/ZIP preservation, `__pycache__` unknown
-   content, reparse points, late archive edits, and rollback-failure recovery.
-   Its post-repair focused raw output and final report are still being prepared;
-   neither is represented here as a completed independent conclusion.
+2. GitHub API readback recorded workflow `38706851785` successful at the historical stated subject. A later remote run `38713544622` succeeded for all configured Windows/Ubuntu Python 3.10/3.12 jobs at `f54f85d3b81c32831370a4f2dd8a9955aed0341d`; its read logs show 562 tests with no skips on Windows 3.12 and 562 tests with one Windows-only junction skip on Ubuntu 3.12. These CI observations establish only configured remote test execution, not a model task, enterprise compatibility, release or acceptance. The later CI `38717537656` concerns a CR-011 paired-runtime fixture and is recorded there; it does not alter this installer evidence.
+3. The initial full independent discovery observed `557` tests with `2` skipped symbolic-link branches, therefore 555 successful tests. That was before the four preservation defects were identified, so it is retained only as a pre-repair baseline and is not the repaired-subject verification result.
+4. `tests/test_codex_skill_independent.py` contains tester-owned repair cases for persistent previous-directory/ZIP preservation, `__pycache__` unknown content, reparse points, late archive edits, and rollback-failure recovery. TASK-047 completed its repaired-subject final focused 11 checks and strict 562-test execution; two ordinary symbolic-link setup branches remain `NOT_EXECUTED`, the Windows junction case passed, and fresh-wheel/isolated-helper smoke passed. TASK-048 independently reviewed that exact bounded evidence as `PASS WITH P3 FOLLOW-UP`; P3 is manual recovery-tree lifecycle management.
 
 ## Registered continuation work
 
 | Task | Required role / actual host identity | Work boundary | Required result | Current status |
 |---|---|---|---|---|
-| TASK-047 | tester `/root/pr2_test` | Late-registered independent test of the repaired PR2 working-tree subject, bound to the base SHA plus current modified-file hashes. Use a disposable project and public package/CLI interfaces. Preserve any fixture or environment failure; do not run model calls, enterprise operations, or remote targets. | `DOC-CODEX-CORE-INDEPENDENT-TEST-001` and `EVD-CODEX-CORE-INDEPENDENT-TEST-001`, with source binding, commands, environment, counts or explicit unavailable status, and raw-log locator. | Runtime claim is made after refreshed inputs; no completion is recorded. |
-| TASK-048 | reviewer `/root/pr2_review` | Review the exact implementation, test source and TASK-047 evidence after the independent test work is DONE. Classify findings by severity and separately check source/claim boundaries. | `DOC-CODEX-CORE-INDEPENDENT-REVIEW-001` and `EVD-CODEX-CORE-INDEPENDENT-REVIEW-001`. | Dependency-gated; no review conclusion is recorded. |
+| TASK-047 | tester `/root/pr2_test` | Late-registered independent test of the repaired PR2 subject through disposable public package/CLI interfaces. | `DOC-CODEX-CORE-INDEPENDENT-TEST-001` and `EVD-CODEX-CORE-INDEPENDENT-TEST-001`. | Runtime DONE with repaired-subject 11 focused and 562 strict tests, two symbolic-link setup branches `NOT_EXECUTED`, Windows junction PASS, and fresh-wheel/isolated-helper smoke PASS. |
+| TASK-048 | reviewer `/root/pr2_review` | Review the exact implementation, test source and TASK-047 evidence after the independent test work is DONE. | `DOC-CODEX-CORE-INDEPENDENT-REVIEW-001` and `EVD-CODEX-CORE-INDEPENDENT-REVIEW-001`. | Runtime DONE: `PASS WITH P3 FOLLOW-UP`; P0/P1/P2=0, P3 manual recovery-tree lifecycle management; no Gate or release conclusion. |
 
-TASK-047 is late registered because tester-owned preparation was observed before
-its work-order registration. Late registration records timing only; it does not
-backdate a claim, execution, or independent conclusion. Its Runtime inputs are
-refreshed to this document version before the actual tester claim.
+TASK-047 was late registered because tester-owned preparation was observed before
+work-order registration. That timing note does not backdate its later actual claim,
+execution or independent conclusion.
 
 ## Integration disposition
 
-The fork/PR2 checkout contains the candidate commits, but this record does not
-merge them into the upstream development branch or alter the existing CR-011
-paired-runtime continuation. Integration may be considered only after TASK-047
-and TASK-048 produce current, subject-bound evidence and remaining review
-findings are dispositioned through a follow-up change record.
+The repaired candidate is committed at `5ca82a3` and its implementation plus final
+independent evidence are synchronized to remote PR1 head `7913fd6`; this record does
+not treat that synchronization as a release, acceptance or Gate decision. It does not
+alter the CR-011 paired-runtime continuation. The remaining P3 recovery-tree lifecycle
+follow-up and any future merge/release decision require their own current evidence and
+human decision.
