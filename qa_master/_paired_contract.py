@@ -49,11 +49,16 @@ def strict_json(raw, *, sensitive=True):
         return result
     def forbidden(_):
         fail('NON_INTEGER_JSON_NUMBER')
+    def parsed_integer(raw_integer):
+        if raw_integer == '-0':
+            fail('NONCANONICAL_INTEGER')
+        return int(raw_integer)
     try:
         if len(raw) > LIMIT:
             fail('SIZE_LIMIT')
         value = json.loads(raw.decode('utf-8'), object_pairs_hook=pairs,
-                           parse_float=forbidden, parse_constant=forbidden)
+                           parse_float=forbidden, parse_constant=forbidden,
+                           parse_int=parsed_integer)
         canonical(value)  # reject unpaired Unicode surrogates
         if sensitive:
             check_keys(value, SECRET_KEYS)
@@ -185,6 +190,19 @@ def _array(items, maximum):
 
 
 _REFS = _array(_STRING, 64)
+_VALUE_SCHEMAS = {
+    'BOOLEAN': {'type': 'boolean'},
+    'INTEGER': {'type': 'integer'},
+    'DECIMAL': _STRING,
+    'STRING': _STRING,
+    'STRING_SET': _array(_STRING, 256),
+    'JSON': {'type': ['null', 'boolean', 'integer', 'string', 'array', 'object']},
+}
+_OBSERVATION = {'oneOf': [
+    _object({'check_id': _STRING, 'value_type': {'const': kind},
+             'value': shape, 'evidence_refs': _REFS})
+    for kind, shape in _VALUE_SCHEMAS.items()
+]}
 RESPONSE_SCHEMA = _object({
     'schema_version': {'const': 1}, 'scenario_id': _STRING,
     'response_status': {'enum': ['COMPLETED', 'PARTICIPANT_FAILURE']},
@@ -194,8 +212,7 @@ RESPONSE_SCHEMA = _object({
         'steps': _array(_object({'action': _STRING, 'expected': _STRING}), 64), 'source_refs': _REFS}), 128),
     'gaps': _array(_object({'id': _STRING, 'description': _STRING, 'impact': _STRING,
         'needed_evidence': _STRING, 'source_refs': _REFS}), 128),
-    'observations': _array(_object({'check_id': _STRING, 'value_type': {'enum': VALUE_TYPES},
-        'value': {}, 'evidence_refs': _REFS}), 256),
+    'observations': _array(_OBSERVATION, 256),
     'metadata': _object({'artifact_state': {'const': 'DRAFT'}, 'execution_state': {'const': 'NOT_EXECUTED'}}),
     'failure_reason': {'anyOf': [_STRING, {'type': 'null'}]},
 })
@@ -206,13 +223,39 @@ PROMPT_TEMPLATE_V1 = (
     'Return exactly one JSON object, without Markdown fences, following the neutral response contract. '
     'This is draft test design, never an executed test result. '
     'Answer the named checks with typed observations and source evidence references. '
-    'INTEGER is a JSON integer (not boolean); DECIMAL is canonical plain decimal text; '
-    'STRING_SET is a sorted unique string array; JSON contains no fractional numbers. '
+    'BOOLEAN is a native JSON boolean; INTEGER is a JSON integer (not boolean or negative zero); '
+    'DECIMAL is canonical plain decimal text; STRING is literal text. '
+    'STRING_SET is a sorted unique native string array; JSON is a native value, not encoded text, '
+    'with no fractional numbers, at most 16 container levels and 4096 nodes including object keys. '
     'References identify visible fact IDs or listed participant asset paths. '
     'Record uncertainty as gaps; do not invent requirements, execution, approval or quality ratings.\n'
     '{{PARTICIPANT_CONTEXT}}\nVISIBLE_INPUT\n{{VISIBLE_INPUT}}\n'
     'RESPONSE_CONTRACT\n{{RESPONSE_CONTRACT}}\n'
 ).encode('utf-8')
+
+
+def _bounded_json_value(value):
+    # Count iteratively before recursive canonicalization. Keys count as nodes;
+    # only nested containers add a level, with the root at depth one.
+    pending = [(value, 1)]
+    nodes = 0
+    while pending:
+        child, depth = pending.pop()
+        nodes += 1
+        if nodes > 4096:
+            fail('JSON_NODE_LIMIT')
+        if depth > 16:
+            fail('JSON_DEPTH_LIMIT')
+        if isinstance(child, dict):
+            if nodes + len(pending) + 2 * len(child) > 4096:
+                fail('JSON_NODE_LIMIT')
+            for key, item in child.items():
+                pending.append((key, depth))
+                pending.append((item, depth + int(isinstance(item, (dict, list)))))
+        elif isinstance(child, list):
+            if nodes + len(pending) + len(child) > 4096:
+                fail('JSON_NODE_LIMIT')
+            pending.extend((item, depth + int(isinstance(item, (dict, list)))) for item in child)
 
 
 def typed(value_type, value):
@@ -231,6 +274,8 @@ def typed(value_type, value):
             text(item)
         if value != sorted(set(value)):
             fail('NONCANONICAL_SET')
+    if value_type == 'JSON':
+        _bounded_json_value(value)
     strict_json(canonical(value))
     check_keys(value, CLAIM_KEYS)
 
