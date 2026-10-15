@@ -1,0 +1,103 @@
+test_tc_pe_201_manifest_strict_and_malformed_types_no_spawn (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_201_manifest_strict_and_malformed_types_no_spawn) ... ok
+test_tc_pe_202_source_drift_and_paths (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_202_source_drift_and_paths) ... ok
+test_tc_pe_203_counts_sizes_and_declared_capacity (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_203_counts_sizes_and_declared_capacity) ... ok
+test_tc_pe_204_materialization_prompt_inventory_and_noexec (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_204_materialization_prompt_inventory_and_noexec) ... ok
+test_tc_pe_205_evaluator_leakage_before_process_or_root (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_205_evaluator_leakage_before_process_or_root) ... ok
+test_tc_pe_206_exact_six_capture_order_and_no_pilot_promotion (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_206_exact_six_capture_order_and_no_pilot_promotion) ... ok
+test_tc_pe_207_failure_priority_and_schedule (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_207_failure_priority_and_schedule) ... ok
+test_tc_pe_208_policy_redaction_and_partial_input_stop (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_208_policy_redaction_and_partial_input_stop) ... ok
+test_tc_pe_209_typed_grade_keyword_missing_and_binding (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_209_typed_grade_keyword_missing_and_binding) ... ok
+test_tc_pe_210_inspect_detects_mutation_and_undeclared (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_210_inspect_detects_mutation_and_undeclared) ... ok
+test_tc_pe_211_attestation_claim_and_fixed_contract_reject (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_211_attestation_claim_and_fixed_contract_reject) ... 
+  test_tc_pe_211_attestation_claim_and_fixed_contract_reject (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_211_attestation_claim_and_fixed_contract_reject) (change='claim') ... FAIL
+test_tc_pe_212_cli_nonexecute_and_no_secret_echo (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_212_cli_nonexecute_and_no_secret_echo) ... ok
+test_tc_pe_213_native_python_child_stream_timeout_and_command (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_213_native_python_child_stream_timeout_and_command) ... 
+  test_tc_pe_213_native_python_child_stream_timeout_and_command (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_213_native_python_child_stream_timeout_and_command) (mode='timeout') ... ERROR
+test_tc_pe_213_native_python_child_stream_timeout_and_command (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_213_native_python_child_stream_timeout_and_command) ... FAIL
+
+======================================================================
+ERROR: test_tc_pe_213_native_python_child_stream_timeout_and_command (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_213_native_python_child_stream_timeout_and_command) (mode='timeout')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-Skill\qa_master\_paired_process.py", line 252, in native_capture
+    result['termination_outcome'], result['termination'] = _terminate(process)
+                                                           ~~~~~~~~~~^^^^^^^^^
+  File "D:\QA-Master-Skill\qa_master\_paired_process.py", line 148, in _terminate
+    result = subprocess.run([str(system), '/PID', str(process.pid), '/T', '/F'],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10, shell=False,
+                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+  File "C:\Program Files\Python\Lib\subprocess.py", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python\Lib\unittest\mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python\Lib\unittest\mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python\Lib\unittest\mock.py", line 1234, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "D:\QA-Master-Skill\tests\test_paired_runtime_independent.py", line 243, in launch
+    final=command[command.index('--output-last-message')+1]
+                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: '--output-last-message' is not in list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\QA-Master-Skill\tests\test_paired_runtime_independent.py", line 246, in test_tc_pe_213_native_python_child_stream_timeout_and_command
+    result=process.native_capture(executable=sys.executable,model={'alias':'test-model','reasoning_effort':'medium'},features=DISABLED_FEATURES,prompt=b'fixture stdin',timeout_seconds=0.2 if mode=='timeout' else 3)
+  File "D:\QA-Master-Skill\qa_master\_paired_process.py", line 276, in native_capture
+    result['termination_outcome'], result['termination'] = _terminate(process)
+                                                           ~~~~~~~~~~^^^^^^^^^
+  File "D:\QA-Master-Skill\qa_master\_paired_process.py", line 148, in _terminate
+    result = subprocess.run([str(system), '/PID', str(process.pid), '/T', '/F'],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10, shell=False,
+                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+  File "C:\Program Files\Python\Lib\subprocess.py", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python\Lib\unittest\mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python\Lib\unittest\mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python\Lib\unittest\mock.py", line 1234, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "D:\QA-Master-Skill\tests\test_paired_runtime_independent.py", line 243, in launch
+    final=command[command.index('--output-last-message')+1]
+                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: '--output-last-message' is not in list
+
+======================================================================
+FAIL: test_tc_pe_211_attestation_claim_and_fixed_contract_reject (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_211_attestation_claim_and_fixed_contract_reject) (change='claim')
+----------------------------------------------------------------------
+qa_master._paired_contract.PairedEvaluationError: INVALID_MEMBERS
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\QA-Master-Skill\tests\test_paired_runtime_independent.py", line 221, in test_tc_pe_211_attestation_claim_and_fixed_contract_reject
+    with self.subTest(change=change),self.assertRaisesRegex(PairedEvaluationError,code):self.valid()
+                                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "PROHIBITED_FIELD" does not match "INVALID_MEMBERS"
+
+======================================================================
+FAIL: test_tc_pe_213_native_python_child_stream_timeout_and_command (tests.test_paired_runtime_independent.PairedRuntimeIndependent.test_tc_pe_213_native_python_child_stream_timeout_and_command)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-Skill\tests\test_paired_runtime_independent.py", line 247, in test_tc_pe_213_native_python_child_stream_timeout_and_command
+    command,kw=seen[0];self.assertFalse(kw['shell']);self.assertNotIn('--add-dir',command);self.assertIn('--ignore-user-config',command);self.assertNotIn('UNLISTED_PRIVATE_VALUE',kw['env']);self.assertFalse(Path(kw['cwd']).exists());self.assertEqual(result['cleanup_outcome'],'DELETED')
+                                                                                                                                                                                              ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 13 tests in 15.002s
+
+FAILED (failures=2, errors=1)
+Exception ignored in: <function Popen.__del__ at 0x000001B566F968E0>
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Lib\subprocess.py", line 1140, in __del__
+    _warn("subprocess %s is still running" % self.pid,
+ResourceWarning: subprocess 11240 is still running

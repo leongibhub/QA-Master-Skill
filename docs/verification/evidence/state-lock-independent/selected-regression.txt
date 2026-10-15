@@ -1,0 +1,11 @@
+test_empty_lock_file_parallel_initialization_has_one_winner (tests.test_state_lock_race.StateLockInitializationRaceTests.test_empty_lock_file_parallel_initialization_has_one_winner)
+An existing empty lock file must not make a losing initializer fail I/O. ... ok
+test_tc_sm_005_parallel_init_has_one_winner_without_partial_state (tests.test_application_independent.CanonicalWorkflowIndependentTests.test_tc_sm_005_parallel_init_has_one_winner_without_partial_state) ... ok
+test_campaign_save_load_revisions_and_rejects_stale_writer (tests.test_state_store.StateStoreTests.test_campaign_save_load_revisions_and_rejects_stale_writer) ... ok
+test_concurrent_same_revision_has_one_winner_and_no_fixed_temp_file (tests.test_state_store.StateStoreTests.test_concurrent_same_revision_has_one_winner_and_no_fixed_temp_file) ... ok
+test_workflow_legacy_migrates_and_new_state_does_not_overwrite (tests.test_state_store.StateStoreTests.test_workflow_legacy_migrates_and_new_state_does_not_overwrite) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 3.101s
+
+OK
