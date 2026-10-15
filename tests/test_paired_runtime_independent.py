@@ -28,6 +28,7 @@ def sha(raw):
 
 class Fixture:
     def __init__(self, base):
+        self.executable=Path(sys.executable).resolve(strict=True)
         self.base=Path(base); self.inputs=self.base/'inputs'; self.inputs.mkdir()
         self.manifest_path=self.inputs/'manifest.json'; self.exclusions=self.base/'excluded.json'
         exclusion={'schema_version':1,'forbidden_locators':['holdout/private.json'],'forbidden_sha256':[],'fixture_markers':['EVALUATOR_PRIVATE_12345']}
@@ -44,7 +45,7 @@ class Fixture:
             self.visible[sid]=value
             scenarios.append({'id':sid,'method':method,'visible_input':self.source(sid+'.json',packed(value)),'oracle_commitment_sha256':sha(b'independent oracle commitment')})
         self.manifest={'schema_version':1,'run_id':'INDEPENDENT-RUN','profile':'EXPLORATORY_CONFIGURED_SAME_MODEL','created_at_utc':'2026-10-15T00:00:00Z','participants':participants,'scenarios':scenarios,'prompt_template':self.source('prompt.txt',PROMPT_TEMPLATE_V1),'response_schema':self.source('schema.json',NEUTRAL_RESPONSE_SCHEMA_V1),'evaluator_commitment_sha256':sha(packed(exclusion)),
-        'runtime':{'codex':{'executable_path':sys.executable,'executable_sha256':sha(Path(sys.executable).read_bytes()),'version':'INDEPENDENT-TEST-NATIVE-PYTHON-NOT-CODEX'},'model':{'alias':'test-model','reasoning_effort':'medium','provider_revision':{'state':'NOT_AVAILABLE','value':None,'evidence_sha256':None},'system_baseline':{'state':'UNVERIFIED','value':None,'evidence_sha256':None},'temperature_state':'NOT_AVAILABLE','seed_state':'NOT_AVAILABLE'},'policy':{'sandbox':'read-only','add_dirs':[],'ignore_user_config':True,'ephemeral':True,'skip_host_skill_discovery':True,'requested_tool_policy':'NO_TOOL_USE','disabled_features':DISABLED_FEATURES,'isolation_level':ISOLATION},'host':{'os':platform.system(),'architecture':platform.machine()},'timeout_seconds':1,'retry_count':0},
+        'runtime':{'codex':{'executable_path':str(self.executable),'executable_sha256':sha(self.executable.read_bytes()),'version':'INDEPENDENT-TEST-NATIVE-PYTHON-NOT-CODEX'},'model':{'alias':'test-model','reasoning_effort':'medium','provider_revision':{'state':'NOT_AVAILABLE','value':None,'evidence_sha256':None},'system_baseline':{'state':'UNVERIFIED','value':None,'evidence_sha256':None},'temperature_state':'NOT_AVAILABLE','seed_state':'NOT_AVAILABLE'},'policy':{'sandbox':'read-only','add_dirs':[],'ignore_user_config':True,'ephemeral':True,'skip_host_skill_discovery':True,'requested_tool_policy':'NO_TOOL_USE','disabled_features':DISABLED_FEATURES,'isolation_level':ISOLATION},'host':{'os':platform.system(),'architecture':platform.machine()},'timeout_seconds':1,'retry_count':0},
         'schedule':[{'attempt_id':'PAIR-'+str(i),'scenario_id':'SC-'+str(i),'order':['A','B'] if i!=1 else ['B','A']} for i in range(3)]}
         self.save()
 
@@ -243,9 +244,9 @@ class PairedRuntimeIndependent(unittest.TestCase):
                     return real_popen(command,**kwargs)
                 seen.append((command,dict(kwargs)))
                 final=command[command.index('--output-last-message')+1]
-                return real_popen([sys.executable,'-c',script,final],**kwargs)
+                return real_popen([str(self.f.executable),'-c',script,final],**kwargs)
             with self.subTest(mode=mode),patch.object(process.subprocess,'Popen',side_effect=launch),patch.dict(os.environ,{'UNLISTED_PRIVATE_VALUE':'MUST_NOT_INHERIT'}):
-                result=process.native_capture(executable=sys.executable,model={'alias':'test-model','reasoning_effort':'medium'},features=DISABLED_FEATURES,prompt=b'fixture stdin',timeout_seconds=0.2 if mode=='timeout' else 3)
+                result=process.native_capture(executable=str(self.f.executable),model={'alias':'test-model','reasoning_effort':'medium'},features=DISABLED_FEATURES,prompt=b'fixture stdin',timeout_seconds=0.2 if mode=='timeout' else 3)
             command,kw=seen[0];self.assertFalse(kw['shell']);self.assertNotIn('--add-dir',command);self.assertIn('--ignore-user-config',command);self.assertNotIn('UNLISTED_PRIVATE_VALUE',kw['env']);self.assertFalse(Path(kw['cwd']).exists());self.assertEqual(result['cleanup_outcome'],'DELETED')
             if mode=='success':self.assertEqual(result['stdout'],b'fixture stdin');self.assertEqual(result['final'],b'{}');self.assertFalse(result['integrity_failure'])
             elif mode=='nonzero':self.assertEqual(result['exit_code'],7)

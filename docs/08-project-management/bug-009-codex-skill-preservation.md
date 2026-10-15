@@ -1,8 +1,8 @@
 # BUG-009 to BUG-012 — Codex Skill installer preservation defects
 
 - Change: `CR-012`
-- Source subject: `0ae0ec0287a62d1b91e0c108c5d9def377cd70a2` before the current working-tree repair
-- Finding source: initial independent reviewer findings reported during PR2 review; formal reviewer report remains pending
+- Historical source subject: `0ae0ec0287a62d1b91e0c108c5d9def377cd70a2` before repair; repaired subject is committed at `5ca82a368a7089207cc753afdad4bb3450b7db3c`
+- Finding source: initial independent reviewer findings reported during PR2 review; TASK-048 later completed its bounded formal review
 - Evidence Status: `OBSERVED`
 - Disposition: the repaired working-tree subject has current independent tester evidence and a formal `PASS WITH P3 FOLLOW-UP` review. The findings remain retained, rather than marked closed, because no committed-subject CI, release, acceptance, or formal defect-closure chain exists.
 
