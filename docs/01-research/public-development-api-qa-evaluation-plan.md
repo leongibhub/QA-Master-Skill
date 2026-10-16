@@ -6,8 +6,27 @@
   complete `REQ-011`.
 - Document State: `DRAFT`
 - Evaluation State: `IN_REVIEW`
-- Evidence Status: `PENDING`
+- Evidence Status: `OBSERVED` (TASK-066 participant output, TASK-069 fixture
+  audit/reconciliation and TASK-067 practical review executed and retained; see
+  "Completion status" below — no quality, comparison or acceptance conclusion)
 - Date: 2026-10-15
+
+## Completion status (added by TASK-074 linkage)
+
+The planned trial chain has executed in the registered bounded scope.  The
+freeze was delivered by TASK-065 (commit `962637b`); the participant trial by
+TASK-066 (output retained at `52bff03`); the independent reconciliation and
+coverage audit by TASK-069; and the practical review by TASK-067 with an
+`AGENT_REVIEW_ONLY` conclusion of
+`REVIEWABLE_SOURCE_GROUNDED_DRAFT_WITH_EXPLICIT_GAPS`, P0/P1/P2/P3=0.  The
+originally suggested evidence IDs were issued with bounded statuses only:
+`EVD-PUBLIC-API-QA-PARTICIPANT-001` (OBSERVED, participant output),
+`EVD-PUBLIC-API-QA-RECONCILIATION-001` and `EVD-PUBLIC-API-QA-COVERAGE-001`
+(OBSERVED, TASK-069 independent reconciliation/coverage) and
+`EVD-PUBLIC-API-QA-PRACTICAL-REVIEW-001` (VERIFIED, TASK-067 review delivery
+linkage), plus the freeze/participant delivery records.  These
+are bounded observations only: they are not a quality PASS, score, comparison,
+execution, holdout/human assessment, Gate, acceptance or release result.
 
 ## Purpose and boundary
 
@@ -140,7 +159,10 @@ product implementation task is justified.
 
 The planning and source artifacts use `DOC-PUBLIC-API-QA-PLAN-001`,
 `DOC-PUBLIC-API-QA-FACTS-001`, and `DOC-PUBLIC-API-QA-CHECKLIST-001`.
-Suggested future, unissued identifiers are
+Suggested future, unissued identifiers were
 `EVD-PUBLIC-API-QA-PARTICIPANT-001`, `EVD-PUBLIC-API-QA-TEST-001`, and
-`EVD-PUBLIC-API-QA-REVIEW-001`.  They must not be created, marked observed, or
-called completed until the corresponding later work actually executes.
+`EVD-PUBLIC-API-QA-REVIEW-001`.  They were later issued or superseded by the
+executed trial chain with bounded statuses only (see "Completion status"
+above); `EVD-PUBLIC-API-QA-TEST-001` was not carried as a separate ID, and the
+independent work registered its own reconciliation/coverage/review records.
+No quality, comparison or acceptance conclusion follows from their issuance.

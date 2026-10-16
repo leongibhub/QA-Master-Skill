@@ -6,8 +6,27 @@
   for `REQ-005`, `REQ-009`, `NFR-001` and `NFR-004` without completing them.
 - Document State: `DRAFT`
 - Evaluation State: `IN_REVIEW`
-- Evidence Status: `PENDING`
+- Evidence Status: `OBSERVED` (TASK-071 participant output, TASK-072 coverage audit
+  and TASK-073 practical review executed and retained; see "Completion status"
+  below — no quality, comparison or acceptance conclusion)
 - Date: 2026-10-15
+
+## Completion status (added by TASK-074 linkage)
+
+The planned trial chain has executed in the registered bounded scope.  The
+freeze was delivered by TASK-070 (commit `2f9ec205`); the participant trial by
+TASK-071 (output retained at `c3a52ff`, manifest provenance corrected at
+`cd4a7d9` with participant bytes unchanged); the independent coverage audit by
+TASK-072 (`16555fd`); and the practical review by TASK-073 (`6bd7eeb`) with an
+`AGENT_REVIEW_ONLY` conclusion of
+`REVIEWABLE_SOURCE_GROUNDED_DRAFT_WITH_EXPLICIT_GAPS`, P0/P1/P2/P3=0.  The
+originally suggested evidence IDs were issued as
+`EVD-PUBLIC-LINUX-QA-PARTICIPANT-001` (OBSERVED),
+`EVD-PUBLIC-LINUX-QA-TEST-001` (OBSERVED) and
+`EVD-PUBLIC-LINUX-QA-REVIEW-001` (VERIFIED, delivery linkage only), plus the
+free delivery/correction records.  These are bounded observations only: they
+are not a quality PASS, score, comparison, execution, holdout/human assessment,
+Gate, acceptance or release result.
 
 ## Purpose and boundary
 
@@ -102,6 +121,9 @@ registered independent testing and review receive the audit aids.  Future
 TASK-071 through TASK-073 may carry participant, testing and review work, but
 are planned only by this document and are neither created nor executed here.
 
-Suggested future, unissued evidence IDs are `EVD-PUBLIC-LINUX-QA-PARTICIPANT-001`,
+Suggested future, unissued evidence IDs were `EVD-PUBLIC-LINUX-QA-PARTICIPANT-001`,
 `EVD-PUBLIC-LINUX-QA-TEST-001`, and `EVD-PUBLIC-LINUX-QA-REVIEW-001`.  They
-must not be marked observed or completed before the respective work occurs.
+were later issued by the executed trial chain with bounded statuses only
+(OBSERVED for participant/test, VERIFIED for review delivery linkage); see
+"Completion status" above.  No quality, comparison or acceptance conclusion
+follows from their issuance.
