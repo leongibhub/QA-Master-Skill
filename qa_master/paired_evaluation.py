@@ -246,6 +246,21 @@ def _verify_attestations(trust_registry_path, evidence_dir, manifest):
                              'verification': 'SIGNATURE_VALID'})
     if len(verdicts) != 4:
         fail('STRICT_ATTESTATION_INCOMPLETE')
+    # DES-061 v2 (NR-1): a strict pair is same-model by construction — the two
+    # arms must attest equal values per subject, and any non-null declared
+    # runtime.model value must match the attested value.
+    model = manifest['runtime']['model']
+    for subject in ATTESTATION_SUBJECTS:
+        values = [v['value'] for v in verdicts if v['subject'] == subject]
+        if len(values) == 2 and values[0] != values[1]:
+            fail('STRICT_ATTESTATION_VALUE_MISMATCH')
+        declared_record = model[subject]
+        if declared_record['state'] != 'VERIFIED':
+            # A declared VERIFIED state is rejected by _runtime with its own
+            # dedicated code; only consistent declarations reach this check.
+            declared = declared_record['value']
+            if declared is not None and declared != values[0]:
+                fail('STRICT_ATTESTATION_VALUE_MISMATCH')
     return {'registry_digest': loaded['digest'], 'verdicts': verdicts}
 
 

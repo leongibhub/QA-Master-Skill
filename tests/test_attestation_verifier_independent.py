@@ -58,7 +58,7 @@ class IndependentVerifierTests(unittest.TestCase):
         for arm in ('A', 'B'):
             for subject in pe.ATTESTATION_SUBJECTS:
                 document = {'schema_version': 1, 'subject': subject, 'arm_id': arm,
-                            'value': subject + '/' + arm, 'observed_at_utc': '2026-10-14T00:00:00Z',
+                            'value': subject + '/shared', 'observed_at_utc': '2026-10-14T00:00:00Z',
                             'issuer_id': 'ISSUER-IND-001', 'statement': 'Independent synthetic.'}
                 if arm_mutator:
                     arm_mutator(arm, subject, document)

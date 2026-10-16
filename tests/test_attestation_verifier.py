@@ -37,7 +37,7 @@ def attestations_for(root, issuer_key, manifest_created='2026-10-15T00:00:00Z'):
     for arm in ('A', 'B'):
         for subject in pe.ATTESTATION_SUBJECTS:
             document = {'schema_version': 1, 'subject': subject, 'arm_id': arm,
-                        'value': subject + '-value-' + arm,
+                        'value': subject + '-value',
                         'observed_at_utc': '2026-10-14T00:00:00Z',
                         'issuer_id': 'ISSUER-TEST-001',
                         'statement': 'Synthetic test attestation.'}
@@ -126,6 +126,40 @@ class AttestationVerifierDeveloperTests(unittest.TestCase):
             self.path.read_bytes(), manifest_dir=self.path.parent,
             trust_registry_path=self.registry, evidence_dir=self.attestations))
         self.assertEqual(code, 'ATTESTATION_NOT_SUPPORTED')
+
+    # TC-SV-7: DES-061 v2 NR-1 equality clause
+
+    def test_differing_arm_values_fail(self):
+        # Re-sign arm B provider_revision with a different value.
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+        document = json.loads((self.attestations/'provider_revision-B.json').read_text())
+        document['value'] = 'different-revision-for-B'
+        raw = canonical(document)
+        (self.attestations/'provider_revision-B.json').write_bytes(raw)
+        (self.attestations/'provider_revision-B.sig').write_bytes(self.issuer.sign(raw))
+        code = self.code_of(lambda: pe.validate_run_manifest(
+            self.path.read_bytes(), manifest_dir=self.path.parent,
+            trust_registry_path=self.registry, evidence_dir=self.attestations))
+        self.assertEqual(code, 'STRICT_ATTESTATION_VALUE_MISMATCH')
+
+    def test_declared_value_mismatch_fails(self):
+        self.manifest['runtime']['model']['provider_revision'] = {
+            'state': 'UNVERIFIED', 'value': 'declared-other-revision', 'evidence_sha256': None}
+        self.path.write_bytes(canonical(self.manifest))
+        code = self.code_of(lambda: pe.validate_run_manifest(
+            self.path.read_bytes(), manifest_dir=self.path.parent,
+            trust_registry_path=self.registry, evidence_dir=self.attestations))
+        self.assertEqual(code, 'STRICT_ATTESTATION_VALUE_MISMATCH')
+
+    def test_declared_value_matching_passes(self):
+        value = json.loads((self.attestations/'provider_revision-A.json').read_text())['value']
+        self.manifest['runtime']['model']['provider_revision'] = {
+            'state': 'UNVERIFIED', 'value': value, 'evidence_sha256': None}
+        self.path.write_bytes(canonical(self.manifest))
+        outcome = pe.validate_run_manifest(
+            self.path.read_bytes(), manifest_dir=self.path.parent,
+            trust_registry_path=self.registry, evidence_dir=self.attestations)
+        self.assertEqual(outcome['status'], 'VALIDATED_NOT_EXECUTED')
 
     def test_strict_single_order_schedule_fails(self):
         self.manifest['schedule'][1]['order'] = ['A', 'B']
