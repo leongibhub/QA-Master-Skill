@@ -57,28 +57,40 @@ focused on the upgrade classes.
 
 ## Frozen bytes and validity-script commitment (executed)
 
+**Correction (pre-run, 2026-10-16):** after freezing v1, run-preparation
+validation caught a scenario-shape defect (six scenario `scope` fields were
+objects where the run contract requires text; FS-08 additionally escaped the
+first fix). All `scope` fields were corrected to single text sentences, the
+validity script was extended with contract-shape checks that would have
+caught the defect at pre-registration time, and the bytes were rebuilt and
+re-validated **131/131**. No model had seen the earlier bytes at correction
+time. The hashes below are the post-correction frozen values.
+
 The scenario/oracle bytes are frozen under
 `.qa-master/paired-pilot/cr022-fresh-preparation-v1/` (local-only,
 gitignored, as with all run material). The pre-registered validity script
 `cr022-oracle-validity-v1.py` was executed against those bytes and passed
-**123/123 checks** covering OA-1 (evidence refs exist; checks exist;
+**131/131 checks** covering OA-1 (evidence refs exist; checks exist;
 value_type match; oracle bytes match hand-derived tables; every value token
 derivable from facts text), OA-2 (provenance questions name the
 specific-facts reading and expected answers are the specific fact IDs), OA-3
 (synthesized token forms — classification, discount, event names, precision
 — fixed in the question text itself, identical information for both arms),
-OA-4 (no numeric duplicates).
+OA-4 (no numeric duplicates), plus contract-shape checks (title/request/scope
+are non-empty text).
 
 - `cr022-oracle-validity-v1.py` sha256:
-  `88f6caaaff954448391d24bc232c274034b909a2cfd572dda67533af8e9ab67f`
-- `cr022-oracle-validity-v1.output.txt` sha256 (`ALL PASS`, 123/123):
-  `c6c737276882757a8829ba321bce5235118257a9d169f8970b1d980572ebb547`
+  `3afa984a39f93e868fd6e019351ba76b55aa5b4283b4e11161479b17b03cec5b`
+- `cr022-oracle-validity-v1.output.txt` sha256 (`ALL PASS`, 131/131):
+  `82164292cf6f24188582a98c1a5ad5f00bb84ae795f7a41bea2b89ff1830eab2`
 
-During validity checking, three scenario/question wording weaknesses were
-found and corrected BEFORE any run (event-name form fixed in questions;
-scale-violation derivation phrasing sharpened; hyphenated-phrase
-derivation), and the final bytes re-validated 123/123. No model has seen
-these bytes.
+During validity checking, scenario/question wording weaknesses were found
+and corrected BEFORE any run (event-name form fixed in questions;
+scale-violation derivation phrasing sharpened; hyphenated-phrase derivation;
+scope contract shape), and the final bytes re-validated 131/131. No model has
+seen these bytes. The run preparation and TEST_DOUBLE rehearsal are recorded
+in `docs/verification/cr022-run-preparation.md` (manifest validated,
+16/16 rehearsal calls completed, 36/36 rehearsal assertions satisfied).
 
 ## Non-goals
 
