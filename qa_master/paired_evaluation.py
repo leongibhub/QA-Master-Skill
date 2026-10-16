@@ -24,6 +24,8 @@ from ._paired_process import native_capture, parse_trace, redact
 
 MAX_SCENARIOS = 32
 MAX_MATERIALIZED_BYTES = 64 * 1024 * 1024
+STRICT_PROFILE = 'STRICT_COMPARISON_CANDIDATE'
+ATTESTATION_SUBJECTS = ('provider_revision', 'system_baseline')
 
 
 def _utc():
@@ -104,6 +106,8 @@ def _runtime(value):
     for name in ('provider_revision', 'system_baseline'):
         record = exact(model[name], 'state value evidence_sha256')
         if record['state'] == 'VERIFIED':
+            # Only the verifier port may produce VERIFIED; a manifest that
+            # merely claims it never passes (DES-061 §6 keeps this code).
             fail('ATTESTATION_NOT_SUPPORTED')
         if record['state'] not in ('NOT_AVAILABLE', 'UNVERIFIED'):
             fail('INVALID_ATTESTATION_STATE')
@@ -126,7 +130,125 @@ def _runtime(value):
     integer(value['retry_count'], 0, 0)
 
 
-def _prepare_unchecked(payload, manifest_dir):
+ATTESTATION_SUBJECTS = ('provider_revision', 'system_baseline')
+VERIFIER_ID = 'ATTESTATION_VERIFIER_V1'
+
+
+def _load_trust_registry(path):
+    """Load and validate the administrator-controlled trust registry (DES-061 §2)."""
+    path = no_links(Path(path))
+    raw = read_bytes(path)
+    if redact(raw)[1]['state'] != 'UNCHANGED':
+        fail('TRUST_REGISTRY_INVALID')
+    registry = strict_json(raw)
+    exact(registry, 'schema_version registry_id created_at_utc issuers')
+    integer(registry['schema_version'], 1, 1)
+    identifier(registry['registry_id'])
+    try:
+        dt.datetime.strptime(registry['created_at_utc'], '%Y-%m-%dT%H:%M:%SZ')
+    except (TypeError, ValueError):
+        fail('TRUST_REGISTRY_INVALID')
+    issuers = {}
+    for issuer in array(registry['issuers'], 64, 1):
+        exact(issuer, 'issuer_id subject algorithm public_key_multibase')
+        identifier(issuer['issuer_id'])
+        if issuer['subject'] not in ATTESTATION_SUBJECTS:
+            fail('TRUST_REGISTRY_INVALID')
+        if issuer['algorithm'] != 'ED25519':
+            fail('TRUST_REGISTRY_INVALID')
+        text(issuer['public_key_multibase'], 512)
+        if len(issuer['public_key_multibase']) < 8:
+            fail('TRUST_REGISTRY_INVALID')
+        key = (issuer['issuer_id'], issuer['subject'])
+        if key in issuers:
+            fail('TRUST_REGISTRY_INVALID')
+        issuers[key] = issuer['public_key_multibase']
+    return {'registry': registry, 'digest': digest(raw), 'keys': issuers}
+
+
+def _registry_drift(path, expected_digest):
+    path = no_links(Path(path))
+    if file_digest(path) != expected_digest:
+        fail('TRUST_REGISTRY_DRIFT')
+
+
+def _verify_attestations(trust_registry_path, evidence_dir, manifest):
+    """Verify provider-signed attestations for both arms and both subjects (DES-061 §3-4)."""
+    try:
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+    except ImportError:
+        fail('ATTESTATION_VERIFIER_UNAVAILABLE')
+    loaded = _load_trust_registry(trust_registry_path)
+    evidence_dir = no_links(Path(evidence_dir))
+    manifest_created = dt.datetime.strptime(manifest['created_at_utc'], '%Y-%m-%dT%H:%M:%SZ')
+    verdicts = []
+    for arm in ('A', 'B'):
+        for subject in ATTESTATION_SUBJECTS:
+            document_path = contained(evidence_dir, subject + '-' + arm + '.json')
+            signature_path = contained(evidence_dir, subject + '-' + arm + '.sig')
+            try:
+                document_raw = read_bytes(document_path)
+            except PairedEvaluationError as exc:
+                if exc.code == 'MISSING_FILE':
+                    fail('ATTESTATION_MISSING')
+                raise
+            try:
+                signature_raw = read_bytes(signature_path, 1024)
+            except PairedEvaluationError as exc:
+                if exc.code == 'MISSING_FILE':
+                    fail('ATTESTATION_MISSING')
+                raise
+            if redact(document_raw)[1]['state'] != 'UNCHANGED':
+                fail('ATTESTATION_INVALID')
+            document = strict_json(document_raw)
+            exact(document, 'schema_version subject arm_id value observed_at_utc issuer_id statement')
+            integer(document['schema_version'], 1, 1)
+            if document['subject'] != subject or document['arm_id'] != arm:
+                fail('ATTESTATION_INVALID')
+            text(document['value'], 20000)
+            text(document['statement'], 20000)
+            identifier(document['issuer_id'])
+            try:
+                observed = dt.datetime.strptime(document['observed_at_utc'], '%Y-%m-%dT%H:%M:%SZ')
+            except (TypeError, ValueError):
+                fail('ATTESTATION_INVALID')
+            if observed > manifest_created:
+                fail('ATTESTATION_TIME_INVALID')
+            key = (document['issuer_id'], subject)
+            if key not in loaded['keys']:
+                fail('ATTESTATION_ISSUER_UNKNOWN')
+            try:
+                public_key = Ed25519PublicKey.from_public_bytes(bytes.fromhex(loaded['keys'][key]))
+            except ValueError:
+                fail('TRUST_REGISTRY_INVALID')
+            try:
+                public_key.verify(signature_raw, canonical(document))
+            except Exception:
+                fail('ATTESTATION_SIGNATURE_INVALID')
+            verdicts.append({'subject': subject, 'arm_id': arm, 'state': 'VERIFIED',
+                             'value': document['value'], 'issuer_id': document['issuer_id'],
+                             'observed_at_utc': document['observed_at_utc'],
+                             'evidence_sha256': digest(document_raw), 'verifier_id': VERIFIER_ID,
+                             'verification': 'SIGNATURE_VALID'})
+    if len(verdicts) != 4:
+        fail('STRICT_ATTESTATION_INCOMPLETE')
+    return {'registry_digest': loaded['digest'], 'verdicts': verdicts}
+
+
+def _strict_preflight(manifest, trust_registry_path, evidence_dir):
+    """Fail-closed strict-profile gate (DES-061 §5). Returns verdicts or None."""
+    if manifest['profile'] == STRICT_PROFILE:
+        if trust_registry_path is None or evidence_dir is None:
+            fail('STRICT_PROFILE_NOT_SUPPORTED')
+        result = _verify_attestations(trust_registry_path, evidence_dir, manifest)
+        return result
+    if trust_registry_path is not None:
+        # An exploratory manifest never consumes a registry; it cannot silently upgrade.
+        fail('STRICT_PROFILE_MISMATCH')
+    return None
+
+
+def _prepare_unchecked(payload, manifest_dir, trust_registry_path=None, evidence_dir=None):
     manifest = strict_json(payload)
     if redact(payload)[1]['state'] != 'UNCHANGED':
         fail('PROHIBITED_INPUT_PATTERN')
@@ -135,14 +257,13 @@ def _prepare_unchecked(payload, manifest_dir):
     identifier(manifest['run_id'])
     # Run/attempt IDs become path components and must also satisfy the path grammar.
     relative(manifest['run_id'])
-    if manifest['profile'] == 'STRICT_COMPARISON_CANDIDATE':
-        fail('STRICT_PROFILE_NOT_SUPPORTED')
-    if manifest['profile'] != PROFILE:
+    if manifest['profile'] not in (PROFILE, STRICT_PROFILE):
         fail('INVALID_PROFILE')
     try:
         dt.datetime.strptime(manifest['created_at_utc'], '%Y-%m-%dT%H:%M:%SZ')
     except (TypeError, ValueError):
         fail('INVALID_TIMESTAMP')
+    attestation = _strict_preflight(manifest, trust_registry_path, evidence_dir)
     hash_value(manifest['evaluator_commitment_sha256'])
     _runtime(manifest['runtime'])
     participants = array(manifest['participants'], 2, 2)
@@ -194,12 +315,19 @@ def _prepare_unchecked(payload, manifest_dir):
     unique([row['attempt_id'].casefold() for row in schedule])
     if sorted(row['scenario_id'] for row in schedule) != sorted(visible):
         fail('INVALID_SCHEDULE')
-    return {'manifest': manifest, 'assets': assets, 'inputs': input_bytes, 'visible': visible}
+    if manifest['profile'] == STRICT_PROFILE:
+        # A strict candidate needs at least two completed schedule rows with both
+        # orders represented (DES-040 §4.2); preflight derives it, never trusts it.
+        orders = {tuple(row['order']) for row in schedule}
+        if len(schedule) < 2 or orders != {('A', 'B'), ('B', 'A')}:
+            fail('INVALID_SCHEDULE')
+    return {'manifest': manifest, 'assets': assets, 'inputs': input_bytes, 'visible': visible,
+            'attestation': attestation}
 
 
-def _prepare(payload, manifest_dir):
+def _prepare(payload, manifest_dir, trust_registry_path=None, evidence_dir=None):
     try:
-        return _prepare_unchecked(payload, manifest_dir)
+        return _prepare_unchecked(payload, manifest_dir, trust_registry_path, evidence_dir)
     except (TypeError, KeyError, AttributeError, RecursionError):
         fail('INVALID_SCHEMA')
     except OSError:
@@ -210,8 +338,8 @@ def load_run_manifest(payload, *, manifest_dir):
     return _prepare(payload, manifest_dir)['manifest']
 
 
-def validate_run_manifest(payload, *, manifest_dir):
-    prepared = _prepare(payload, manifest_dir)
+def validate_run_manifest(payload, *, manifest_dir, trust_registry_path=None, evidence_dir=None):
+    prepared = _prepare(payload, manifest_dir, trust_registry_path, evidence_dir)
     return {'status': 'VALIDATED_NOT_EXECUTED', 'run_manifest_sha256': digest(canonical(prepared['manifest'])),
             'claim_status': 'NOT_ASSERTED', 'human_rating_status': 'NOT_EXECUTED'}
 
@@ -287,10 +415,20 @@ def _ledger_write(root, locator, raw, role):
             'byte_count': len(safe), 'sha256': digest(safe), 'redaction': transformation}
 
 
-def _materialize(manifest_path, exclusions_path, output_root, preview=False):
+def _materialize(manifest_path, exclusions_path, output_root, preview=False,
+                 trust_registry_path=None, evidence_dir=None):
     manifest_path = no_links(manifest_path)
-    prepared = _prepare(read_bytes(manifest_path), manifest_path.parent)
+    # Snapshot the registry digest before preparation; the verifier reloads it
+    # during preparation and both digests must match, then every materialized
+    # call rechecks the live file (DES-061 §2 drift boundary).
+    registry_before = _load_trust_registry(trust_registry_path)['digest'] if trust_registry_path is not None else None
+    prepared = _prepare(read_bytes(manifest_path), manifest_path.parent,
+                        trust_registry_path, evidence_dir)
     manifest = prepared['manifest']
+    if trust_registry_path is not None:
+        if registry_before != prepared['attestation']['registry_digest']:
+            fail('TRUST_REGISTRY_DRIFT')
+        _registry_drift(trust_registry_path, prepared['attestation']['registry_digest'])
     outer = no_links(output_root)
     exclusions = _exclusions(exclusions_path, prepared, manifest_path.parent, outer)
     root = outer if preview else contained(outer, manifest['run_id'])
@@ -331,6 +469,7 @@ def _materialize(manifest_path, exclusions_path, output_root, preview=False):
                  'run_manifest_sha256': digest(canonical(manifest)), 'runtime': manifest['runtime'],
                  'settings_canonical_sha256': digest(canonical(manifest['runtime'])),
                  'evaluator_commitment_sha256': manifest['evaluator_commitment_sha256'], 'leakage_matches': 0,
+                 'trust_registry_sha256': prepared['attestation']['registry_digest'] if prepared['attestation'] else None,
                  'ledger': ledger, 'planned_calls': [{key: value for key, value in plan.items() if key not in ('files', 'prompt')} for plan in plans]}
     preflight_bytes = canonical(preflight)+b'\n'
     if len(preflight_bytes) > LIMIT//2 or len(preflight_bytes)+len(plans)*10240 > LIMIT:
@@ -351,8 +490,10 @@ def _materialize(manifest_path, exclusions_path, output_root, preview=False):
     return root, prepared, plans, preflight
 
 
-def materialize_preview(manifest_path, evaluator_exclusions_path, preview_root):
-    root, prepared, plans, preflight = _materialize(manifest_path, evaluator_exclusions_path, preview_root, True)
+def materialize_preview(manifest_path, evaluator_exclusions_path, preview_root,
+                        trust_registry_path=None, evidence_dir=None):
+    root, prepared, plans, preflight = _materialize(manifest_path, evaluator_exclusions_path, preview_root, True,
+                                                    trust_registry_path, evidence_dir)
     return {'status': 'PREVIEW_NOT_RUN', 'run_manifest_sha256': preflight['run_manifest_sha256'], 'call_count': len(plans)}
 
 
@@ -372,8 +513,10 @@ def _terminal(record, participant_failure=False):
     return 'COMPLETED_PROCESS'
 
 
-def _run(manifest_path, exclusions_path, output_root, launcher, backend):
-    root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root)
+def _run(manifest_path, exclusions_path, output_root, launcher, backend,
+         trust_registry_path=None, evidence_dir=None):
+    root, prepared, plans, preflight = _materialize(manifest_path, exclusions_path, output_root,
+                                                    False, trust_registry_path, evidence_dir)
     manifest = prepared['manifest']; runtime = manifest['runtime']
     attempts = []; stop = None
     ledger = list(preflight['ledger'])
@@ -390,9 +533,11 @@ def _run(manifest_path, exclusions_path, output_root, launcher, backend):
         if stop is None:
             record['started_at_utc'] = _utc()
             try:
-                # Recheck executable and every materialized byte immediately before launch.
+                # Recheck executable, registry and every materialized byte immediately before launch.
                 if file_digest(runtime['codex']['executable_path']) != runtime['codex']['executable_sha256']:
                     fail('EXECUTABLE_DRIFT')
+                if trust_registry_path is not None:
+                    _registry_drift(trust_registry_path, prepared['attestation']['registry_digest'])
                 for entry in preflight['ledger']:
                     path = contained(root, entry['relative_path'])
                     if file_digest(path) != entry['sha256']:
@@ -441,12 +586,27 @@ def _run(manifest_path, exclusions_path, output_root, launcher, backend):
         attempts.append(record)
     complete = all(row['terminal_status'] == 'COMPLETED_PROCESS' for row in attempts)
     started = any(row['process_outcome'] not in ('NOT_STARTED', 'SPAWN_FAILED') for row in attempts)
+    attestation = prepared['attestation']
+    strict_eligible = (attestation is not None and backend == 'NATIVE_CODEX'
+                       and manifest['profile'] == STRICT_PROFILE)
+    evidence_class = 'STRICT_COMPARABILITY_CANDIDATE' if strict_eligible else (PROFILE if backend == 'NATIVE_CODEX' else 'TEST_DOUBLE')
     result = {'schema_version': 1, 'run_id': manifest['run_id'], 'created_at_utc': _utc(),
               'run_manifest_sha256': preflight['run_manifest_sha256'], 'response_schema_sha256': digest(NEUTRAL_RESPONSE_SCHEMA_V1),
-              'execution_backend': backend, 'evidence_class': PROFILE if backend == 'NATIVE_CODEX' else 'TEST_DOUBLE',
+              'execution_backend': backend, 'evidence_class': evidence_class,
               'pilot_status': ('COMPLETE' if complete else 'PARTIAL' if started else 'FAILED') if backend == 'NATIVE_CODEX' else 'NOT_EXECUTED',
               'claim_status': 'NOT_ASSERTED', 'human_rating_status': 'NOT_EXECUTED', 'runtime': runtime,
               'attempts': attempts, 'ledger': ledger}
+    if attestation is not None:
+        # Preserve the manifest's declared records; verdicts are separate derived facts.
+        result['attestation_verdicts'] = attestation['verdicts']
+        result['strict_eligibility'] = 'HOLDS_FOR_HOLDOUT_PROTOCOL_ONLY'
+        result['model'] = dict(runtime['model'])
+        for verdict in attestation['verdicts']:
+            record = result['model'].get(verdict['subject'])
+            if isinstance(record, dict):
+                record = dict(record, state='VERIFIED', value=verdict['value'],
+                              evidence_sha256=verdict['evidence_sha256'])
+                result['model'][verdict['subject']] = record
     result_bytes = canonical(result)+b'\n'
     if len(result_bytes) > LIMIT:
         fail('CONTROL_RECORD_CAPACITY_LIMIT')
@@ -454,13 +614,17 @@ def _run(manifest_path, exclusions_path, output_root, launcher, backend):
     return result
 
 
-def run_pair(manifest_path, evaluator_exclusions_path, output_root):
-    return _run(manifest_path, evaluator_exclusions_path, output_root, native_capture, 'NATIVE_CODEX')
+def run_pair(manifest_path, evaluator_exclusions_path, output_root,
+             trust_registry_path=None, evidence_dir=None):
+    return _run(manifest_path, evaluator_exclusions_path, output_root, native_capture, 'NATIVE_CODEX',
+                trust_registry_path, evidence_dir)
 
 
-def _run_pair_with_ports(manifest_path, evaluator_exclusions_path, output_root, *, launcher):
+def _run_pair_with_ports(manifest_path, evaluator_exclusions_path, output_root, *, launcher,
+                        trust_registry_path=None, evidence_dir=None):
     """Private deterministic test port. Never produces native pilot evidence."""
-    return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE')
+    return _run(manifest_path, evaluator_exclusions_path, output_root, launcher, 'TEST_DOUBLE',
+                trust_registry_path, evidence_dir)
 
 
 def _check_ledger(entries):
@@ -493,7 +657,7 @@ def _inspect(run_root):
     root = no_links(run_root)
     result_file = root/'result.json'
     preflight = strict_json(read_bytes(root/'preflight.json'))
-    exact(preflight, 'schema_version status created_at_utc run_manifest_sha256 runtime settings_canonical_sha256 evaluator_commitment_sha256 leakage_matches ledger planned_calls')
+    exact(preflight, 'schema_version status created_at_utc run_manifest_sha256 runtime settings_canonical_sha256 evaluator_commitment_sha256 trust_registry_sha256 leakage_matches ledger planned_calls')
     integer(preflight['schema_version'], 1, 1)
     if preflight['status'] not in ('SEALED', 'PREVIEW_NOT_RUN'):
         fail('INVALID_PREFLIGHT')
@@ -514,7 +678,12 @@ def _inspect(run_root):
     document = strict_json(read_bytes(result_file)) if result_file.exists() else preflight
     _check_ledger(document['ledger'])
     if result_file.exists():
-        exact(document, 'schema_version run_id created_at_utc run_manifest_sha256 response_schema_sha256 execution_backend evidence_class pilot_status claim_status human_rating_status runtime attempts ledger')
+        required_result = 'schema_version run_id created_at_utc run_manifest_sha256 response_schema_sha256 execution_backend evidence_class pilot_status claim_status human_rating_status runtime attempts ledger'
+        if not isinstance(document, dict) or not set(required_result.split()).issubset(document):
+            fail('INVALID_RESULT')
+        optional_result = set('attestation_verdicts strict_eligibility model'.split())
+        if set(document) - set(required_result.split()) - optional_result:
+            fail('INVALID_RESULT')
         integer(document['schema_version'], 1, 1)
         if (preflight['status'] != 'SEALED' or document['run_id'] != manifest['run_id']
             or document['run_manifest_sha256'] != preflight['run_manifest_sha256']
@@ -524,7 +693,30 @@ def _inspect(run_root):
             fail('INVALID_RESULT')
         if document['execution_backend'] not in ('NATIVE_CODEX', 'TEST_DOUBLE'):
             fail('INVALID_RESULT')
-        if document['evidence_class'] != (PROFILE if document['execution_backend'] == 'NATIVE_CODEX' else 'TEST_DOUBLE'):
+        strict_candidate = (document['evidence_class'] == 'STRICT_COMPARABILITY_CANDIDATE')
+        expected_class = ('STRICT_COMPARABILITY_CANDIDATE' if strict_candidate else
+                          (PROFILE if document['execution_backend'] == 'NATIVE_CODEX' else 'TEST_DOUBLE'))
+        if document['evidence_class'] != expected_class:
+            fail('INVALID_RESULT')
+        if strict_candidate:
+            # Strict-eligible results must carry the verifier verdicts, the
+            # holdout-protocol-only marker, and no claim/rating promotion.
+            verdicts = document.get('attestation_verdicts')
+            if (not isinstance(verdicts, list) or len(verdicts) != 4
+                    or document.get('strict_eligibility') != 'HOLDS_FOR_HOLDOUT_PROTOCOL_ONLY'
+                    or document['claim_status'] != 'NOT_ASSERTED'
+                    or document['human_rating_status'] != 'NOT_EXECUTED'):
+                fail('INVALID_RESULT')
+            for verdict in verdicts:
+                exact(verdict, 'subject arm_id state value issuer_id observed_at_utc evidence_sha256 verifier_id verification')
+                if (verdict['state'] != 'VERIFIED' or verdict['verification'] != 'SIGNATURE_VALID'
+                        or verdict['verifier_id'] != VERIFIER_ID or verdict['arm_id'] not in ('A', 'B')
+                        or verdict['subject'] not in ATTESTATION_SUBJECTS):
+                    fail('INVALID_RESULT')
+            if [ (v['arm_id'], v['subject']) for v in verdicts ] != [('A', 'provider_revision'), ('A', 'system_baseline'), ('B', 'provider_revision'), ('B', 'system_baseline')]:
+                fail('INVALID_RESULT')
+        elif 'attestation_verdicts' in document or 'strict_eligibility' in document:
+            # A strict marker on a non-strict result would be a silent upgrade.
             fail('INVALID_RESULT')
         attempts = array(document['attempts'], 512)
         if len(attempts) != len(planned):
@@ -713,18 +905,23 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     subs = parser.add_subparsers(dest='command', required=True)
     validate = subs.add_parser('validate'); validate.add_argument('manifest')
+    validate.add_argument('--trust-registry'); validate.add_argument('--attestations')
     for name in ('materialize', 'run'):
         command = subs.add_parser(name); command.add_argument('manifest'); command.add_argument('--exclusions', required=True); command.add_argument('--output', required=True)
+        command.add_argument('--trust-registry'); command.add_argument('--attestations')
     inspect = subs.add_parser('inspect'); inspect.add_argument('run_root')
     grade = subs.add_parser('grade'); grade.add_argument('run_root'); grade.add_argument('--assertions', required=True); grade.add_argument('--output', required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == 'validate':
-            result = validate_run_manifest(read_bytes(args.manifest), manifest_dir=Path(args.manifest).absolute().parent)
+            result = validate_run_manifest(read_bytes(args.manifest), manifest_dir=Path(args.manifest).absolute().parent,
+                                           trust_registry_path=args.trust_registry, evidence_dir=args.attestations)
         elif args.command == 'materialize':
-            result = materialize_preview(args.manifest, args.exclusions, args.output)
+            result = materialize_preview(args.manifest, args.exclusions, args.output,
+                                         args.trust_registry, args.attestations)
         elif args.command == 'run':
-            result = run_pair(args.manifest, args.exclusions, args.output)
+            result = run_pair(args.manifest, args.exclusions, args.output,
+                              args.trust_registry, args.attestations)
         elif args.command == 'inspect':
             result = inspect_run(args.run_root)
         else:
