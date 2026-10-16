@@ -56,7 +56,13 @@ candidates, declared source/guide mapping, and typed gaps; they do not prove a
 case usable or executable. Produce a usable draft case for each determinable
 obligation, or state the missing target, observable, cleanup, source, or oracle
 fact as a typed gap. The packaged example at `examples/design-methods.json` is
-instructional data only and has no approved requirement baseline.
+instructional data only and has no approved requirement baseline. When you
+design tables or transitions by reading instead of running the engine, mirror
+its output discipline: enumerate the full fact-defined universe with one row
+per combination or transition, classify conflicts as `CONFLICT`, rule-outs as
+`EXCLUDED` and uncovered combinations as `GAP`, keep every stated field per
+row, and keep extra candidate ideas in the case table rather than the typed
+answer.
 
 | Work | Guide under `scripts/qa_master/skills/professional/` |
 | --- | --- |
