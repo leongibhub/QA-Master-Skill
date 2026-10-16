@@ -1,0 +1,86 @@
+{
+  "work": "TASK072",
+  "attempt": 1,
+  "version": 1,
+  "assessment": "SOURCE_TRACE_ONLY_NO_QUALITY_VERDICT",
+  "records": [
+    {
+      "path": "benchmarks/public-development/PD-LINUX-UPGRADE-001/release-notes.md",
+      "sha256": "fa1481efe9420eba9c23ff5144f8ab39b8c31e1ff677618bbc1ddf486f528f4f",
+      "bytes": 2335,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-LINUX-UPGRADE-001/upgrade-runbook.md",
+      "sha256": "a7621f2401646cae76e33024d8f857d742ea169a6c0d172f3619778177797c32",
+      "bytes": 2055,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-LINUX-UPGRADE-001/support-and-config.md",
+      "sha256": "1c2dbbea6050b115c1cf30a016258ea0f8d8f845f032d419edb98ed5357e8b8c",
+      "bytes": 1644,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-LINUX-UPGRADE-001/incident-excerpts.md",
+      "sha256": "f527db21d24f5f3624e376c6c555e1b714b7584b1fd2d00d26b6136b9611e569",
+      "bytes": 876,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-LINUX-UPGRADE-001/participant-task.md",
+      "sha256": "9ef1d4eec587b34471b6a56a179fd99734a1a3dded161d6bc80fe05e5dcf45e5",
+      "bytes": 1672,
+      "scope": "public source"
+    },
+    {
+      "path": "benchmarks/public-development/PD-LINUX-UPGRADE-001/audit-ledger.md",
+      "sha256": "3dabc312a4d11ed7aa329c3dd39ab815313810febfbcfedf824ca6282daef353",
+      "bytes": 4061,
+      "scope": "released audit aid after output freeze"
+    },
+    {
+      "path": "benchmarks/public-development/PD-LINUX-UPGRADE-001/expected-review-checklist.md",
+      "sha256": "f9e0019ca54d173fc318498cff1eabcc165039eaa25288b3029f33f50ae26bf5",
+      "bytes": 2167,
+      "scope": "released audit aid after output freeze"
+    },
+    {
+      "path": "docs/verification/evidence/linux-task-001/attempt1/01-review-and-strategy.md",
+      "sha256": "f92005272a5bbf5287c9432ddf3957f343f9681e969fe0465bc4f185a4b86b38",
+      "bytes": 28413,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/linux-task-001/attempt1/02-draft-cases.md",
+      "sha256": "a0c43d7e813da0a47889d5fce37f9c9d0ebe009620a9804877e32293dee75e35",
+      "bytes": 37426,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/linux-task-001/attempt1/03-review-and-handoff.md",
+      "sha256": "5e597295569c1c6a35b3be2b7371c217972fe9e101006bbb2b37da7bd0fdc4ed",
+      "bytes": 10246,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/linux-task-001/attempt1/read-audit.md",
+      "sha256": "b48f6b5c7eaf21a4e52725553dfdb9bbe135b5b7164b5002268ff339279b4bd6",
+      "bytes": 4169,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/linux-task-001/attempt1/handoff.json",
+      "sha256": "de5827d570018b8796c83869a14f8e84c16fd650abcc61a844876fb6ff5d098a",
+      "bytes": 10419,
+      "scope": "retained participant artifact unchanged"
+    },
+    {
+      "path": "docs/verification/evidence/linux-task-001/attempt1/manifest.json",
+      "sha256": "d59c93ae8810b4f9bb0f20a824592796a0b32733c00741f7b254fbcbe2445e21",
+      "bytes": 1879,
+      "scope": "retained participant manifest (provenance-corrected at cd4a7d9; participant file bytes unchanged)"
+    }
+  ]
+}

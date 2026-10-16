@@ -1,0 +1,17 @@
+[
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\linux-task-001\\coverage-task072\\.gitattributes",
+    "sha256": "5CE7A2B404660AE0FDA700E45B88FCA5B110864FE586091DEACBE2554365BFA0",
+    "bytes": 42
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\evidence\\linux-task-001\\coverage-task072\\review-input-hashes.json",
+    "sha256": "706133D9618246D0F708941B5A3472F0FC4450FE4BB8167F91694D28AB129B96",
+    "bytes": 3473
+  },
+  {
+    "path": "D:\\QA-Master-PR2\\docs\\verification\\public-linux-task072-source-coverage.md",
+    "sha256": "26C73BA8EA318A187AF9D2904DCFAC6EE7E1E84EAF5E5F962131C9796781E374",
+    "bytes": 16461
+  }
+]
