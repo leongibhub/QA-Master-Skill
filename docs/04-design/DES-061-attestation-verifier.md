@@ -3,7 +3,10 @@
 - Artifact ID: `DES-061`
 - Document State: `DRAFT`
 - Evaluation State: `IN_REVIEW`
-- Change / task: `CR-015` / `TASK-076`
+- Version: v2 (TASK-083 NR-1 amendment: §3 step-3 cross-arm value equality
+  and declared-value consistency; §5 conjunction extended; §6 adds
+  `STRICT_ATTESTATION_VALUE_MISMATCH`. v1 was TASK-076.)
+- Change / task: `CR-015` / `TASK-076`, amendment `TASK-083`
 - Requirements: `REQ-011` claim boundary; `REQ-024` (unknown provider revision
   may only create `EXPLORATORY_CONFIGURED_SAME_MODEL`); supports Phase 3
   readiness of DRAFT `REQ-025`/`NFR-009` without completing them
@@ -114,7 +117,12 @@ Called only from the strict preflight path. For each arm and each subject it:
 4. Verifies the detached signature against the issuer's registered public key.
 5. Checks `observed_at_utc` is not after the manifest's `created_at_utc`
    (an attestation cannot attest the future).
-6. Returns per-arm/per-subject:
+6. **NR-1 amendment (v2):** after both arms are verified for a subject,
+   requires the two arms' attested `value`s to be equal, and where the
+   manifest declares a non-null `runtime.model.<subject>.value`, requires the
+   attested value to equal the declared value
+   (`STRICT_ATTESTATION_VALUE_MISMATCH` otherwise).
+7. Returns per-arm/per-subject:
 
 ```json
 {
@@ -156,7 +164,13 @@ to:
 3. If `profile == STRICT_COMPARISON_CANDIDATE` with a registry: run
    `verify_attestations` for both arms and both subjects before participant
    materialization or any call. Any rejected verdict fails the preflight with
-   the specific code; no partial run is started.
+   the specific code; no partial run is started. **NR-1 amendment (v2):**
+   after all four verdicts are `VERIFIED`, the verifier additionally requires
+   per subject that the two arms' attested `value`s are equal (a strict pair
+   is same-model by construction), and where the manifest's declared
+   `runtime.model.<subject>.value` is non-null, the attested value must equal
+   the declared value; a mismatch fails `STRICT_ATTESTATION_VALUE_MISMATCH`
+   before any participant call.
 4. Additionally require for strict manifests: `retry_count == 0` (already
    global), `temperature_state == NOT_AVAILABLE`, `seed_state ==
    NOT_AVAILABLE` (already enforced), and at least two schedule rows with both
@@ -165,13 +179,14 @@ to:
    declared profile).
 
 `evidence_class` in the run result is `STRICT_COMPARABILITY_CANDIDATE` only
-when: profile is strict, both attestations are `VERIFIED` for both arms,
-`execution_backend == NATIVE_CODEX`, and pilot status is derived without
-discretion exactly as today. Even then the result carries
-`claim_status: NOT_ASSERTED`, `human_rating_status: NOT_EXECUTED`, and a new
-`strict_eligibility: HOLDS_FOR_HOLDOUT_PROTOCOL_ONLY` marker stating that the
-separate REQ-011 holdout/human protocol is still required. It is not fairness
-proof or a superiority conclusion.
+when: profile is strict, all four verdicts are `VERIFIED`, the cross-arm
+equality clause of step 3 holds (NR-1), `execution_backend == NATIVE_CODEX`,
+and pilot status is derived without discretion exactly as today. Even then the
+result carries `claim_status: NOT_ASSERTED`, `human_rating_status:
+NOT_EXECUTED`, and a new `strict_eligibility:
+HOLDS_FOR_HOLDOUT_PROTOCOL_ONLY` marker stating that the separate REQ-011
+holdout/human protocol is still required. It is not fairness proof or a
+superiority conclusion.
 
 ## 6. New failure codes (stable, public)
 
@@ -186,6 +201,7 @@ proof or a superiority conclusion.
 | `ATTESTATION_TIME_INVALID` | `observed_at_utc` after manifest `created_at_utc`. |
 | `STRICT_PROFILE_MISMATCH` | Registry supplied with an exploratory profile. |
 | `STRICT_ATTESTATION_INCOMPLETE` | A strict manifest lacks a required verdict. |
+| `STRICT_ATTESTATION_VALUE_MISMATCH` | Arms attest different values for a subject, or an attested value differs from a non-null declared value (NR-1). |
 
 `ATTESTATION_NOT_SUPPORTED` remains the code for a manifest that merely
 declares `VERIFIED` in `runtime.model` without going through the verifier; the
