@@ -37,33 +37,48 @@ bytes would reward tuning rather than measure generality.
    response schema, same model and no-tool policy, AB/BA alternation, B arm
    pinned `1a8c57c` byte-identical, A arm at the post-CR-021 HEAD.
 
-## Scenario roster (8 scenarios, 16 checks)
+## Scenario roster (8 scenarios, 18 checks)
 
 | ID | Method | Domain | Upgrade class targeted | Checks |
 |---|---|---|---|---|
 | FS-01 | boundary | Gym membership duration tiers (whole-number months) | interior neighbours both sides + multi-part (accepted+rejected) | Q-FS-011, Q-FS-012 |
-| FS-02 | boundary | Invoice line-quantity decimal cap (thousandths rule) | declared precision + scale-violation candidate + both classes | Q-FS-021, Q-FS-022 |
-| FS-03 | decision_table | Shipping-speed rules with one excluded combination and one rule conflict | multi-part (legal + excluded members) + engine vocabulary (CONFLICT/EXCLUDED) + provenance (specific facts) | Q-FS-031, Q-FS-032, Q-FS-033 |
-| FS-04 | decision_table | Support-ticket priority matrix (3 conditions) | row-universe discipline (fact-defined rows only) + exact row keys | Q-FS-041, Q-FS-042 |
-| FS-05 | state_transition | Library-loan lifecycle (renew/damage/return) | label minimality + family consistency (renew family) + multi-part valid/invalid | Q-FS-051, Q-FS-052 |
-| FS-06 | state_transition | Elevator control (idle/moving/fault) | family consistency (door-open/door-closed family) + label minimality | Q-FS-061, Q-FS-062 |
-| FS-07 | state_transition | Batch job lifecycle (queued/running/failed/done) with retry counter | label minimality (retry counter separate from event names) + universe discipline | Q-FS-071, Q-FS-072 |
+| FS-02 | boundary | Invoice line-quantity decimal cap (thousandths rule) | declared precision + scale-violation candidates + both classes | Q-FS-021, Q-FS-022 |
+| FS-03 | decision_table | Shipping-speed rules with one excluded combination and one rule conflict | multi-part (legal + excluded members) + engine vocabulary (CONFLICT/DEFINED) + provenance (specific facts) | Q-FS-031, Q-FS-032, Q-FS-033 |
+| FS-04 | decision_table | Support-ticket priority matrix (2x2) | row-universe discipline (fact-defined rows only) + exact row keys; embedded ambiguity (escalation continuation undefined) | Q-FS-041, Q-FS-042 |
+| FS-05 | state_transition | Library-loan lifecycle (renew/return/loss) | label minimality + family consistency (renewal family) + multi-part valid/invalid | Q-FS-051, Q-FS-052 |
+| FS-06 | state_transition | Elevator control (idle/moving/doors/fault) | family consistency (fault family across three states) + universe discipline | Q-FS-061, Q-FS-062 |
+| FS-07 | state_transition | Batch job lifecycle with retry counter | label minimality (retry counter separate from event names) + universe discipline; embedded ambiguity (retry limit unstated) | Q-FS-071, Q-FS-072 |
 | FS-08 | decision_table | Discount-eligibility with promo overlap conflict | engine vocabulary (CONFLICT classification) + provenance specific facts | Q-FS-081, Q-FS-082, Q-FS-083 |
 
-Embedded-ambiguity scenarios (gap behavior, no guessing): FS-04 (one cell
-undefined), FS-07 (retry-count limit unstated). Two ambiguity scenarios
-(matching the CR-017 density) rather than four, to keep the set focused on
-the upgrade classes.
+Embedded-ambiguity scenarios (gap behavior, no guessing): FS-04 (escalation
+continuation undefined), FS-07 (retry-count limit unstated). Two ambiguity
+scenarios (matching the CR-017 density) rather than four, to keep the set
+focused on the upgrade classes.
 
-## Oracle validity script commitment
+## Frozen bytes and validity-script commitment (executed)
 
-Before any run, a script asserts for every check: (a) every expected row and
-value is string-derivable from that scenario's `known_facts` (OA-1);
-(b) provenance answers name the specific conflict/invalidity fact IDs
-(OA-2); (c) synthesized tokens appear only where the check question itself
-fixes the token (OA-3); (d) expected lists contain no numeric duplicates
-(OA-4). The script and its output hash are registered as evidence before the
-run manifest is built.
+The scenario/oracle bytes are frozen under
+`.qa-master/paired-pilot/cr022-fresh-preparation-v1/` (local-only,
+gitignored, as with all run material). The pre-registered validity script
+`cr022-oracle-validity-v1.py` was executed against those bytes and passed
+**123/123 checks** covering OA-1 (evidence refs exist; checks exist;
+value_type match; oracle bytes match hand-derived tables; every value token
+derivable from facts text), OA-2 (provenance questions name the
+specific-facts reading and expected answers are the specific fact IDs), OA-3
+(synthesized token forms — classification, discount, event names, precision
+— fixed in the question text itself, identical information for both arms),
+OA-4 (no numeric duplicates).
+
+- `cr022-oracle-validity-v1.py` sha256:
+  `88f6caaaff954448391d24bc232c274034b909a2cfd572dda67533af8e9ab67f`
+- `cr022-oracle-validity-v1.output.txt` sha256 (`ALL PASS`, 123/123):
+  `c6c737276882757a8829ba321bce5235118257a9d169f8970b1d980572ebb547`
+
+During validity checking, three scenario/question wording weaknesses were
+found and corrected BEFORE any run (event-name form fixed in questions;
+scale-violation derivation phrasing sharpened; hyphenated-phrase
+derivation), and the final bytes re-validated 123/123. No model has seen
+these bytes.
 
 ## Non-goals
 
