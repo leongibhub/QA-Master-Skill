@@ -21,6 +21,12 @@ new design task, keep reviewable outputs in `.qa-master/artifacts/<task-id>/`:
 - Requirement review: atomic candidate ID, actor/trigger, rule, observable outcome,
   versioned source, fact/inference/assumption, conflict and question. Highlight
   missing rules that change test expectations.
+- Every deliverable that reports gaps must cover, where the supplied facts omit
+  them: the **execution observable** (how a pass or fail would actually be
+  observed), **setup and cleanup preconditions** (accounts, fixtures, state
+  reset), and the **oracle source** (which rule or contract fixes the expected
+  value). A gap record that names only the missing rule without naming what
+  execution evidence is missing is incomplete.
 - Test strategy: object and risk, applicable types, meaningful coverage obligations,
   prerequisites and exclusions. Do not use a count of generated cases as coverage.
 - Case table: stable ID, requirement/risk/source, type, priority and reason,

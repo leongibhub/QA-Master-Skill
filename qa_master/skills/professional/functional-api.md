@@ -16,7 +16,9 @@ Inputs are an approved requirement ID and oracle, data domain or state model, AP
 
 ## Method
 
-Partition input domains into valid equivalence classes, invalid classes and boundaries. For an ordered range, include each endpoint, just-inside and just-outside values; never use arbitrary values as a substitute for a declared bound. Build a state-transition table: each allowed transition has a triggering role and effect; each forbidden transition has its denial and invariant. For APIs, compare method, path, parameters, headers, media types, status, response schema, idempotency and error shape to the contract. Exercise authentication absence, invalid credentials, expired credentials, wrong tenant and authorized-but-forbidden roles according to the documented policy.
+Partition input domains into valid equivalence classes, invalid classes and boundaries. For an ordered range, include each endpoint, just-inside and just-outside values; never use arbitrary values as a substitute for a declared bound. Cover **both** ends of the range with interior step points: when the domain has a declared step or natural unit, include one interior step point adjacent to each endpoint (for example a `2..9` whole-number range includes both `2`, `3` and `8`, `9` as accepted neighbours), not just one side. Build a state-transition table: each allowed transition has a triggering role and effect; each forbidden transition has its denial and invariant. For APIs, compare method, path, parameters, headers, media types, status, response schema, idempotency and error shape to the contract. Exercise authentication absence, invalid credentials, expired credentials, wrong tenant and authorized-but-forbidden roles according to the documented policy.
+
+When a range is decimal with a declared precision or scale, boundary values must be expressed in that declared precision (for example `0.50`, not `0.5`, when the rule states hundredths), and the rejected set must include at least one value that violates the scale by one place beyond it (for example `0.505` when the scale is two), alongside the numeric just-outside neighbours.
 
 ## Executable acceptance oracle examples
 

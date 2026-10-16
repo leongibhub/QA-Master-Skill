@@ -28,7 +28,11 @@ project answers before asking questions. Record an explicit "none" separately fr
 Use [the work protocol](references/work-protocol.md) for deliverables, local state
 commands, human decisions and cross-session continuation. Use
 [domain guidance](references/domains.md) to select Web/API, Linux/system or AI
-computing checks. Read only the sections relevant to the object.
+computing checks. Read only the sections relevant to the object. When a task
+asks for typed observations or graded answers, apply
+[the typed observation conventions](references/typed-observations.md): literal
+source tokens, uppercase-underscore synthesized labels, minimal observation
+values and declared precision.
 
 ## Select and apply professional methods
 
