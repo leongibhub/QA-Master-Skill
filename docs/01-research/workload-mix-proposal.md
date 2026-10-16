@@ -71,8 +71,25 @@ routing (the router lane, where the plan withholds method labels).
 
 Not every (I, M, D) cell is meaningful (e.g. a boundary-value design against
 "no materials" is not a valid request; performance thresholds without a
-system are `THRESHOLD_UNCONFIRMED` by contract). The proposal below restricts
-mixes to valid cells only, and the validity table is part of the proposal.
+system are `THRESHOLD_UNCONFIRMED` by contract). The proposal restricts mixes
+to valid cells only; the validity table follows.
+
+### Request-class validity table
+
+Valid (intake × method × domain) cells, derived from the SKILL.md intake
+rules and the domain guidance (every cell below is meaningful for all three
+domains, so counts are methods × 3):
+
+| Intake | Valid methods | Cells |
+| --- | --- | --- |
+| `I1` no materials | `M1` (ask for materials; requirements review) | 1 × 3 = 3 |
+| `I2` repository only | `M1`, `M2`, `M3`, `M5`, `M6` (code-reading methods; `M4` needs a running system) | 5 × 3 = 15 |
+| `I3` deployed system only | `M1` (boundary agreement → requirement derivation), `M4`, `M5` | 3 × 3 = 9 |
+| `I4` development incomplete | `M1`, `M2`, `M3`, `M6` (design-now + handoff) | 4 × 3 = 12 |
+| `I5` one-stage bounded | any single stage `M1`–`M7` the requester names | 7 × 3 = 21 |
+
+**Total: 60 valid cells** (of 5 × 7 × 3 = 105 possible). The mix options
+below draw only from these cells.
 
 ### Deterministic-product track (separate mix)
 
@@ -123,10 +140,10 @@ Cost estimate: ~1.6–1.8× W-A.
 
 ### Option W-C — "full-factorial probe" (highest cost)
 
-Every valid (I, M, D) cell with nonzero weight (the validity table yields 24
-valid cells), minimum 2 pairs per cell. Cost estimate: ~4–5× W-A. Offered for
-completeness; not recommended for a first controlled comparison because
-per-cell depth is too thin for any stable per-cell statement.
+Valid (I, M, D) cells from the validity table above (60 cells), minimum 2
+pairs per cell. Cost estimate: ~6–8× W-A. Offered for completeness; not
+recommended for a first controlled comparison because per-cell depth is too
+thin for any stable per-cell statement.
 
 **Deterministic-track mix (all options):** boundary:decision_table:
 state_transition = 1:1:1 with ≥50% of boundary models decimal-typed and ≥1
@@ -157,10 +174,10 @@ The bounded floor is therefore precision-driven:
   threshold-grade — direction-of-interest only.
 - **Overall minimum (W-A):** 5 strata × 8 = **40 pairs minimum**, before
   repeat policy.
-- **Overall minimum (W-B):** 10 strata × 8 = **80 pairs minimum**, before
-  repeat policy.
-- **Overall minimum (W-C):** 24 cells × 2 minimum (probe granularity;
-  per-cell statements are explicitly not supported at this depth) = 48 pairs
+- **Overall minimum (W-B):** 9 strata (3 specialist + router + 4 intake +
+  1 narrative) × 8 = **72 pairs minimum**, before repeat policy.
+- **Overall minimum (W-C):** 60 valid cells × 2 minimum (probe granularity;
+  per-cell statements are explicitly not supported at this depth) = 120 pairs
   minimum.
 - **Repeat policy (if provider seed unsupported):** same pre-registered
   repeat count r ≥ 2 for both arms on every pair; effective judged unit is
