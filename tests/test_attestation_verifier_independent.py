@@ -86,16 +86,16 @@ class IndependentVerifierTests(unittest.TestCase):
         registry = json.loads(self.registry.read_text())
         registry['issuers'] = []
         self.registry.write_bytes(canonical(registry))
-        # FINDING F-01: grammar failures surface contract-layer codes
-        # (INVALID_ARRAY/INVALID_TEXT/...), not DES-061 §6 TRUST_REGISTRY_INVALID.
-        self.assertEqual(self.code_of(self.validate), 'INVALID_ARRAY')
+        # F-01 repaired (TASK-080): grammar failures now surface the
+        # DES-061 §6 dedicated code.
+        self.assertEqual(self.code_of(self.validate), 'TRUST_REGISTRY_INVALID')
 
     def test_registry_extra_member_rejected(self):
         registry = json.loads(self.registry.read_text())
         registry['extra'] = 1
         self.registry.write_bytes(canonical(registry))
-        # FINDING F-01 (same class): INVALID_MEMBERS instead of the §6 code.
-        self.assertEqual(self.code_of(self.validate), 'INVALID_MEMBERS')
+        # F-01 repaired (TASK-080).
+        self.assertEqual(self.code_of(self.validate), 'TRUST_REGISTRY_INVALID')
 
     def test_registry_short_key_rejected(self):
         registry = json.loads(self.registry.read_text())
@@ -132,27 +132,23 @@ class IndependentVerifierTests(unittest.TestCase):
             if arm == 'B' and subject == 'system_baseline':
                 document['statement'] = ''
         self.attestations = self._attestations(arm_mutator=mutate)
-        # FINDING F-02: attestation grammar failures surface INVALID_TEXT,
-        # not DES-061 §6 ATTESTATION_INVALID.
-        self.assertEqual(self.code_of(self.validate), 'INVALID_TEXT')
+        # F-02 repaired (TASK-080).
+        self.assertEqual(self.code_of(self.validate), 'ATTESTATION_INVALID')
 
     def test_noninteger_schema_version_rejected(self):
         def mutate(arm, subject, document):
             if arm == 'A':
                 document['schema_version'] = '1'
         self.attestations = self._attestations(arm_mutator=mutate)
-        # FINDING F-02 (same class): INVALID_INTEGER instead of §6 code.
-        self.assertEqual(self.code_of(self.validate), 'INVALID_INTEGER')
+        # F-02 repaired (TASK-080).
+        self.assertEqual(self.code_of(self.validate), 'ATTESTATION_INVALID')
 
     def test_trailing_bytes_document_rejected(self):
         raw = (self.attestations/'provider_revision-A.json').read_bytes()
         (self.attestations/'provider_revision-A.json').write_bytes(raw + b' ')
-        # FINDING F-03: a non-canonical document with trailing whitespace is
-        # ACCEPTED: strict_json tolerates it and the signature covers only the
-        # canonical form, so the on-disk bytes are not what was signed.
-        # (DES-061 §3: signature is over the canonical document bytes; a
-        # trailing-byte document should fail as ATTESTATION_INVALID.)
-        self.assertEqual(self.validate()['status'], 'VALIDATED_NOT_EXECUTED')
+        # F-03 repaired (TASK-080): on-disk bytes must equal the canonical
+        # document; tolerated variants are gone.
+        self.assertEqual(self.code_of(self.validate), 'ATTESTATION_INVALID')
 
     def test_missing_signature_file_rejected(self):
         (self.attestations/'system_baseline-B.sig').unlink()

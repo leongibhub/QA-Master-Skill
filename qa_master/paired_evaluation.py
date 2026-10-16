@@ -141,22 +141,27 @@ def _load_trust_registry(path):
     if redact(raw)[1]['state'] != 'UNCHANGED':
         fail('TRUST_REGISTRY_INVALID')
     registry = strict_json(raw)
-    exact(registry, 'schema_version registry_id created_at_utc issuers')
-    integer(registry['schema_version'], 1, 1)
-    identifier(registry['registry_id'])
     try:
+        exact(registry, 'schema_version registry_id created_at_utc issuers')
+        integer(registry['schema_version'], 1, 1)
+        identifier(registry['registry_id'])
         dt.datetime.strptime(registry['created_at_utc'], '%Y-%m-%dT%H:%M:%SZ')
-    except (TypeError, ValueError):
+        issuers_raw = array(registry['issuers'], 64, 1)
+    except (PairedEvaluationError, TypeError, ValueError):
+        # F-01 repair: registry grammar failures surface the DES-061 §6 code.
         fail('TRUST_REGISTRY_INVALID')
     issuers = {}
-    for issuer in array(registry['issuers'], 64, 1):
-        exact(issuer, 'issuer_id subject algorithm public_key_multibase')
-        identifier(issuer['issuer_id'])
+    for issuer in issuers_raw:
+        try:
+            exact(issuer, 'issuer_id subject algorithm public_key_multibase')
+            identifier(issuer['issuer_id'])
+            text(issuer['public_key_multibase'], 512)
+        except PairedEvaluationError:
+            fail('TRUST_REGISTRY_INVALID')
         if issuer['subject'] not in ATTESTATION_SUBJECTS:
             fail('TRUST_REGISTRY_INVALID')
         if issuer['algorithm'] != 'ED25519':
             fail('TRUST_REGISTRY_INVALID')
-        text(issuer['public_key_multibase'], 512)
         if len(issuer['public_key_multibase']) < 8:
             fail('TRUST_REGISTRY_INVALID')
         key = (issuer['issuer_id'], issuer['subject'])
@@ -201,13 +206,22 @@ def _verify_attestations(trust_registry_path, evidence_dir, manifest):
             if redact(document_raw)[1]['state'] != 'UNCHANGED':
                 fail('ATTESTATION_INVALID')
             document = strict_json(document_raw)
-            exact(document, 'schema_version subject arm_id value observed_at_utc issuer_id statement')
-            integer(document['schema_version'], 1, 1)
-            if document['subject'] != subject or document['arm_id'] != arm:
+            # F-03 repair: the signature covers the canonical bytes, so the
+            # on-disk bytes must be exactly canonical — no tolerated variants.
+            if document_raw != canonical(document):
                 fail('ATTESTATION_INVALID')
-            text(document['value'], 20000)
-            text(document['statement'], 20000)
-            identifier(document['issuer_id'])
+            try:
+                exact(document, 'schema_version subject arm_id value observed_at_utc issuer_id statement')
+                integer(document['schema_version'], 1, 1)
+                if document['subject'] != subject or document['arm_id'] != arm:
+                    fail('ATTESTATION_INVALID')
+                text(document['value'], 20000)
+                text(document['statement'], 20000)
+                identifier(document['issuer_id'])
+            except PairedEvaluationError:
+                # F-02 repair: grammar failures inside the shared helpers
+                # surface the DES-061 §6 code, not contract-layer codes.
+                fail('ATTESTATION_INVALID')
             try:
                 observed = dt.datetime.strptime(document['observed_at_utc'], '%Y-%m-%dT%H:%M:%SZ')
             except (TypeError, ValueError):
@@ -600,13 +614,16 @@ def _run(manifest_path, exclusions_path, output_root, launcher, backend,
         # Preserve the manifest's declared records; verdicts are separate derived facts.
         result['attestation_verdicts'] = attestation['verdicts']
         result['strict_eligibility'] = 'HOLDS_FOR_HOLDOUT_PROTOCOL_ONLY'
-        result['model'] = dict(runtime['model'])
-        for verdict in attestation['verdicts']:
-            record = result['model'].get(verdict['subject'])
-            if isinstance(record, dict):
-                record = dict(record, state='VERIFIED', value=verdict['value'],
-                              evidence_sha256=verdict['evidence_sha256'])
-                result['model'][verdict['subject']] = record
+        if strict_eligible:
+            # The promoted model record exists only on a native strict-eligible
+            # run; a TEST_DOUBLE run records verdicts but presents no model.
+            result['model'] = dict(runtime['model'])
+            for verdict in attestation['verdicts']:
+                record = result['model'].get(verdict['subject'])
+                if isinstance(record, dict):
+                    record = dict(record, state='VERIFIED', value=verdict['value'],
+                                  evidence_sha256=verdict['evidence_sha256'])
+                    result['model'][verdict['subject']] = record
     result_bytes = canonical(result)+b'\n'
     if len(result_bytes) > LIMIT:
         fail('CONTROL_RECORD_CAPACITY_LIMIT')
@@ -657,14 +674,26 @@ def _inspect(run_root):
     root = no_links(run_root)
     result_file = root/'result.json'
     preflight = strict_json(read_bytes(root/'preflight.json'))
-    exact(preflight, 'schema_version status created_at_utc run_manifest_sha256 runtime settings_canonical_sha256 evaluator_commitment_sha256 trust_registry_sha256 leakage_matches ledger planned_calls')
-    integer(preflight['schema_version'], 1, 1)
+    # R-02 repair: pre-CR-015 run roots have no trust_registry_sha256 member;
+    # retained evidence must stay inspectable, so the member is optional-absent
+    # for those roots and required for strict-profile runs (which always have one).
+    required_preflight = 'schema_version status created_at_utc run_manifest_sha256 runtime settings_canonical_sha256 evaluator_commitment_sha256 leakage_matches ledger planned_calls'
+    optional_preflight = {'trust_registry_sha256'}
+    if not isinstance(preflight, dict) or not set(required_preflight.split()).issubset(preflight):
+        fail('INVALID_PREFLIGHT')
+    if set(preflight) - set(required_preflight.split()) - optional_preflight:
+        fail('INVALID_PREFLIGHT')
+    if 'trust_registry_sha256' in preflight and preflight['trust_registry_sha256'] is not None:
+        hash_value(preflight['trust_registry_sha256'])
     if preflight['status'] not in ('SEALED', 'PREVIEW_NOT_RUN'):
         fail('INVALID_PREFLIGHT')
     manifest = strict_json(read_bytes(root/'manifest.json'))
     if digest(canonical(manifest)) != preflight['run_manifest_sha256'] or canonical(manifest['runtime']) != canonical(preflight['runtime']):
         fail('INVALID_PREFLIGHT')
     if digest(canonical(preflight['runtime'])) != preflight['settings_canonical_sha256']:
+        fail('INVALID_PREFLIGHT')
+    if manifest.get('profile') == STRICT_PROFILE and preflight.get('trust_registry_sha256') is None:
+        # A strict run always passed the verifier and must record the registry digest.
         fail('INVALID_PREFLIGHT')
     _check_ledger(preflight['ledger'])
     planned = preflight['planned_calls']
@@ -698,6 +727,7 @@ def _inspect(run_root):
                           (PROFILE if document['execution_backend'] == 'NATIVE_CODEX' else 'TEST_DOUBLE'))
         if document['evidence_class'] != expected_class:
             fail('INVALID_RESULT')
+        has_strict_members = 'attestation_verdicts' in document or 'strict_eligibility' in document
         if strict_candidate:
             # Strict-eligible results must carry the verifier verdicts, the
             # holdout-protocol-only marker, and no claim/rating promotion.
@@ -707,17 +737,51 @@ def _inspect(run_root):
                     or document['claim_status'] != 'NOT_ASSERTED'
                     or document['human_rating_status'] != 'NOT_EXECUTED'):
                 fail('INVALID_RESULT')
-            for verdict in verdicts:
-                exact(verdict, 'subject arm_id state value issuer_id observed_at_utc evidence_sha256 verifier_id verification')
-                if (verdict['state'] != 'VERIFIED' or verdict['verification'] != 'SIGNATURE_VALID'
-                        or verdict['verifier_id'] != VERIFIER_ID or verdict['arm_id'] not in ('A', 'B')
-                        or verdict['subject'] not in ATTESTATION_SUBJECTS):
-                    fail('INVALID_RESULT')
-            if [ (v['arm_id'], v['subject']) for v in verdicts ] != [('A', 'provider_revision'), ('A', 'system_baseline'), ('B', 'provider_revision'), ('B', 'system_baseline')]:
+            if document['execution_backend'] != 'NATIVE_CODEX':
+                # Only a native run may carry the strict evidence class.
                 fail('INVALID_RESULT')
-        elif 'attestation_verdicts' in document or 'strict_eligibility' in document:
-            # A strict marker on a non-strict result would be a silent upgrade.
+        elif has_strict_members and document['execution_backend'] != 'TEST_DOUBLE':
+            # Strict members on a non-strict NATIVE result would be a silent upgrade.
             fail('INVALID_RESULT')
+        if has_strict_members:
+            # R-01 repair: strict TEST_DOUBLE runs record their verification facts,
+            # but they are never strict candidates and claim nothing.
+            if document.get('strict_eligibility') != 'HOLDS_FOR_HOLDOUT_PROTOCOL_ONLY':
+                fail('INVALID_RESULT')
+            if document['evidence_class'] != 'TEST_DOUBLE' and not strict_candidate:
+                fail('INVALID_RESULT')
+            if 'model' in document and document['execution_backend'] != 'NATIVE_CODEX':
+                # A TEST_DOUBLE run must not present a promoted model record.
+                fail('INVALID_RESULT')
+            if 'model' in document:
+                # R-03 repair: validate the promoted model record shape and
+                # rebind every VERIFIED member to the verdict list.
+                model = document['model']
+                if not isinstance(model, dict) or not {'provider_revision', 'system_baseline'}.issubset(model):
+                    fail('INVALID_RESULT')
+                verdicts = document.get('attestation_verdicts') or []
+                for name in ('provider_revision', 'system_baseline'):
+                    record = model.get(name)
+                    if not isinstance(record, dict):
+                        fail('INVALID_RESULT')
+                    exact(record, 'state value evidence_sha256')
+                    if record['state'] != 'VERIFIED':
+                        fail('INVALID_RESULT')
+                    match = [v for v in verdicts if v.get('subject') == name and v.get('arm_id') == 'A']
+                    if len(match) != 1 or match[0].get('value') != record['value'] or match[0].get('evidence_sha256') != record['evidence_sha256']:
+                        fail('INVALID_RESULT')
+            if 'attestation_verdicts' in document:
+                verdicts = document['attestation_verdicts']
+                if not isinstance(verdicts, list):
+                    fail('INVALID_RESULT')
+                for verdict in verdicts:
+                    exact(verdict, 'subject arm_id state value issuer_id observed_at_utc evidence_sha256 verifier_id verification')
+                    if (verdict['state'] != 'VERIFIED' or verdict['verification'] != 'SIGNATURE_VALID'
+                            or verdict['verifier_id'] != VERIFIER_ID or verdict['arm_id'] not in ('A', 'B')
+                            or verdict['subject'] not in ATTESTATION_SUBJECTS):
+                        fail('INVALID_RESULT')
+                if [(v['arm_id'], v['subject']) for v in verdicts] != [('A', 'provider_revision'), ('A', 'system_baseline'), ('B', 'provider_revision'), ('B', 'system_baseline')]:
+                    fail('INVALID_RESULT')
         attempts = array(document['attempts'], 512)
         if len(attempts) != len(planned):
             fail('ATTEMPT_INVENTORY_MISMATCH')

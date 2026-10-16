@@ -218,12 +218,47 @@ class AttestationVerifierDeveloperTests(unittest.TestCase):
         self.assertEqual(result['evidence_class'], 'TEST_DOUBLE')
         self.assertEqual(len(result['attestation_verdicts']), 4)
         self.assertEqual(result['strict_eligibility'], 'HOLDS_FOR_HOLDOUT_PROTOCOL_ONLY')
-        self.assertEqual(result['model']['provider_revision']['state'], 'VERIFIED')
-        self.assertEqual(result['model']['system_baseline']['state'], 'VERIFIED')
+        # R-01 repair: a TEST_DOUBLE run records verdicts but presents no
+        # promoted model record.
+        self.assertNotIn('model', result)
         self.assertEqual(result['claim_status'], 'NOT_ASSERTED')
         self.assertEqual(result['human_rating_status'], 'NOT_EXECUTED')
         # Manifest-declared UNVERIFIED records are preserved in runtime.
         self.assertEqual(result['runtime']['model']['provider_revision']['state'], 'NOT_AVAILABLE')
+
+    def test_strict_test_double_root_passes_own_inspect(self):
+        # R-01 repair regression: the written run root of a strict TEST_DOUBLE
+        # run must pass inspect_run (it previously failed INVALID_RESULT).
+        result = self.run_strict_fake()
+        run_root = self.root/'output'/self.manifest['run_id']
+        outcome = pe.inspect_run(run_root)
+        self.assertEqual(outcome['status'], 'INTACT')
+        # The written result still records TEST_DOUBLE evidence class.
+        from qa_master._paired_contract import strict_json
+        written = strict_json((run_root/'result.json').read_bytes())
+        self.assertEqual(written['evidence_class'], 'TEST_DOUBLE')
+        self.assertNotIn('model', written)
+
+    def test_historical_preflight_without_registry_member_inspects(self):
+        # R-02 repair regression: retained pre-CR-015 run roots (no
+        # trust_registry_sha256 member) must remain inspectable. The retained
+        # TASK-044 pilot root is the authoritative instance; a missing member
+        # in a ledger-listed file cannot be simulated without breaking the
+        # ledger digest, so this checks the real retained roots.
+        repository = Path(__file__).resolve().parents[1]
+        candidates = [
+            repository/'.qa-master/paired-pilot/observed-v4-final-freeze/CR011-EXPLORATORY-PUBLIC-DEV-001',
+            repository/'.qa-master/cr011-independent/preview',
+            repository/'.qa-master/cr011-independent/final-installed/preview',
+            repository/'.qa-master/cr011-independent/repaired-installed/preview',
+        ]
+        existing = [path for path in candidates if (path/'preflight.json').is_file()]
+        self.assertTrue(existing, 'retained run roots must exist in the repository checkout')
+        for run_root in existing:
+            preflight = json.loads((run_root/'preflight.json').read_bytes())
+            self.assertNotIn('trust_registry_sha256', preflight)
+            outcome = pe.inspect_run(run_root)
+            self.assertEqual(outcome['status'], 'INTACT', run_root)
 
     def test_strict_validate_passes_with_all_verdicts(self):
         outcome = pe.validate_run_manifest(
