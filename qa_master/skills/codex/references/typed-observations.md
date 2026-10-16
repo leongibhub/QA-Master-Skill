@@ -27,14 +27,21 @@ class — the shortest form the source phrasing supports. Do not stack
 qualifiers into the label when the source states them as separate events or
 separate conditions (`WRONG_PASSWORD`, not
 `WRONG_PASSWORD_BEFORE_THE_THIRD_ONE`, when the source names a wrong-password
-event and a third-consecutive-wrong-password event separately). Do not
-reorder source phrasing when the source already fixes an order
-(`PAYMENT_CONFIRMED` from "a confirmed payment" is acceptable only when no
-shorter source-faithful form exists; prefer the source's own token when the
-source names the event directly). Guards and conditions belong in their own
-field, never folded into the event name. Keep the synthesized label list
-part of the deliverable so a reviewer can map each label back to the phrase
-it came from.
+event and a third-consecutive-wrong-password event separately). Guards and
+conditions belong in their own field, never folded into the event name.
+
+Synthesized labels are **family-consistent**: events or classes that the
+source presents as a family around one concept (an event and its negation, a
+guarded and an unguarded variant, successive members of one sequence) derive
+from one canonical phrasing of that concept so the family stays structurally
+parallel — `PAYMENT_CONFIRMED` beside `PAYMENT_NOT_CONFIRMED`, not
+`CONFIRMED_PAYMENT` beside `PAYMENT_NOT_CONFIRMED`. When choosing the family
+stem, prefer the phrasing that appears in the most family members or that
+the source names as the concept itself; when equal, prefer the grammatically
+complete phrase ("confirmed payment" → `PAYMENT_CONFIRMED` treats
+"payment" as the concept and "confirmed" as its state). Keep the synthesized
+label list part of the deliverable so a reviewer can map each label back to
+the phrase it came from.
 
 ## Classification tokens mirror the engine
 
@@ -71,7 +78,7 @@ than choosing a display precision silently.
 A check that asks for accepted and rejected candidates must supply both
 classes. A check that asks for two kinds of rows (valid and invalid
 transitions, legal and excluded combinations) supplies one member per kind —
-missing a asked-for member is an incomplete answer, not a concise one. A
+missing an asked-for member is an incomplete answer, not a concise one. A
 check that asks for defined combinations must enumerate exactly the
 combinations the facts define — undefined ones become gaps, not invented
 rows, and correct-but-extra rows belong in the case table, not the typed
