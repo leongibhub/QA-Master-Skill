@@ -146,11 +146,15 @@ The bounded floor is therefore precision-driven:
 
 - **Per stratum, minimum n = 8 pairs.** Rationale: with binary per-dimension
   outcome coding (better/equal/worse per dimension per pair) and no prior,
-  n = 8 gives a two-sided 95% sign-test confidence interval half-width ≤ 0.33
-  (n = 8 → CI for p ≈ ±0.17 beyond the 0.5 point at worst case); n = 6 gives
-  ≤ 0.38 and is rejected as too wide for even a direction-of-interest
-  statement, let alone any threshold decision (which is human-registered
-  elsewhere).
+  the floor is a precision criterion, not a power calculation. Exact
+  Clopper-Pearson 95% intervals for the sign proportion p at the observed
+  midpoint (k = n/2) are: n = 6 → [0.118, 0.882] (half-width 0.382);
+  n = 8 → [0.157, 0.843] (half-width 0.343); n = 10 → [0.187, 0.813]
+  (0.313); n = 12 → [0.211, 0.789] (0.289). Under a pre-declared precision
+  criterion of midpoint half-width < 0.35, n = 8 is the smallest qualifying
+  floor (n = 6 fails at 0.382). Humans pre-registering a different precision
+  criterion should re-derive; at these widths no per-stratum statement is
+  threshold-grade — direction-of-interest only.
 - **Overall minimum (W-A):** 5 strata × 8 = **40 pairs minimum**, before
   repeat policy.
 - **Overall minimum (W-B):** 10 strata × 8 = **80 pairs minimum**, before
