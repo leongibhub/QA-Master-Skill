@@ -7,14 +7,14 @@
 评审需求、设计来源可链接的软件测试，并在 Codex 中协调分阶段 QA。
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](./pyproject.toml)
-[![Status](https://img.shields.io/badge/status-pre--release-orange)]()
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)](./pyproject.toml)
+[![Status](https://img.shields.io/badge/status-released-green)]()
 [![CI](https://github.com/leongibhub/QA-Master-Skill/actions/workflows/test.yml/badge.svg)](https://github.com/leongibhub/QA-Master-Skill/actions/workflows/test.yml)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
 </div>
 
-> ⚠️ **当前是 V1 开发版，不是已验收的正式版。** 无需另装其它 QA Skill 仓库。
+> ⚠️ **已发布 1.0.0；企业 E2E、性能、远程执行等能力尚未验收，见下方「当前边界」。** 无需另装其它 QA Skill 仓库。
 
 **快速链接：** [安装](#快速开始) · [用法](#用法) · [专业能力指南](#专业能力指南) · [入口点](#入口点) · [文档地图](#文档地图) · [验证证据](docs/verification/)
 
@@ -215,7 +215,7 @@ CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一�
 - 双边评测资料校验与协议见 [docs/BENCHMARK.md](docs/BENCHMARK.md) 和 [docs/PAIRED_EVALUATION.md](docs/PAIRED_EVALUATION.md)。
 - 验证轨迹汇总见 [docs/verification/verification-trajectory-summary.md](docs/verification/verification-trajectory-summary.md)。
 
-真实企业环境 E2E 为 `NOT_EXECUTED`；尚无证据证明总体优于 Awesome QA Skills，也不发布 V1.0 正式标签。
+真实企业环境 E2E 为 `NOT_EXECUTED`；尚无证据证明总体优于 Awesome QA Skills。
 
 ## 文档地图
 
@@ -239,7 +239,7 @@ CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一�
 
 ## 当前边界
 
-V1 开发版的如实边界——以下能力因需要外部资源或超出本地工具范围而尚未交付（`NOT_AVAILABLE` / `NOT_EXECUTED`）：
+V1.0 的如实边界——以下能力因需要外部资源或超出本地工具范围而尚未交付（`NOT_AVAILABLE` / `NOT_EXECUTED`）：
 
 - **完整多语言语义 Agent**：本技能是确定性控制器 + 指南，不是全自动 Agent。
 - **远程 SSH/WinRM 执行与资源调度**：需要可信宿主与基础设施。
