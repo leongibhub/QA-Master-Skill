@@ -49,11 +49,27 @@ python -m pip install .
 python -m qa_master install-codex --user
 ```
 
-安装器把入口、专业指南、领域参考和本地助手一起装到 `~/.agents/skills/qa-master`。在 Codex 中打开待测项目，直接描述目标即可：
+安装器把入口、专业指南、领域参考和本地助手一起装到 `~/.agents/skills/qa-master`。在 Codex 或 OpenCode 中打开待测项目，直接描述目标即可：
 
 > `$qa-master 评审这份需求并生成测试用例，开发还未完成，不执行测试`
 
 只供单个项目使用时，改用 `python -m qa_master install-codex --project <项目目录>`，装到该项目的 `.agents/skills/qa-master`。安装后的 Skill 不依赖原始源码目录或另一个 QA Skills 仓库；本地助手需要 Python 3.10+，没有 Python 时仍可只按指南由 Codex 完成分析设计。详细交付边界见 [Codex 核心版](docs/CODEX_CORE.md)。
+
+## 支持的 Agent 工具
+
+本 Skill 遵循 Agent Skills 开放标准（一个目录 + `SKILL.md` + frontmatter）。安装器把完整技能装到 `.agents/skills/qa-master`，凡是读取 `.agents/skills/` 的工具都能直接发现。
+
+| 工具 | 安装位置 | 方式 |
+| --- | --- | --- |
+| Codex CLI | `~/.agents/skills/qa-master` | `python -m qa_master install-codex --user`（原生） |
+| OpenCode | `~/.agents/skills/qa-master`（全局）· `.agents/skills/qa-master`（项目） | 同上——OpenCode 也读 `.agents/skills/`（agent-compatible） |
+| Claude Code | `~/.claude/skills/qa-master` | 手动复制或软链（Claude Code 读 `.claude/skills/`） |
+
+- **全局**：`install-codex --user` → `~/.agents/skills/qa-master`，Codex CLI 与 OpenCode 都能发现。
+- **项目**：`install-codex --project <项目目录>` → `<项目>/.agents/skills/qa-master`，在该项目内被 Codex CLI 与 OpenCode 发现。
+- **Claude Code** 读 `~/.claude/skills/`，把装好的 `qa-master` 目录复制/软链过去即可；`SKILL.md` 的 frontmatter 只含 `name`/`description`，跨工具通用。
+
+安装后若工具没刷新技能列表，重新打开会话。
 
 ## 用法
 
@@ -82,6 +98,18 @@ python -m qa_master install-codex --user
 | `security-recovery` | 安全、恢复 |
 | `regression-evidence` | 回归、缺陷与证据报告 |
 
+**13 个测试维度**（用于指南路由与覆盖判定）：`functional`、`api`、`whitebox`、`integration`、`performance`、`load`、`stress`、`stability`、`compatibility`、`negative`、`security`、`recovery`、`regression`。
+
+**3 个确定性设计方法**（`qa_master.design_methods` 有限合成引擎，无需模型即可从结构化模型导出可审计用例）：
+
+| 方法 | 用途 | 典型场景 |
+| --- | --- | --- |
+| `boundary` | 边界值分析 | 数值域上界/下界/步长的邻域取值 |
+| `decision_table` | 决策表 | 条件组合、约束排除、规则命中的冲突/缺口 |
+| `state_transition` | 状态迁移 | 状态、触发、守卫/效果、闭环非法迁移 |
+
+这 3 个是**确定性有限模型方法**，不等于「全部测试方法」；性能、安全等其余维度由专业指南配合模型完成（见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)）。
+
 注册表只返回本地包中已验证存在的文件，绝不把「选择某一指南」说成已调用模型、已运行测试或已产生结论。这些指南和确定性生成器不等于完整语义 Agent。
 
 ## 入口点
@@ -93,6 +121,25 @@ python -m qa_master install-codex --user
 | `python -m qa_master.campaign_cli --input examples/campaign.json --output .qa-master/design.json` | 结构化需求草稿、追踪、覆盖与缺口 | 草稿，不能代替人类批准 |
 | `qa-master-paired-eval` | 同题、同模型、同设置的双边评测资料校验 | 缺少双方实际输出时不能得出优劣 |
 | `python -m qa_master.config_ui --config .qa-master/config.json` | 本机配置页面（默认 `http://127.0.0.1:8765`） | 仅非秘密配置与凭据环境变量引用 |
+
+## 架构
+
+```mermaid
+flowchart LR
+    U[用户 · 自然语言] --> A[Agent 工具<br/>Codex CLI · OpenCode · Claude Code]
+    A --> S[qa-master<br/>SKILL.md 总控入口]
+    S --> P[专业指南 x6<br/>需求 · 功能/API · 结构/集成 ·<br/>非功能/兼容 · 安全/恢复 · 回归/证据]
+    S --> R[references<br/>design-methods · typed-observations ·<br/>work-protocol · domains]
+    A --> CLI[qa_master CLI<br/>plan · pause/resume · install-codex ·<br/>campaign_cli · config_ui · benchmark]
+    CLI --> E[确定性设计引擎<br/>boundary · decision_table · state_transition]
+    CLI --> AD[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
+    CLI --> RUN[本机 Runner · 任务调度核心]
+    E --> V[证据与验证<br/>attestation · paired-evaluation]
+    AD --> V
+    RUN --> V
+```
+
+`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具（规划、结构化设计、企业适配、受控执行），二者共用专业指南与 references，最终产出统一落到证据与验证层。
 
 ## 仓库结构
 
@@ -125,10 +172,11 @@ QA-Master-Skill/
 提交改动前，从仓库根目录运行：
 
 ```sh
+python -m pip install ".[test]"      # 安装测试依赖（含 attestation 验签所需的 cryptography）
 python -W error::ResourceWarning -m unittest discover -s tests
 ```
 
-CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一命令。
+CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一命令（先 `pip install ".[test]"` 再跑测试）。`cryptography` 是可选运行时依赖：只做需求评审/测试设计而不做 attestation 验签时，基础 `pip install .` 即可。
 
 - 复测证据位于 [docs/verification/](docs/verification/)，原始基线失败与修复记录均保留；历史 README 已归档至 [docs/history/](docs/history/)。
 - 双边评测资料校验与协议见 [docs/BENCHMARK.md](docs/BENCHMARK.md) 和 [docs/PAIRED_EVALUATION.md](docs/PAIRED_EVALUATION.md)。
