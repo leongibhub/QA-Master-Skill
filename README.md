@@ -87,6 +87,56 @@ python -m qa_master install-codex --user
 
 不知道从哪开始时，先跑 `qa-master plan`，它会输出规划阶段、信息缺口和匹配的专业指南。
 
+## 最佳实践
+
+一条质量工作流覆盖「需求 → 测试计划 → 测试用例 → 执行 → 报告」。以下每条都是本仓库真实命令与真实输出，在仓库根目录可直接复现。
+
+**① 需求：先暴露信息缺口，再谈用例。** `plan` 是意图路由而非生成器，优先回答「缺什么」。
+
+```sh
+python -m qa_master init demo-login
+python -m qa_master plan "评审用户上传文档功能的需求，列出冲突和测试点"
+```
+
+输出：`no_execution: true`、`questions` 列出信息缺口（例如「请提供需求文件 / Wiki / GitLab 仓库地址」）、`professional_guidance.selected` 自动选中 `requirements-review`。**先补齐来源再设计**——别让 Agent 在缺需求来源时凭空生成用例。
+
+**② 测试计划：把需求写成结构化 bundle。** 结构化需求（`id` / `text` / `source` / `approved` / `dimension` / `acceptance` / `preconditions` / `test_data` / `priority`）让评审与追踪可核对，示例见 `examples/campaign.json`。
+
+```sh
+python -m qa_master.campaign_cli --input examples/campaign.json --output .qa-master/design.json
+```
+
+产出 JSON 里：`requirement_review.approval = PENDING_HUMAN`（不替人类拍板）、`requirement_findings` 列出冲突/阻断。**`approved` 只对已确认需求打 `true`，评审结论永远停在 `PENDING_HUMAN` 由人决定。**
+
+**③ 测试用例：草稿与覆盖缺口一起看。** 生成的用例默认 `approval=DRAFT`，同时给出 13 维度的覆盖矩阵。
+
+产出 JSON：`test_cases[]` 每条带 `trace`（回指需求）、`dimension`、`steps`、`expected`；`coverage.*` 中 `DRAFT` = 已生成、`UNASSESSED` = 未覆盖维度。**先扫 `coverage` 里的 `UNASSESSED`，那才是缺口，别只看用例数量。**
+
+**④ 测试用例（进阶）：能结构化就用确定性方法。** 边界值 / 决策表 / 状态迁移 / 成对组合 / 组合测试不依赖模型猜测，直接从结构化模型导出可审计用例（示例 `examples/design-methods.json`）。
+
+```sh
+python -m qa_master design --input examples/design-methods.json --output .qa-master/methods.json
+```
+
+输出：`method_candidates = 14`、`status = DRAFT_UNAPPROVED`、`execution = NOT_EXECUTED`。**结构能明确时别交给语义模型猜，确定性引擎结果可复现、可审计。**
+
+**⑤ 执行：默认拒绝，显式授权后才动。** 受人类门控是特性，不是 bug。
+
+```sh
+python -m qa_master check execution
+# {"state": "DENIED_BY_TASK_SCOPE", "execution_authorized": false, ...}
+```
+
+**草稿停在 `DRAFT_UNAPPROVED`，只有显式授权（可信宿主 + 审批验证）才进入执行，没有默认放行器。**
+
+**⑥ 报告：如实反映门控状态，不做「通过」宣称。**
+
+```sh
+python -m qa_master check report   # {"state": "PENDING", ...}
+```
+
+产出 JSON：`workflow.requirements_review = WAITING_HUMAN_APPROVAL`、`workflow.execution = NOT_AUTHORIZED`、`case_review.trace_matrix`（需求→用例追踪）。**报告是「追踪 + 门控状态」的证据，不是「测试通过」的结论——没有执行授权就没有执行结论。**
+
 ## 专业能力指南
 
 6 份原创、可被注册表发现的审查与设计指南（`qa_master/skills/professional/`）：
