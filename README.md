@@ -114,7 +114,22 @@ python -m qa_master install-codex --user
 
 带 `boundary` / `decision_table` / `state_transition` 的是 `qa_master.design_methods` 的**确定性有限合成方法**（无需模型，直接从结构化模型导出可审计用例）；等价类、场景法、分支/条件等由专业指南配合模型完成。详见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)。
 
+> 尚未原生实现的设计方法（pairwise / combinatorial / model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，由互补库 awesome-qa-skills 提供，见 [互补技能库](docs/COMPLEMENTARY_SKILLS.md)。本仓库逐步把这些高价值方法原生化。
+
 注册表只返回本地包中已验证存在的文件，绝不把「选择某一指南」说成已调用模型、已运行测试或已产生结论。这些指南和确定性生成器不等于完整语义 Agent。
+
+## 互补技能库：Awesome QA Skills
+
+本仓库是**确定性引擎 + 编排 + 6 份指南**，覆盖测试经典主干；[awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills) 是 **165-skill 的广度库**，覆盖 pairwise / combinatorial / model-based / property-based / metamorphic、Playwright/Selenium/Cypress、k6/JMeter/Gatling、LLM/RAG/Agent 测试、chaos/circuit-breaker 等长尾专类方法与技巧。
+
+需要这些长尾方法时，直接安装互补库：
+
+```sh
+npx skills add naodeng/awesome-qa-skills --skill pairwise-testing   # 装单个
+npx skills add naodeng/awesome-qa-skills                            # 装整个英文集合
+```
+
+本仓库会逐步把高价值方法原生化（路线图见下）。完整的覆盖对照、缺口清单、安装命令与使用决策见 [互补技能库](docs/COMPLEMENTARY_SKILLS.md)。
 
 ## 入口点
 
@@ -202,6 +217,7 @@ CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一�
 | --- | --- |
 | [CODEX_CORE.md](docs/CODEX_CORE.md) | Codex 核心版交付边界 |
 | [SKILL_CAPABILITIES.md](docs/SKILL_CAPABILITIES.md) | 专业能力层设计与验收范围 |
+| [COMPLEMENTARY_SKILLS.md](docs/COMPLEMENTARY_SKILLS.md) | 互补库对照、缺口清单与补齐路线图 |
 | [ENTERPRISE_ADAPTERS.md](docs/ENTERPRISE_ADAPTERS.md) | Jira / Confluence / SynapseRT 接口 |
 | [GITLAB_CI_ATTESTATION.md](docs/GITLAB_CI_ATTESTATION.md) | GitLab CI 制品核验 |
 | [LOCAL_RUNNER.md](docs/LOCAL_RUNNER.md) | 本机 Runner 授权与隔离 |
