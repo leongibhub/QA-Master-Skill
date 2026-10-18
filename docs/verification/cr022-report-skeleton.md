@@ -17,12 +17,12 @@
 
 | Artifact | Value |
 |---|---|
-| Run manifest canonical digest (bound into assertion bundle) | `d102763f6a1f118bc8b41f247c56b590b94845ff8ca5846cfb86227711e9aed1` |
-| Assertion bundle sha256 (live) | `466b71efb936d45ba0c1a9c5d4e914ea5764ed7d16850c10b90bb1421c32d28e` |
+| Run manifest canonical digest (bound into assertion bundle) | `c04969f85af81484b5a9f5cb1834841cb46d7b3674dd57335e1aef7ef292ca7f` |
+| Assertion bundle sha256 (live) | `ca6e95e1277bc7ac134f8f2117c5661941eee603d5d969bcf208642b6fd39af7` |
 | Semantic rules sha256 (live) | `89ea6b6242c57d21267350cf26087c97e5be1126187cf5a1cbcabe1cb77ada77` |
 | Arm A commit | `fa84f489abe62cbf7cfe9185729fc480466a80d3` (post CR-018 + CR-021) |
 | Arm B commit (pinned) | `1a8c57c` byte-identical to CR-017/CR-019 upstream arm |
-| codex.exe sha256 (pinned; path re-verified 2026-10-17, still matching) | `9ecb9df2ecafcc00542ef0966c6f1737a81397dc9531b0a4b178238e2bf4a46d` |
+| codex.exe sha256 (pinned; re-bound 2026-10-18 after second bin rotation, version string unchanged at `0.163.0-alpha.10.2`) | `f6dbf48cb70f62649c645f26c87dc9bf84cc36986202dfad8e12fb5b8ca70312` |
 
 ## Pre-registered reporting plan (verbatim from `cr022-semantic-rules-v1.md`)
 

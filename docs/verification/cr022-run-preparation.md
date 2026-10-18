@@ -29,19 +29,32 @@
 
 | Artifact | Value |
 |---|---|
-| Manifest canonical digest (bound into the assertion bundle) | `d102763f6a1f118bc8b41f247c56b590b94845ff8ca5846cfb86227711e9aed1` |
-| Manifest file sha256 | `f94ef94cdd280b021b05edb90f48e615d66cf21903ad4ac47ef39de319123d16` |
+| Manifest canonical digest (bound into the assertion bundle) | `c04969f85af81484b5a9f5cb1834841cb46d7b3674dd57335e1aef7ef292ca7f` (re-bound 2026-10-18 after a second bin rotation; was `d102763f…`) |
+| Manifest file sha256 | `18c5fd76976178d2fc98a478a166e54c88ededbbb3992b4046ddeb0e0b89a070` (was `f94ef94c…`) |
 | Evaluator commitment (`cr022-exclusions-v1.json`, canonical digest) | `9fe6b813b0b7698d9f56d6d60a08b5578a44f3b25d295b7fe35e72610dcc9b22` |
-| Assertion bundle `cr022-assertions-v1.json` sha256 | `466b71efb936d45ba0c1a9c5d4e914ea5764ed7d16850c10b90bb1421c32d28e` |
+| Assertion bundle `cr022-assertions-v1.json` sha256 | `ca6e95e1277bc7ac134f8f2117c5661941eee603d5d969bcf208642b6fd39af7` (was `466b71ef…`; changed only because its bound `run_manifest_sha256` field re-pointed to the new manifest digest) |
 | Pre-declared semantic rules `cr022-semantic-rules-v1.md` sha256 | `89ea6b6242c57d21267350cf26087c97e5be1126187cf5a1cbcabe1cb77ada77` |
 | Oracle validity script output (`ALL PASS` 131/131) sha256 | `82164292cf6f24188582a98c1a5ad5f00bb84ae795f7a41bea2b89ff1830eab2` |
 
 Runtime: codex-cli `0.163.0-alpha.10.2` (executable re-pinned after the
 previous bin directory rotated; the CR-019 manifest's old path no longer
 exists, so the CR-022 manifest pins the currently installed binary — same
-model alias and reasoning effort, read-only sandbox, 15 features disabled as
+model alias and reasoning effort, read-only sandbox, 16 features disabled as
 before). The runtime block difference vs CR-019 is limited to the executable
 identity; model, policy and timeout settings are unchanged.
+
+Second bin rotation, 2026-10-18 (immediately before execution, quota
+recovered): the `e78bad9887fa50cf` directory re-pinned in TASK-100 no longer
+exists; the currently installed binary lives at
+`896a0166b774037a\codex.exe` with sha256
+`f6dbf48cb70f62649c645f26c87dc9bf84cc36986202dfad8e12fb5b8ca70312`. The
+version string is **unchanged** (`codex-cli 0.163.0-alpha.10.2`); only the
+binary identity (path + hash) differs. Model alias, reasoning effort,
+read-only sandbox and all 16 disabled features are byte-identical to the
+TASK-100 manifest. The manifest runtime block, its canonical digest and the
+assertion bundle's bound `run_manifest_sha256` were re-derived and
+re-validated (`VALIDATED_NOT_EXECUTED`). No scenario, oracle, arm asset,
+semantic-rule or exclusion byte changed.
 
 ## TEST_DOUBLE full-pipeline rehearsal (zero model calls)
 
@@ -71,7 +84,8 @@ The real run must target a fresh output root
 
 1. Re-verify the codex executable still matches the manifest hash (bin
    directories rotate; if rotated, update the runtime block and re-bind the
-   assertion bundle, then re-validate).
+   assertion bundle, then re-validate). — **DONE 2026-10-18**: second rotation
+   handled (see "Second bin rotation" note above).
 2. `run_pair(PREP/'run-manifest.json', EVAL/'cr022-exclusions-v1.json',
    observed-cr022)` — do NOT reuse the dry-run root.
 3. Grade with `EVAL/'cr022-assertions-v1.json'`; apply the pre-declared
