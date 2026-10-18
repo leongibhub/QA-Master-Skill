@@ -10,6 +10,7 @@
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](./pyproject.toml)
 [![Status](https://img.shields.io/badge/status-pre--release-orange)]()
 [![CI](https://github.com/leongibhub/QA-Master-Skill/actions/workflows/test.yml/badge.svg)](https://github.com/leongibhub/QA-Master-Skill/actions/workflows/test.yml)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
 
 </div>
 
@@ -186,6 +187,7 @@ QA-Master-Skill/
 ├── tests/                    # unittest 套件
 ├── .github/workflows/        # CI（ubuntu/windows × py3.10/3.12）
 ├── pyproject.toml
+├── LICENSE                   # PolyForm Noncommercial 1.0.0
 └── README.md
 ```
 
@@ -253,4 +255,4 @@ Issues 和 PR 欢迎：专业指南、生成器、企业适配、评测与文档
 
 ## 许可证
 
-本项目当前**尚未附加开源许可证**；在明确许可证之前，请默认按保留所有权利处理。
+本仓库采用 [PolyForm Noncommercial License 1.0.0](./LICENSE)。您可以自由使用、修改和分发本软件，但仅限非商业目的（如个人学习、研究、实验、慈善机构、教育机构、公共研究组织、政府机构等用途）。
