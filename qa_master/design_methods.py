@@ -19,6 +19,11 @@ _HEX = re.compile(r"^[0-9a-f]{64}$")
 _SECRET = {"password", "token", "cookie", "private_key", "private-key", "privatekey"}
 _SOURCE_KINDS = {"requirement", "risk", "contract", "model", "guard", "effect", "change", "defect", "other"}
 _ORACLE_KINDS = {"valid", "invalid", "outcome", "transition", "denial", "effect"}
+_MAX_COMB_PARAMS = 12
+_MAX_COMB_VALUES = 12
+_MAX_COMB_STRENGTH = 3
+_MAX_COMB_CARTESIAN = 4096
+_MAX_COMB_INTERACTIONS = 4096
 
 
 class DesignMethodError(ValueError):
@@ -429,11 +434,110 @@ def _state(model, refs, oracles):
     analysis={"state_count":len(states),"trigger_count":len(triggers),"explicit_records":len(s["transitions"]),"logical_keys":len(all_keys),"closed_world_added":len(pairs) if s["closed_world"] else 0,"reachable_states":sorted(reached),"unreachable_states":unreachable,"reachable_transitions":sum(1 for a,_,_ in edges if a in reached),"unreachable_transitions":unreachable_edges,"logical_rows":rows,"classification_counts":counts}
     return candidates,obligations,coverage,analysis
 
+
+def _covering(model, refs, oracles, strength):
+    """Deterministic greedy t-way covering-array synthesis (CR-010 extension).
+
+    Pairwise is strength fixed at 2; combinatorial reads an explicit strength.
+    No constraints are applied: every declared parameter value is combinable, so
+    every t-way interaction is structurally coverable. The chosen array is a
+    deterministic in-order greedy covering array, not a claimed minimum.
+    """
+    s = model["spec"]
+    if strength is None:
+        _exact(s, {"parameters", "strength", "oracle_ref"})
+        t = s["strength"]
+        if not isinstance(t, int) or isinstance(t, bool) or not 2 <= t <= _MAX_COMB_STRENGTH:
+            _fail("COMBINATORIAL_STRENGTH_INVALID")
+    else:
+        _exact(s, {"parameters", "oracle_ref"})
+        t = strength
+    params = s["parameters"]
+    if not isinstance(params, list) or not 2 <= len(params) <= _MAX_COMB_PARAMS:
+        _fail("COMBINATORIAL_MODEL_INCOMPLETE")
+    domains = {}
+    for p in params:
+        _exact(p, {"id", "values"})
+        pid = _id(p["id"])
+        if pid in domains: _fail("DUPLICATE_ID")
+        values = _sorted_unique(p["values"])
+        if len(values) > _MAX_COMB_VALUES: _fail("COMBINATORIAL_LIMIT_EXCEEDED")
+        domains[pid] = values
+    if t > len(domains): _fail("COMBINATORIAL_STRENGTH_INVALID")
+    oracle = s["oracle_ref"]
+    if oracle is not None:
+        if not isinstance(oracle, str) or oracle not in oracles: _fail("UNKNOWN_REFERENCE")
+        if oracles[oracle]["kind"] not in {"outcome", "effect"}: _fail("COMBINATORIAL_ORACLE_KIND_INVALID")
+    ids = sorted(domains)
+    cartesian = 1
+    for values in domains.values(): cartesian *= len(values)
+    if cartesian > _MAX_COMB_CARTESIAN: _fail("COMBINATORIAL_LIMIT_EXCEEDED")
+
+    def _ikey(partial):
+        return frozenset((p, _scalar_key(v)) for p, v in partial.items())
+
+    interactions = []
+    for combo in itertools.combinations(ids, t):
+        for vals in itertools.product(*(domains[p] for p in combo)):
+            interactions.append(dict(zip(combo, vals)))
+    if len(interactions) > _MAX_COMB_INTERACTIONS: _fail("COMBINATORIAL_LIMIT_EXCEEDED")
+
+    assignments = [dict(zip(ids, vals)) for vals in itertools.product(*(domains[p] for p in ids))]
+    covered = []
+    for assignment in assignments:
+        cov = set()
+        for combo in itertools.combinations(ids, t):
+            cov.add(_ikey({p: assignment[p] for p in combo}))
+        covered.append(cov)
+    uncovered = {_ikey(partial) for partial in interactions}
+    chosen = []
+    while uncovered:
+        best = -1
+        best_count = 0
+        for index, cov in enumerate(covered):
+            count = len(uncovered & cov)
+            if count > best_count:
+                best_count = count
+                best = index
+        if best_count <= 0: _fail("COMBINATORIAL_MODEL_INCOMPLETE")
+        chosen.append(best)
+        uncovered -= covered[best]
+
+    candidates = []
+    obligations = []
+    for index in chosen:
+        data = {"assignment": assignments[index]}
+        if oracle is None:
+            obligations.append(_obligation(model, refs, oracles, "COMBINATORIAL_ORACLE_MISSING", data))
+        else:
+            case = _candidate(model, refs, oracles, data, data, [oracle])
+            case["steps"] = [
+                "Set parameters " + json.dumps(data["assignment"], sort_keys=True, ensure_ascii=False, separators=(",", ":")),
+                "Perform the scenario referenced by " + ", ".join(model["requirement_ids"]),
+                "Collect evidence for oracle " + oracle,
+            ]
+            candidates.append(case)
+    ready = len(candidates)
+    coverage = _coverage("interactions", len(interactions), ready, oracle_missing=len(chosen) - ready)
+    analysis = {"parameter_count": len(ids), "value_counts": {p: len(domains[p]) for p in ids},
+                "strength": t, "cartesian_size": cartesian, "interaction_count": len(interactions),
+                "covering_array_size": len(chosen)}
+    return candidates, obligations, coverage, analysis
+
+
+def _pairwise(model, refs, oracles):
+    return _covering(model, refs, oracles, 2)
+
+
+def _combinatorial(model, refs, oracles):
+    return _covering(model, refs, oracles, None)
+
+
 def _normalize_spec(spec):
     """Canonicalize only schema-declared sets; validation still rejects bad shapes."""
     if isinstance(spec, dict):
         result={k:_normalize_spec(v) for k,v in spec.items()}
-        for key in ("conditions","rules","states","transitions"):
+        for key in ("conditions","rules","states","transitions","parameters"):
             if key in result and isinstance(result[key],list):
                 result[key].sort(key=lambda x: _canon(x.get("id")) if isinstance(x,dict) else _canon(x))
         for key in ("source_refs","guard_refs","effect_refs","triggers"):
@@ -476,7 +580,7 @@ def _used_references(spec, sources, oracles):
 def _model(raw, requirement_map, refs, oracles):
     _exact(raw,{"id","method","title","dimension","requirement_ids","source_refs","spec"})
     mid=_id(raw["id"]); method=raw["method"]
-    if method not in {"boundary","decision_table","state_transition"}: _fail("UNKNOWN_METHOD")
+    if method not in {"boundary","decision_table","state_transition","pairwise","combinatorial"}: _fail("UNKNOWN_METHOD")
     if not isinstance(raw["title"],str) or not raw["title"].strip() or raw["dimension"] not in DIMENSIONS or not isinstance(raw["spec"],dict): _fail("INVALID_MODEL")
     reqs=_set_ids(raw["requirement_ids"],requirement_map,"UNKNOWN_REQUIREMENT")
     for req in reqs: _no_secret(requirement_map[req])
@@ -510,7 +614,7 @@ def _design_methods(bundle: dict) -> dict:
     models.sort(key=lambda x:x["id"])
     all_cases=[]; all_obligations=[]; results=[]
     for model in models:
-        engine={"boundary":_boundary,"decision_table":_decision,"state_transition":_state}[model["method"]]
+        engine={"boundary":_boundary,"decision_table":_decision,"state_transition":_state,"pairwise":_pairwise,"combinatorial":_combinatorial}[model["method"]]
         cases, obligations, coverage, analysis=engine(model,refs,oracles)
         cases.sort(key=lambda x:x["id"]); obligations.sort(key=lambda x:x["id"])
         results.append({"model_id":model["id"],"method":model["method"],"input_sha256":model["model_sha256"],"candidate_ids":[x["id"] for x in cases],"obligation_ids":[x["id"] for x in obligations],"coverage":coverage,"analysis":analysis})

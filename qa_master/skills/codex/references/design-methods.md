@@ -36,7 +36,8 @@ prefix is valid. Source kinds are `requirement`, `risk`, `contract`, `model`,
 
 Each model has exactly `id`, `method`, `title`, `dimension`,
 `requirement_ids`, `source_refs`, and `spec`. `method` is `boundary`,
-`decision_table`, or `state_transition`; `dimension` is exactly one of
+`decision_table`, `state_transition`, `pairwise`, or `combinatorial`;
+`dimension` is exactly one of
 `functional`, `api`, `whitebox`, `integration`, `performance`, `load`,
 `stress`, `stability`, `compatibility`, `negative`, `security`, `recovery`, or
 `regression`; referenced requirements and source IDs must exist. Unknown fields, duplicate IDs/keys, JSON float/non-finite
@@ -165,6 +166,27 @@ are structurally possible, never execution evidence. Duplicate logical
 transitions, conflicts, unreachable states, and missing oracles are reported
 as draft obligations where structurally valid.
 
+## Pairwise and combinatorial model
+
+The `pairwise` `spec` has exactly `parameters` and `oracle_ref`; it fixes the
+interaction strength at 2. The `combinatorial` `spec` has exactly `parameters`,
+`strength`, and `oracle_ref`, with `strength` an integer from 2 through 3. Both
+need 2 through 12 parameters; a parameter is exactly `{"id": ID, "values":
+[SCALAR, ...]}` with unique scalar values (string, boolean, or integer, where
+`true`, `1`, and `"1"` are distinct) and at most 12 values. The Cartesian
+product is at most 4,096, and the number of t-way interactions is at most 4,096.
+
+`oracle_ref` is `null` or an oracle of kind `outcome` or `effect`; a missing
+oracle makes every chosen case a `COMBINATORIAL_ORACLE_MISSING` obligation
+rather than a guessed candidate. No constraints are accepted: every declared
+value is combinable, so every t-way interaction is structurally coverable. The
+engine emits a deterministic in-order greedy covering array (not a claimed
+minimum) whose chosen assignments cover every t-way interaction. `coverage`
+uses `interactions` as its denominator; `candidate_ready` is the
+covering-array size when an oracle is supplied. Structural and limit errors are
+`COMBINATORIAL_MODEL_INCOMPLETE`, `COMBINATORIAL_STRENGTH_INVALID`,
+`COMBINATORIAL_ORACLE_KIND_INVALID`, and `COMBINATORIAL_LIMIT_EXCEEDED`.
+
 ## Output, gaps, and errors
 
 Valid output is always `DRAFT_UNAPPROVED` and `NOT_EXECUTED`.
@@ -191,10 +213,13 @@ parser failures emit no product JSON. A rejected call leaves an existing output
 unchanged. Missing source, target, observable, setup, cleanup, or oracle facts
 are typed gaps, not approval, execution, a rating, or a comparison conclusion.
 Strict finite-model limit errors are `MODEL_LIMIT_EXCEEDED`,
-`DECISION_LIMIT_EXCEEDED`, and `STATE_LIMIT_EXCEEDED`; structural reference,
+`DECISION_LIMIT_EXCEEDED`, `STATE_LIMIT_EXCEEDED`, and
+`COMBINATORIAL_LIMIT_EXCEEDED`; structural reference,
 schema, decimal, constraint, and state errors retain their stable existing
 `DesignMethodError` code in the same `REJECTED` envelope.
 
-The packaged `../examples/design-methods.json` constructs all three methods
-using declared non-secret instructional bindings. It is not an approved
+The packaged `../examples/design-methods.json` constructs the three classic
+methods (boundary, decision_table, state_transition) using declared non-secret
+instructional bindings. `../examples/design-methods-combinatorial.json` adds
+pairwise and combinatorial models. Neither is an approved
 baseline and its locators need not exist in a fresh install.

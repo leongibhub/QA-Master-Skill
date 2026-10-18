@@ -1,4 +1,5 @@
 import copy
+import itertools
 import json
 import unittest
 
@@ -251,3 +252,83 @@ class DesignMethodRegressions(unittest.TestCase):
         obligation=next(o for o in result["obligations"] if o["code"]=="STATE_CONFLICT")
         self.assertEqual({r["id"] for r in obligation["source_refs"]},{"SRC","FROM","TO","EFFECT"})
         self.assertEqual([r["id"] for r in obligation["oracle_refs"]],["T"])
+
+
+class CoveringArrayTests(unittest.TestCase):
+    def bundle(self, method, spec):
+        return {"project":"p","requirements":[{"id":"REQ-1","priority":"P1"}],
+                "design_models":{"schema_version":1,
+                    "source_refs":[{"id":"SRC","kind":"requirement","locator":"docs/r"}],
+                    "oracle_refs":[{"id":"O","kind":"outcome","locator":"oracles/o"},
+                                   {"id":"V","kind":"valid","locator":"oracles/v"}],
+                    "models":[{"id":"M","method":method,"title":"M","dimension":"functional",
+                               "requirement_ids":["REQ-1"],"source_refs":["SRC"],"spec":spec}]}}
+
+    def pairwise_spec(self):
+        return {"parameters":[{"id":"A","values":[1,2]},
+                              {"id":"B","values":["x","y","z"]},
+                              {"id":"C","values":[True,False]}],
+                "oracle_ref":"O"}
+
+    def test_pairwise_covers_every_pair(self):
+        result = design_methods(self.bundle("pairwise", self.pairwise_spec()))
+        analysis = result["model_results"][0]["analysis"]
+        self.assertEqual(analysis["strength"], 2)
+        self.assertEqual(analysis["cartesian_size"], 12)
+        self.assertEqual(analysis["interaction_count"], 16)
+        chosen = [c["method_data"]["assignment"] for c in result["candidates"]]
+        self.assertEqual(len(chosen), analysis["covering_array_size"])
+        domains = {"A":[1,2],"B":["x","y","z"],"C":[True,False]}
+        for a, b in itertools.combinations(["A","B","C"], 2):
+            for va in domains[a]:
+                for vb in domains[b]:
+                    self.assertTrue(any(c[a]==va and c[b]==vb for c in chosen), (a,va,b,vb))
+        self.assertLessEqual(analysis["covering_array_size"], analysis["cartesian_size"])
+        self.assertTrue(all(c["approval"]=="DRAFT" for c in result["candidates"]))
+        self.assertTrue(all(c["validation_action"]=="NOT_EXECUTED" for c in result["candidates"]))
+        self.assertTrue(all(c["evidence_state"]=="PENDING" for c in result["candidates"]))
+
+    def test_combinatorial_strength_three_covers_every_triple(self):
+        spec = {"parameters":[{"id":"A","values":[1,2]},{"id":"B","values":[3,4]},{"id":"C","values":[5,6]}],
+                "strength":3,"oracle_ref":"O"}
+        result = design_methods(self.bundle("combinatorial", spec))
+        analysis = result["model_results"][0]["analysis"]
+        self.assertEqual(analysis["strength"], 3)
+        self.assertEqual(analysis["interaction_count"], 8)
+        chosen = [c["method_data"]["assignment"] for c in result["candidates"]]
+        for va, vb, vc in itertools.product([1,2],[3,4],[5,6]):
+            self.assertTrue(any(c["A"]==va and c["B"]==vb and c["C"]==vc for c in chosen), (va,vb,vc))
+
+    def test_pairwise_missing_oracle_is_obligation(self):
+        spec = self.pairwise_spec(); spec["oracle_ref"] = None
+        result = design_methods(self.bundle("pairwise", spec))
+        self.assertEqual(result["candidates"], [])
+        self.assertTrue(result["obligations"])
+        self.assertTrue(all(o["code"]=="COMBINATORIAL_ORACLE_MISSING" for o in result["obligations"]))
+        self.assertEqual(len(result["obligations"]),
+                         result["model_results"][0]["analysis"]["covering_array_size"])
+
+    def test_covering_errors(self):
+        for method, spec, code in [
+            ("combinatorial", {"parameters":[{"id":"A","values":[1,2]},{"id":"B","values":[3,4]}],
+                               "strength":4,"oracle_ref":"O"}, "COMBINATORIAL_STRENGTH_INVALID"),
+            ("combinatorial", {"parameters":[{"id":"A","values":[1,2]},{"id":"B","values":[3,4]}],
+                               "strength":1,"oracle_ref":"O"}, "COMBINATORIAL_STRENGTH_INVALID"),
+            ("pairwise", {"parameters":[{"id":"A","values":[1,2]}],"oracle_ref":"O"}, "COMBINATORIAL_MODEL_INCOMPLETE"),
+            ("pairwise", {"parameters":[{"id":"A","values":[1,2]},{"id":"B","values":[3,4]}],
+                          "oracle_ref":"NOPE"}, "UNKNOWN_REFERENCE"),
+            ("pairwise", {"parameters":[{"id":"A","values":[1,2]},{"id":"B","values":[3,4]}],
+                          "oracle_ref":"V"}, "COMBINATORIAL_ORACLE_KIND_INVALID"),
+            ("pairwise", {"parameters":[{"id":"A","values":[1,2]},{"id":"A","values":[3,4]}],"oracle_ref":"O"}, "DUPLICATE_ID"),
+        ]:
+            with self.subTest(method=method, code=code):
+                with self.assertRaisesRegex(DesignMethodError, "^"+code+"$"):
+                    design_methods(self.bundle(method, spec))
+
+    def test_covering_array_is_deterministic_under_reorder(self):
+        a = self.bundle("pairwise", self.pairwise_spec())
+        b = copy.deepcopy(a)
+        b["design_models"]["models"][0]["spec"]["parameters"].reverse()
+        for p in b["design_models"]["models"][0]["spec"]["parameters"]:
+            p["values"].reverse()
+        self.assertEqual(design_methods(a), design_methods(b))

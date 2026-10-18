@@ -1,0 +1,61 @@
+{
+  "project": "combinatorial-design-example",
+  "requirements": [
+    {
+      "id": "REQ-COMBO",
+      "text": "Model search filter and payment option combinations",
+      "source": "declared/example-requirements.md",
+      "approved": false,
+      "dimension": "functional",
+      "dimensions": ["functional"],
+      "acceptance": "Every declared parameter combination produces a documented outcome for the search and payment scenarios.",
+      "oracles": {"functional": "Every declared parameter combination produces a documented outcome for the search and payment scenarios."},
+      "priority": "P1"
+    }
+  ],
+  "design_models": {
+    "schema_version": 1,
+    "source_refs": [
+      {"id": "SRC-MODEL", "kind": "model", "locator": "declared/combinatorial-models.md"},
+      {"id": "SRC-REQ", "kind": "requirement", "locator": "declared/example-requirements.md"}
+    ],
+    "oracle_refs": [
+      {"id": "OR-OUTCOME", "kind": "outcome", "locator": "declared/oracles.md"}
+    ],
+    "models": [
+      {
+        "id": "DM-SEARCH",
+        "method": "pairwise",
+        "title": "Search filter pairwise",
+        "dimension": "functional",
+        "requirement_ids": ["REQ-COMBO"],
+        "source_refs": ["SRC-REQ", "SRC-MODEL"],
+        "spec": {
+          "parameters": [
+            {"id": "category", "values": ["book", "music"]},
+            {"id": "sort", "values": ["relevance", "price", "date"]},
+            {"id": "in_stock", "values": [true, false]}
+          ],
+          "oracle_ref": "OR-OUTCOME"
+        }
+      },
+      {
+        "id": "DM-PAY",
+        "method": "combinatorial",
+        "title": "Payment option three-way",
+        "dimension": "functional",
+        "requirement_ids": ["REQ-COMBO"],
+        "source_refs": ["SRC-REQ", "SRC-MODEL"],
+        "spec": {
+          "parameters": [
+            {"id": "method", "values": ["card", "wallet"]},
+            {"id": "currency", "values": ["USD", "EUR"]},
+            {"id": "save", "values": [true, false]}
+          ],
+          "strength": 3,
+          "oracle_ref": "OR-OUTCOME"
+        }
+      }
+    ]
+  }
+}
