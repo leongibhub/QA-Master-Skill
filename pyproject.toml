@@ -6,6 +6,9 @@ name = "qa-master-skill"
 version = "0.1.0"
 description = "Human-gated, resumable QA workflow controller"
 requires-python = ">=3.10"
+[project.optional-dependencies]
+attestation = ["cryptography>=41"]
+test = ["cryptography>=41"]
 [project.scripts]
 qa-master = "qa_master.__main__:main"
 qa-master-paired-eval = "qa_master.paired_evaluation:main"
