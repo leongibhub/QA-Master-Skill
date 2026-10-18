@@ -84,4 +84,20 @@ combinations the facts define — undefined ones become gaps, not invented
 rows, and correct-but-extra rows belong in the case table, not the typed
 answer, unless the check asks for the full universe. When the question names
 the row keys, use exactly those keys per row — no extra fields, no
-renames.
+renames. When a check scopes its answer to items the facts state explicitly —
+"invalid transition candidates explicitly stated", "exclusions explicitly
+listed", "cases the facts name as blocked" — list exactly those stated items,
+one member per stated item, and do not derive additional candidates from
+general rules (a "no event leaves a terminal state" rule, an implied negation,
+or a symmetric inference). Derived-but-unstated candidates belong in the case
+table, not the typed answer.
+
+## Evidence cites the exhaustive-universe fact
+
+When a check asks for a list drawn from a bounded universe (all transitions,
+all defined combinations) and the facts include a statement that enumerates
+that universe (for example "the only states are DRAFT, ACTIVE, CLOSED"), cite
+that exhaustive-universe fact as a source reference together with
+each item-defining fact. The exhaustive-universe fact is what makes the
+enumeration provably complete; listing correct items without it leaves the
+answer unsourced at the universe level.

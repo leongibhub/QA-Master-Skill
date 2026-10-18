@@ -93,6 +93,18 @@ class CR021Conventions(unittest.TestCase):
         self.assertIn('references/typed-observations.md', SKILL)
 
 
+class CR025Conventions(unittest.TestCase):
+    """CR-025 third round: explicit-scope discipline + exhaustive-universe provenance."""
+
+    def test_explicitly_stated_scope_clause(self):
+        self.assertIn('list exactly those stated items', TYPED_OBSERVATIONS)
+        self.assertIn('do not derive additional candidates from general rules', TYPED_OBSERVATIONS)
+
+    def test_exhaustive_universe_provenance_clause(self):
+        self.assertIn('exhaustive-universe fact', TYPED_OBSERVATIONS)
+        self.assertIn('enumeration provably complete', TYPED_OBSERVATIONS)
+
+
 class OA3NonGoalGuard(unittest.TestCase):
     """Audit OA-3: never tune arm instructions to oracle-synthesized tokens."""
 
