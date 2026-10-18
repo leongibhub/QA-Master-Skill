@@ -3,7 +3,7 @@
 - Artifact ID: `DOC-ACCEPT-001`
 - Document State: `DRAFT`
 - Evaluation State: `IN_REVIEW`
-- Current release state: V1 is not released and has not met the full release criteria.
+- Current release state: V1.0 (1.0.0) is released, but the full release/acceptance criteria remain unmet.
 
 ## Current product boundary
 
@@ -47,7 +47,7 @@ The independent record is [DOC-TEST-BASELINE-001](verification/baseline-2026-10-
 | Remote execution | NOT_EXECUTED | No authorized remote scheduling, monitoring, retention, or network execution is recorded. |
 | Performance, load, stress, stability, compatibility | NOT_EXECUTED | No approved environment, thresholds, or execution evidence is recorded. |
 | Competitor comparison | OBSERVED | One CR-011 public-development exploratory six-call capture exists, but provider revision/system baseline are unavailable and there are no independently held inputs, completed expert ratings or human decision. No superiority claim is permitted. |
-| Release and acceptance | NOT_EXECUTED | No release decision, deployment, rollback, authenticated human acceptance, or project Gate PASS exists. |
+| Release and acceptance | NOT_EXECUTED | The 1.0.0 tag is published (a release decision now exists), but deployment, rollback, authenticated human acceptance, and project Gate PASS remain absent. |
 
 ## V1 release evidence still required
 
