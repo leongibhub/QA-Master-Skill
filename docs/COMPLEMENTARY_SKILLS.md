@@ -11,7 +11,7 @@
 | | QA Master Skill（本仓库） | awesome-qa-skills（互补库） |
 | --- | --- | --- |
 | 本质 | 单个技能 + 确定性引擎 | 技能库：330 目录（165 中文 + 165 英文） |
-| 组成 | 6 指南 + 确定性引擎(3 方法) + 13 维度 + Campaign 状态机 | 10 workflow + 150 testing-type + 5 skill-engineering |
+| 组成 | 6 指南 + 确定性引擎(5 方法) + 13 维度 + Campaign 状态机 | 10 workflow + 150 testing-type + 5 skill-engineering |
 | 每个 skill 形态 | 指南是 markdown，背后有真实 Python 引擎（离线确定性合成） | 纯 markdown 提示词（`SKILL.md`+`prompts/`+`references/`+`output-templates/`） |
 | 核心价值 | 深度 + 确定性 + 编排 + 来源可追溯 | 广度：可单独安装某个测试类型 skill |
 | 典型用途 | 需求评审 → 设计 → 分阶段执行/回归的**受人类门控**闭环 | 某个具体测试类型/工具的**单点**提示词工作流 |
@@ -35,7 +35,7 @@
 
 ### 确定性测试设计引擎（`qa_master/design_methods.py`）
 
-离线、无需模型、可审计的有限合成：`boundary`（边界值）、`decision_table`（决策表）、`state_transition`（状态迁移）。
+离线、无需模型、可审计的有限合成：`boundary`（边界值）、`decision_table`（决策表）、`state_transition`（状态迁移）、`pairwise`（成对组合）、`combinatorial`（组合测试）。
 
 ### 13 个测试维度
 
@@ -49,7 +49,7 @@
 
 | 缺口类别 | 由互补库提供（代表性 skill 目录） |
 | --- | --- |
-| **更多设计方法** | `pairwise-testing` · `combinatorial-testing` · `model-based-testing` · `property-based-testing` · `metamorphic-testing` |
+| **更多设计方法** | `model-based-testing` · `property-based-testing` · `metamorphic-testing` |
 | **工具类自动化** | `ui-test-playwright` · `ui-test-selenium` · `ui-test-cypress` · `ui-test-puppeteer` · `ui-test-webdriverio` · `ui-test-testcafe` · `api-test-postman` · `api-test-bruno` · `api-test-pytest` · `api-test-restassure` · `api-test-supertest` · `performance-test-k6` · `performance-test-gatling` · `performance-test-jmeter` |
 | **UI/视觉/移动/可访问性** | `visual-regression-testing` · `cross-browser-testing` · `mobile-testing` · `accessibility-testing` |
 | **可靠性工程** | `chaos-testing` · `failover-testing` · `circuit-breaker-testing` · `dependency-failure-testing` · `retry-testing` · `timeout-testing` · `resilience-testing` |
@@ -64,14 +64,14 @@
 awesome-qa-skills 通过 `npx skills`（Agent Skills CLI）安装，也可一键安装、clone 或手动复制。英文 skill 是默认源，中文需显式指定 `skills/zh`。
 
 ```bash
-# 装单个英文 skill（如 pairwise 设计方法）
-npx skills add naodeng/awesome-qa-skills --skill pairwise-testing
+# 装单个英文 skill（如 property-based 设计方法）
+npx skills add naodeng/awesome-qa-skills --skill property-based-testing
 
 # 装整个英文集合
 npx skills add naodeng/awesome-qa-skills
 
 # 装单个中文 skill
-npx skills add https://github.com/naodeng/awesome-qa-skills/tree/main/skills/zh --skill pairwise-testing
+npx skills add https://github.com/naodeng/awesome-qa-skills/tree/main/skills/zh --skill property-based-testing
 ```
 
 其它方式：
@@ -88,7 +88,7 @@ git clone https://github.com/naodeng/awesome-qa-skills.git .skills/awesome-qa-sk
 git submodule add https://github.com/naodeng/awesome-qa-skills.git .skills/awesome-qa-skills
 
 # 手动复制单个 skill
-cp -r skills/en/testing-types/pairwise-testing ~/.cursor/skills/
+cp -r skills/en/testing-types/property-based-testing ~/.cursor/skills/
 ```
 
 完整安装说明见对方仓库 `scripts/INSTALL_SKILLS.md`。
@@ -100,10 +100,10 @@ cp -r skills/en/testing-types/pairwise-testing ~/.cursor/skills/
 | 场景 | 用本仓库 | 用互补库 |
 | --- | --- | --- |
 | 需求评审、冲突、基线复核 | ✅ 原生 | — |
-| 边界值 / 决策表 / 状态迁移（离线确定性） | ✅ 确定性引擎 | — |
+| 边界值 / 决策表 / 状态迁移 / 成对组合 / 组合测试（离线确定性） | ✅ 确定性引擎 | — |
 | 等价类 / 分支条件 / 场景法设计 | ✅ 6 指南 | — |
 | 分阶段 QA/回归编排（受人类门控、可暂停恢复） | ✅ Campaign 状态机 | — |
-| pairwise / combinatorial / model-based / property-based / metamorphic | 规划中（见路线图） | ✅ 直接用 |
+| model-based / property-based / metamorphic | 规划中（见路线图） | ✅ 直接用 |
 | Playwright/Selenium/Cypress 等 UI 自动化脚本设计 | — | ✅ 直接用 |
 | k6/JMeter/Gatling 性能压测 | — | ✅ 直接用 |
 | LLM/RAG/Agent 测试、提示词注入 | 规划中（见路线图） | ✅ 直接用 |
@@ -117,7 +117,7 @@ cp -r skills/en/testing-types/pairwise-testing ~/.cursor/skills/
 
 | 阶段 | 内容 | 落点 |
 | --- | --- | --- |
-| **P1 设计方法** | `pairwise`、`combinatorial`（可确定性合成）→ 进引擎；`model-based`、`property-based`、`metamorphic` → 指南方法 | `design_methods.py` + 新参考/指南 |
+| **P1 设计方法** | ✅ `pairwise`、`combinatorial` 已进引擎；`model-based`、`property-based`、`metamorphic` → 指南方法 | `design_methods.py` + 新参考/指南 |
 | **P2 可靠性** | chaos / failover / circuit-breaker / dependency-failure / retry / timeout / resilience | 新指南 `reliability-engineering`（或扩展 `security-recovery`） |
 | **P3 AI 原生** | LLM / RAG / prompt-injection / agent 测试 | 新指南 `ai-native-testing` |
 | **P4 工具自动化** | Playwright/Selenium 等框架 + UI/视觉/跨浏览器/可访问性 | 新参考 `automation-tools` |

@@ -21,14 +21,14 @@
 
 ## 能做什么
 
-一个仓库、一个 QA Master 入口。每个专业指南可单独路由，也可按「需求分析 → 测试设计 → 企业接入 → 本地执行」组成一条质量工作流。
+一个仓库、一个 QA Master 入口。每个专业指南可单独路由，也可按「需求分析 → 测试设计 →（可选）企业接入 → 本地执行」组成一条质量工作流。企业接入不是必经步骤：默认不连任何企业系统，需要时先在配置页（`config_ui`）预配适配器并授权。
 
 | 场景 | 入口 | 帮助 |
 | --- | --- | --- |
 | 需求评审与测试计划 | 需求评审指南 · `qa-master plan` | 多源需求冲突、功能边界与状态、风险 → 可追踪的测试计划与用例 |
 | 功能 / API / 白盒 / 集成测试设计 | 功能/API、结构/集成指南 · `campaign_cli` | 生成可审查的草稿用例、追踪、覆盖与缺口 |
-| 确定性测试方法 | 边界值 · 决策表 · 状态迁移 | 从模型导出可审计的用例组合 |
-| 企业工具接入 | Jira · Confluence · SynapseRT · GitLab CI | 读取、受控写入、JUnit 制品核验 |
+| 确定性测试方法 | 边界值 · 决策表 · 状态迁移 · 成对组合 · 组合测试 | 从模型导出可审计的用例组合 |
+| 企业工具接入（可选） | Jira · Confluence · SynapseRT · GitLab CI | 先在配置页预配适配器，再读取 / 受控写入 / JUnit 制品核验 |
 | 本地受控执行 | 本机 Runner · 任务调度核心 | 可信宿主授权、环境隔离、超时清理 |
 
 内置指南覆盖需求冲突、功能边界/状态、API、白盒、集成、性能/负载/压力/稳定性、兼容性、安全/恢复、回归与证据报告。详见 [专业能力](docs/SKILL_CAPABILITIES.md)。
@@ -109,23 +109,25 @@ python -m qa_master install-codex --user
 | 边界值分析 | `boundary` | 双侧端点 + 内侧步进点 + 越界邻域 |
 | 决策表 / 判定表 | `decision_table` | 条件组合、约束排除、规则冲突/缺口 |
 | 状态迁移 | `state_transition` | 状态、触发、守卫/效果、闭环非法迁移 |
+| 成对组合 | `pairwise` | 固定强度 2，贪心覆盖数组覆盖所有参数对 |
+| 组合测试 | `combinatorial` | 可选强度 2–3，贪心覆盖数组覆盖所有 t 元交互 |
 | 分支 / 条件覆盖 | — | 复合谓词、决策/条件证据（`structural-integration` 指南） |
 | 场景法 | — | 正常交付、契约不符、超时、重试耗尽、重复消息、乱序、部分副作用等 |
 
-带 `boundary` / `decision_table` / `state_transition` 的是 `qa_master.design_methods` 的**确定性有限合成方法**（无需模型，直接从结构化模型导出可审计用例）；等价类、场景法、分支/条件等由专业指南配合模型完成。详见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)。
+带 `boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial` 的是 `qa_master.design_methods` 的**确定性有限合成方法**（无需模型，直接从结构化模型导出可审计用例）；等价类、场景法、分支/条件等由专业指南配合模型完成。详见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)。
 
-> 尚未原生实现的设计方法（pairwise / combinatorial / model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，由互补库 awesome-qa-skills 提供，见 [互补技能库](docs/COMPLEMENTARY_SKILLS.md)。本仓库逐步把这些高价值方法原生化。
+> 尚未原生实现的设计方法（model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，由互补库 awesome-qa-skills 提供，见 [互补技能库](docs/COMPLEMENTARY_SKILLS.md)。本仓库逐步把这些高价值方法原生化。
 
 注册表只返回本地包中已验证存在的文件，绝不把「选择某一指南」说成已调用模型、已运行测试或已产生结论。这些指南和确定性生成器不等于完整语义 Agent。
 
 ## 互补技能库：Awesome QA Skills
 
-本仓库是**确定性引擎 + 编排 + 6 份指南**，覆盖测试经典主干；[awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills) 是 **165-skill 的广度库**，覆盖 pairwise / combinatorial / model-based / property-based / metamorphic、Playwright/Selenium/Cypress、k6/JMeter/Gatling、LLM/RAG/Agent 测试、chaos/circuit-breaker 等长尾专类方法与技巧。
+本仓库是**确定性引擎 + 编排 + 6 份指南**，覆盖测试经典主干；[awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills) 是 **165-skill 的广度库**，覆盖 model-based / property-based / metamorphic、Playwright/Selenium/Cypress、k6/JMeter/Gatling、LLM/RAG/Agent 测试、chaos/circuit-breaker 等长尾专类方法与技巧。
 
 需要这些长尾方法时，直接安装互补库：
 
 ```sh
-npx skills add naodeng/awesome-qa-skills --skill pairwise-testing   # 装单个
+npx skills add naodeng/awesome-qa-skills --skill property-based-testing   # 装单个
 npx skills add naodeng/awesome-qa-skills                            # 装整个英文集合
 ```
 
@@ -139,9 +141,9 @@ npx skills add naodeng/awesome-qa-skills                            # 装整个�
 | `qa-master pause` / `resume` | 保存暂停状态，恢复后重查流程条件 | 暂停期间拒绝推进；恢复不增加授权 |
 | `python -m qa_master.campaign_cli --input examples/campaign.json --output .qa-master/design.json` | 结构化需求草稿、追踪、覆盖与缺口 | 草稿，不能代替人类批准 |
 | `qa-master-paired-eval` | 同题、同模型、同设置的双边评测资料校验 | 缺少双方实际输出时不能得出优劣 |
-| `python -m qa_master.config_ui --config .qa-master/config.json` | 本机配置页面（默认 `http://127.0.0.1:8765`） | 仅非秘密配置与凭据环境变量引用 |
+| `python -m qa_master.config_ui --config .qa-master/config.json` | 本机配置页面（默认 `http://127.0.0.1:8765`）——预配企业适配器与测试机连接 | 仅非秘密配置与凭据环境变量引用 |
 
-## 架构
+## 架构流程图
 
 ```mermaid
 flowchart TD
@@ -150,14 +152,16 @@ flowchart TD
     C --> D{意图路由<br/>qa-master plan}
     D -->|需求评审| E[需求评审指南<br/>冲突 · 边界 · 人工复核]
     D -->|测试设计| F{确定性方法?}
-    D -->|企业接入| G[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
+    D -->|企业接入?| G{已预配企业适配器?}
     D -->|受控执行| H[本机 Runner<br/>任务调度核心]
-    F -->|是 · 结构化模型| I[确定性引擎<br/>boundary · decision_table · state_transition]
+    F -->|是 · 结构化模型| I[确定性引擎<br/>boundary · decision_table · state_transition · pairwise · combinatorial]
     F -->|否 · 需语义| J[专业指南 + 模型<br/>等价类 · 场景法 · 分支条件 · 安全 · 性能...]
-    E --> K[草稿产物<br/>用例 · 覆盖 · 缺口 · 追踪]
+    G -->|否 · 未预配| K[草稿产物<br/>用例 · 覆盖 · 缺口 · 追踪]
+    G -->|是 · 已授权| G2[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
+    E --> K
     I --> K
     J --> K
-    G --> K
+    G2 --> K
     K --> L{是否执行?}
     L -->|否| M([DRAFT_UNAPPROVED 交付])
     L -->|是 · 需授权| H
@@ -166,7 +170,7 @@ flowchart TD
     N --> M
 ```
 
-`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。三条关键分支：①意图路由（需求评审 / 测试设计 / 企业接入 / 受控执行）；②测试设计里「结构化模型走确定性引擎，语义类走专业指南 + 模型」；③产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
+`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。三条关键分支：①意图路由（需求评审 / 测试设计 / 受控执行；企业接入是可选分支，需先在配置页预配适配器，未预配则跳过）；②测试设计里「结构化模型走确定性引擎，语义类走专业指南 + 模型」；③产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
 
 ## 仓库结构
 
