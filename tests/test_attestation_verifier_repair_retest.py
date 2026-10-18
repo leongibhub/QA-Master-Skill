@@ -21,6 +21,16 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 from tests.test_paired_evaluation import fixture, capture  # noqa: E402
 
+# Retained run roots from the CR-011 verification exercise. These live under
+# the git-ignored `.qa-master/` working directory and are absent in a clean
+# checkout, so the retained-roots checks skip when they are not present.
+RETAINED_ROOTS = [
+    REPO/'.qa-master/paired-pilot/observed-v4-final-freeze/CR011-EXPLORATORY-PUBLIC-DEV-001',
+    REPO/'.qa-master/cr011-independent/preview',
+    REPO/'.qa-master/cr011-independent/final-installed/preview',
+    REPO/'.qa-master/cr011-independent/repaired-installed/preview',
+]
+
 
 class RepairReTest(unittest.TestCase):
     """Independent verification that each repair does what the review asked."""
@@ -83,22 +93,20 @@ class RepairReTest(unittest.TestCase):
 
     # RT-1: R-02 repair on the real retained roots (fresh process, real files)
 
+    @unittest.skipUnless(all((p/'preflight.json').is_file() for p in RETAINED_ROOTS),
+                         'retained roots absent in clean checkout')
     def test_retained_roots_inspect_intact(self):
-        candidates = [
-            REPO/'.qa-master/paired-pilot/observed-v4-final-freeze/CR011-EXPLORATORY-PUBLIC-DEV-001',
-            REPO/'.qa-master/cr011-independent/preview',
-            REPO/'.qa-master/cr011-independent/final-installed/preview',
-            REPO/'.qa-master/cr011-independent/repaired-installed/preview',
-        ]
-        existing = [p for p in candidates if (p/'preflight.json').is_file()]
+        existing = [p for p in RETAINED_ROOTS if (p/'preflight.json').is_file()]
         self.assertEqual(len(existing), 4)
         for run_root in existing:
             self.assertEqual(pe.inspect_run(run_root)['status'], 'INTACT', run_root)
 
+    @unittest.skipUnless((RETAINED_ROOTS[0]/'result.json').is_file(),
+                         'retained pilot root absent in clean checkout')
     def test_retained_pilot_root_gradable(self):
         # Full grade chain on the retained pilot root with a machine-fact bundle.
         from qa_master._paired_contract import read_bytes, strict_json, contained
-        root = REPO/'.qa-master/paired-pilot/observed-v4-final-freeze/CR011-EXPLORATORY-PUBLIC-DEV-001'
+        root = RETAINED_ROOTS[0]
         result = json.loads((root/'result.json').read_bytes())
         attempt = result['attempts'][0]
         visible = strict_json(read_bytes(contained(root, 'calls/'+attempt['call_id']+'/common/visible-input.json')))

@@ -12,6 +12,7 @@ from pathlib import Path
 warnings.simplefilter("error", ResourceWarning)
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))  # make the `tests` package importable (parity with `python -m unittest`)
 suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
 result = unittest.TextTestRunner(verbosity=1).run(suite)
 

@@ -206,7 +206,10 @@ class IndependentVerifierTests(unittest.TestCase):
         import venv
         venv_dir = self.root/'venv'
         venv.create(venv_dir, with_pip=True)
-        py = venv_dir/'Scripts'/'python.exe'
+        if sys.platform == 'win32':
+            py = venv_dir/'Scripts'/'python.exe'
+        else:
+            py = venv_dir/'bin'/'python'
         subprocess.run([str(py), '-m', 'pip', 'install', '--quiet',
                         str(REPO), 'cryptography'], capture_output=True, check=True)
         # Exploratory validates without flags.
