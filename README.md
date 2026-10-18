@@ -64,6 +64,7 @@ python -m qa_master install-codex --user
 | Codex CLI | `~/.agents/skills/qa-master` | `python -m qa_master install-codex --user`（原生） |
 | OpenCode | `~/.agents/skills/qa-master`（全局）· `.agents/skills/qa-master`（项目） | 同上——OpenCode 也读 `.agents/skills/`（agent-compatible） |
 | Claude Code | `~/.claude/skills/qa-master` | 手动复制或软链（Claude Code 读 `.claude/skills/`） |
+| WorkBuddy（腾讯云） | `.workbuddy/skills/qa-master` | 手动复制或软链（支持 Agent Skills 标准） |
 
 - **全局**：`install-codex --user` → `~/.agents/skills/qa-master`，Codex CLI 与 OpenCode 都能发现。
 - **项目**：`install-codex --project <项目目录>` → `<项目>/.agents/skills/qa-master`，在该项目内被 Codex CLI 与 OpenCode 发现。
@@ -100,15 +101,18 @@ python -m qa_master install-codex --user
 
 **13 个测试维度**（用于指南路由与覆盖判定）：`functional`、`api`、`whitebox`、`integration`、`performance`、`load`、`stress`、`stability`、`compatibility`、`negative`、`security`、`recovery`、`regression`。
 
-**3 个确定性设计方法**（`qa_master.design_methods` 有限合成引擎，无需模型即可从结构化模型导出可审计用例）：
+**测试设计方法**（确定性引擎 + 专业指南共同覆盖）：
 
-| 方法 | 用途 | 典型场景 |
+| 方法 | 确定性引擎 | 说明 |
 | --- | --- | --- |
-| `boundary` | 边界值分析 | 数值域上界/下界/步长的邻域取值 |
-| `decision_table` | 决策表 | 条件组合、约束排除、规则命中的冲突/缺口 |
-| `state_transition` | 状态迁移 | 状态、触发、守卫/效果、闭环非法迁移 |
+| 等价类划分 | — | 有效/无效等价类 + 边界（`functional-api` 指南） |
+| 边界值分析 | `boundary` | 双侧端点 + 内侧步进点 + 越界邻域 |
+| 决策表 / 判定表 | `decision_table` | 条件组合、约束排除、规则冲突/缺口 |
+| 状态迁移 | `state_transition` | 状态、触发、守卫/效果、闭环非法迁移 |
+| 分支 / 条件覆盖 | — | 复合谓词、决策/条件证据（`structural-integration` 指南） |
+| 场景法 | — | 正常交付、契约不符、超时、重试耗尽、重复消息、乱序、部分副作用等 |
 
-这 3 个是**确定性有限模型方法**，不等于「全部测试方法」；性能、安全等其余维度由专业指南配合模型完成（见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)）。
+带 `boundary` / `decision_table` / `state_transition` 的是 `qa_master.design_methods` 的**确定性有限合成方法**（无需模型，直接从结构化模型导出可审计用例）；等价类、场景法、分支/条件等由专业指南配合模型完成。详见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)。
 
 注册表只返回本地包中已验证存在的文件，绝不把「选择某一指南」说成已调用模型、已运行测试或已产生结论。这些指南和确定性生成器不等于完整语义 Agent。
 
@@ -125,21 +129,29 @@ python -m qa_master install-codex --user
 ## 架构
 
 ```mermaid
-flowchart LR
-    U[用户 · 自然语言] --> A[Agent 工具<br/>Codex CLI · OpenCode · Claude Code]
-    A --> S[qa-master<br/>SKILL.md 总控入口]
-    S --> P[专业指南 x6<br/>需求 · 功能/API · 结构/集成 ·<br/>非功能/兼容 · 安全/恢复 · 回归/证据]
-    S --> R[references<br/>design-methods · typed-observations ·<br/>work-protocol · domains]
-    A --> CLI[qa_master CLI<br/>plan · pause/resume · install-codex ·<br/>campaign_cli · config_ui · benchmark]
-    CLI --> E[确定性设计引擎<br/>boundary · decision_table · state_transition]
-    CLI --> AD[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
-    CLI --> RUN[本机 Runner · 任务调度核心]
-    E --> V[证据与验证<br/>attestation · paired-evaluation]
-    AD --> V
-    RUN --> V
+flowchart TD
+    A([用户 · 自然语言]) --> B[Agent 工具<br/>Codex CLI · OpenCode · Claude Code · WorkBuddy]
+    B --> C[qa-master SKILL.md<br/>总控入口]
+    C --> D{意图路由<br/>qa-master plan}
+    D -->|需求评审| E[需求评审指南<br/>冲突 · 边界 · 人工复核]
+    D -->|测试设计| F{确定性方法?}
+    D -->|企业接入| G[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
+    D -->|受控执行| H[本机 Runner<br/>任务调度核心]
+    F -->|是 · 结构化模型| I[确定性引擎<br/>boundary · decision_table · state_transition]
+    F -->|否 · 需语义| J[专业指南 + 模型<br/>等价类 · 场景法 · 分支条件 · 安全 · 性能...]
+    E --> K[草稿产物<br/>用例 · 覆盖 · 缺口 · 追踪]
+    I --> K
+    J --> K
+    G --> K
+    K --> L{是否执行?}
+    L -->|否| M([DRAFT_UNAPPROVED 交付])
+    L -->|是 · 需授权| H
+    H --> N[证据与验证<br/>attestation · paired-evaluation]
+    K --> N
+    N --> M
 ```
 
-`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具（规划、结构化设计、企业适配、受控执行），二者共用专业指南与 references，最终产出统一落到证据与验证层。
+`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。三条关键分支：①意图路由（需求评审 / 测试设计 / 企业接入 / 受控执行）；②测试设计里「结构化模型走确定性引擎，语义类走专业指南 + 模型」；③产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
 
 ## 仓库结构
 
@@ -203,9 +215,17 @@ CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一�
 | [requirement-traceability-matrix.md](docs/03-requirements/requirement-traceability-matrix.md) | 需求追踪矩阵 |
 | [verification/](docs/verification/) | 验证与复测证据 |
 
-## 尚未交付
+## 当前边界
 
-完整多语言语义 Agent、远程 SSH/WinRM 执行与资源调度、生产身份/密钥库、具体 SynapseRT 部署的全部业务操作与缺陷回归自动闭环、双方完整行为对照评测。
+V1 开发版的如实边界——以下能力因需要外部资源或超出本地工具范围而尚未交付（`NOT_AVAILABLE` / `NOT_EXECUTED`）：
+
+- **完整多语言语义 Agent**：本技能是确定性控制器 + 指南，不是全自动 Agent。
+- **远程 SSH/WinRM 执行与资源调度**：需要可信宿主与基础设施。
+- **生产身份 / 密钥库**：需要企业级密钥管理。
+- **SynapseRT 全量业务操作与缺陷回归闭环**：需要具体部署环境。
+- **「优于 Awesome QA Skills」的正式结论**：REQ-011 需严格画像 + 人类评分 + 独立 holdout，均 `NOT_AVAILABLE`。
+
+明确列出边界是为了不夸大能力、不做未经验证的宣称。
 
 ## 贡献
 
