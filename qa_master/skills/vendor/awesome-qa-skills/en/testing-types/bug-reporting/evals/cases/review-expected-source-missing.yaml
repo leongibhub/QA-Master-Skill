@@ -1,0 +1,18 @@
+id: "review-expected-source-missing"
+title: "Observed anomaly does not invent an expectation source"
+description: "Observed anomaly does not invent an expectation source"
+input:
+  prompt: "Use bug-reporting. Observed on B32: a quote displays 11. Expected behavior was not supplied. Write a limited bug draft with explicit missing expected-result source and next verification action; do not assert 10 is correct."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Preserves displayed 11 as observed fact and expected result as unknown pending a requirement/contract source."
+    - "Does not fabricate amount=10, a confirmed pricing bug, always-reproduces frequency, or a root cause."
+  pass_threshold: 1.0

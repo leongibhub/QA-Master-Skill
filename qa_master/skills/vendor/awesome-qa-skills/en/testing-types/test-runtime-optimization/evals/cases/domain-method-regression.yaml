@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "test-runtime-optimization: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use test-runtime-optimization to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Matched commit, obligations, and2-worker limit. Baseline setup20s, tests A60s/B40s sequentially, teardown10s. T1 isolates data and runs A/B in parallel; setup/teardown unchanged, same amount fault still detected. T2 shares an account and misses the fault. T3 uses a different test set and takes10s. T4 is only an unexecuted estimate. Decide ACCEPT/REJECT/NOT_COMPARABLE/ESTIMATE and compute baseline/T1 critical-path time with cold/warm cache context.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: baseline_seconds, candidate_seconds. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

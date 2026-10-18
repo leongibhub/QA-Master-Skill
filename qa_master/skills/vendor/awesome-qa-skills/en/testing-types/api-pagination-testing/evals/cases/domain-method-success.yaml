@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-pagination-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use api-pagination-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1: fixed snapshot S1 sorted by createdAt asc, id asc, pageSize=2, terminal next=null, no cursor loops. All createdAt values are equal; S1 IDs=[1, 2, 3, 4, 5].
+    T1 P1=[1, 2], next=c1; P2(c1)=[2, 4], next=c2; P3(c2)=[5], next=c2.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Derive [1, 2]/[3, 4]/[5]; identify duplicate 2, missing 3, and nonterminal c2."
+    - "Propose invalid/tampered cursor checks without inventing an absent error contract."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

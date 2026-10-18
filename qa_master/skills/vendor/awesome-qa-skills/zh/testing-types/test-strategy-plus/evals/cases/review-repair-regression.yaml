@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "test-strategy-plus: sourced repair regression"
+input:
+  prompt: |
+    Use test-strategy-plus.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附表 `ID | DECISION | Evidence`，每个 ID 一行，DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: CONSTRAINT_ONLY, NOT_ASSESSED, UNSUPPORTED.
+
+    Three domains: calculator1+1=2, text-editorUTF-8, Celsius0=Fahrenheit32. S1 helper preserves these sources, versions UNKNOWN, analysis NOT_ASSESSED. S2 alleged strategy fills promotion/stock scope, gateway/cache/queue topology and P1>=95% gate with no source. S3 project plan supplies capacity1QA and Friday deadline; no acceptance owner or risk authorization. Reject invented strategy; preserve capacity as delivery constraint only.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "skill-change-verification: sourced repair regression"
+input:
+  prompt: |
+    Use skill-change-verification.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附表 `ID | DECISION | Evidence`，每个 ID 一行，DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: FAIL, NOT_RUN.
+
+    Only structural log V1: skill-up validate -> exit 0, loaded 3 cases. No engine, run ID or judge exists. V2: actual run r2 selects 3 cases, engine exits 0, judge passes 2 and fails 1. Classify the behavior conclusion, not the engine exit.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

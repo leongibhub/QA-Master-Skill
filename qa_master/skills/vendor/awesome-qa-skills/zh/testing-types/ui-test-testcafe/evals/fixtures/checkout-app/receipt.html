@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Receipt</title>
+<h1>Receipt</h1><p data-testid="receipt-state"></p><script>
+const q = new URLSearchParams(location.search);
+const user = q.get('user') || 'A';
+const order = q.get('order') || `${user}-1`;
+const record = JSON.parse(localStorage.getItem(`qa-fixture:${user}:${order}`) || 'null');
+document.querySelector('[data-testid="receipt-state"]').textContent = record ? `${record.principal}:${record.state}:${record.amount}` : 'missing';
+</script></html>

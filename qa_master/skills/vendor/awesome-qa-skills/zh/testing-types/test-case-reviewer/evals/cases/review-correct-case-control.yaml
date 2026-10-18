@@ -1,0 +1,26 @@
+id: "review-correct-case-control"
+title: "可执行有来源用例不应误拒"
+description: "可执行有来源用例不应误拒"
+context:
+  files:
+    "requirement.md": |-
+      R1: authenticated owner of an existing order may update qty to1 while feature is enabled; returns UPDATED and persisted qty1.
+    "case.md": |-
+      TC3; Trace:R1; priority:P1.
+      Preconditions: sandbox, existing owned order O1 qty2, authenticated owner, feature enabled.
+      Data:qty1. Steps:submit update O1 qty1, read O1 as same owner. Expected:caller UPDATED; stored qty1. No execution has run.
+input:
+  prompt: "使用 test-case-reviewer。按唯一需求评审给定单用例，范围仅 enabled owner update，不要求其他领域或未提供负向规则。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "TC3 含认证owner/已存订单qty2/启用feature、输入qty1、步骤、返回UPDATED/stored qty1 与Trace R1，不误报缺前置/预期/Trace。"
+    - "限定范围允许无用例阻塞，runtime 未执行和真实来源限制需保留。"
+  pass_threshold: 1.0

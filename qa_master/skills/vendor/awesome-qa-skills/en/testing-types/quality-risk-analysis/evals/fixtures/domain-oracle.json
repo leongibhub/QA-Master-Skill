@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "R-1": "HIGHER_PRIORITY",
+    "R-2": "LOWER_PRIORITY",
+    "R-3": "UNKNOWN",
+    "R-4": "CONTROL_EVIDENCED"
+  },
+  "calculations": {},
+  "required_details": []
+}

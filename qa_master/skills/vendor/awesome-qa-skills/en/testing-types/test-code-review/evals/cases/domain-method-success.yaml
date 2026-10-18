@@ -1,0 +1,21 @@
+id: domain-method-success
+title: "test-code-review: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use test-code-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 calc(2, 3)=5; throwing or returning 4 must fail the test; runner awaits returned async tests.
+    F1 L1 try {calc(2, 3)} catch(e) {}, no assertion.
+    F2 L2 actual=calc(2, 3); assert(2+3===5).
+    F3 L3 two parallel tests write shared fixed orderId=1 without cleanup; contract requires independent orders.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify L1 swallowed errors/no assertion and L2 checking a constant instead of actual; show a swallowed exception for L1 and returning 4 still passing for L2."
+    - "Locate L3 shared-ID/cleanup conflicts instead of generic maintainability prose."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

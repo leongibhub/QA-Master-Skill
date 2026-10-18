@@ -1,0 +1,9 @@
+id: "review-offline-arrival-artifacts"
+title: "离线 k6 产物保留负载达到与业务断言"
+description: "离线 k6 产物保留负载达到与业务断言"
+input:
+  prompt: "使用 performance-test-k6。仅编写 perf/options.json 和 perf/scripts/order.js，不发压。独立到达100/s 持续1m，预分配20/max50 VU；门槛 p95<300ms、HTTP错误<1%、dropped_iterations=0、业务 checks 全真。契约 POST /orders body {sku:\"SKU-1\",qty:1} ->201 {id:非空字符串,state:\"CREATED\",sku:\"SKU-1\",qty:1}。在 init 中 JSON.parse(open(\"../options.json\")) 导出 options，res.json() 赋给 body；BASE_URL/API_TOKEN 使用 __ENV。返回 JSON {\"execution_status\":\"NOT_RUN\"}，可另附 check/threshold 与达到负载限制解释。"
+judge:
+  type: "script"
+  script_path: "evals/graders/review-offline-arrival-artifacts.py"
+  timeout_seconds: 30

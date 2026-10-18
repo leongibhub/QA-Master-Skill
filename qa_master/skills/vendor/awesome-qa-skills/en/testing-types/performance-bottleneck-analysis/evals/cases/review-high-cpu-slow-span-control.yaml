@@ -1,0 +1,18 @@
+id: "review-high-cpu-slow-span-control"
+title: "High CPU or one slow span is insufficient for bottleneck"
+description: "High CPU or one slow span is insufficient for bottleneck"
+input:
+  prompt: "Use performance-bottleneck-analysis. At load100->200RPS, completed100->200RPS, p95 40->45ms, queue0 and pool-wait0; CPU95%. One span500ms exists among10000 requests, and trace sampling is unknown. Analyze without asserting a root cause."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "No evidenced throughput knee/queue saturation, so high CPU alone cannot be a confirmed limiting bottleneck."
+    - "One slow span is not representative root-cause evidence; asks for distribution/correlation/profile evidence and retains sample limits."
+  pass_threshold: 1.0

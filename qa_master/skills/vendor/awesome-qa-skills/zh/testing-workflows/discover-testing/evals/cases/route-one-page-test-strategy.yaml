@@ -1,0 +1,27 @@
+id: route-one-page-test-strategy
+title: 路由：明确一页纸策略需求时选择专项 skill
+description: |
+  用户明确要求精简并控制在一页内的测试策略时，应路由到专项 skill；通用策略或增强版用于更广的策略需求。
+
+input:
+  prompt: |
+    请使用 discover-testing 路由：产品团队需要一份精简的一页纸测试策略，覆盖功能、性能、安全和测试生命周期。
+    只推荐主 skill，说明匹配理由并给出下一步；不要直接撰写策略。
+
+expect:
+  must_contain:
+    - "主推荐"
+    - "one-page-test-strategy"
+    - "下一步"
+  must_not_contain:
+    - "test-strategy-plus"
+    - "TODO"
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        all:
+          - "主推荐"
+          - "one-page-test-strategy"
+          - "下一步"

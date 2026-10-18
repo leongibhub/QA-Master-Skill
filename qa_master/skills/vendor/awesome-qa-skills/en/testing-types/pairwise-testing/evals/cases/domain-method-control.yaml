@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "pairwise-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use pairwise-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    M2 A/B/C∈{0, 1}, no constraints, pairwise goal only; P2=[000, 011, 101, 110], unexecuted; no higher-order defect obligation supplied.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Verify three factor pairs×four value pairs=12 covered pairs, not four because the suite has four rows."
+    - "Do not require eight full assignments; retain higher-order/execution limits."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

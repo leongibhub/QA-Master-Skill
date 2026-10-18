@@ -1,0 +1,144 @@
+id: "review-role-merge-split-trace"
+title: "四角色重复合并但不同预期拆分"
+description: "四角色重复合并但不同预期拆分"
+context:
+  files:
+    "candidates.json": |-
+      [
+        {
+          "id": "C1",
+          "source_id": "prod-1",
+          "version": "v7",
+          "source_role": "product",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "business"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C2",
+          "source_id": "qa-1",
+          "version": "v7",
+          "source_role": "qa",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "api"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C3",
+          "source_id": "ux-1",
+          "version": null,
+          "source_role": "ux",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "ux"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C4",
+          "source_id": "tech-1",
+          "version": "v7",
+          "source_role": "technical",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "consistency"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C5",
+          "source_id": "qa-2",
+          "version": "v7",
+          "source_role": "qa",
+          "Trace": [
+            "R1",
+            "AC2"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": false,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "FEATURE_DISABLED",
+            "qty": 2
+          },
+          "risk_tags": [
+            "disabled"
+          ],
+          "priority": "P1"
+        }
+      ]
+input:
+  prompt: "使用 test-case-writing。从 candidates.json 写统一用例集。给定 R1：enabled 更新 -> UPDATED/qty1（AC1）；disabled -> FEATURE_DISABLED/原qty2（AC2）。返回 JSON {\"cases\":[{\"id\",\"candidate_ids\",\"source_role\",\"Trace\",\"risk_tags\",\"sources\":[{\"source_id\",\"version\"}],\"preconditions\":{\"authenticated_owner\",\"feature_enabled\",\"initial_qty\"},\"steps\":[字符串],\"expected\":{\"outcome\",\"qty\"}}]}。保留来源/角色/Trace/风险首次出现顺序，缺版本写unknown，不同通过条件需可执行。"
+judge:
+  type: "script"
+  script_path: "evals/graders/review-role-merge-split-trace.py"
+  timeout_seconds: 30

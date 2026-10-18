@@ -1,0 +1,23 @@
+id: edge-incomplete-input
+title: Missing review material
+description: No target, source, scope or runtime evidence is provided, so no pass verdict is supportable.
+input:
+  prompt: Use skill-prose-review. Assess whether a Skill passes, but this request supplies no target ID, path, source, review
+    scope or runtime environment. Report insufficient evidence and list the material required to start; do not assume files
+    in the current workspace are the target.
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  context:
+    profile: minimal
+    final_message: include
+    transcript: omit
+    workspace_diff: include
+    generated_files: include
+  criteria:
+  - Identifies target/source and review scope as information gaps; actual review has not started and no unsupported prose
+    pass or fail is issued.
+  - Separates unassessed static content from unexecuted runtime validation, without claiming observed defects or completed
+    verification.
+  - Requests actionable missing material without executing other workspace Skills/business tasks or editing files.
+  pass_threshold: 1.0

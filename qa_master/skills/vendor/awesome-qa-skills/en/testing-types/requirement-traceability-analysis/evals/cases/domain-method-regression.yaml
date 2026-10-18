@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "requirement-traceability-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use requirement-traceability-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Current O1/O2/O3 are v2. O1 maps to T1/T2; T1 v2 has an effective assertion and passed run R1, T2 is unexecuted. O2 has only a stale v1 mapping. O3 maps to v2 T3 without a run. Two sources reuse O9 for 'free shipping' and 'refund time limit'. Decide SATISFIED/STALE/MAPPED/IDENTITY_CONFLICT for O1/O2/O3/O9. Report current three-obligation mapped/satisfied numerators and denominators; two O1 tests do not inflate coverage.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: mapped_obligations, satisfied_obligations, current_obligation_denominator. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

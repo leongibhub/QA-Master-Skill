@@ -1,0 +1,18 @@
+id: "review-rejected-invalid-control"
+title: "Safe rejection is not an invented recovery defect"
+description: "Safe rejection is not an invented recovery defect"
+input:
+  prompt: "Use negative-scenario-discovery. Rule R4: quantity<=0 is rejected before any state write with supplied error INVALID_QTY. Trace N4: quantity0 -> INVALID_QTY, writes0, no downstream calls. Discover only remaining evidence-backed candidates for this scope."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Recognizes N4 as observed safe rejection under R4 and does not report a confirmed partial-write/recovery defect."
+    - "Does not invent payment outages, timeout numbers or additional fixed error codes from this single input scope."
+  pass_threshold: 1.0

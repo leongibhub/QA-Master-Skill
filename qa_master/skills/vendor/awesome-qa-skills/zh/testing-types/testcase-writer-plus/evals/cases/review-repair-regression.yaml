@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "testcase-writer-plus: sourced repair regression"
+input:
+  prompt: |
+    Use testcase-writer-plus.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附表 `ID | DECISION | Evidence`，每个 ID 一行，DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: CANDIDATE, DESIGNED, INVALID.
+
+    REQ-v1: password length12..64. W1 candidate has source_hash, source_line, original text, priority/status NOT_ASSESSED, expected pending. W2 alleged executable case has promotion/gift/inventory data and expected "consistent with rules"; no source supports it. W3 real sourced password case uses lengths11,12,64,65 with explicit rejected/accepted outcomes and versionREQ-v1; execution NOT_RUN. Classify the artifact, never report execution passed.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

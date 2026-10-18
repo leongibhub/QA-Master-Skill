@@ -1,0 +1,31 @@
+id: "review-partial-double-recovery-failures"
+title: "异常路径保留结果未知与恢复一致性预期"
+description: "异常路径保留结果未知与恢复一致性预期"
+context:
+  files:
+    "failures.md": |-
+      N1: provider committed debit D1 under K1; caller timed out. Rule R1: at most one debit per K1; query operation state before retry. Caller error code is not defined.
+      N2: payment P2 failed; reservation release R2 also failed. Rule R2: unpaid orders eventually release reservation; release owner is Ops.
+      N3: recovery worker persisted completed_step=2 then crashed; restart must resume after completed steps. Rule R3: each compensation effect once. Recovery error mapping is missing.
+input:
+  prompt: "使用 negative-scenario-discovery。仅从 failures.md 发现 NS 候选，每项需刺激/前置、拒绝或恢复预期、可见结果、一致性影响与所需证据，不授权故障注入。"
+expect:
+  must_contain:
+    - "N1"
+    - "N2"
+    - "N3"
+    - "K1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "N1 支付已提交后的 timeout 为结果未知，重试需 K1/查状态且不二次扣款，不能编 HTTP 映射。"
+    - "N2 支付失败和库存释放失败为双失败，保留待释放风险、核对/人工交接预期与两层来源。"
+    - "N3 恢复 worker 写 step2 后崩溃，需按持久步骤恢复/去重，验证不重复补偿；未知恢复错误码作为问题。"
+  pass_threshold: 1.0

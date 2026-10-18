@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "security-requirement-review: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 security-requirement-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    S2 内部项目 Policy-X v3 规定 invoice 仅同租户所有者可读。R3 owner同租户→允许；nonowner/跨租户→403且不返回invoice字段；server-side身份/资源检查，隔离验收将记录主体、资源、状态和脱敏响应；owner=API团队。仅需求/计划，未执行。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可 R3 对该义务可测、许可拒绝明确，不强制未给出的算法或标准。"
+    - "测试执行及全标准符合性保持未知，不能把可测性写成安全通过。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

@@ -1,0 +1,19 @@
+id: "review-unknown-denominator"
+title: "部分日志保留未知计划分母"
+description: "部分日志保留未知计划分母"
+input:
+  prompt: "使用 test-reporting。仅有日志：T1 PASS、T2 FAIL，均 run=r9、build=b42。没有计划清单、跳过/阻塞/未运行行或缺陷来源。生成报告，保留已观察执行数2与观察通过率50%；计划总数、执行覆盖及未观察分类保持未知。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "只报告 r9/b42 观察执行2、观察通过率50%。"
+    - "计划总数、执行覆盖、未观察的跳过/阻塞/未运行和缺陷清单保持未知，不虚构0。"
+    - "不从部分日志宣布已批准发布或全套通过。"
+  pass_threshold: 1.0

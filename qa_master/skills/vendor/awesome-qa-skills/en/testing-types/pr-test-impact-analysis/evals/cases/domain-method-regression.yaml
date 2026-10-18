@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "pr-test-impact-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use pr-test-impact-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    PR base=b1/head=h2 changes shared Money units from cents to decimal. E1 maps Money→refund→O-refund→T-refund. E2 maps Money→invoice→O-invoice→T-invoice. E3 removes the only T-tax protection for O-tax. E4 has unmapped dynamic plugin consumers. E5 is an independent avatar contract with no money dependency. Decide INCLUDE/COVERAGE_GAP/UNKNOWN/EXCLUDE for E1–E5 with base/head, test IDs and transitive evidence; diff size alone cannot justify unit-only scope.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

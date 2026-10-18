@@ -1,0 +1,103 @@
+id: "review-mixed-stage"
+title: "Mixed stages must not silently synthesize"
+description: "Mixed stages must not silently synthesize"
+context:
+  files:
+    "reports.json": |-
+      [
+        {
+          "source_id": "qa-1",
+          "version": "v1",
+          "stage": "test-report-review",
+          "source_role": "QA",
+          "facts": [],
+          "evidence": [
+            "run-R1"
+          ],
+          "findings": [
+            {
+              "id": "F-qa",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P0",
+              "blocking": true
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        },
+        {
+          "source_id": "tech-1",
+          "version": "v2",
+          "stage": "test-strategy",
+          "source_role": "technical",
+          "facts": [],
+          "evidence": [
+            "diff-D1"
+          ],
+          "findings": [
+            {
+              "id": "F-tech",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P1",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "medium"
+        },
+        {
+          "source_id": "product-1",
+          "version": "v3",
+          "stage": "test-report-review",
+          "source_role": "product",
+          "facts": [],
+          "evidence": [
+            "req-Q7"
+          ],
+          "findings": [
+            {
+              "id": "F-product",
+              "target": "invoice-import",
+              "condition": "same invoice uploaded twice",
+              "problem": "duplicate debit",
+              "severity": "P2",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        }
+      ]
+input:
+  prompt: "Use multi-role-quality-synthesis. Synthesize reports.json only when its stages permit a reliable single-stage conclusion. Preserve the input source register even if blocked."
+expect:
+  must_contain:
+    - "qa-1"
+    - "tech-1"
+    - "product-1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Detects test-strategy versus test-report-review, blocks a combined conclusion, lists the conflicting stage/source pairs, and asks to split by stage."
+    - "Keeps all three source identities visible and does not invent synthesis consensus or discard a P0 because synthesis is blocked."
+  pass_threshold: 1.0

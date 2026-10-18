@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "functional-testing: sourced repair regression"
+input:
+  prompt: |
+    Use functional-testing.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附一个 Markdown 表格，表头固定为 `ID | DECISION | Evidence`，每个 ID 恰好一行且仅在该表出现一次；其他部分可以分析 fixture，但不要重复决策行。DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: FAIL, PASS.
+
+    Contract PAY-v2: payment success means order.status=PAID and exactly one ledger credit for the order. F1: UI toast success; DB order=PENDING, ledger credits=0. F2: order=PAID, ledger credits=1, no toast assertion. F3: repeat callback caused ledger credits=2. Compare business postconditions; there is no real execution beyond this fixture.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "test-case-reviewer-plus: sourced repair regression"
+input:
+  prompt: |
+    Use test-case-reviewer-plus.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append `ID | DECISION | Evidence`, one row per ID, using the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: NOT_ASSESSED, NO_DISCREPANCY, UNSUPPORTED.
+
+    Calculator contract1+1=2. V1 helper preserves requirement and TC1 exact expected2; analysis NOT_ASSESSED. V2 helper output declares stockP0, payment compensation, coverage complete and T+1 without supporting text. V3 agent reviewed TC1 against the calculator contract, found no discrepancy, but source ownership/version is missing. Assess claims, preserve pending human decisions; absence of discrepancy is limited to this supplied comparison.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

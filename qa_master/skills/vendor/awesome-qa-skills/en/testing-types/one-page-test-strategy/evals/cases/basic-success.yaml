@@ -1,0 +1,47 @@
+id: basic-success
+title: "One-page strategy: risk-driven release summary"
+description: |
+  With useful context, produce the one-page principle, scope, seven lifecycle stages, quadrants, layers, and iteration feedback modules from the image.
+
+input:
+  prompt: |
+    Use one-page-test-strategy. Project: an e-commerce order platform ships in two weeks. Business goal: reduce unfulfilled orders caused by payment failures. Critical journey: order→payment→shipping. Known risk: payment callbacks time out or repeat; CI and staging are available, with two QA engineers and four developers. Production logs are observable, but production data cannot be changed directly. Create a one-page strategy for team discussion.
+
+expect:
+  must_contain:
+    - "Guiding principle"
+    - "Functionality"
+    - "Performance"
+    - "Security"
+    - "Test enablers and constraints"
+    - "Requirements analysis"
+    - "Before development"
+    - "Development complete"
+    - "Testing"
+    - "Before release"
+    - "Released"
+    - "Q1"
+    - "Q2"
+    - "Q3"
+    - "Q4"
+    - "Business-facing"
+    - "Technology-facing"
+    - "Supports the team"
+    - "Evaluates the product"
+    - "Exploratory"
+    - "API"
+    - "Unit"
+    - "Iteration"
+    - "feedback"
+  must_not_contain:
+    - "TODO"
+    - "I cannot"
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        all:
+          - "goal"
+          - "quality"
+          - "production"

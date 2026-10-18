@@ -1,0 +1,70 @@
+id: "review-risk-mapped-selection"
+title: "选择集合保留强制依赖与预算"
+description: "选择集合保留强制依赖与预算"
+context:
+  files:
+    "inventory.json": |-
+      {
+        "budget_minutes": 12,
+        "changed_risks": [
+          "Q1",
+          "Q2"
+        ],
+        "tests": [
+          {
+            "id": "T0",
+            "minutes": 2,
+            "depends": [],
+            "risks": [],
+            "mandatory": true
+          },
+          {
+            "id": "T1",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T2",
+            "minutes": 5,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q2"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T3",
+            "minutes": 3,
+            "depends": [],
+            "risks": [
+              "copy"
+            ],
+            "mandatory": false
+          },
+          {
+            "id": "T4",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": false
+          }
+        ]
+      }
+input:
+  prompt: "使用 regression-test-selection。从 inventory.json 选最小充分已有集合，返回 JSON {\"selected\":[IDs],\"execution_order\":[IDs],\"total_minutes\":数值,\"budget_status\":\"FEASIBLE|INFEASIBLE\",\"deferred\":[IDs],\"uncovered_risks\":[IDs]}。强制项与前置不能丢，不新增测试ID或执行结果。"
+judge:
+  type: "script"
+  script_path: "evals/graders/review-risk-mapped-selection.py"
+  timeout_seconds: 30

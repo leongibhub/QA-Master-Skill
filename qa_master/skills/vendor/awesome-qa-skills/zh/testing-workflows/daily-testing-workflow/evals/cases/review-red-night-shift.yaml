@@ -1,0 +1,27 @@
+id: "review-red-night-shift"
+title: "夜班红环境必须重排工作队列"
+description: "夜班红环境必须重排工作队列"
+context:
+  files:
+    "day.json": "{\"shift\":\"22:00-02:00 Asia/Shanghai\",\"capacity_hours\":4,\"build\":\"B17\",\"env\":\"RED\",\"smoke\":\"unavailable\",\"recovery_owner\":\"Lin\",\"items\":[{\"id\":\"P0-payment\",\"priority\":\"P0\",\"status\":\"NOT_RUN\"},{\"id\":\"P2-copy\",\"priority\":\"P2\",\"status\":\"NOT_RUN\"}]}"
+input:
+  prompt: "使用 daily-testing-workflow。读取 day.json，为 22:00-02:00 班次按开工/检查点/收尾里程碑制定受限计划，给出门禁状态与唯一下一 Skill，不能编造执行结果。"
+expect:
+  must_contain:
+    - "B17"
+    - "P0-payment"
+    - "Lin"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "build B17 环境门禁为红，恢复或升级给已提供负责人 Lin，smoke 不可用时安排离线变更/用例设计。"
+    - "不能报告 P0-payment 已通过或完成，保留 NOT_RUN/BLOCKED 并后移 P2-copy。"
+    - "按班次里程碑而非强制早晨排程，下一交接唯一且携带红环境。"
+  pass_threshold: 1.0

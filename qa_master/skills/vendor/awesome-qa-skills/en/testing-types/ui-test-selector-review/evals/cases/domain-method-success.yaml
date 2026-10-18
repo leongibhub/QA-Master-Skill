@@ -1,0 +1,18 @@
+id: domain-method-success
+title: "ui-test-selector-review: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use ui-test-selector-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    D1 #billing and #profile each contain a button named"Save"; target saves billing. T1 globally finds button/name Save and takes first; DOM order may change. D2 English Save/Chinese 保存, no fixed-language contract.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify 2 global matches/first selecting the wrong area; scope billing then role/name with uniqueness validation."
+    - "Retain English-only localization assumptions without inventing a data-testid."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "A-1": "CONTRADICTED",
+    "A-2": "PASS",
+    "A-3": "INCOMPLETE",
+    "A-4": "APPROPRIATE_REFUSAL"
+  },
+  "calculations": {},
+  "required_details": []
+}

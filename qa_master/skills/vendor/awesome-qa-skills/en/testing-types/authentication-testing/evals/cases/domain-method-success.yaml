@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "authentication-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use authentication-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 project login requires MFA: correct password enters challenged state; session only after MFA success. Recovery tokens are single-use. Recovery responses for existent/nonexistent accounts are both 202/"If eligible, email sent".
+    T1 correct password, no MFA→authenticated/session issued. T2 the same redacted recovery-token label R resets twice successfully. T3 nonexistent account→404/NO_ACCOUNT.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Trace premature authentication, recovery replay and account-response conflict to C1; reference token labels only."
+    - "Do not invent MFA/lock lifetimes or claim verified bypass/resource access from static traces."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

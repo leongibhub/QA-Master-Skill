@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-gate-design: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use quality-gate-design to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Gate-v3 requires all critical obligations to PASS with version-matched evidence no older than 24h. UNKNOWN/BLOCKED stops advancement; exceptions need owner approval and unexpired validity. G-1 lacks a test record. G-2 cannot execute because the environment failed. G-3 has a fresh failed assertion with an expired signed exception. G-4 has all fresh required PASS evidence. G-5 has a 48-hour-old PASS. Decide UNKNOWN/BLOCKED/FAIL/PASS with STOP/GO advice; stale or missing evidence cannot become green.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

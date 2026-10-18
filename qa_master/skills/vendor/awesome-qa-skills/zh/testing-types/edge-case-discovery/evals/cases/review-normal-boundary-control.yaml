@@ -1,0 +1,18 @@
+id: "review-normal-boundary-control"
+title: "正常样例不应误判边界失败"
+description: "正常样例不应误判边界失败"
+input:
+  prompt: "使用 edge-case-discovery。R1 允许最多 4 codepoints 且 8 UTF-8 bytes，样例 ab 为 2 codepoints/2 bytes，仅提供 label 范围。判断样例并提出有来源相邻候选，不编造失败状态或阈值。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "ab 在两限制内，不能称确定失败；边界候选不等于执行证明。"
+    - "不能编造时区/手机/并发需求或固定越界错误码。"
+  pass_threshold: 1.0

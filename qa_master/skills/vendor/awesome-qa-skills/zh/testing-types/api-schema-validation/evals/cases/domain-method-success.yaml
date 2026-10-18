@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-schema-validation: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 api-schema-validation 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    S1 JSON Schema 2020-12：{"type":"object","properties":{"id":{"type":"integer"},"note":{"type":["string","null"]}},"required":["id","note"],"additionalProperties":false}。
+    样例 A={"id":1,"note":null}；B={"id":1}；C={"id":1,"note":"ok","extra":0}。R1 声称 A 无效、B/C 有效。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "按 S1 判 A 合法、B 违反 required、C 违反 additionalProperties，逐项指出 R1 冲突。"
+    - "明确 null 被允许且 required 只要求出现，不擅加非空规则。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

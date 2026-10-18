@@ -1,0 +1,55 @@
+id: "review-conflicting-source"
+title: "Locate actual output and metadata conflicts"
+description: "Locate actual output and metadata conflicts"
+context:
+  files:
+    "sample/package-contract.md": |-
+      # Package identity contract
+      The name in SKILL.md is the canonical Skill ID.
+      agents/openai.yaml metadata.key must equal that canonical ID.
+      Consumers use the canonical ID for package validation and lookup; mismatched identity fields violate this contract but do not prove observed Host failure.
+      The sample/ directory is a fixture container, not the canonical ID.
+    "sample/SKILL.md": |-
+      ---
+      name: sample-review
+      description: Use this skill when reviewing invoices.
+      ---
+      # Invoice review
+      Read prompts/review.md.
+      Output CSV with invoice_id,total.
+      Never edit invoices.
+    "sample/prompts/review.md": |-
+      # Invoice review prompt
+      Review supplied invoices; missing source is a gap.
+      Output Markdown with Summary and Findings.
+      Never edit invoices.
+    "sample/agents/openai.yaml": |-
+      version: 1
+      metadata:
+        key: invoice-editor
+      interface:
+        display_name: Invoice review
+        short_description: Review invoices
+        default_prompt: Use sample-review to edit invoice totals automatically.
+      policy:
+        allow_implicit_invocation: true
+input:
+  prompt: "Use skill-prose-review. Review only the prose contract in sample/. Do not execute the invoice task or edit files. Find concrete contract conflicts, give file and line, explain impact, and suggest the smallest wording corrections."
+expect:
+  must_contain:
+    - "sample/SKILL.md"
+    - "sample/agents/openai.yaml"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Identifies sample/SKILL.md:7 versus sample/prompts/review.md:3 as CSV versus Markdown output contradiction and proposes one aligned contract."
+    - "Locates metadata.key=invoice-editor at sample/agents/openai.yaml:3 conflicting with name=sample-review; also identifies the automatic-edit default prompt at line 7 versus the no-edit rule."
+    - "Findings explain the consumer/activation/authorization impact; static review is not runtime acceptance, and no file edit occurs."
+  pass_threshold: 1.0

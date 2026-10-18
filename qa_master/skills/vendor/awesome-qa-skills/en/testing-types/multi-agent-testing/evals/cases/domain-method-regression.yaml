@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "multi-agent-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use multi-agent-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Team-v1 requires one owner and commit per task_id, accepts only the current shared-state version and reassigns or escalates failed work. A-1 lets W1 and W2 claim T and write separately. A-2 rejects a stale v2 delegation while state is v3, with no effects. A-3 completes the parent despite a failed child whose unfinished work has no owner or escalation. A-4 receives a duplicate message after commit, reads completed T and ACKs without another write. Decide PASS/FAIL with ownership, version and handoff evidence.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

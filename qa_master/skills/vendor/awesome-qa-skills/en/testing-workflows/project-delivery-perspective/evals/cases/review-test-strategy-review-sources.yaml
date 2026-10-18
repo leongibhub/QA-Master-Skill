@@ -1,0 +1,79 @@
+id: "review-test-strategy-review-sources"
+title: "Delivery sources at test-strategy-review"
+description: "Delivery sources at test-strategy-review"
+context:
+  files:
+    "delivery.json": |-
+      {
+        "source_id": "delivery-1",
+        "version": "v2",
+        "constraints": [
+          {
+            "id": "D1",
+            "source": "meeting-note",
+            "meeting": "2026-10-06T15:00:00+08:00"
+          },
+          {
+            "id": "D2",
+            "source": "dependency-ticket",
+            "dependency_ready": "2026-10-06T17:00:00+08:00",
+            "owner": "Chen"
+          },
+          {
+            "id": "D3",
+            "source": "capacity-note",
+            "QA_hours": 4
+          }
+        ],
+        "requests": [
+          {
+            "source": "PM-message",
+            "text": "Mark P0 B9 closed before the meeting"
+          }
+        ],
+        "authorized_decisions": [
+          {
+            "source": "decision-A1",
+            "text": "Defer P2 copy review only"
+          }
+        ],
+        "actions": [
+          {
+            "id": "A2",
+            "source": "follow-up-note",
+            "owner": null,
+            "due": null,
+            "status": "unassigned"
+          }
+        ],
+        "quality_facts": [
+          {
+            "source": "QA-run-R1",
+            "bug": "B9",
+            "priority": "P0",
+            "status": "OPEN",
+            "tests": "NOT_RUN"
+          }
+        ]
+      }
+input:
+  prompt: "Use project-delivery-perspective. stage: test-strategy-review. Read delivery.json and produce the stage-specific delivery report. Keep stakeholder requests, authorized decisions, and preserved quality evidence separate. Normalize times only with their supplied offsets."
+expect:
+  must_contain:
+    - "B9"
+    - "A2"
+    - "Chen"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Preserves D1 at 15:00+08:00 (07:00Z) and D2 readiness at 17:00+08:00 (09:00Z), exposing the two-hour dependency delay and its source/owner Chen instead of silently assuming readiness."
+    - "Keeps PM request to close B9 separate from authorized decision-A1 (defer P2 only); QA-run-R1 facts remain B9 P0 OPEN and tests NOT_RUN."
+    - "A2 owner/due stay unknown and status unassigned; no invented date/person, quality verdict or release approval. Report carries delivery-1/v2 provenance and sourced coordination actions."
+  pass_threshold: 1.0

@@ -1,0 +1,30 @@
+id: "review-requirements-analysis-design"
+title: "Technical source evidence at requirements-analysis"
+description: "Technical source evidence at requirements-analysis"
+context:
+  files:
+    "design.md": |-
+      # Refund design v7
+      API writes a job; worker calls debit provider.
+      Retry deduplication and recovery ownership: not specified.
+    "requirements.json": "{\"source_id\":\"tech-design\",\"version\":\"v7\",\"Q1\":\"at most one debit per refund\"}"
+input:
+  prompt: "Use technical-quality-perspective. stage: requirements-analysis. Read design.md@v7 and requirements.json. Give only stage-relevant technical risks, questions and validation preparation; no implementation or runtime has been supplied."
+expect:
+  must_contain:
+    - "Q1"
+    - "design.md"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Ties one-debit invariant Q1 to the stated API/worker boundary and missing retry-dedup detail at design.md:3@v7, with validation preparation or a question rather than a confirmed implemented bug."
+    - "Separates known architecture from unknown idempotency/recovery implementation, and does not claim tests passed or code was verified."
+    - "Uses file:line@version for supplied static text and a distinct stable finding/action evidence link; specialized code/design review is a handoff by Skill name, not duplicate invented findings."
+  pass_threshold: 1.0

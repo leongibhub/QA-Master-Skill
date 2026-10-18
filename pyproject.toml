@@ -15,6 +15,6 @@ qa-master-paired-eval = "qa_master.paired_evaluation:main"
 [tool.setuptools.packages.find]
 include = ["qa_master*"]
 [tool.setuptools.package-data]
-qa_master = ["skills/**/*.md", "skills/**/*.json", "semantic_quality_assets/*.json"]
+qa_master = ["skills/**/*.md", "skills/**/*.json", "skills/vendor/**/*", "semantic_quality_assets/*.json"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]

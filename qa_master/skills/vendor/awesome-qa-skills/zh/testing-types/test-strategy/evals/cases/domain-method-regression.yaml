@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-strategy: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 test-strategy 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    项目门槛：退款幂等和跨租户隔离两个义务必须有独立断言执行证据；每个需20min，有隔离环境/Playwright/API资产。C1 QA-A窗口45min可顺序完成两个。C2 QA-A窗口25min，尚无风险接受授权。C3只有用例计划无运行，却写已通过。C4未给其他通过率门槛却套95%。用FEASIBLE/ESCALATE/NOT_RUN/UNKNOWN，交付义务/负责人/深度/证据最小表，不隐藏容量取舍。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

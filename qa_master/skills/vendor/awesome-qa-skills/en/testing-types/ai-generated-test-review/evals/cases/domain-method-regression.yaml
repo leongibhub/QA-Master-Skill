@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ai-generated-test-review: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ai-generated-test-review to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Classify these complete contracts/code summaries without syntax-based false positives. T-1: real price(total,taxClient), only external taxClient mocked to 2, independent price(10)=12 assertion; ignoring tax fails. T-2: real serializeOrder {id,status,total}, Human-reviewed snapshot retains all business fields; paid→pending fails. T-3: /health's sole contract is 503 for unavailable dependency, no body/write obligation; real handler with disconnected dependency asserts 503. T-4: subject price itself mocked to 12, then 12 asserted; production price never executes. Give STRONG/WEAK/FAKE and a concrete mutation rationale per test.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

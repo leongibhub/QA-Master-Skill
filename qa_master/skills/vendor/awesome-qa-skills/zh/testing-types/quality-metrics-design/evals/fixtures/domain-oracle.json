@@ -1,0 +1,14 @@
+{
+  "decisions": {
+    "K-1": "WRONG",
+    "K-2": "WRONG",
+    "K-3": "CALCULABLE",
+    "K-4": "UNKNOWN"
+  },
+  "calculations": {
+    "new_defects": 2,
+    "first_attempt_pass_numerator": 1,
+    "first_attempt_pass_denominator": 2
+  },
+  "required_details": []
+}

@@ -1,0 +1,17 @@
+id: review-repair-regression
+title: "api-test-pytest: sourced repair regression"
+input:
+  prompt: |
+    Use api-test-pytest.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append `ID | DECISION | Evidence`, one row per ID, using the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: BLOCKED, FAIL, INCOMPLETE, PASS.
+
+    Contract API-v1: POST /orders body {qty:1}, Content-Type application/json; expected statuses[201], expected JSON {qty:1}. A1 observed201/{qty:1}. A2 observed404/{qty:1}. A3 observed201/{qty:2}. A4 no expected statuses and required body missing. A5 empty endpoints. Explain exact payload preservation, no fixed latency or invented auth/body, and generated scaffolds versus actual run. Bruno requires {{baseUrl}}; Supertest target mode must be explicit.
+    Decision contract: INCOMPLETE means an existing endpoint lacks required request or expectation data; BLOCKED means the endpoint collection itself is empty, so generation has no scope. Do not infer either from real request execution.
+
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

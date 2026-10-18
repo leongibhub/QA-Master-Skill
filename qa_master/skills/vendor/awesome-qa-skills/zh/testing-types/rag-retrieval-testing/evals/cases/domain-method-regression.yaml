@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "rag-retrieval-testing: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 rag-retrieval-testing 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    queryQ租户A，已知相关文档集合{d1,d2,d3}，k=2，无重复。R-1返回d1/d2均A当前版本。R-2返回d1/B租户d9，即使d9相关也越权。R-3返回d1旧版，项目要求最新。R-4检索d1/d2正确但生成把原14天写30天。R-5无完整相关标注却宣称Recall100%。用RETRIEVAL_VALID/AUTHORIZATION_FAIL/STALE/GENERATION_FAIL/UNKNOWN，复算R-1precision和recall的分子分母，不把2个结果等于完整覆盖。
+    计算结果另用 `METRIC | VALUE | 单位/依据` 表输出，METRIC 使用以下键：precision_numerator, precision_denominator, recall_numerator, recall_denominator。VALUE 只写数字。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

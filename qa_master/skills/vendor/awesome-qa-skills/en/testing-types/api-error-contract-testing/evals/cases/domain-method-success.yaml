@@ -1,0 +1,20 @@
+id: domain-method-success
+title: "api-error-contract-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use api-error-contract-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 error contract v1: POST /orders and POST /quotes both map INVALID_QTY to 400. Body requires string code and requestId; retryable=false; stack is prohibited.
+    T1 /orders: 400 {code: INVALID_QTY, requestId: r1, retryable: false}; log requestId=r1.
+    T2 /quotes: 422 {code: INVALID_QTY, retryable: true, stack:"/srv/quote.py:18"}; log requestId=r2.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Trace T2's 422, absent requestId, retryable=true, and stack to C1 with specific reasons."
+    - "Treat T1 as a valid control; different request IDs r1/r2 are not a correlation conflict."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

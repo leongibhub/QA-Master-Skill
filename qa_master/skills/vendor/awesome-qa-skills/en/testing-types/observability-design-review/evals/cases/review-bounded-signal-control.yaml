@@ -1,0 +1,18 @@
+id: "review-bounded-signal-control"
+title: "Explicit cardinality and propagation controls are recognized"
+description: "Explicit cardinality and propagation controls are recognized"
+input:
+  prompt: "Use observability-design-review. Design scope: metric labels status(5)×region(3), budget10000; request_id only in redacted logs; traceparent and a shared head sampling decision propagate gateway->worker; alert owner Ops with linked runbook checks pool wait and pages on-call. Review statically, no runtime signals supplied."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Upper bound15 is within supplied budget; no false high-cardinality, missing propagation or owner/runbook findings for explicit controls."
+    - "Does not turn the coherent design into verified detection, runtime health or SLO compliance."
+  pass_threshold: 1.0

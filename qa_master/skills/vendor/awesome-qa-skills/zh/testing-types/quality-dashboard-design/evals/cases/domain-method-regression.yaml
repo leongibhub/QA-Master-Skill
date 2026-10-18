@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-dashboard-design: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 quality-dashboard-design 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    项目门禁：未关闭P0阻断，数据超过24h标STALE，未运行标NOT_RUN。D-1 面板99/100通过但剩余1项P0未关闭。D-2 上次绿灯数据48h前。D-3 测试无运行记录，却显示失败0并绿灯。D-4 当前100/100且无P0、来源run17可钻取、时窗与口径完整。给BLOCKED/STALE/NOT_RUN/PASS逐项决策，并映射发布决策/数据/行动，不把缺数据当零。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

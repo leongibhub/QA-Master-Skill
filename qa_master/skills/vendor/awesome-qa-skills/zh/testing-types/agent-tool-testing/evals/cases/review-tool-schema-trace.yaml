@@ -1,0 +1,164 @@
+id: "review-tool-schema-trace"
+title: "用实际工具 schema 与 trace 判断副作用"
+description: "用实际工具 schema 与 trace 判断副作用"
+context:
+  files:
+    "tools-and-traces.json": |-
+      {
+        "tools": [
+          {
+            "name": "read_order",
+            "write": false,
+            "schema": {
+              "type": "object",
+              "required": [
+                "order_id"
+              ],
+              "properties": {
+                "order_id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "create_refund",
+            "write": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "order_id",
+                "amount_cents",
+                "idempotency_key"
+              ],
+              "properties": {
+                "order_id": {
+                  "type": "string"
+                },
+                "amount_cents": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "idempotency_key": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "policy": {
+          "production_writes": false,
+          "authorized_sandbox_order": "O1"
+        },
+        "traces": [
+          {
+            "id": "T0",
+            "request": "read O1 status",
+            "calls": [
+              {
+                "tool": "read_order",
+                "args": {
+                  "order_id": "O1"
+                },
+                "result": "read-only success"
+              }
+            ],
+            "effects": []
+          },
+          {
+            "id": "T1",
+            "request": "read O1 status",
+            "calls": [
+              {
+                "tool": "create_refund",
+                "args": {
+                  "order_id": "O1",
+                  "amount_cents": 100,
+                  "idempotency_key": "K1"
+                },
+                "result": "authorization denied"
+              }
+            ],
+            "effects": []
+          },
+          {
+            "id": "T2",
+            "request": "authorized sandbox refund O1 100 cents",
+            "calls": [
+              {
+                "tool": "create_refund",
+                "args": {
+                  "order_id": "O1",
+                  "amount_cents": "100",
+                  "idempotency_key": "K1"
+                },
+                "result": "schema rejection"
+              }
+            ],
+            "effects": []
+          },
+          {
+            "id": "T3",
+            "request": "authorized sandbox refund O1 100 cents",
+            "calls": [
+              {
+                "tool": "create_refund",
+                "args": {
+                  "order_id": "O1",
+                  "amount_cents": 100,
+                  "idempotency_key": "K1"
+                },
+                "result": "timeout after commit RF1"
+              },
+              {
+                "tool": "create_refund",
+                "args": {
+                  "order_id": "O1",
+                  "amount_cents": 100,
+                  "idempotency_key": "K1"
+                },
+                "result": "replay RF1"
+              }
+            ],
+            "effects": [
+              "RF1"
+            ]
+          },
+          {
+            "id": "T4",
+            "request": "authorized sandbox refund O1 100 cents",
+            "calls": [
+              {
+                "tool": "create_refund",
+                "args": {
+                  "order_id": "O1",
+                  "amount_cents": 100,
+                  "idempotency_key": "K1"
+                },
+                "result": "timeout after commit RF1"
+              },
+              {
+                "tool": "create_refund",
+                "args": {
+                  "order_id": "O1",
+                  "amount_cents": 100,
+                  "idempotency_key": "K2"
+                },
+                "result": "commit RF2"
+              }
+            ],
+            "effects": [
+              "RF1",
+              "RF2"
+            ]
+          }
+        ]
+      }
+input:
+  prompt: "使用 agent-tool-testing。允许通过只读本地文件访问读取 tools-and-traces.json，也允许读取已安装的 Skill 指令。不得执行记录中的业务工具 read_order 或 create_refund，不调用端点，不修改文件。返回 JSON {\"traces\":[{\"id\",\"selection\":\"valid|wrong\",\"arguments\":\"valid|invalid\",\"authorization\":\"allowed|denied\",\"side_effects\":整数,\"duplicate\":布尔值}]}。按请求/schema/授权判断每条 trace，计数已提交副作用而非调用数；正确对照必须保持合法。"
+judge:
+  type: "script"
+  script_path: "evals/graders/review-tool-schema-trace.py"
+  timeout_seconds: 30

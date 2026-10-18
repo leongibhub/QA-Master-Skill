@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ai-generated-test-review: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 ai-generated-test-review 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    根据以下完整契约和代码摘要分类，不按语法报假阳性。T-1：真实 price(total, taxClient) 调用；只 mock 外部 taxClient 返回 2；独立断言 price(10)=12，错误忽略税会失败。T-2：真实 serializeOrder 生成 {id,status,total}，人工审核快照保留所有业务字段；把 paid 改为 pending 会失败。T-3：/health 唯一契约是依赖不可用时 503，没有响应体或写入义务；真实 handler 注入断开依赖断言 503。T-4：直接 mock 被测 price 返回 12，再断言 12，生产 price 从未调用。每项 STRONG/WEAK/FAKE，给具体变异理由。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

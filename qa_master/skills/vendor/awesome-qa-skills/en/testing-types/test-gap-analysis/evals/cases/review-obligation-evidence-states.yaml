@@ -1,0 +1,74 @@
+id: "review-obligation-evidence-states"
+title: "Mapped, executed, unknown and not-applicable states are distinct"
+description: "Mapped, executed, unknown and not-applicable states are distinct"
+context:
+  files:
+    "obligations.json": |-
+      {
+        "build": "B70",
+        "environment": "sandbox-A",
+        "timestamp": "2026-10-06T09:00:00Z",
+        "obligations": [
+          {
+            "id": "O1",
+            "rule": "receipt visible",
+            "applicable": true,
+            "test": "T1",
+            "run_status": "NOT_RUN"
+          },
+          {
+            "id": "O2",
+            "rule": "at most one debit",
+            "applicable": true,
+            "test": "T2",
+            "run_status": "PASS",
+            "assertion": "HTTP200 only",
+            "observed_debits": 2
+          },
+          {
+            "id": "O3",
+            "rule": null,
+            "applicable": null,
+            "test": null,
+            "run_status": null
+          },
+          {
+            "id": "O4",
+            "rule": "mobile UI",
+            "applicable": false,
+            "scope_source": "backend-only scope S1",
+            "test": null
+          },
+          {
+            "id": "O5",
+            "rule": "qty1 persists",
+            "applicable": true,
+            "test": "T5",
+            "run_status": "PASS",
+            "observed_qty": 1
+          }
+        ]
+      }
+input:
+  prompt: "Use test-gap-analysis. Analyze obligations.json with an obligation-state table and TG findings only for evidenced gaps. Give closure evidence per gap; do not calculate effective coverage from the five-item count."
+expect:
+  must_contain:
+    - "O1"
+    - "O2"
+    - "O3"
+    - "O4"
+    - "O5"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "O1 is mapped but NOT_RUN -> unverified_execution; O2 ran HTTP-only PASS but observed2 debits violates at-most-one -> uncovered_risk/unsatisfied behavior, not missing mapping or guaranteed satisfaction."
+    - "O3 lacks rule/applicability and mapping, so remains unassessed with a material/mapping evidence question, not a confirmed execution defect; O4 is explicit not-applicable, not a mandatory missed test."
+    - "O5 is supported within supplied qty scope, no false gap; O1 closes with versioned run/result and O2 with business assertion plus once-only ledger evidence; no count-derived effective-coverage percentage."
+  pass_threshold: 1.0

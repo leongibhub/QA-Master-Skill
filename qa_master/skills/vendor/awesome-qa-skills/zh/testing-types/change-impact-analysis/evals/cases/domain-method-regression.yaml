@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "change-impact-analysis: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 change-impact-analysis 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    变更配置 v8：金额单位 cents→decimal。证据 E1：配置→checkout 读取→退款金额义务 O1→T-refund；E2：checkout→invoice 共享金额→O2→T-invoice；E3：plugin registry 动态消费者未知；E4：图片服务明确独立契约、不读金额配置。判定 O1/O2 INCLUDE，E3 UNKNOWN，E4 EXCLUDE 或按证据自行判断 INCLUDE/EXCLUDE/UNKNOWN，列边来源及未知依赖的保守验证。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

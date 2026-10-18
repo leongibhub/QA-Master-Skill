@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "requirement-traceability-analysis: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 requirement-traceability-analysis 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    当前O1/O2/O3均v2。O1关联T1/T2，T1 v2有效断言runR1通过，T2未执行；O2仅有v1旧映射；O3有v2 T3映射但未执行。另两个来源重复ID=O9却分别“免运费”和“退款时限”。用O1 SATISFIED/O2 STALE/O3 MAPPED/O9 IDENTITY_CONFLICT，给当前三义务mapped和satisfied分子/分母，两个O1测试不能扩大分母。
+    计算结果另用 `METRIC | VALUE | 单位/依据` 表输出，METRIC 使用以下键：mapped_obligations, satisfied_obligations, current_obligation_denominator。VALUE 只写数字。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

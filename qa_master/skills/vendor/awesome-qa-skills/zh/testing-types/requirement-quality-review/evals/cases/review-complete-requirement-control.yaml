@@ -1,0 +1,29 @@
+id: "review-complete-requirement-control"
+title: "完整限定需求不应编造阻塞"
+description: "完整限定需求不应编造阻塞"
+context:
+  files:
+    "requirement.md": |-
+      # Quantity edit requirement v4, source RQ-doc
+      Goal: users edit quantities safely. Scope: existing owned sandbox order, integer qty; no payment or deletion.
+      R1: authenticated owner may set qty to an integer in [1,10] inclusive.
+      R2: non-owner receives FORBIDDEN and qty does not change.
+      R3: noninteger or outside [1,10] receives INVALID_QTY and qty does not change.
+      R4: successful update returns the new qty; repeated same value keeps that qty.
+      Dependency: stub order store supports read/write in sandbox-A, fixture owner/non-owner accounts and qty1/10/0/11 exist; QA owner role maintains data cleanup.
+      Acceptance: observe stored qty and caller code for R1-R4. No latency target, mobile UI or real payment is in scope. Runtime is not supplied.
+input:
+  prompt: "使用 requirement-quality-review。仅审阅 requirement.md 的给定数量编辑范围，允许无阻塞发现；区分需求就绪、runtime 验证与最终产品批准。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "识别目标、角色权限、整数闭区间、可观察成功/失败、失败不改状态、依赖数据清理与范围，不能误报缺核心规则阻塞。"
+    - "不能强求明确范围外的延迟/手机/支付规则、制造3-5填充问题或称测试已运行通过。"
+  pass_threshold: 1.0

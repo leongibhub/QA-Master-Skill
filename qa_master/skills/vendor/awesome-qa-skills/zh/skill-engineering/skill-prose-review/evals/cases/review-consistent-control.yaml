@@ -1,0 +1,50 @@
+id: "review-consistent-control"
+title: "正确契约不得误报相同冲突"
+description: "正确契约不得误报相同冲突"
+context:
+  files:
+    "sample/package-contract.md": |-
+      # 包身份契约
+      SKILL.md 的 name 是 canonical Skill ID。
+      agents/openai.yaml 的 metadata.key 必须与该 canonical ID 一致。
+      消费者按 canonical ID 校验包和查找 Skill；身份字段不一致违反本契约，但不能证明 Host 已实际发生故障。
+      sample/ 目录是 fixture 容器，不是 canonical ID。
+    "sample/SKILL.md": |-
+      ---
+      name: sample-review
+      description: Use this skill when reviewing invoices.
+      ---
+      # Invoice review
+      Read prompts/review.md.
+      Output Markdown with Summary and Findings.
+      Never edit invoices.
+    "sample/prompts/review.md": |-
+      # Invoice review prompt
+      Review supplied invoices; missing source is a gap.
+      Output Markdown with Summary and Findings.
+      Never edit invoices.
+    "sample/agents/openai.yaml": |-
+      version: 1
+      metadata:
+        key: sample-review
+      interface:
+        display_name: Invoice review
+        short_description: Review invoices
+        default_prompt: Use sample-review to review supplied invoices without edits.
+      policy:
+        allow_implicit_invocation: true
+input:
+  prompt: "使用 skill-prose-review。只审阅 sample/ 文本，不编辑。内容自洽时允许通过或无阻塞发现；将缺少 runtime 与文本缺陷区分。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "不能误报 CSV/Markdown、name/key 或授权编辑冲突：两文档均 Markdown、key/name 同为 sample-review，始终禁止编辑。"
+    - "允许无阻塞文本发现，runtime/eval 运行为未验证，不能伪造通过或文本阻塞。"
+  pass_threshold: 1.0

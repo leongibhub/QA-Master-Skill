@@ -1,0 +1,20 @@
+id: domain-method-control
+title: "authorization-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use authorization-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 members may read their own same-tenant orders; admins may read all same-tenant orders but not other tenants. Delegation grants read only and expires at t=10. Unlisted permissions deny.
+    O1 owner=u1/tenant=A.
+    C2 is C1. T4 u1/member/A read→allow; u2/member/A→deny; admin/A→allow; admin/B→deny; delegate@9 read→allow/write→deny; delegate@10 read→deny. No writes.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept the allowed/denied controls and expiry at t10; a proper denial is not a defect."
+    - "Limit decisions to supplied cells; do not invent roles, actions or cache-revocation behavior."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

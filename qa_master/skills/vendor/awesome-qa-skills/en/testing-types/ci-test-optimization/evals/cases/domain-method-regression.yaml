@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "ci-test-optimization: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ci-test-optimization to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Same commit/test-set/runner:baseline queue20s, install30s, parallel test jobs60s/40s, report5s, no retries. CI-1 valid cache cuts install to10s, identical other phases and fault detection. CI-2 removes money regression job, misses the fault. CI-3 uses || true after job failure and reports green. CI-4 reuses old cache after lockfile change without validation. Decide ACCEPT/REJECT/UNKNOWN, showing baseline/CI-1 end-to-end time and critical path.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: baseline_seconds, candidate_seconds. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. If a cell mentions a literal `|`, escape it as `\|` or rephrase it, including inside inline code. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

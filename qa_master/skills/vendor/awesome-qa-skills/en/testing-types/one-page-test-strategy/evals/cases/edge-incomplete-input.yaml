@@ -1,0 +1,48 @@
+id: edge-incomplete-input
+title: "One-page strategy: preserve missing context"
+description: |
+  With only a launch request, still retain every image module and clearly preserve assumptions and gaps.
+
+input:
+  prompt: |
+    Use one-page-test-strategy. Product only said “we launch next month.” They provided no product scope, business goal, risks, architecture, test environments, team setup, production observability, or release gates. Draft a one-page strategy without asking questions.
+
+expect:
+  must_contain:
+    - "Guiding principle"
+    - "Goal"
+    - "Functionality"
+    - "Performance"
+    - "Security"
+    - "Test enablers and constraints"
+    - "Requirements analysis"
+    - "Before development"
+    - "Development complete"
+    - "Testing"
+    - "Before release"
+    - "Released"
+    - "Q1"
+    - "Q2"
+    - "Q3"
+    - "Q4"
+    - "Business-facing"
+    - "Technology-facing"
+    - "Supports the team"
+    - "Evaluates the product"
+    - "Exploratory"
+    - "API"
+    - "Unit"
+    - "Iteration"
+    - "Open"
+  must_not_contain:
+    - "95%"
+    - "TODO"
+    - "I cannot"
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        all:
+          - "gaps"
+          - "risk"

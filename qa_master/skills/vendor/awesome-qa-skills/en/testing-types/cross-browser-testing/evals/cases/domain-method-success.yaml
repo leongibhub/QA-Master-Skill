@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "cross-browser-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use cross-browser-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    S1 support: desktop Chromium/Linux build C1; WebKit/iOS device build W1. WebKit users=30%; D1 notes W1 date-input submission may lose its value.
+    R1 contains passing fixtures for Chromium/Linux C1 and another Chromium/Linux brand C2, claiming two-browser coverage protects D1 and the entire matrix.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify absent W1/iOS date-input evidence; two Chromium brands do not fill that cell."
+    - "Propose targeted W1/iOS input/submission checks, scoping existing results to their environments."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

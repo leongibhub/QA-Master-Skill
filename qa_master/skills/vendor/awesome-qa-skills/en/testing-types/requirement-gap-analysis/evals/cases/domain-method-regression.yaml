@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "requirement-gap-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use requirement-gap-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    G1 refund requirement defines roles, amounts, duplicate IDs, failures, and closure when the ledger succeeds and balances reconcile. G2 permits pausing tasks but defines no terminal/closure condition. G3 references missing appendix B. G4 same-version rules give both7 and14 days. G5 scope is web-only and explicitly excludes native push. Decide COMPLETE/MISSING_RULE/MISSING_MATERIAL/CONFLICT/N/A; show G2's impact and closure evidence without false findings on G1.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

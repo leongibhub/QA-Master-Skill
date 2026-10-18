@@ -1,0 +1,38 @@
+id: "review-unit-seasonal-missing-series"
+title: "指标异常使用给定基线与缺值语义"
+description: "指标异常使用给定基线与缺值语义"
+context:
+  files:
+    "series.csv": |-
+      window,region,p95_ms,requests
+      week1-Mon-09,A,100,100
+      week1-Mon-09,B,100,100
+      week2-Mon-09,A,110,100
+      week2-Mon-09,B,100,100
+      week3-Mon-09,A,90,100
+      week3-Mon-09,B,100,100
+      current-Mon-09:00,A,200,100
+      current-Mon-09:00,B,100,100
+      current-Mon-09:01,A,,0
+      current-Mon-09:02,A,200,100
+input:
+  prompt: "使用 metrics-anomaly-analysis。分析 series.csv，采样每分钟、p95 单位 ms；requests0 的空值为缺失，不是零延迟。基线为前三个 Monday-09 窗口，B40 在当前 09:00 部署，无因果实验。不能平均百分位为全局 p95。"
+expect:
+  must_contain:
+    - "09:01"
+    - "100"
+    - "200"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "A 给定窗口 p95 值均值100ms，观察200ms 为 +100ms/+100%；B 仍100ms，这是窗口统计基线而非合并百分位。"
+    - "09:01 缺值为采集/数据缺口，不能声称连续三分钟异常或插值为零。"
+    - "按地区拆分并保留季节基线，部署同步是相关，需受控对比/查询而非已证明根因/业务损失。"
+  pass_threshold: 1.0

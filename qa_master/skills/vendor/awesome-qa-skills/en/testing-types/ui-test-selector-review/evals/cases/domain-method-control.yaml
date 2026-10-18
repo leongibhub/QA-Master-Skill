@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "ui-test-selector-review: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use ui-test-selector-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    D3 #billing button[data-action="commit"] is unique across supplied languages/states; data-action is a stable project testing contract, independent of styling. T3 uses that CSS selector for billing save.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept contracted, scoped, unique CSS rather than flagging it for lacking role/testid."
+    - "Retain absent visibility/future-state/live-run evidence without promising perpetual stability."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

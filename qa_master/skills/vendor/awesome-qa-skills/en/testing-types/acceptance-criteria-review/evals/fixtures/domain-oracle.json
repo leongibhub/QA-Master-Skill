@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "AC-7": "FAIL",
+    "AC-8": "FAIL",
+    "AC-9": "PASS",
+    "AC-10": "MISSING_RULE"
+  },
+  "calculations": {},
+  "required_details": []
+}

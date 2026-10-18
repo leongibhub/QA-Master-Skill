@@ -1,0 +1,25 @@
+id: "review-valid-schema-control"
+title: "Explicit constraints and access paths are not missing defects"
+description: "Explicit constraints and access paths are not missing defects"
+context:
+  files:
+    "schema.sql": |-
+      CREATE TABLE requests(id TEXT PRIMARY KEY,tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,amount INTEGER NOT NULL CHECK(amount>=0),created_at TIMESTAMP NOT NULL,UNIQUE(tenant_id,request_id));
+      CREATE INDEX requests_tenant_time ON requests(tenant_id,created_at);
+    "design.md": |-
+      Each request_id is unique within tenant. amount is nonnegative cents. Queries filter tenant_id and created_at range. This is a new table, no online alteration in scope. Writes are transaction-bound; retries reuse request_id. Retention 30 days per approved fixture policy. No runtime execution is provided.
+input:
+  prompt: "Use database-design-quality-review. Review schema.sql and design.md for the stated request-log scope only. All required schema controls are supplied. Leave workload and recovery execution unassessed rather than fabricating defects."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Recognizes id PK, tenant/request unique invariant, nonnegative amount check and tenant/created_at query index; does not falsely report missing keys, uniqueness, amount constraint or relevant index."
+    - "Allows no blocking schema finding in this scope and distinguishes runtime/index performance/recovery evidence not supplied from a proven design failure."
+  pass_threshold: 1.0

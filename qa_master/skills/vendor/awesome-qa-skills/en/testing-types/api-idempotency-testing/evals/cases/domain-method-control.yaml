@@ -1,0 +1,20 @@
+id: domain-method-control
+title: "api-idempotency-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use api-idempotency-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1: tenant+key lives for 60 s; same key/payload returns the original orderId and commits one order; different payload with that key gives 409 without a new order.
+    C2 extends C1: keys expire at t>=60 s and a new order is permitted.
+    T2: t=0 K/qty 1→O1; t=5 K/qty 1→O1; t=6 K/qty 2→409; t=61 K/qty 1→O2. D2 contains only O1(t0)/O2(t61), one message each.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept replay at t5, rejection at t6, and the new order at t61 under C2; do not flag post-expiry O2."
+    - "Limit the comparison to supplied serial material; concurrency, tenant scope, and live ledger verification remain unassessed."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

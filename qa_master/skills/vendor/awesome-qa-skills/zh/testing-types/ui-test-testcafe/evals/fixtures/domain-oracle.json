@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "T1": "VALID",
+    "T2": "REPAIR",
+    "T3": "FAILURE_HIDDEN",
+    "T4": "EXPECTED_FAILURE",
+    "T5": "ISOLATION_FAIL"
+  },
+  "calculations": {},
+  "required_details": []
+}

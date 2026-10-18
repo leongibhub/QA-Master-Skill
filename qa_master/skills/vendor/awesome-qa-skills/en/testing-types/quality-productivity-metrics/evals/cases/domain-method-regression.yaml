@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-productivity-metrics: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use quality-productivity-metrics to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Matched team/window/complexity: baseline 100 accepted tasks in 100h with one escape. A candidate splits cases into 200 rows but still delivers 100 tasks in 100h with five escapes. P-1 claims doubled productivity and better quality. P-2 is a separate candidate: the same 100 tasks in 80h, one escape, comparable rework and complete acceptance evidence. P-3 ranks a payment team against a copy team by case count alone. Decide UNSUPPORTED/SUPPORTED/NOT_COMPARABLE using balanced input/output/quality/flow evidence.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

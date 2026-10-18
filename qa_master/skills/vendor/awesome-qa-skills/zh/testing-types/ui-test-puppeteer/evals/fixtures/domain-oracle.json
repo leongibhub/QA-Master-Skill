@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "U1": "VALID",
+    "U2": "FAIL",
+    "U3": "REPAIR",
+    "U4": "EXPECTED_FAILURE",
+    "U5": "CONFIG_ERROR"
+  },
+  "calculations": {},
+  "required_details": []
+}

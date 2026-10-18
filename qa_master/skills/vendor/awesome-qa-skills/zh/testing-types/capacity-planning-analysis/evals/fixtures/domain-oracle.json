@@ -1,0 +1,14 @@
+{
+  "decisions": {
+    "K-1": "UNSUPPORTED",
+    "K-2": "CALCULABLE",
+    "K-3": "UNKNOWN",
+    "K-4": "SUPPORTED"
+  },
+  "calculations": {
+    "backlog_requests": 1800
+  },
+  "required_details": [
+    "1800"
+  ]
+}

@@ -1,0 +1,20 @@
+id: domain-method-control
+title: "authorization-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 authorization-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 member 可读同租户自己的订单；admin 可读同租户全部订单，不能跨租户；委派只授权 read，到期 t=10 即无效；未列许可默认拒绝。
+    资源 O1 owner=u1/tenant=A。
+    C2 同 C1。T4 u1/member/A read O1→allow；u2/member/A→deny；admin/A→allow；admin/B→deny；delegate@9 read→allow，write→deny；delegate@10 read→deny。均无写入。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可所有合法许可/拒绝与 t10 到期边界，不把合理拒绝当缺陷。"
+    - "只对给定矩阵作静态判断，不虚构未给出的角色、动作或撤权缓存行为。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

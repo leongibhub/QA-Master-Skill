@@ -1,0 +1,131 @@
+id: "review-openapi-consumer-diff"
+title: "OpenAPI diff 区分已证实冲突与迁移缺口"
+description: "OpenAPI diff 区分已证实冲突与迁移缺口"
+context:
+  files:
+    "old.json": |-
+      {
+        "openapi": "3.0.3",
+        "info": {
+          "title": "Fixture Orders",
+          "version": "v1"
+        },
+        "paths": {
+          "/orders/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "order",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "amount"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    "new.json": |-
+      {
+        "openapi": "3.0.3",
+        "info": {
+          "title": "Fixture Orders",
+          "version": "v2"
+        },
+        "paths": {
+          "/orders/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "order",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "amount"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    "consumer-C1.py": |-
+      # C1 expects an integer amount
+      def increment(body):
+          return body["amount"] + 1
+input:
+  prompt: "使用 api-design-quality-review。静态审阅 old.json -> new.json 的 GET /orders/{id} 与 consumer-C1.py。未提供 rollout 或响应执行。定位变更 schema 字段、消费者影响和独立迁移证据缺口。"
+expect:
+  must_contain:
+    - "amount"
+    - "C1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "API-## 定位 GET /orders/{id} responses/200/application-json/schema/properties/amount 的 integer->string，回链 C1 amount+1 不兼容和类型错误验证场景。"
+    - "已证实类型冲突与缺少 rollout/版本适配证据分开，不能把未指定权限/限流写成确定漏洞。"
+    - "给出来源版本、消费者影响、负责人角色和可关闭验证，不能执行 API 或称兼容测试通过。"
+  pass_threshold: 1.0

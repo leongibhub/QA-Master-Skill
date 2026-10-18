@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ui-test-puppeteer: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ui-test-puppeteer to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Fixture baseline Puppeteer23 with its installed browser bundle. U1 popup belongs to the original page, receipt shows paid20, finally closes both pages/browser. U2 load error is swallowed, returns0, browser remains active. U3 titleCheckout but statepending. U4 timeout captures screenshot/currentURL, propagates original error, finally leaves active resources0. U5 supplied launch log confirms incompatible browser. Decide VALID/FAIL/REPAIR/EXPECTED_FAILURE/CONFIG_ERROR with popup/load/timeout lifecycle evidence.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

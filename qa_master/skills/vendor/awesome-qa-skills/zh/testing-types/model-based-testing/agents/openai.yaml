@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "model-based-testing"
+interface:
+  display_name: "基于模型的测试设计"
+  short_description: "依据已提供证据设计基于模型的测试设计，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the model-based-testing skill to produce MBT-## without claiming execution."
+policy:
+  allow_implicit_invocation: true

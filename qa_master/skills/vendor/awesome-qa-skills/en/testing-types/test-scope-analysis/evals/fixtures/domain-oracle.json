@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "S1": "INCLUDE",
+    "S2": "EXCLUDE",
+    "S3": "UNKNOWN",
+    "S4": "BLOCKED"
+  },
+  "calculations": {},
+  "required_details": []
+}

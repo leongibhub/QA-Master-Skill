@@ -1,0 +1,18 @@
+id: "review-rejected-invalid-control"
+title: "安全拒绝不能编造恢复缺陷"
+description: "安全拒绝不能编造恢复缺陷"
+input:
+  prompt: "使用 negative-scenario-discovery。R4：quantity<=0 在任何状态写入前拒绝，指定 INVALID_QTY。N4 trace：quantity0 -> INVALID_QTY，writes0，无下游调用。仅发现此范围尚有证据支持候选。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "N4 符合 R4 的安全拒绝观察，不能误报确定部分写入/恢复缺陷。"
+    - "不能由单输入范围编支付故障、timeout 数或额外固定错误码。"
+  pass_threshold: 1.0

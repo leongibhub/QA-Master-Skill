@@ -1,0 +1,84 @@
+id: "review-mandatory-budget-infeasible"
+title: "An impossible mandatory budget is surfaced rather than hidden"
+description: "An impossible mandatory budget is surfaced rather than hidden"
+context:
+  files:
+    "inventory.json": |-
+      {
+        "budget_minutes": 8,
+        "changed_risks": [
+          "Q1",
+          "Q2"
+        ],
+        "tests": [
+          {
+            "id": "T0",
+            "minutes": 2,
+            "depends": [],
+            "risks": [],
+            "mandatory": true
+          },
+          {
+            "id": "T1",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T2",
+            "minutes": 5,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q2"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T3",
+            "minutes": 3,
+            "depends": [],
+            "risks": [
+              "copy"
+            ],
+            "mandatory": false
+          },
+          {
+            "id": "T4",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": false
+          }
+        ]
+      }
+input:
+  prompt: "Use regression-test-selection. Use inventory.json but available budget is8 minutes. Mandatory T0/T1/T2 require11 minutes. Select/report without silently dropping risk coverage; state the smallest decision required."
+expect:
+  must_contain:
+    - "T0"
+    - "T1"
+    - "T2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Marks budget infeasible with11 required versus8 available, preserves all mandatory IDs/dependency, and does not falsely report a within-budget sufficient subset."
+    - "Asks for at least3 additional minutes or an explicitly authorized scope/risk trade-off; omission cannot be labeled zero residual risk."
+  pass_threshold: 1.0

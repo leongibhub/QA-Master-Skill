@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "M1": "SUPPORTED",
+    "M2": "SUPPORTED",
+    "M3": "UNSUPPORTED",
+    "M4": "UNSUPPORTED",
+    "M5": "UNKNOWN"
+  },
+  "calculations": {},
+  "required_details": []
+}

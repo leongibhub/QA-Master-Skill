@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "automation-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use automation-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Existing framework: Playwright. C-1:stable login, isolated account, session principal matches account page, daily runs, logout cleanup. C-2:daily-changing prototype without state oracle. C-3:high-return payment only reaches real production debits without authorized sandbox/cleanup. C-4:existing checkout asserts title only; failed payment retains normal title. Decide ADOPT/DEFER/REPAIR without switching stacks or authorizing production effects; explain entry gates/business assertions.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

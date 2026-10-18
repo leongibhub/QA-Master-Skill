@@ -1,0 +1,22 @@
+id: "review-unstarted-p0"
+title: "P0 未启动时检查点压缩 P2"
+description: "P0 未启动时检查点压缩 P2"
+input:
+  prompt: "使用 daily-testing-workflow。优先级检查点环境 B18 为绿，剩余 2 小时；P0-refund 需 90 分钟且 NOT_RUN，P2-label 需 60 分钟并在执行。重排队列、指出门禁未满足，并交接唯一下一 Skill。"
+expect:
+  must_contain:
+    - "P0-refund"
+    - "P2-label"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "P0 未启动意味着检查点门禁未满足，优先安排 P0-refund，150 分钟超过 120 分钟需延后/裁剪 P2-label。"
+    - "不能把 P0 改成完成/通过，必须展示容量取舍，唯一主交接围绕 P0 执行。"
+  pass_threshold: 1.0

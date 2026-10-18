@@ -1,0 +1,26 @@
+id: "review-correct-case-control"
+title: "Executable sourced case is not falsely rejected"
+description: "Executable sourced case is not falsely rejected"
+context:
+  files:
+    "requirement.md": |-
+      R1: authenticated owner of an existing order may update qty to1 while feature is enabled; returns UPDATED and persisted qty1.
+    "case.md": |-
+      TC3; Trace:R1; priority:P1.
+      Preconditions: sandbox, existing owned order O1 qty2, authenticated owner, feature enabled.
+      Data:qty1. Steps:submit update O1 qty1, read O1 as same owner. Expected:caller UPDATED; stored qty1. No execution has run.
+input:
+  prompt: "Use test-case-reviewer. Review the supplied single case against its sole requirement. Scope is enabled owner update only; no other domain or unprovided negative rule is required."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "TC3 has authenticated owner/existing order qty2/enabled feature, input qty1, update steps, caller UPDATED and stored qty1, and Trace R1; no false missing precondition/oracle/trace finding."
+    - "Allows no blocking case findings in this bounded scope, preserving runtime not executed and any genuine source limitation."
+  pass_threshold: 1.0

@@ -1,0 +1,33 @@
+id: "review-multi-rule-minimal-conflict"
+title: "三规则共同冲突即使每一对可满足"
+description: "三规则共同冲突即使每一对可满足"
+context:
+  files:
+    "rules.md": |-
+      # Same job J1, version v3; all times are minutes from the same origin.
+      Invariant I1: finish = start + duration; duration >=0.
+      R1: start >=10.
+      R2: duration >=20.
+      R3: finish <=25.
+      No rule precedence or waiver is supplied.
+input:
+  prompt: "使用 requirement-conflict-detection。在 rules.md 同 job/version/scope 内查冲突，列出参与规则 ID 和最小不可满足集合，保留来源原句并给决策问题，不自行选优先级。"
+expect:
+  must_contain:
+    - "R1"
+    - "R2"
+    - "R3"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "最小冲突 {R1,R2,R3}：start>=10、duration>=20 与 finish=start+duration 导出 finish>=30，与 finish<=25 矛盾。"
+    - "每个真子对能满足关系，因此不能伪造两两互斥，RF 发现需包含三来源。"
+    - "不能静默减 duration/改截止期或选优先级，需授权负责人决定修订哪个约束。"
+  pass_threshold: 1.0

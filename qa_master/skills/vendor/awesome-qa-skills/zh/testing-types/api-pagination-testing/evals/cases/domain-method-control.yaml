@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "api-pagination-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 api-pagination-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C2 实时 offset 接口不保证跨页快照；pageSize=2，按 id asc。t0 数据 [1,2,3,4]，P1=[1,2]；t1 删除 1 后数据 [2,3,4]，offset2→[4],next=null。未给快照一致性义务。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "说明 3 未出现在跨页结果与删除后 offset 移位有关，不能直接判违反快照合同。"
+    - "保留消费者是否需要无漏的待决要求和稳定快照建议，不把建议说成既有合同。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

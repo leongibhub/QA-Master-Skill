@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "timeout-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use timeout-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 deadline 1000 ms, serial queue 100/connect 200/read 800 budgets; children inherit deadline; timeout leaves order unknown/reconciles ledger.
+    T1 actual phases 100/200/800, total 1100 ms; caller t1000 marks failed, child not cancelled/commits O1 at t1050; caller retries t1100 creating O2.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Calculate 1100>1000 and identify propagation/state/late-commit duplication O1/O2; per-phase budgets do not establish end-to-end correctness."
+    - "Request child/ledger/cancellation/reconciliation evidence; timeout does not prove no side effects."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

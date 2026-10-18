@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "failover-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 failover-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 网络分区后只允许一个 writer，切到 B 前必须 fencing A；业务 RTO<=20s。
+    C2 同 C1。T2 t0 分区，t4 A 被 fencing 且写拒绝；t5 B 得写权；t8 业务可用。账本 O1=10，双方无冲突；切回计划需复制追平并先撤 B 写权，尚未执行。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可 T2 所给 fencing 顺序与 RTO8s，区分已提供切换材料和未执行切回。"
+    - "不宣称所有分区/零丢失或切回验证已完成。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "regression-optimization: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use regression-optimization to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Matched version/environment/obligations: baseline runs sequentially in 10min and detects duplicate refund in T-refund. O-1 isolates data and runs in parallel in 6min, retaining detection and no conflicts. O-2 deletes T-refund, runs in 4min and stays green under the fault. O-3 compares a differently sized project taking 3min and claims 70% gain. O-4 lacks mandatory-obligation mappings. Decide ACCEPT/REJECT/NOT_COMPARABLE/UNKNOWN with percentage benefit, retained protection and unblock conditions.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: runtime_reduction_percent. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

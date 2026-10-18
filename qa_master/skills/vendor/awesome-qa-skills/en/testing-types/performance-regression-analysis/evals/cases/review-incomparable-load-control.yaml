@@ -1,0 +1,18 @@
+id: "review-incomparable-load-control"
+title: "Workload and environment differences block regression attribution"
+description: "Workload and environment differences block regression attribution"
+input:
+  prompt: "Use performance-regression-analysis. Baseline B1 perf-A:100RPS read workload p95=100ms. Candidate B2 perf-B:200RPS write workload p95=160ms. Report numerical observation and comparability, keeping a version regression conclusion bounded."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Observed difference is +60ms/+60%, but both environment and workload mix/rate changed, so cannot attribute it to B2 regression."
+    - "Regression remains unassessed/incomparable and rerun pins environment/workload/data/settings while changing build only; does not pretend numerical difference proves causality."
+  pass_threshold: 1.0

@@ -1,0 +1,12 @@
+{
+  "decisions": {
+    "O-1": "ACCEPT",
+    "O-2": "REJECT",
+    "O-3": "NOT_COMPARABLE",
+    "O-4": "UNKNOWN"
+  },
+  "calculations": {
+    "runtime_reduction_percent": 40
+  },
+  "required_details": []
+}

@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "model-based-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use model-based-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    M1 starts at D: D-submit(qty>0)→S, S-pay(success)→P, S-cancel→C, P-ship→F. C/F terminal; L has no incoming edge. Goal covers all reachable edges.
+    M2 is M1. P2 paths D(qty 1)-S(successful pay)-P-F and D(qty 1)-S(cancel)-C; L listed unreachable/excluded. All four reachable edges statically covered; no execution.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept model coverage of four reachable edges/two terminal paths without inventing an L path."
+    - "Keep model validity/implementation execution unassessed; do not claim real tests passed."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

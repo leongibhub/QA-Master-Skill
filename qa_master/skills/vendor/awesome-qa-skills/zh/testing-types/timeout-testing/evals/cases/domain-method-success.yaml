@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "timeout-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 timeout-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 deadline1000ms，串行queue100/connect200/read800预算；子调用需传播deadline；超时订单标unknown并查账本。
+    T1 三阶段实际100/200/800，总1100ms；caller t1000标failed，子调用未取消、t1050已提交O1；caller t1100重试创建O2。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "复算1100>1000、定位传播/超时状态与迟到提交导致重复O1/O2，不能因各阶段等于预算就判正确。"
+    - "要求子调用/账本/取消与对账证据，不能推断超时无副作用。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

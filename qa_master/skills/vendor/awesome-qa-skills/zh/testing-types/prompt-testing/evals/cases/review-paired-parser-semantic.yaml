@@ -1,0 +1,71 @@
+id: "review-paired-parser-semantic"
+title: "配对 Prompt 输出使用 parser 和校准语义锚点"
+description: "配对 Prompt 输出使用 parser 和校准语义锚点"
+context:
+  files:
+    "pairs.json": |-
+      {
+        "identity": {
+          "baseline_prompt": "P1",
+          "candidate_prompt": "P2",
+          "model": "fixture-model-v1",
+          "temperature": 0,
+          "seeds": [
+            1,
+            2
+          ],
+          "dataset": "D1",
+          "environment": "offline-A"
+        },
+        "schema": {
+          "answer": "string",
+          "source_ids": "array"
+        },
+        "source": {
+          "S1": "reset retains billing history"
+        },
+        "anchors": {
+          "pass": "same source-supported meaning with S1 citation",
+          "fail": "contradiction or unsupported claim"
+        },
+        "pairs": [
+          {
+            "id": "Q1",
+            "baseline": "{\"answer\":\"History remains.\",\"source_ids\":[\"S1\"]}",
+            "candidate": "{\"answer\":\"History is retained.\",\"source_ids\":[\"S1\"]}"
+          },
+          {
+            "id": "Q2",
+            "baseline": "{\"answer\":\"History remains.\",\"source_ids\":[\"S1\"]}",
+            "candidate": "{\"answer\":\"History is deleted.\",\"source_ids\":[\"S1\"]}"
+          },
+          {
+            "id": "Q3",
+            "baseline": "{\"answer\":\"History remains.\",\"source_ids\":[\"S1\"]}",
+            "candidate": "{\"answer\":\"History remains.\",\"source_ids\":\"S1\"}"
+          }
+        ]
+      }
+input:
+  prompt: "使用 prompt-testing。模式 prompt-regression。分析 pairs.json，先按给定 schema 解析 JSON 再按 S1 语义锚点判定，保留身份并逐对分类；单次差异不等于分布层退化。"
+expect:
+  must_contain:
+    - "Q1"
+    - "Q2"
+    - "Q3"
+    - "P1"
+    - "P2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Q1 合法等价改写无语义退化，Q2 schema 合法却矛盾 S1，Q3 为数组类型结构失败，不是语义矛盾。"
+    - "Q2/Q3 的 PRT 发现保留 P1/P2、模型参数 seed、D1 与输入ID，含预期/观察/差异/证据/验证/Human决定字段。"
+    - "使用给定通过失败锚点核对参考，更广门禁前提议配对重复和盲评顺序，不批准发布/业务。"
+  pass_threshold: 1.0

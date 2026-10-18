@@ -1,0 +1,22 @@
+id: "review-continuous-flow"
+title: "Continuous flow uses events rather than invented dates"
+description: "Continuous flow uses events rather than invented dates"
+input:
+  prompt: "Use sprint-testing-workflow. Team uses continuous flow with WIP limit 2 and no sprint dates. Item ST-1 has a reviewable change and green smoke; ST-2 lacks test data; integration regression occurs at merge-to-candidate; review occurs at item completion. Map testing phases/gates and identify the next focus handoff."
+expect:
+  must_contain:
+    - "ST-1"
+    - "ST-2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Uses supplied per-item and merge-to-candidate milestones without inventing Day 1/12 dates; preserves readiness, feature-complete and integration/exit evidence."
+    - "ST-2 remains blocked on data and is not marked done based on ST-1 green smoke; handoff names one primary Skill with the current item/gate."
+  pass_threshold: 1.0

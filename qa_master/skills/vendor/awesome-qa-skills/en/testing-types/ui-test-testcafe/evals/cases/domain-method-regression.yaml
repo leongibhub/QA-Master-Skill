@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ui-test-testcafe: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ui-test-testcafe to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Fixture TestCafe3 with existing CLI/runner. T1 awaits all t actions, isolated Role/account, paid20 assertions and cleanup. T2 checks titleCheckout only and stays green on pending. T3 runner.run() returns failedCount1 but entry ignores it and exits0. T4 pending fails business assertion, CLI nonzero, screenshot tied to testID. T5 two Roles share account/business key and contaminate data. Decide VALID/REPAIR/FAILURE_HIDDEN/EXPECTED_FAILURE/ISOLATION_FAIL; artifacts alone are not run evidence.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

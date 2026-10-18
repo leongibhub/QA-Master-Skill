@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "rag-retrieval-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use rag-retrieval-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Query Q belongs to tenant A; known relevant documents are {d1,d2,d3}; k=2 with no duplicates. R-1 retrieves current tenant-A d1/d2. R-2 retrieves d1 and unauthorized tenant-B d9 even if relevant. R-3 retrieves old d1 when latest is required. R-4 retrieves correct d1/d2 but generation changes 14 days to 30. R-5 claims full recall without complete labels. Decide RETRIEVAL_VALID/AUTHORIZATION_FAIL/STALE/GENERATION_FAIL/UNKNOWN and calculate R-1 precision/recall numerators and denominators.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: precision_numerator, precision_denominator, recall_numerator, recall_denominator. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

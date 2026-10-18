@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "S1": "NOT_RUN",
+    "S2": "CONTROL_PASS",
+    "S3": "CONFIRMED",
+    "S4": "DESIGNED"
+  },
+  "calculations": {},
+  "required_details": []
+}

@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "cross-browser-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use cross-browser-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    S2 supports only Chromium/Linux C1; R2 fixture reports success on that exact platform/build. P2 proposes iOS viewport emulation for exploratory mobile needs outside S2 support; no real iOS evidence.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept R2's S2 mapping without inventing an iOS support defect."
+    - "Keep P2 exploratory; viewport emulation does not establish real iOS compatibility."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

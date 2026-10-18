@@ -1,0 +1,31 @@
+id: "review-controlled-causal-chain"
+title: "Controlled reproduction supports a bounded causal explanation"
+description: "Controlled reproduction supports a bounded causal explanation"
+context:
+  files:
+    "controlled.md": |-
+      Sandbox build B60, load100RPS/dataD1 fixed.
+      H1 CPU saturation vs H2 pool lease leak.
+      Trace E1: acquire lease; handler raises; no release event. After20 injected exception requests pool20/20; CPU40%. Three identical isolated repeats reproduce.
+      Patch B61 uses finally release; same20 exception requests release20 leases and pool0/20 in three repeats; CPU40%, same load/data.
+      Production mapping is not supplied.
+input:
+  prompt: "Use root-cause-analysis. Analyze controlled.md only. State which hypothesis has causal support in the fixture and distinguish it from unknown production impact; no further actions are authorized."
+expect:
+  must_contain:
+    - "H2"
+    - "B60"
+    - "B61"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Finds H2 supported by traced exception path acquiring without release and pinned-load reproduction20/20 exhausted; fixing finally-release eliminates leak across supplied repeats while CPU/load unchanged."
+    - "Causal conclusion stays within this isolated path/run evidence, not all production incidents or permanent zero risk; identifies missing production mapping separately."
+  pass_threshold: 1.0

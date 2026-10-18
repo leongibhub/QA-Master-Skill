@@ -1,0 +1,9 @@
+{
+  "decisions": {
+    "P-1": "UNSUPPORTED",
+    "P-2": "SUPPORTED",
+    "P-3": "NOT_COMPARABLE"
+  },
+  "calculations": {},
+  "required_details": []
+}

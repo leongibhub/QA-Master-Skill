@@ -1,0 +1,144 @@
+id: "review-role-merge-split-trace"
+title: "Four-role duplicates merge while distinct outcomes split"
+description: "Four-role duplicates merge while distinct outcomes split"
+context:
+  files:
+    "candidates.json": |-
+      [
+        {
+          "id": "C1",
+          "source_id": "prod-1",
+          "version": "v7",
+          "source_role": "product",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "business"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C2",
+          "source_id": "qa-1",
+          "version": "v7",
+          "source_role": "qa",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "api"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C3",
+          "source_id": "ux-1",
+          "version": null,
+          "source_role": "ux",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "ux"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C4",
+          "source_id": "tech-1",
+          "version": "v7",
+          "source_role": "technical",
+          "Trace": [
+            "R1",
+            "AC1"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": true,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "UPDATED",
+            "qty": 1
+          },
+          "risk_tags": [
+            "consistency"
+          ],
+          "priority": "P1"
+        },
+        {
+          "id": "C5",
+          "source_id": "qa-2",
+          "version": "v7",
+          "source_role": "qa",
+          "Trace": [
+            "R1",
+            "AC2"
+          ],
+          "intent": "update quantity",
+          "trigger": "submit qty1",
+          "action": "update owned order O1",
+          "preconditions": {
+            "authenticated_owner": true,
+            "feature_enabled": false,
+            "initial_qty": 2
+          },
+          "expected": {
+            "outcome": "FEATURE_DISABLED",
+            "qty": 2
+          },
+          "risk_tags": [
+            "disabled"
+          ],
+          "priority": "P1"
+        }
+      ]
+input:
+  prompt: "Use test-case-writing. Write one unified suite from candidates.json. Supplied R1: feature-enabled update -> UPDATED/qty1 (AC1); feature-disabled -> FEATURE_DISABLED/originalqty2 (AC2). Return JSON {\"cases\":[{\"id\",\"candidate_ids\",\"source_role\",\"Trace\",\"risk_tags\",\"sources\":[{\"source_id\",\"version\"}],\"preconditions\":{\"authenticated_owner\",\"feature_enabled\",\"initial_qty\"},\"steps\":[strings],\"expected\":{\"outcome\",\"qty\"}}]}. Preserve first-appearance source/role/trace/risk order, mark absent version unknown, and keep differing pass criteria executable."
+judge:
+  type: "script"
+  script_path: "evals/graders/review-role-merge-split-trace.py"
+  timeout_seconds: 30

@@ -1,0 +1,63 @@
+id: "review-incomparable-runs"
+title: "模型和输入变化不能归因版本退化"
+description: "模型和输入变化不能归因版本退化"
+context:
+  files:
+    "artifacts/runs.json": |-
+      {
+        "previous": {
+          "run_id": "run-prev",
+          "skill_version": "v1",
+          "eval_version": "e1",
+          "skill_up": "0.12.0",
+          "engine": "codex",
+          "model": "model-fixture",
+          "parameters": {
+            "temperature": 0,
+            "seed": 7
+          },
+          "input_hash": "cases-A",
+          "judge": "rubric-A",
+          "environment": "sandbox-A",
+          "timestamp": "2026-10-01T09:00:00Z",
+          "passed": 8,
+          "total": 10
+        },
+        "current": {
+          "run_id": "run-current",
+          "skill_version": "v2",
+          "eval_version": "e1",
+          "skill_up": "0.12.0",
+          "engine": "codex",
+          "model": "model-other",
+          "parameters": {
+            "temperature": 0,
+            "seed": 7
+          },
+          "input_hash": "cases-B",
+          "judge": "rubric-A",
+          "environment": "sandbox-A",
+          "timestamp": "2026-10-02T09:00:00Z",
+          "passed": 6,
+          "total": 10
+        }
+      }
+input:
+  prompt: "使用 skill-evaluation。审阅 artifacts/runs.json。current 还改为 model=model-other、input_hash=cases-B。将数值观察与版本退化结论分开，给出最小受控重跑。"
+expect:
+  must_contain:
+    - "model-other"
+    - "cases-B"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "指出 model-other 与 cases-B 都破坏可比性，不能把 80% 到 60% 归因于 Skill 版本。"
+    - "版本退化结论为 UNASSESSED 或 INSUFFICIENT_EVIDENCE，同时保留原始通过率；重跑仅改变 Skill，固定模型参数、输入、judge、环境。"
+  pass_threshold: 1.0

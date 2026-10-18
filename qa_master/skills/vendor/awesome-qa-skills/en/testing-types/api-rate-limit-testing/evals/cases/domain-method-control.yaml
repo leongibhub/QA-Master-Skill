@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "api-rate-limit-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use api-rate-limit-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1: per-tenant fixed windows [0, 10), [10, 20), N=3, count all arrivals. Excess returns 429 with Retry-After equal to integer seconds until the next window; in-quota gives 200.
+    C2 is C1. T2 A@1/2/3→200; A@4→429/Retry-After:6; B@4→200; A@10→200. Only these responses are supplied, without database or production load evidence.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept quota, excess, isolation, and boundary recovery responses under C2."
+    - "Do not extrapolate to all windows, loads, or side effects; retain those evidence gaps."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

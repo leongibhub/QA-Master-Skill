@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "performance-testing: sourced repair regression"
+input:
+  prompt: |
+    Use performance-testing.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append `ID | DECISION | Evidence`, one row per ID, using the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: FAIL, PASS, UNKNOWN.
+
+    Contract PERF-v2: achieved load >=100 RPS, error rate <=1% of all attempts. P1: requested100 RPS, achieved80 RPS; 8 business failures of400 attempts; CPU95%, generatorCPU99%. P2: achieved110 RPS; 1 business failure of500 attempts; resources recorded, source v2. P3: only requested100 RPS, no achieved count or denominator. Compute error rates and separate load validity, bottleneck inference and unobserved results.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

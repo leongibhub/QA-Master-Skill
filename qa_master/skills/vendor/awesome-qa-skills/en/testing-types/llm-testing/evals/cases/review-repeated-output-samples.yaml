@@ -1,0 +1,75 @@
+id: "review-repeated-output-samples"
+title: "LLM samples separate parser and calibrated semantic failures"
+description: "LLM samples separate parser and calibrated semantic failures"
+context:
+  files:
+    "outputs.json": |-
+      {
+        "model": "fixture-model-v1",
+        "temperature": 0.3,
+        "seed_policy": "record each seed",
+        "prompt_version": "P1",
+        "schema": {
+          "answer": "string",
+          "citations": "array of source IDs"
+        },
+        "source": {
+          "S1": "reset does not delete billing history"
+        },
+        "rubric": {
+          "pass": "answer preserves S1 meaning and cites S1",
+          "fail": "contradicts S1 or unsupported certainty"
+        },
+        "outputs": [
+          {
+            "id": "O1",
+            "input": "reset effect",
+            "seed": 1,
+            "context": "short",
+            "output": "{\"answer\":\"Billing history remains.\",\"citations\":[\"S1\"]}"
+          },
+          {
+            "id": "O2",
+            "input": "reset effect",
+            "seed": 2,
+            "context": "short",
+            "output": "{\"answer\":\"Billing history is retained.\",\"citations\":[\"S1\"]}"
+          },
+          {
+            "id": "O3",
+            "input": "reset effect",
+            "seed": 3,
+            "context": "long, S1 at beginning",
+            "output": "{\"answer\":\"Billing history is deleted.\",\"citations\":[\"S1\"]}"
+          },
+          {
+            "id": "O4",
+            "input": "reset effect",
+            "seed": 4,
+            "context": "long, S1 at beginning",
+            "output": "{\"answer\":\"Billing history remains.\",\"citations\":\"S1\"}"
+          }
+        ]
+      }
+input:
+  prompt: "Use llm-testing. Analyze outputs.json without invoking a model. Give per-output structural and semantic classification, repeat/long-context limitations, and a pinned follow-up design. Calibrate using the supplied S1 anchor and paraphrase control."
+expect:
+  must_contain:
+    - "O1"
+    - "O2"
+    - "O3"
+    - "O4"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "O1/O2 both satisfy JSON schema and meaning despite different wording; O3 schema-valid but semantically contradicts S1; O4 fails citations-array structure despite correct answer meaning."
+    - "Reports two end-to-end successes among four observed outputs separately from structural success 3/4 and answer-semantic correctness 3/4, without conflating parser acceptance with task success."
+    - "Long-context O3 failure is an observed anchor loss, not confirmed universal root cause; proposes repeated same-input/settings runs varying S1 position/length with source/seed/version recorded."
+  pass_threshold: 1.0

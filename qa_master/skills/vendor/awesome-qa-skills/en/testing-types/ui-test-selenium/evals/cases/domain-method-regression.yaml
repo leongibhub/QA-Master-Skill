@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ui-test-selenium: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ui-test-selenium to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Fixture Selenium4/Python with confirmed compatible driver. S1 retains a stale element after rerender and repeats payment click3times. S2 re-finds by data-testid, waits for paid, acts once with one ledger entry. S3 exception exits without quit, Grid session active. S4 preserves screenshot/original error and quits in finally, sessions0. S5 parallel sessions share account/order. Decide REPAIR/VALID/RESOURCE_LEAK/EXPECTED_FAILURE/ISOLATION_FAIL; larger sleeps are no universal repair.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

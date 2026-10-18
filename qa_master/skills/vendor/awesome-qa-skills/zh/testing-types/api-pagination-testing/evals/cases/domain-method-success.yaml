@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-pagination-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 api-pagination-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 快照 S1 固定，按 createdAt asc,id asc，pageSize=2，末页 next=null；cursor 不得循环。S1 全部 createdAt 相同，ID=[1,2,3,4,5]。
+    T1 P1=[1,2],next=c1；P2(c1)=[2,4],next=c2；P3(c2)=[5],next=c2。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "复核预期页 [1,2]/[3,4]/[5]，指出重复 2、缺失 3 与 c2 未终止。"
+    - "给出 cursor 失效/篡改候选，但未给失效合同不得补状态码。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

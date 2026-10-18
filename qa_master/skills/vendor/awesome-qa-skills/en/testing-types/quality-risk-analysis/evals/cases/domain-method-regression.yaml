@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-risk-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use quality-risk-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Project impact anchors classify potential 1-million loss without automatic recovery as major and require first verification even when rare. R-1 observed duplicate debit once without idempotency control evidence. R-2 observes minor button-color differences ten times/day without task impact. R-3 has a new dependency without failure/control materials. R-4 has measured idempotency protection and no escapes in its observation window, with residual risk still required. Decide HIGHER_PRIORITY/LOWER_PRIORITY/UNKNOWN/CONTROL_EVIDENCED without invented numeric scores or zero-risk claims.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

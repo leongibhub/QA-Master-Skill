@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-debt-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use quality-debt-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Q-1 is a 180-day-old duplicate helper costing 1h/month with no high-risk protection gap. Q-2 is a one-day-old refund test that mocks its subject, missed duplicate debit yesterday and still exposes loss. Q-3 is an unfixed confirmed production defect. Q-4 closes a refactor ticket without behavior or maintenance evidence. Q-5 has changed code, independent regression, a maintenance sample and owner acceptance. Decide LOWER_PRIORITY/HIGHER_PRIORITY/PRODUCT_DEFECT/NOT_CLOSED/CLOSED without age-only ranking.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

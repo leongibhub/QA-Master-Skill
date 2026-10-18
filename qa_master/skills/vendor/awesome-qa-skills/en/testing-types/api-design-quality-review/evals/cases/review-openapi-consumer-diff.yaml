@@ -1,0 +1,131 @@
+id: "review-openapi-consumer-diff"
+title: "OpenAPI diff distinguishes confirmed conflict from migration gap"
+description: "OpenAPI diff distinguishes confirmed conflict from migration gap"
+context:
+  files:
+    "old.json": |-
+      {
+        "openapi": "3.0.3",
+        "info": {
+          "title": "Fixture Orders",
+          "version": "v1"
+        },
+        "paths": {
+          "/orders/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "order",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "amount"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    "new.json": |-
+      {
+        "openapi": "3.0.3",
+        "info": {
+          "title": "Fixture Orders",
+          "version": "v2"
+        },
+        "paths": {
+          "/orders/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "order",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "amount"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    "consumer-C1.py": |-
+      # C1 expects an integer amount
+      def increment(body):
+          return body["amount"] + 1
+input:
+  prompt: "Use api-design-quality-review. Statically review old.json -> new.json for GET /orders/{id} with consumer-C1.py. No rollout or response execution is provided. Locate the changed schema field, consumer effect, and distinct missing migration evidence."
+expect:
+  must_contain:
+    - "amount"
+    - "C1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "An API-## finding identifies GET /orders/{id} responses/200/application-json/schema/properties/amount integer->string and C1 amount+1 incompatibility with a type-error validation case."
+    - "Separates this evidence-backed type conflict from missing rollout/version-adapter evidence; does not fill unspecified auth/rate limits with confirmed vulnerabilities."
+    - "Gives source/version, consumer impact, owner role and closeable validation without executing API or claiming compatibility tests passed."
+  pass_threshold: 1.0

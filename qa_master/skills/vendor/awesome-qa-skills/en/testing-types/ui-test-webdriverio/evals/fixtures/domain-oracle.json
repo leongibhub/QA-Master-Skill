@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "W1": "CONFIG_ERROR",
+    "W2": "REPAIR",
+    "W3": "EXPECTED_FAILURE",
+    "W4": "VALID",
+    "W5": "FAILURE_HIDDEN"
+  },
+  "calculations": {},
+  "required_details": []
+}

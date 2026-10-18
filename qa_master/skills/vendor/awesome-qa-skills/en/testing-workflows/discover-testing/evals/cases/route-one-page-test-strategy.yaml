@@ -1,0 +1,29 @@
+id: route-one-page-test-strategy
+title: "Routing: choose the dedicated one-page strategy skill"
+description: |
+  When a user explicitly needs a concise test strategy that fits on one page, route to the dedicated skill;
+  reserve the general and plus strategy skills for broader strategy requests.
+
+input:
+  prompt: |
+    Use discover-testing to route this request: our product team needs a concise test strategy that fits on one page,
+    covering functionality, performance, security, and the testing lifecycle. Recommend only the primary skill,
+    explain why it fits, and give the next step. Do not write the strategy itself.
+
+expect:
+  must_contain:
+    - "Primary Recommendation"
+    - "one-page-test-strategy"
+    - "Next Step"
+  must_not_contain:
+    - "test-strategy-plus"
+    - "TODO"
+
+judge:
+  type: rule_based
+  success:
+    - output_contains:
+        all:
+          - "Primary Recommendation"
+          - "one-page-test-strategy"
+          - "Next Step"

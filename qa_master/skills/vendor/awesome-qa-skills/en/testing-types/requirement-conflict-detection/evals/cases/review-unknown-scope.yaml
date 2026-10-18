@@ -1,0 +1,18 @@
+id: "review-unknown-scope"
+title: "Unknown scope does not establish a confirmed conflict"
+description: "Unknown scope does not establish a confirmed conflict"
+input:
+  prompt: "Use requirement-conflict-detection. Source S1 says exports must be CSV, versionv2/actoradmin. Source S2 says exports must be JSON but actor/version/time are not supplied. Analyze applicability and required closure evidence."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Preserves both statements but classifies possible conflict as ambiguous/unassessed until S2 applicability is established, not confirmed mutually exclusive current rule."
+    - "Requests S2 actor/version/time/object and authorized resolution rather than silently choosing CSV/JSON."
+  pass_threshold: 1.0

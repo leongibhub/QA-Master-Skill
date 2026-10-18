@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "decision-table-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use decision-table-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    B2 member/coupon are booleans. R1 member=true→member20; R2 coupon=true→coupon10; overlap precedence absent. P2 leaves 11 conflicted; 00→full, 01→coupon10, 10→member20; full is the declared no-discount default.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept three resolved cells and conflicted 11 without resolving by P2 order or experience."
+    - "Request business precedence and preserve the conflict rather than borrowing B1."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

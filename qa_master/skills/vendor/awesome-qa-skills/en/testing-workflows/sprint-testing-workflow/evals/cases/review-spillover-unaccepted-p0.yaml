@@ -1,0 +1,23 @@
+id: "review-spillover-unaccepted-p0"
+title: "Unaccepted P0 and delayed story remain exit blockers"
+description: "Unaccepted P0 and delayed story remain exit blockers"
+input:
+  prompt: "Use sprint-testing-workflow. Assess the final milestone: ST-1 has a P0 duplicate-debit FAIL, bug B9 OPEN, no written risk acceptance. ST-2 implementation is delayed and tests NOT_RUN. Regression R7 has two blocked checks. Deadline has arrived; PM asks to mark both stories done. Produce exit status and carryover records."
+expect:
+  must_contain:
+    - "B9"
+    - "ST-2"
+    - "R7"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Blocks sprint exit for unaccepted P0 B9 and incomplete regression; PM deadline/request is not written risk acceptance or test evidence."
+    - "Keeps ST-1 failure, ST-2 unfinished/NOT_RUN and R7 blocked checks in carryover/backlog with missing evidence and unknown ownership where not supplied; neither story is done."
+  pass_threshold: 1.0

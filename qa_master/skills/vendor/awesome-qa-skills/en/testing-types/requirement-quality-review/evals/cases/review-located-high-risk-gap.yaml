@@ -1,0 +1,32 @@
+id: "review-located-high-risk-gap"
+title: "Unobservable refund acceptance has concrete source and priority"
+description: "Unobservable refund acceptance has concrete source and priority"
+context:
+  files:
+    "requirement.md": |-
+      # Refund requirement v5, source RQ-refund
+      Goal: avoid duplicate debit during refunds.
+      R1: Refund promptly and safely.
+      R2: A timeout allows the user to retry; outcome and deduplication rules are not defined.
+      Impact: duplicate debit can cause irreversible customer loss.
+input:
+  prompt: "Use requirement-quality-review. Review requirement.md for refund acceptance only. Quote the minimum original phrase, locate the high-risk gaps, explain priority and propose owner-bound revisions and closure evidence; do not invent final refund policy."
+expect:
+  must_contain:
+    - "RQ-refund"
+    - "R1"
+    - "R2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Locates line3 \"Refund promptly and safely\" as untestable timing/outcome wording and line4 retry without an at-most-once or visible outcome contract; links double-debit exposure to supplied financial impact."
+    - "P0/P1 gap has RQ source/version, owner role Product/Engineering, specific question and validation/close condition; recommendations are not approved thresholds or implemented defects."
+    - "Does not invent a24h SLA, HTTP code, or automatically approve release."
+  pass_threshold: 1.0

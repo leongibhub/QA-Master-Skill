@@ -9,7 +9,7 @@ from importlib import resources
 from pathlib import Path
 from typing import Iterable
 
-from .core import DIMENSIONS
+from .core import DIMENSIONS, SKILLS, DIMENSION_SKILLS
 
 _GUIDE_FILES = (
     "requirements-review.md",
@@ -144,4 +144,109 @@ def select_skills(intent: str | Iterable[str] | None = None, dimensions: Iterabl
         "requested": {"intent": list(requested_intents), "dimensions": list(requested_dimensions), "risk": risk},
         "selected": selected,
         "gaps": gaps,
+    }
+
+
+_VENDOR_LANGS = ("en", "zh")
+_VENDOR_CATEGORIES = ("testing-workflows", "testing-types", "skill-engineering")
+
+
+def vendor_skill_root():
+    """Return the package-resource directory holding vendored breadth skills."""
+    return resources.files("qa_master").joinpath("skills", "vendor", "awesome-qa-skills")
+
+
+def _vendor_metadata(text: str) -> dict[str, str] | None:
+    """Parse a vendored ``SKILL.md`` frontmatter into its name/description map."""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    result: dict[str, str] = {}
+    for line in lines[1:]:
+        stripped = line.strip()
+        if stripped == "---":
+            break
+        if ":" not in line:
+            return None
+        key, value = line.split(":", 1)
+        key, value = key.strip(), value.strip()
+        if not key or not value or key in result:
+            return None
+        result[key] = value
+    if "name" not in result or "description" not in result:
+        return None
+    return result
+
+
+def discover_vendor_skills(root=None) -> dict:
+    """Discover vendored awesome-qa-skills breadth leaves (en + zh).
+
+    Vendored skills are Markdown prompt workflows without QA Master's
+    deterministic engine; QA Master only discovers and routes them and never
+    executes their content locally.
+    """
+    root = vendor_skill_root() if root is None else root
+    skills, gaps = [], []
+    for lang in _VENDOR_LANGS:
+        for category in _VENDOR_CATEGORIES:
+            category_root = root.joinpath(lang).joinpath(category)
+            for skill_dir in _iter_files(category_root):
+                if not getattr(skill_dir, "is_dir", lambda: False)():
+                    continue
+                skill_file = skill_dir.joinpath("SKILL.md")
+                try:
+                    metadata = _vendor_metadata(skill_file.read_text(encoding="utf-8"))
+                except (OSError, UnicodeError):
+                    gaps.append({"code": "VENDOR_SKILL_UNREADABLE", "path": str(skill_file)})
+                    continue
+                if not metadata:
+                    gaps.append({"code": "VENDOR_SKILL_METADATA_INVALID", "path": str(skill_file)})
+                    continue
+                skills.append({
+                    "name": metadata["name"],
+                    "description": metadata["description"],
+                    "language": lang,
+                    "category": category,
+                    "path": str(skill_file),
+                })
+    return {
+        "skills": skills,
+        "gaps": gaps,
+        "count": len(skills),
+        "status": "DISCOVERED" if skills else "NO_VENDOR_SKILLS_AVAILABLE",
+    }
+
+
+def select_vendor_skills(stages=None, dimensions=None, *, root=None) -> dict:
+    """Route planning stages/dimensions to matching vendored breadth skills.
+
+    Stages are mapped to canonical skill names via ``core.SKILLS`` and
+    dimensions via ``core.DIMENSION_SKILLS``; a name absent from the vendor
+    catalog (e.g. a dimension already owned by a bundled guide) is skipped.
+    """
+    requested_stages = _requested(stages)
+    requested_dimensions = _requested(dimensions)
+    discovered = discover_vendor_skills(root)
+    by_name: dict[str, list] = {}
+    for skill in discovered["skills"]:
+        by_name.setdefault(skill["name"], []).append(skill)
+    wanted = set()
+    for stage in requested_stages:
+        wanted.update(SKILLS.get(stage, ()))
+    for dimension in requested_dimensions:
+        name = DIMENSION_SKILLS.get(dimension)
+        if name:
+            wanted.add(name)
+    selected = []
+    for name in sorted(wanted):
+        selected.extend(by_name.get(name, ()))
+    return {
+        "status": "PLANNING_ONLY",
+        "execution": "NOT_EXECUTED",
+        "requested": {"stages": list(requested_stages), "dimensions": list(requested_dimensions)},
+        "wanted": sorted(wanted),
+        "selected": selected,
+        "count": len(selected),
+        "vendor_skill_count": discovered["count"],
+        "gaps": discovered["gaps"],
     }

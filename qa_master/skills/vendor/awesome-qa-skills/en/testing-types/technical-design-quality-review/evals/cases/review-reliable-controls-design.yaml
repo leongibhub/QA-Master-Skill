@@ -1,0 +1,26 @@
+id: "review-reliable-controls-design"
+title: "A reliable design control is not mechanically rejected"
+description: "A reliable design control is not mechanically rejected"
+context:
+  files:
+    "design.md": |-
+      # Design v7
+      Scope: transaction, event replay and at-most-one debit.
+      API requires operation_id. Ledger and outbox insert commit in one DB transaction; unique operation_id. Provider dedups by operation_id.
+      Worker dedups processed event_id; retries reuse operation_id. Outbox publisher retries committed rows; Operations owns reconciliation of ledger/order states.
+      Tenant auth and redacted correlation_id are required at API. All data sandbox-scoped. Performance/capacity policy outside scope. No runtime records.
+input:
+  prompt: "Use technical-design-quality-review. Review design.md in its explicit transaction/replay scope. No runtime exists; assess design sufficiency and residual validation gaps without inventing missing controls."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Recognizes ledger+outbox same transaction, stable operation key, provider dedup, worker replay/dedup and reconciliation ownership; no false missing atomicity/idempotency/recovery blocker."
+    - "Allows no blocking design finding within the supplied scope while still requiring runtime failure/replay evidence before verified behavior."
+  pass_threshold: 1.0

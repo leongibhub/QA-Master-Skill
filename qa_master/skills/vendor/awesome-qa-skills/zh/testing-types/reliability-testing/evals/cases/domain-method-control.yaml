@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "reliability-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 reliability-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    S2 时间可用性=可用分钟/完整观测分钟，窗口60min、目标>=99%；R3 可用59.7min/60min=99.5%。请求量未给，报告仅比较 S2 并保留长期可靠性未评估。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可99.5%对应时间 SLI 和该窗口目标，不能因缺请求量误判分母错误。"
+    - "不把时间指标当首尝试成功率，也不扩展为全年可靠性。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

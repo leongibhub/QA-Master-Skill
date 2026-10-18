@@ -1,0 +1,38 @@
+id: "review-test-report-review-raw-results"
+title: "QA evidence-rich test-report-review"
+description: "QA evidence-rich test-report-review"
+context:
+  files:
+    "results.csv": |-
+      id,build,status,defect
+      T1,B23,PASS,
+      T2,B23,FAIL,B9
+      T3,B23,SKIP,
+      T4,B23,BLOCKED,
+      T5,B23,PASS,
+      T6,B23,NOT_RUN,
+    "defects.json": "[{\"id\":\"B9\",\"priority\":\"P0\",\"status\":\"OPEN\",\"impact\":\"duplicate debit\",\"recovery_evidence\":null}]"
+    "report.md": |-
+      # QA report
+      Build B23: all 6 passed, 100%, no release risk.
+input:
+  prompt: "Use qa-quality-perspective. stage: test-report-review. Read results.csv and defects.json. The supplied counting contract defines executed=PASS+FAIL; planned includes all six IDs. Review report.md, including its incorrect 100% conclusion, against the supplied raw evidence. Preserve facts and qualitative risk reasoning."
+expect:
+  must_contain:
+    - "B9"
+    - "T4"
+    - "T6"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Preserves planned 6, executed 3, passed 2, failed 1, skipped 1, blocked 1, NOT_RUN 1; any pass rate states denominator 3 (2/3), not all-six pass."
+    - "B9 remains open P0 duplicate-debit risk with failure T2, and T4/T6 remain coverage/evidence gaps rather than failures or passes."
+    - "High risk is explained by irreversible debit impact and missing recovery evidence, not an invented numeric product score; no global quality pass/release approval."
+  pass_threshold: 1.0

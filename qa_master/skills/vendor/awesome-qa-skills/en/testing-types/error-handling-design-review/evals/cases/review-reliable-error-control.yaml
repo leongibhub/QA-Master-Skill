@@ -1,0 +1,18 @@
+id: "review-reliable-error-control"
+title: "Existing bounded retry controls are not blanket defects"
+description: "Existing bounded retry controls are not blanket defects"
+input:
+  prompt: "Use error-handling-design-review. Review a read-only cache fetch design: validation errors return 400/no retry; temporary connection failure retries once within 100ms using request R5; no write side effect exists; exhaustion returns 503 RETRY_LATER and logs correlation R5. Scope is this fetch only."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Recognizes explicit bounded retry, non-retryable validation, caller result and correlation; no false missing-idempotency/compensation defect for a read-only no-side-effect operation."
+    - "Runtime remains unassessed; optional resilience improvements do not become unsupported blockers or proven SLA compliance."
+  pass_threshold: 1.0

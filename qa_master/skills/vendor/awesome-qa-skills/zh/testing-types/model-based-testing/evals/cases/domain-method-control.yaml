@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "model-based-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 model-based-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    M1 初始 D；D-submit(qty>0)→S；S-pay(success)→P；S-cancel→C；P-ship→F；C/F 终止。L 无入边。目标覆盖全部可达边。
+    M2 同 M1。P2 路径 D(qty1)-S(pay success)-P-F 和 D(qty1)-S(cancel)-C，列 L 不可达且不计目标；全部四条可达边静态覆盖，未运行。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可四条可达边与两终止路径的模型覆盖，不要求凭空产生 L 路径。"
+    - "保持模型正确性及实现运行未评估，不写真实测试全部通过。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

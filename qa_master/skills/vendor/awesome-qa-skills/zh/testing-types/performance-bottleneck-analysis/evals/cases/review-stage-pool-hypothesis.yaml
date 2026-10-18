@@ -1,0 +1,31 @@
+id: "review-stage-pool-hypothesis"
+title: "吞吐拐点与排队证据指导区分实验"
+description: "吞吐拐点与排队证据指导区分实验"
+context:
+  files:
+    "stages.csv": |-
+      stage,offered_rps,completed_rps,p95_ms,cpu_pct,pool_busy,pool_capacity,pool_wait_ms,db_span_ms,generator_cpu_pct,dropped_iterations
+      A,100,100,80,40,10,20,0,10,25,0
+      B,200,190,180,60,20,20,50,10,30,0
+      C,400,195,600,62,20,20,400,10,30,0
+input:
+  prompt: "使用 performance-bottleneck-analysis。分析 sandbox B41 的 stages.csv，发压机 CPU 未饱和且 dropped_iterations=0。提出竞争假设、证据优先级和最小隔离区分实验，本轮不发压。"
+expect:
+  must_contain:
+    - "190"
+    - "195"
+    - "400"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "offered200->400 而 completed190->195，pool20/20 与 wait50->400ms、DB span10ms 支持连接池排队假设强于 CPU 根因。"
+    - "不能称 pool 已证明根因，也不能单凭 CPU62% 判根因；保留 DB/锁/长占用竞争解释。"
+    - "固定负载环境做一次 pool/并发或占用时长区分实验，给相反 wait/吞吐/DB 预期，不大改优化或编容量。"
+  pass_threshold: 1.0

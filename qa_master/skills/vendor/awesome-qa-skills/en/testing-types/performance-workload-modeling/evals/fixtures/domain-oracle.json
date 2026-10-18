@@ -1,0 +1,14 @@
+{
+  "decisions": {
+    "W-1": "UNSUPPORTED",
+    "W-2": "CALCULABLE",
+    "W-3": "CALCULABLE",
+    "W-4": "CALCULABLE"
+  },
+  "calculations": {
+    "peak_window_average_rps": 200,
+    "mean_in_system_requests": 20,
+    "total_requests": 320
+  },
+  "required_details": []
+}

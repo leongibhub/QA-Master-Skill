@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "boundary-value-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use boundary-value-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 score is an integer in inclusive [0, 100]; length uses Unicode codepoints, max 1.
+    P1 includes only [0, 100]. R1 labels -1 and 101 valid. R2 counts the single "😀" as length 2 and rejects it. Money range=[0, 100], precision unspecified.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Derive -1, 0, 1, 99, 100, 101 with only -1/101 invalid and identify P1's missing neighbors."
+    - "Identify the one-codepoint emoji counting conflict; retain unknown money precision without assuming 0.01."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

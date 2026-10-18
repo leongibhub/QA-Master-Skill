@@ -1,0 +1,26 @@
+id: "review-reliable-controls-design"
+title: "可靠控制设计不能机械拒绝"
+description: "可靠控制设计不能机械拒绝"
+context:
+  files:
+    "design.md": |-
+      # Design v7
+      Scope: transaction, event replay and at-most-one debit.
+      API requires operation_id. Ledger and outbox insert commit in one DB transaction; unique operation_id. Provider dedups by operation_id.
+      Worker dedups processed event_id; retries reuse operation_id. Outbox publisher retries committed rows; Operations owns reconciliation of ledger/order states.
+      Tenant auth and redacted correlation_id are required at API. All data sandbox-scoped. Performance/capacity policy outside scope. No runtime records.
+input:
+  prompt: "使用 technical-design-quality-review。仅在明确事务/重放范围内审阅 design.md，无 runtime。评估设计充分性和残余验证缺口，不虚构缺控制。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "识别 ledger+outbox 同事务、稳定 key、provider 去重、worker 重放/去重与核对负责人，不能误报缺原子/幂等/恢复阻塞。"
+    - "给定范围允许无设计阻塞，但已验证行为仍需 runtime 失败/重放证据。"
+  pass_threshold: 1.0

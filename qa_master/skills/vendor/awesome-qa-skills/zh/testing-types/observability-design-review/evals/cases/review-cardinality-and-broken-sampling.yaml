@@ -1,0 +1,29 @@
+id: "review-cardinality-and-broken-sampling"
+title: "信号设计关联预算、链路与告警行动"
+description: "信号设计关联预算、链路与告警行动"
+context:
+  files:
+    "observability.md": |-
+      Metric refund_duration_ms labels: user_id (100000 distinct/window), status(5), region(3); all combinations possible. Series budget10000.
+      Gateway root sampled10%; worker child independently sampled10%; traceparent is not forwarded. Request R6 may have orphan spans.
+      Logs redact account data and retain request_id. Alert p95>500ms for5min sends notification; owner/runbook/action not supplied.
+input:
+  prompt: "使用 observability-design-review。静态审阅 observability.md，计算给定标签上界、定位采样链路连续性缺口并提出可关闭告警行动/负责人问题，不查询生产信号。"
+expect:
+  must_contain:
+    - "10000"
+    - "R6"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "user_id100000 × status5 × region3 潜在1,500,000序列超过预算10000，不是已观察账单成本；建议有界标签，并在指标标签外保留请求/用户关联及隐私控制。"
+    - "root/child 独立采样且无 trace context 传播会使 R6 关联断裂，需共同决定/上下文或错误保留验证，不能仅有 sampling 就充分。"
+    - "p95 告警有阈值时长但无 owner/runbook，索取指派与行动证据，不能编 SLO/负责人/费用。"
+  pass_threshold: 1.0

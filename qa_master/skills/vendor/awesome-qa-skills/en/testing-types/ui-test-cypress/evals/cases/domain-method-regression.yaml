@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ui-test-cypress: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ui-test-cypress to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Existing fixture baseline Cypress13/E2E, not a latest-version recommendation. Title always Checkout. C1 real payment yields paid/amount20/principalA; spec asserts these values. C2 bug mode keeps title but statepending; spec checks title only. C3 intercept stubs only external payment; real UI remains pending, so business assertion should fail. C4 CI appends ||true after failed spec. C5 isolated A/B accounts and cleanup are evidenced. Decide VALID forC1/C5, REPAIR forC2, EXPECTED_FAILURE forC3, INVALID forC4, explaining retries, boundaries, and failure propagation.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

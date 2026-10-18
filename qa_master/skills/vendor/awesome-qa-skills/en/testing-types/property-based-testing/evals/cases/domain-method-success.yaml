@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "property-based-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use property-based-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 integer lists length 0..5; sort ascending and preserve elements/multiplicity. G1 seed=17, version g1: [2, 1, 1]→[1, 2]. R1 checks ordering only and calls properties passed.
+    Shrink observations: [1, 1]→[1]; [1]→[1].
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Separate passing order from failing multiplicity; retain minimal duplicate counterexample [1, 1]→[1], seed 17/g1."
+    - "Explain that shrinking preserves the domain; equal distinct sets do not preserve multiplicity."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

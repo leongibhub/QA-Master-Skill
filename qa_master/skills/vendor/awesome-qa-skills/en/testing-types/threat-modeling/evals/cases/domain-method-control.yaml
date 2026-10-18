@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "threat-modeling: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use threat-modeling to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    A2 architecture: untrusted browser→API→InvoiceDB; API uses authenticated server-side tenantId/checks invoice.owner and ignores client tenantId. P2 allows same-tenant owners. Architecture claims only, no run/log evidence.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept declared binding/owner controls under P2 without reusing A1's absent-control finding."
+    - "Retain control-validation/unsupplied log areas as unknown; do not declare threat-free/security-passed."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

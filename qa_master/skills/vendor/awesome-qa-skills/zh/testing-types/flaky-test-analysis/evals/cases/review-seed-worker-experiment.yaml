@@ -1,0 +1,38 @@
+id: "review-seed-worker-experiment"
+title: "flaky 比例与最小实验保留隔离风险"
+description: "flaky 比例与最小实验保留隔离风险"
+context:
+  files:
+    "runs.csv": |-
+      run,seed,worker,status
+      1,7,2,FAIL
+      2,7,2,PASS
+      3,7,2,FAIL
+      4,7,2,PASS
+      5,7,1,PASS
+      6,7,1,PASS
+      7,8,2,PASS
+      8,8,2,PASS
+      9,8,1,PASS
+      10,8,1,PASS
+input:
+  prompt: "使用 flaky-test-analysis。分析同环境 B34 的 F1 runs.csv。Lin 提议隔离至 2026-10-09，退出标准为受控重复 30 次零失败。不执行重跑。输出证据、竞争解释、最小区分实验及质量报告影响。"
+expect:
+  must_contain:
+    - "F1"
+    - "Lin"
+    - "2026-10-09"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "总体 2/10=20%，seed7/worker2 为 2/4=50%，其余提供格各 0/2；相关性不证明 seed 或并行为根因。"
+    - "固定 fixture/环境比较 seed7 worker1 与 worker2 并重复计数，附共享状态/竞争区分观察，不能盲重试。"
+    - "隔离含 Lin、2026-10-09 与 30 次退出证据，原失败/覆盖限制仍进质量报告，不隐藏成通过。"
+  pass_threshold: 1.0

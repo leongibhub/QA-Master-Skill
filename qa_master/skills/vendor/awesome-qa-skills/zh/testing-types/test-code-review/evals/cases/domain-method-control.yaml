@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "test-code-review: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 test-code-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C2 calcAsync(2,3)应返回5，返回4或抛异常时测试必须失败。
+    F4 async test(){ actual=await calcAsync(2,3); assertEqual(actual,5); }；runner等待test且异常使失败。并行测试各取唯一orderId，finally删除自己的订单。被测函数未mock。仅静态片段。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可await、实际值断言、异常失败与独立清理，不误报async或finally本身。"
+    - "真实执行、其它分支和资源泄漏仍未评估，不声称测试套件通过。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

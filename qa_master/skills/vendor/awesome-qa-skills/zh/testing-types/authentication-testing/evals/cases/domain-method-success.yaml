@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "authentication-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 authentication-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 MFA 是本项目登录必需；密码正确后仅挑战中，MFA 成功才发会话。恢复令牌一次性；不存在/存在账户恢复响应均 202/"If eligible, email sent"。
+    T1 密码正确、MFA 未提交→authenticated/session issued。T2 同一脱敏恢复 token label R 连续两次重设均成功。T3 不存在账户返回 404/NO_ACCOUNT。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "对应 C1 定位过早认证、恢复 token 重放与账户恢复响应冲突；令牌只引用 label。"
+    - "不编造 MFA/锁定期限，也不把所给静态 trace 写成已验证绕过或资源越权。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

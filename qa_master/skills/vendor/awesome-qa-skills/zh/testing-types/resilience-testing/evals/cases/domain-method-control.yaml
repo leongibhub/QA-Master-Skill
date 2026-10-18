@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "resilience-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 resilience-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 推荐服务故障时结账仍可用、推荐可隐藏；每订单只扣一次，依赖恢复30s内应恢复推荐。
+    C2 同 C1。T2 中段推荐隐藏、结账成功，O2 仅扣一次；依赖 t100 恢复，t120 推荐恢复，后续账本一致。仅该部分依赖场景 fixture。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可各阶段不变量和20s恢复符合 C2，不把合法降级当不可用缺陷。"
+    - "结论限定该场景，不宣布所有故障韧性或长期可靠性。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

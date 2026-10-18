@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "C-1": "ADOPT",
+    "C-2": "DEFER",
+    "C-3": "DEFER",
+    "C-4": "REPAIR"
+  },
+  "calculations": {},
+  "required_details": []
+}

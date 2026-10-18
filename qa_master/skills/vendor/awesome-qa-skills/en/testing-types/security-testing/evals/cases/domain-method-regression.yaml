@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "security-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use security-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Authorization permits read-only checks on isolated fixture tenants A/B. S1 automated scan has zero findings, business authorization untested. S2 A reads own O1 as allowed with no foreign data. S3 A reads B/O2 and receives200 plus B's amount; logs/response supplied. S4 is a deletion-permission plan with no run or deletion authority. Decide NOT_RUN for S1's business authorization, CONTROL_PASS for S2, CONFIRMED for S3, and DESIGNED for S4 with threat/control/evidence mapping; no whole-system safety claim from S1.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

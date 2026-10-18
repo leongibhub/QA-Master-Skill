@@ -1,0 +1,30 @@
+id: "review-test-strategy-design"
+title: "test-strategy 的技术证据成功路径"
+description: "test-strategy 的技术证据成功路径"
+context:
+  files:
+    "design.md": |-
+      # Refund design v7
+      API writes a job; worker calls debit provider.
+      Retry deduplication and recovery ownership: not specified.
+    "requirements.json": "{\"source_id\":\"tech-design\",\"version\":\"v7\",\"Q1\":\"at most one debit per refund\"}"
+input:
+  prompt: "使用 technical-quality-perspective。stage: test-strategy。读取 design.md@v7 与 requirements.json，只输出本阶段技术风险、问题和验证准备；未提供实现或运行记录。"
+expect:
+  must_contain:
+    - "Q1"
+    - "design.md"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "将 Q1 单扣款不变量回链 API/worker 边界与 design.md:3@v7 的重试去重缺细节，输出验证准备/问题，不能当已实现缺陷。"
+    - "区分已知架构与未知幂等/恢复实现，不能声称测试通过或代码已验证。"
+    - "静态文字定位 file:line@version，并有稳定发现/行动证据链接；专项代码/设计审查以 Skill 名交接，不能重复编造发现。"
+  pass_threshold: 1.0

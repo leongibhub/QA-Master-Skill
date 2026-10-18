@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "agent-loop-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use agent-loop-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Loop-v4: escalate after 3 consecutive no-progress cycles; hard cost budget 1 unit stops at exhaustion. B-1: same search arguments/observation repeat 3 times without change, followed by a fourth call. B-2: only 2 repetitions but cost reaches 1; no further call, terminal budget_stop. B-3: each of 3 calls obtains new relevant records, advances the goal, cost=0.6; work continues. Decide PASS/FAIL and explain deduplication and budget precedence.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

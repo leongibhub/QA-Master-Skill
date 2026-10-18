@@ -1,0 +1,55 @@
+id: basic-success
+title: 完整 Skill 契约审查
+description: 提供完整静态源文件，检查只读契约并区分静态结论与运行证据。
+context:
+  files:
+    sample/package-contract.md: '# 包契约
+
+      SKILL.md 中的 name 是 canonical ID；metadata.key 必须与它相同。
+
+      本材料只支持静态文案审查，没有 Host 或评测运行证据。
+
+      sample/ 是材料容器，不是 canonical ID。'
+    sample/SKILL.md: '---
+
+      name: receipt-reader
+
+      description: Use this skill when reviewing receipt records.
+
+      ---
+
+      # 收据审查
+
+      输入：用户提供的收据记录；来源缺失时列为信息缺口。
+
+      读取 prompts/review.md；用 Markdown 表格输出 receipt_id 与 finding。
+
+      只报告问题，不修改收据或任何文件。'
+    sample/prompts/review.md: '# 收据审查 Prompt
+
+      只检查用户提供的收据记录；缺少来源或 receipt_id 时记录信息缺口，不编造。
+
+      用 Markdown 表格输出 receipt_id 与 finding；没有问题时写明无发现。
+
+      只报告，不修改收据或其他文件。'
+    sample/agents/openai.yaml: "version: 1\nmetadata:\n  key: receipt-reader\ninterface:\n  display_name: 收据审查\n  short_description:\
+      \ 只读审查用户提供的收据记录\n  default_prompt: 使用 receipt-reader 只读审查收据并报告发现。\npolicy:\n  allow_implicit_invocation: true"
+input:
+  prompt: 使用 skill-prose-review。只读审查 sample/ 中提供的收据 Skill，不执行收据任务，不编辑任何文件。检查触发、输入、步骤、输出、约束和证据，给出有来源依据的文案结论；缺少运行证据不等于文案阻塞。
+expect:
+  must_contain:
+  - sample/SKILL.md
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  context:
+    profile: minimal
+    final_message: include
+    transcript: omit
+    workspace_diff: include
+    generated_files: include
+  criteria:
+  - 依据实际文件评估只读收据流程：来源缺失为信息缺口，输出为一致的 Markdown receipt_id/finding 表格，身份 receipt-reader 对齐。
+  - 不虚构阻塞问题；无文案阻塞可以通过，但不得把缺少 Host 或评测运行证据写成运行验收通过。
+  - 不执行收据业务，不修改任何文件；发现与结论有具体文件来源。
+  pass_threshold: 1.0

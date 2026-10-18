@@ -1,0 +1,25 @@
+id: "review-compatible-additive-control"
+title: "Optional field addition does not break tolerant consumer"
+description: "Optional field addition does not break tolerant consumer"
+context:
+  files:
+    "old-schema.json": "{\"type\": \"object\", \"required\": [\"amount\", \"currency\"], \"properties\": {\"amount\": {\"type\": \"integer\", \"description\": \"USD major units\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"USD\"]}}, \"additionalProperties\": true}"
+    "new-schema.json": "{\"type\": \"object\", \"required\": [\"amount\", \"currency\"], \"properties\": {\"amount\": {\"type\": \"integer\", \"description\": \"USD major units\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"USD\"]}, \"memo\": {\"type\": \"string\"}}, \"additionalProperties\": true}"
+    "consumer.py": |-
+      def parse(body):
+          return body["amount"], body["currency"]
+input:
+  prompt: "Use api-contract-testing. Review the provided old/new schemas and consumer. Scope is C1 response parsing only; new optional memo does not alter existing amount units/types, and C1 ignores unknown response fields. Separate design compatibility from runtime tests."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Does not falsely classify optional memo as a confirmed breaking change for the explicitly tolerant C1; keeps amount major-unit semantics unchanged."
+    - "Can report compatible within the supplied parsing scope, without asserting full API/runtime compatibility or inventing migration blockers."
+  pass_threshold: 1.0

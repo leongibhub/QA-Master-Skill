@@ -2,7 +2,7 @@ import argparse
 import json
 from .application import CampaignApplicationService
 from .design_methods import DesignMethodError
-from .skill_registry import discover_skills
+from .skill_registry import discover_skills, discover_vendor_skills
 from .state_store import StateConflictError
 
 
@@ -70,6 +70,14 @@ def main():
                 return 2
         elif args.cmd == 'skills':
             output = discover_skills()
+            vendor = discover_vendor_skills()
+            output['vendor'] = {
+                'count': vendor['count'],
+                'status': vendor['status'],
+                'languages': {lang: sum(1 for s in vendor['skills'] if s['language'] == lang) for lang in ('en', 'zh')},
+                'categories': {cat: sum(1 for s in vendor['skills'] if s['category'] == cat)
+                               for cat in ('testing-workflows', 'testing-types', 'skill-engineering')},
+            }
         elif args.cmd == 'init':
             output = CampaignApplicationService.initialize(args.state, args.name).status()
         else:

@@ -1,0 +1,25 @@
+id: "review-valid-schema-control"
+title: "已有约束与访问路径不能误报缺失"
+description: "已有约束与访问路径不能误报缺失"
+context:
+  files:
+    "schema.sql": |-
+      CREATE TABLE requests(id TEXT PRIMARY KEY,tenant_id TEXT NOT NULL,request_id TEXT NOT NULL,amount INTEGER NOT NULL CHECK(amount>=0),created_at TIMESTAMP NOT NULL,UNIQUE(tenant_id,request_id));
+      CREATE INDEX requests_tenant_time ON requests(tenant_id,created_at);
+    "design.md": |-
+      Each request_id is unique within tenant. amount is nonnegative cents. Queries filter tenant_id and created_at range. This is a new table, no online alteration in scope. Writes are transaction-bound; retries reuse request_id. Retention 30 days per approved fixture policy. No runtime execution is provided.
+input:
+  prompt: "使用 database-design-quality-review。仅审阅给定 request-log 范围的 schema.sql 与 design.md，所需 schema 控制已提供；负载和恢复运行保持未评估，不虚构缺陷。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "识别 id 主键、tenant/request 唯一不变量、amount 非负检查和 tenant/created_at 查询索引，不误报缺 key/唯一/金额约束/适用索引。"
+    - "范围内允许无 schema 阻塞，runtime/索引性能/恢复证据未提供与确定设计失败需区分。"
+  pass_threshold: 1.0

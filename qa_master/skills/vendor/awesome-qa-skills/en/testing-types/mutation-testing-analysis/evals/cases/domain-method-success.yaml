@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "mutation-testing-analysis: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use mutation-testing-analysis to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    POL1 score=killed/(killed+survived+no-coverage); exclude only proven equivalents; report timeout/error separately.
+    R1 m1/m2 killed, m3 survived, m4 no-coverage, m5 timeout, m6 error, m7 survived/equivalence pending. Report excludes m7/omits m4 and claims 2/3=66.7%.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Calculate denominator 5 and 2/5=40% under POL1, retaining m7 pending, m4 uncovered and m5/m6 anomalies."
+    - "Do not auto-classify equivalence or treat timeout/error as killed; propose survived/uncovered follow-up."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

@@ -1,0 +1,33 @@
+id: "review-test-report-evidence"
+title: "Product review rejects unsupported full-scope conclusion"
+description: "Product review rejects unsupported full-scope conclusion"
+context:
+  files:
+    "report.md": |-
+      # Refund report
+      Build B21. All refunds are covered; release ready.
+    "results.csv": |-
+      id,build,requirement,status
+      R1,B21,Q1,PASS
+      R2,B21,Q1,BLOCKED
+    "product.json": "{\"source_id\":\"prod-review\",\"version\":\"v4\",\"requirements\":[{\"id\":\"Q1\",\"rule\":\"one debit per refund operation\",\"impact\":\"duplicate debit is irreversible loss\"}]}"
+input:
+  prompt: "Use product-quality-perspective. stage: test-report-review. Review report.md against results.csv and product.json; preserve the raw facts and distinguish report-expression findings from newly invented test results."
+expect:
+  must_contain:
+    - "Q1"
+    - "R2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Identifies the report claim all refunds covered as unsupported: retry R2 is BLOCKED while happy path R1 is PASS; ties the gap to Q1 duplicate-debit user loss."
+    - "Does not turn BLOCKED into FAIL or PASS, create a defect not in the evidence, or approve release."
+    - "Uses prod-review/v4 source identity and stable finding/action evidence linkage; requests the blocked retry result before closing the conclusion gap."
+  pass_threshold: 1.0

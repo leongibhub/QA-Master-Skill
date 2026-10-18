@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Local business fixture" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables" enabled="true"><collectionProp name="Arguments.arguments"/></elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Closed loop fixture" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp><stringProp name="LoopController.loops">${__P(fixture.loops,2)}</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp><stringProp name="ThreadGroup.ramp_time">1</stringProp><boolProp name="ThreadGroup.scheduler">false</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Unique orders" enabled="true">
+          <stringProp name="filename">orders.csv</stringProp><stringProp name="fileEncoding">UTF-8</stringProp><stringProp name="variableNames">order_id</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp><stringProp name="delimiter">,</stringProp><boolProp name="quotedData">false</boolProp><boolProp name="recycle">false</boolProp><boolProp name="stopThread">true</boolProp><stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet><hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Synthetic order result" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp><stringProp name="cacheKey">true</stringProp><stringProp name="filename"/><stringProp name="parameters"/>
+          <stringProp name="script">def state = props.get('fixture.mode') == 'bug' ? 'pending' : 'paid';
+SampleResult.setResponseData(groovy.json.JsonOutput.toJson([order_id:vars.get('order_id'),state:state,amount:20]),'UTF-8');
+SampleResult.setResponseCode('200'); SampleResult.setSuccessful(true);</stringProp>
+        </JSR223Sampler>
+        <hashTree>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="Business oracle" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp><stringProp name="cacheKey">true</stringProp><stringProp name="filename"/><stringProp name="parameters"/>
+            <stringProp name="script">def record = new groovy.json.JsonSlurper().parseText(prev.getResponseDataAsString());
+if (record.state != 'paid' || record.amount != 20) { AssertionResult.setFailure(true); AssertionResult.setFailureMessage('wrong business state or amount'); }</stringProp>
+          </JSR223Assertion><hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

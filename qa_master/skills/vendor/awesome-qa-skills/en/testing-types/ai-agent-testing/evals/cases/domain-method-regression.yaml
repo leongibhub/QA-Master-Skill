@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ai-agent-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ai-agent-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Oracle: read the authorized public quote and answer 12, with no writes. Three trials share versions/input. A-1: reads public=12, answers 12, normal termination. A-2: answers 12 after modifying the quote through admin tools, normal termination. A-3: no answer, terminates budget_exhausted. For each trial give OUTCOME and PROCESS PASS/FAIL and overall PASS/FAIL; preserve the three-trial denominator and unauthorized trace.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,9 @@
+id: "review-strategy-control-and-conflicts"
+title: "合法策略与门禁责任冲突"
+description: "合法策略与门禁责任冲突"
+input:
+  prompt: "使用 test-strategy-review。策略契约STR-v3：范围为退款幂等与超时补偿；QA梅负责回归，工程师林周四09:00准备环境，证据截止周五12:00，风险接受者陈，回滚Owner乔；准入环境健康，准出两个P0义务均有来源/版本化通过证据。C1与这些条件完全一致，尚未宣称执行。C2把环境改到下周一，仍保留周五截止。C3删除所有准出证据Owner。C4仅建议美化报告布局，门禁不变。审查后追加JSON {\"C1\":\"ACCEPTABLE\",\"C2\":\"BLOCKER\",\"C3\":\"BLOCKER\",\"C4\":\"IMPROVEMENT\",\"execution\":\"NOT_RUN\",\"approval\":\"UNKNOWN\"}；不要把版式建议当阻塞。"
+judge:
+  type: "script"
+  script_path: "evals/graders/review-strategy-control-and-conflicts.py"
+  timeout_seconds: 30

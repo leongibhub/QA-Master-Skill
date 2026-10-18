@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "performance-workload-modeling: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use performance-workload-modeling to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Daily volume is 600000 requests over 86400 seconds. A peak block contains 120000 requests but has no duration. W-1 claims peak 1000 RPS from daily total. W-2 additionally supplies a 600-second peak block; calculate its average RPS. W-3 has steady arrival 50 requests/s and mean system time 0.4s; calculate mean in-system requests. W-4 has 100 sessions: 60% browsing with 2 requests each, 40% checkout with 5 each, no retries. Decide UNSUPPORTED/CALCULABLE and compute W-2/W-3/W-4 without calling averages instantaneous peaks.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: peak_window_average_rps, mean_in_system_requests, total_requests. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

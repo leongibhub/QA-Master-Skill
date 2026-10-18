@@ -1,0 +1,16 @@
+{
+  "decisions": {
+    "R-1": "POSITIVE",
+    "R-2": "NO_BREAK_EVEN",
+    "R-3": "NO_BREAK_EVEN",
+    "R-4": "UNKNOWN"
+  },
+  "calculations": {
+    "net_saving_h": 24,
+    "break_even_months": 1
+  },
+  "required_details": [
+    "24",
+    "12"
+  ]
+}

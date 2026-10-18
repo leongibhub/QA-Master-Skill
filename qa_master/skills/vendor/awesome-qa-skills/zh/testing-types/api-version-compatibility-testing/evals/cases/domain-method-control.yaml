@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "api-version-compatibility-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 api-version-compatibility-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C2 C_old/C_new 均读取 id:int、priceCents:int，忽略未知字段；新字段 debug 可选，不改变价格单位。S_old={id:1,priceCents:1200}；S_new 增加 debug:"x"，其余相同。支持政策覆盖四格；未给错误响应与弃用规则。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可给定成功响应的四格字段读取兼容，不把新增 debug 一律视为破坏。"
+    - "错误、弃用和真实执行保持待确认，不能升级为全接口兼容。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

@@ -1,0 +1,29 @@
+id: "review-cardinality-and-broken-sampling"
+title: "Signal design ties budget, correlation and alert action to evidence"
+description: "Signal design ties budget, correlation and alert action to evidence"
+context:
+  files:
+    "observability.md": |-
+      Metric refund_duration_ms labels: user_id (100000 distinct/window), status(5), region(3); all combinations possible. Series budget10000.
+      Gateway root sampled10%; worker child independently sampled10%; traceparent is not forwarded. Request R6 may have orphan spans.
+      Logs redact account data and retain request_id. Alert p95>500ms for5min sends notification; owner/runbook/action not supplied.
+input:
+  prompt: "Use observability-design-review. Review observability.md statically. Calculate the supplied label upper bound, identify sampled trace continuity gaps and specify a closeable alert action/owner question. Do not query production signals."
+expect:
+  must_contain:
+    - "10000"
+    - "R6"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "user_id100000 × status5 × region3 gives a potential1,500,000 series versus budget10000, not an observed billing cost; proposes bounded labels and preserves request/user correlation outside metric labels with privacy controls."
+    - "Independent root/child sampling without propagated trace context can break request R6 correlation; proposes shared decision/context or error-retention validation, not declaring sampling alone adequate."
+    - "p95 alert has threshold/duration but lacks owner/runbook; requests assignment and action evidence rather than inventing an SLO, owner or cost."
+  pass_threshold: 1.0

@@ -1,0 +1,23 @@
+id: "review-unregistered-close-failure"
+title: "Unregistered P0 failure blocks close"
+description: "Unregistered P0 failure blocks close"
+input:
+  prompt: "Use daily-testing-workflow. Close milestone input: run R19 on B19 recorded P0-refund FAIL with duplicate debit; screenshot E19 is redacted; there is no bug ID or escalation record. Owner Mei is available. P2-label passed. Write the close assessment and one next handoff."
+expect:
+  must_contain:
+    - "P0-refund"
+    - "R19"
+    - "bug-reporting"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Fails the close gate for the unregistered P0-refund failure, escalates to Mei, and hands off bug-reporting with R19/B19/E19 reproduction and impact evidence."
+    - "Preserves P2-label PASS separately; records the P0 risk/carryover and next-start priority rather than marking the day complete."
+  pass_threshold: 1.0

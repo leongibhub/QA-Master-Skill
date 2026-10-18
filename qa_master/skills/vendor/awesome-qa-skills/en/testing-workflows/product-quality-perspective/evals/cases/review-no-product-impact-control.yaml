@@ -1,0 +1,18 @@
+id: "review-no-product-impact-control"
+title: "Backend-only code without product impact is not filler review"
+description: "Backend-only code without product impact is not filler review"
+input:
+  prompt: "Use product-quality-perspective. stage: code-review. Provided change C22 renames a private local variable; supplied owner statement says no external behavior or product requirement changes. No user-impact context is supplied. Decide applicability without inventing business findings."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Reports not applicable or an explicitly limited no-product-finding result grounded in no traceable product impact, with any remaining evidence gap."
+    - "Does not invent payment/business-rule/acceptance defects or certify code correctness."
+  pass_threshold: 1.0

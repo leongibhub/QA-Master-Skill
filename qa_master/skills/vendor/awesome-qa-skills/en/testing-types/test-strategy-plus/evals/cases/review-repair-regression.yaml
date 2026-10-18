@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "test-strategy-plus: sourced repair regression"
+input:
+  prompt: |
+    Use test-strategy-plus.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append `ID | DECISION | Evidence`, one row per ID, using the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: CONSTRAINT_ONLY, NOT_ASSESSED, UNSUPPORTED.
+
+    Three domains: calculator1+1=2, text-editorUTF-8, Celsius0=Fahrenheit32. S1 helper preserves these sources, versions UNKNOWN, analysis NOT_ASSESSED. S2 alleged strategy fills promotion/stock scope, gateway/cache/queue topology and P1>=95% gate with no source. S3 project plan supplies capacity1QA and Friday deadline; no acceptance owner or risk authorization. Reject invented strategy; preserve capacity as delivery constraint only.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

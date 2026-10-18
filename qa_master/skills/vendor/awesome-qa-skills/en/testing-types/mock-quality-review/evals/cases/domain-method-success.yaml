@@ -1,0 +1,20 @@
+id: domain-method-success
+title: "mock-quality-review: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use mock-quality-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 PriceService.total(qty) calls external TaxPort for {rate: number}; errors return error rather than 0.
+    F1 replaces PriceService.total itself with 100 and asserts total(2)==100.
+    F2 TaxPort stub returns {taxRate:0.1}, unlike C1; success stub only, no error candidate.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify F1's replaced subject/unprotected total logic, F2's field drift and absent error protection."
+    - "Propose real-total and TaxPort contract/error controls without inventing live responses."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

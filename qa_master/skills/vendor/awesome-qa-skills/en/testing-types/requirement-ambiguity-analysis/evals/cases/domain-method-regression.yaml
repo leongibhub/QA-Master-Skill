@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "requirement-ambiguity-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use requirement-ambiguity-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    R1-v2 says 'Cancellation is allowed 24 hours after payment' (within the first 24 hours or only after 24 hours). R2 allows authenticated refunds but defines no anonymous-refund rule. R3 has same-version statements 'free shipping for amount>=100' and 'amount>100'. R4 explicitly allows cancellation within 24h inclusive from the payment-success event. Decide AMBIGUOUS/MISSING_RULE/CONFLICT/CLEAR for R1–R4. Give two R1 consequences and one distinguishing question; do not invent ambiguity for R4.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

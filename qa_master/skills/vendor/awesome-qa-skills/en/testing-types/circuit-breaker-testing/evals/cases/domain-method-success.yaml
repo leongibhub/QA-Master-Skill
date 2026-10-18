@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "circuit-breaker-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use circuit-breaker-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 two consecutive dependency failures open for 10 s; half-open permits one concurrent probe, failure reopens for 10 s, success closes. Open returns cached without a dependency call.
+    T1 t0/t1 failures; t2 calls dependency; t11 admits two concurrent probes, one fails; t12 admits an ordinary request.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Derive open after t1, short-circuit at t2, at most one probe at t11 and open at t12 after failure; identify three conflicts."
+    - "Connect decisions to events/fallback, not merely state labels or CBR identifiers."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

@@ -1,0 +1,33 @@
+id: "review-actual-design-safe-seams"
+title: "Architecture and interfaces yield minimal safe seams"
+description: "Architecture and interfaces yield minimal safe seams"
+context:
+  files:
+    "architecture.md": |-
+      # Checkout v8
+      API -> queue -> worker -> payment provider. Worker runs reservation expiry with real clock and random jitter.
+      No operation_id propagation or status observation is specified. Production auth/tenant isolation must remain intact.
+    "interfaces.txt": |-
+      POST /orders: authorized tenant caller; creates async work.
+      PaymentProvider.debit(order_id,amount): external side effect.
+      Clock/RNG adapters and provider substitution are not supplied.
+input:
+  prompt: "Use testability-analysis. Mode architecture-testability-review. Read architecture.md and interfaces.txt. Identify minimum observability, clock/randomness control and dependency substitute, with safe scope and cost/validation. No production debug bypass is authorized."
+expect:
+  must_contain:
+    - "operation_id"
+    - "PaymentProvider"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Sources API->queue->worker->payment dependency and identifies absent operation correlation/result status as a safe observability gap; proposes masked operation_id/status under existing tenant authorization, not credential/data dumps."
+    - "Real clock and randomness require injectable clock/seeded RNG in isolated tests and an interface-bounded payment fake; no arbitrary production time override or auth bypass endpoint."
+    - "Each proposed seam has location, expected evidence, isolated scope and value/cost; design suggestions are not proved architecture testability or runtime pass."
+  pass_threshold: 1.0

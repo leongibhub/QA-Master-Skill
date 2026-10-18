@@ -1,0 +1,16 @@
+{
+  "decisions": {
+    "X-1": "WRONG",
+    "X-2": "CALCULABLE",
+    "X-3": "UNKNOWN",
+    "X-4": "CALCULABLE"
+  },
+  "calculations": {
+    "observed_exclusive_ms": 20,
+    "queue_ms": 15
+  },
+  "required_details": [
+    "20",
+    "15"
+  ]
+}

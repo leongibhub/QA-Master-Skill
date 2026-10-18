@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "ui-test-wait-strategy-review: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use ui-test-wait-strategy-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C2 report readiness requires target reportId/version 7 and ready, budget 3000 ms. T2 read-only polls this state and matches/renders t1200; analytics traffic continues, no repeated Load. No fixed-sleep/network-idle requirement.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept correlated business/version readiness at 1200 ms without treating analytics traffic as unready."
+    - "Retain late-version/cancellation gaps without declaring all waits stable."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

@@ -1,0 +1,32 @@
+id: "review-located-high-risk-gap"
+title: "退款验收不可观察缺口需具体来源和优先级"
+description: "退款验收不可观察缺口需具体来源和优先级"
+context:
+  files:
+    "requirement.md": |-
+      # Refund requirement v5, source RQ-refund
+      Goal: avoid duplicate debit during refunds.
+      R1: Refund promptly and safely.
+      R2: A timeout allows the user to retry; outcome and deduplication rules are not defined.
+      Impact: duplicate debit can cause irreversible customer loss.
+input:
+  prompt: "使用 requirement-quality-review。仅审阅 requirement.md 的退款验收，引用最小原句、定位高风险缺口、解释优先级并提出角色负责的修订和关闭证据，不能编最终退款政策。"
+expect:
+  must_contain:
+    - "RQ-refund"
+    - "R1"
+    - "R2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "定位第3行 Refund promptly and safely 的时间/结果不可测，以及第4行重试缺最多一次/可见结果契约，回链给定重复扣款财损影响。"
+    - "P0/P1 缺口含 RQ 来源版本、Product/Engineering 角色、具体问题与验证/关闭条件，建议不是批准阈值或实现缺陷。"
+    - "不能编24h SLA/HTTP码或自动批准发布。"
+  pass_threshold: 1.0

@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "equivalence-partitioning: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use equivalence-partitioning to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 fictional region A requires a 5-digit string, B a 6-digit string; region C unsupported→UNSUPPORTED_REGION; malformed postcodes in supported regions→INVALID_POSTAL.
+    C2 is C1. P2 separates A-valid 5/A-malformed, B-valid 6/B-malformed, C-unsupported; representatives A/01234, A/abc, B/012345, B/01234, C/01234. Region D rules absent.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept P2's sourced behavior partitions/representatives without merging different valid lengths."
+    - "Keep D unknown rather than borrowing actual-country rules or C's behavior."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

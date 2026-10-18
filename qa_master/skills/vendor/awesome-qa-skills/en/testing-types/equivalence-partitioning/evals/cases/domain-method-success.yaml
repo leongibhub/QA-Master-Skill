@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "equivalence-partitioning: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use equivalence-partitioning to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 fictional region A requires a 5-digit string, B a 6-digit string; region C unsupported→UNSUPPORTED_REGION; malformed postcodes in supported regions→INVALID_POSTAL.
+    P1 groups all numeric postcodes together and all invalids together. Samples A/"01234", B/"01234", B/"012345", C/"01234".
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Judge A/01234 and B/012345 valid, B/01234 INVALID_POSTAL, C UNSUPPORTED_REGION."
+    - "Identify P1's lost region dependency/error distinctions and preserve leading zeros."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

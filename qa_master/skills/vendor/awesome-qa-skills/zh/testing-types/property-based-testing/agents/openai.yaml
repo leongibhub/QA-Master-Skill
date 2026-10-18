@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "property-based-testing"
+interface:
+  display_name: "性质测试设计"
+  short_description: "依据已提供证据设计性质测试设计，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the property-based-testing skill to produce PBT-## without claiming execution."
+policy:
+  allow_implicit_invocation: true

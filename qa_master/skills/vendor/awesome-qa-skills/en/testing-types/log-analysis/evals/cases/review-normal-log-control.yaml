@@ -1,0 +1,18 @@
+id: "review-normal-log-control"
+title: "Normal log sample does not invent incident or global health"
+description: "Normal log sample does not invent incident or global health"
+input:
+  prompt: "Use log-analysis. Analyze the sample: 02:00Z R3 INFO request start; 02:00:01Z R3 INFO status200 request end. Only these two lines were supplied, sampling unknown. No error or deployment record exists."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "No observed error/incident/root cause is invented; reports the supplied R3 success scope only."
+    - "Does not claim global service health, zero errors or complete coverage from two sampled lines."
+  pass_threshold: 1.0

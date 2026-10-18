@@ -1,0 +1,60 @@
+id: "review-paired-deltas"
+title: "配对重复区分一致变化和零中位数波动"
+description: "配对重复区分一致变化和零中位数波动"
+context:
+  files:
+    "paired.json": |-
+      {
+        "identity": {
+          "environment": "perf-A",
+          "workload": "100RPS-read",
+          "data_hash": "D1",
+          "builds": [
+            "B1",
+            "B2"
+          ],
+          "metric": "p95_ms"
+        },
+        "groups": {
+          "stable": [
+            {
+              "id": "P1",
+              "baseline": 100,
+              "candidate": 120
+            },
+            {
+              "id": "P2",
+              "baseline": 102,
+              "candidate": 122
+            },
+            {
+              "id": "P3",
+              "baseline": 98,
+              "candidate": 118
+            }
+          ],
+          "variable": [
+            {
+              "id": "N1",
+              "baseline": 90,
+              "candidate": 110
+            },
+            {
+              "id": "N2",
+              "baseline": 110,
+              "candidate": 90
+            },
+            {
+              "id": "N3",
+              "baseline": 100,
+              "candidate": 100
+            }
+          ]
+        }
+      }
+input:
+  prompt: "使用 performance-regression-analysis。读取 paired.json，返回 JSON {\"groups\":[{\"id\",\"comparable\":布尔值,\"median_absolute_ms\",\"median_baseline_ms\",\"median_candidate_ms\",\"relative_change_pct\",\"classification\":\"consistent_observed_degradation|inconclusive_variation\"}]}。绝对变化用配对差中位数，相对变化=(candidate中位数-baseline中位数)/baseline中位数*100。分类仅描述当前样本，不证明显著性或业务验收。"
+judge:
+  type: "script"
+  script_path: "evals/graders/review-paired-deltas.py"
+  timeout_seconds: 30

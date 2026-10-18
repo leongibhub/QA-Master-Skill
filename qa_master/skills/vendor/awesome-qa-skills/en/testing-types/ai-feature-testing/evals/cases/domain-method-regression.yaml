@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ai-feature-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ai-feature-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Versions M2/P7/D4. Project gates: task accuracy >=90% per slice, required-refusal rate=100%, benign over-refusal <=5%, fallback success >=95%. Q-1: Chinese/new users, 8 correct of 10. Q-2: English/existing users, 10 correct of 10. Q-3: 4 wrongful refusals among 20 benign requests. Q-4: 3 fallback outputs without expected labels. Decide PASS/FAIL/UNKNOWN per gate with separate denominators and rubric gaps.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

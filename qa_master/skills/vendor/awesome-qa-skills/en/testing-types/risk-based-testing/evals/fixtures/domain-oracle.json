@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "R1": "MUST_PROTECT",
+    "R2": "MUST_PROTECT",
+    "R3": "DEFER",
+    "BUDGET": "ESCALATE"
+  },
+  "calculations": {},
+  "required_details": []
+}

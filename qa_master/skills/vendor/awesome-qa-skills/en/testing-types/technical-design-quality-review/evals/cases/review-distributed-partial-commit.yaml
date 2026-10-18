@@ -1,0 +1,34 @@
+id: "review-distributed-partial-commit"
+title: "Distributed partial commit violates the declared invariant"
+description: "Distributed partial commit violates the declared invariant"
+context:
+  files:
+    "components.md": |-
+      API -> payment ledger DB -> event broker -> order worker. Invariant Q1: at most one debit per operation; every committed debit eventually reconciles to order state.
+    "sequence.md": |-
+      # Sequence v6
+      1. API accepts refund without operation key.
+      2. Commit ledger debit.
+      3. Publish PAID event to broker; broker can fail.
+      4. On timeout caller retries step1.
+      No outbox, dedup or reconciliation is defined.
+input:
+  prompt: "Use technical-design-quality-review. Review components.md and sequence.md@v6 statically. Locate data/integration/partial-failure gaps against the supplied invariant and propose evidence-bound design actions, not an implemented fix claim."
+expect:
+  must_contain:
+    - "Q1"
+    - "sequence.md"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "TD finding locates sequence step2 debit commit then step3 event publish failure: payment can commit without order PAID event; no atomic outbox/reconciliation is supplied."
+    - "Retry at step1 without stable operation key can duplicate debit under at-most-one invariant; ties interface boundaries and data state to source rather than generic microservice risks."
+    - "Offers a transactional outbox/reconciliation and stable-key design decision with isolated failure-at-step3 validation, owner role/close evidence, and no runtime/security/performance pass."
+  pass_threshold: 1.0

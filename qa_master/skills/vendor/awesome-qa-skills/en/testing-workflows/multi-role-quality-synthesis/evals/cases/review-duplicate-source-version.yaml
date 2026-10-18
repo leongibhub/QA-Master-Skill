@@ -1,0 +1,78 @@
+id: "review-duplicate-source-version"
+title: "Conflicting versions cannot share an unqualified identity"
+description: "Conflicting versions cannot share an unqualified identity"
+context:
+  files:
+    "reports.json": |-
+      [
+        {
+          "source_id": "qa-1",
+          "version": "v1",
+          "stage": "test-report-review",
+          "source_role": "QA",
+          "facts": [],
+          "evidence": [
+            "run-R1"
+          ],
+          "findings": [
+            {
+              "id": "F-qa",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P0",
+              "blocking": true
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        },
+        {
+          "source_id": "qa-1",
+          "version": "v2",
+          "stage": "test-report-review",
+          "source_role": "technical",
+          "facts": [],
+          "evidence": [
+            "diff-D1"
+          ],
+          "findings": [
+            {
+              "id": "F-tech",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P1",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "medium"
+        }
+      ]
+input:
+  prompt: "Use multi-role-quality-synthesis. Review reports.json for identity conflicts before synthesis. Both reports claim source_id qa-1 but carry versions v1/v2 and different severity/evidence. Do not choose a latest report without an explicit supersession decision."
+expect:
+  must_contain:
+    - "qa-1"
+    - "v1"
+    - "v2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Makes the qa-1 v1/v2 identity ambiguity visible, preserves both severity/evidence claims, and requests unique/version-qualified identity or an authorized supersession decision."
+    - "Does not overwrite P0/run-R1 with P1/diff-D1 or label two versions of one source as distinct-source consensus."
+  pass_threshold: 1.0

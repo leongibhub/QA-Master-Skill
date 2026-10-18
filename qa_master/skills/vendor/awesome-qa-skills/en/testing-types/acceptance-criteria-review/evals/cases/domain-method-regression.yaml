@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "acceptance-criteria-review: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use acceptance-criteria-review to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Version v3 originals: AC-7: orders >= 100 currency units have free shipping; an order of exactly 100 was charged 5. AC-8: retries with the same refund_id must not debit twice; retrying a successful 20-unit refund raised the cumulative refund to 40. AC-9: orders < 100 pay 5 shipping; an order of 99 was charged 5. AC-10 says "refund promptly" without a time limit or observable start/end.
+    Review each original AC ID and text. Keep proposed rewrites separate. Use FAIL/PASS/MISSING_RULE decisions and explain threshold equality and duplicate-request postconditions.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

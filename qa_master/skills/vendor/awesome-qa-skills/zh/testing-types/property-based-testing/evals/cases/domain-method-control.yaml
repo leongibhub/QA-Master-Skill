@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "property-based-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 property-based-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C2 sort 接受 integer lists 长度0..5、升序且保留多重集。F2 []→[]、[2,1,1]→[1,1,2]、[-1,0]→[-1,0]；仅给三个样例，seed 和生成器版本未给。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可三个样例同时满足两项性质，不虚构反例。"
+    - "重放与总体生成覆盖保持缺口，不能由三个样例声称所有输入性质成立。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

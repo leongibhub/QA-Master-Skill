@@ -1,0 +1,37 @@
+id: "review-upstream-guard-control"
+title: "可见上游保护防止下标误报"
+description: "可见上游保护防止下标误报"
+context:
+  files:
+    "patch.diff": |-
+      --- a/items.py
+      +++ b/items.py
+      @@ -1,2 +1,2 @@
+       def first(items):
+      -    return next(iter(items))
+      +    return items[0]
+    "items.py": |-
+      def first(items):
+          return items[0]
+
+      def choose(items):
+          if not items:
+              return None
+          return first(items)
+    "scope.md": |-
+      first is private; choose is its only caller in this package.
+input:
+  prompt: "使用 code-review。审阅 orders commit def456、patch.diff 与 items.py 完整调用路径。判断 changed first(items) 能否从唯一提供的公共入口收到空列表。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "choose() 在空列表时先 return None，给定唯一调用范围下不能把 items[0] 写成已证明可达空列表崩溃。"
+    - "可记录私有 helper 前置条件，但不能把未提供调用者假设升级 P0/P1 或要求无关重构。"
+  pass_threshold: 1.0

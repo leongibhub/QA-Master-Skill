@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-maturity-assessment: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 quality-maturity-assessment 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    项目框架 F1仅评回归管理：L1有已批准模板，L2至少两个版本的实际执行与失败处置记录。团队A只有模板与“我们定期执行”访谈；团队B模板+v1/v2运行+失败追踪。M-1评A，M-2评B。M-3安全测试维度没有提供材料，M-4硬件维度因产品无硬件被框架标不适用。用L1/L2/UNKNOWN/N/A判定，不给自创总分、不要把A访谈当L2证据。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,27 @@
+id: "review-test-strategy-evidence"
+title: "产品策略优先不可逆用户损失"
+description: "产品策略优先不可逆用户损失"
+context:
+  files:
+    "product.json": "{\"source_id\":\"prod-strategy\",\"version\":\"v3\",\"goal\":\"safe refunds\",\"constraints\":{\"QA_days\":1},\"requirements\":[{\"id\":\"Q1\",\"rule\":\"one debit per refund operation\",\"impact\":\"irreversible customer loss if violated\"},{\"id\":\"Q2\",\"rule\":\"receipt appears after confirmed refund\",\"impact\":\"delayed feedback if missing\"}],\"execution\":null}"
+input:
+  prompt: "使用 product-quality-perspective。stage: test-strategy。读取 product.json，输出产品质量视角报告，不替代详细策略。使用已提供报告身份与可执行证据请求。"
+expect:
+  must_contain:
+    - "Q1"
+    - "Q2"
+    - "prod-strategy"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "按不可逆损失与反馈延迟的材料优先 Q1 单次退款仅扣一次、Q2 收据可见，不能编造测试结果或阈值。"
+    - "保留 source_id prod-strategy/version v3，发现有稳定 ID 和来源证据，行动回链重复扣款/收据覆盖的所需证据。"
+    - "只有一个 QA 工作日时明确产品取舍与需 Human 决策，不能批准发布。"
+  pass_threshold: 1.0

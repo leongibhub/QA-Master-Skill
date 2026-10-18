@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "agent-failure-recovery-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use agent-failure-recovery-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Protocol R-v2: one debit per operation_id; query state before retrying uncommitted steps; permanent permission errors stop and escalate. F-1: pay-1 debit commits, response times out, retry debits again, two entries for the same op. F-2: steps 1/2 commit; recovery executes only step 3, with one entry per step. F-3: five unchanged retries follow permanent 403. Decide PASS/FAIL per trace, required recovery branch, final state, and evidence.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

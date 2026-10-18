@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "regression-scope-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use regression-scope-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    A money component changes. E1 maps shared type directly to refund obligations. E2 maps its consumer indirectly to invoice. E3 has unknown dynamic tax plugins. E4 proves an independent image-service contract. The window fits one test, but project policy requires refund and invoice protection without an approved waiver. Decide INCLUDE/UNKNOWN/EXCLUDE for E1–E4 and ESCALATE for BUDGET; do not test refund alone and call the scope sufficient.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,18 @@
+id: "review-stable-control"
+title: "小样本全通过不是 flaky 或零风险证明"
+description: "小样本全通过不是 flaky 或零风险证明"
+input:
+  prompt: "使用 flaky-test-analysis。F2 四次记录：seed7/worker1 两次 PASS，seed8/worker2 两次 PASS；未提供失败或时序证据。说明可推断范围，不自动建议隔离。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "观察为 0/4 失败，但不能证明 flaky 或保证稳定，不编造竞争/根因。"
+    - "不能把 F2 当确认 flaky 隔离，后续采样仅是受限证据请求。"
+  pass_threshold: 1.0

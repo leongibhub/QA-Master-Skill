@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "llm-consistency-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use llm-consistency-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Same sample S, model M1, prompt P2, temperature 0 and seed 7. The contract requires JSON fields decision=APPROVE and amount=20; reason may use equivalent wording. L-1: three valid outputs with amount 20 and equivalent reasons. L-2: the third of three outputs omits amount. L-3: one output is called stable. L-4: three valid structures lack a semantic oracle. Decide PASS/FAIL/INSUFFICIENT_EVIDENCE/UNKNOWN and show L-2's structural failure count and trial denominator.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

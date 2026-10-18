@@ -1,0 +1,18 @@
+id: domain-method-success
+title: "ui-test-wait-strategy-review: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 ui-test-wait-strategy-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 Submit成功标准是当前orderId的status=confirmed，budget2000ms。页面有长期WebSocket。T1 submit后network idle一直不达；另一个trace t100网络空闲、order pending，t800才confirmed。P1把idle一律当成功，并等待失败就再点Submit。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "指出长连接使idle不适用、t100空闲仍pending、重点击有重复副作用风险。"
+    - "建议按当前orderId等confirmed并用2000ms预算/只读观察，不能把t100视为业务完成。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

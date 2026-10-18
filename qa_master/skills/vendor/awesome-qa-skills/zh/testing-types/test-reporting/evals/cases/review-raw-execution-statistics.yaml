@@ -1,0 +1,22 @@
+id: "review-raw-execution-statistics"
+title: "用例、重跑、分母与构建证据"
+description: "用例、重跑、分母与构建证据"
+input:
+  prompt: |-
+    使用 test-reporting。根据以下原始行生成报告，区分用例数与尝试数、构建范围、建议与批准。
+    Build b42; planned manifest v2 has A,B,C,D,E,F.
+    Raw execution rows (latest attempt is authoritative per case, keep all attempts):
+    A, attempt1, FAIL, executed=true, build=b42, run=r1
+    A, attempt2, PASS, executed=true, build=b42, run=r2
+    B, attempt1, BLOCKED, executed=false, build=b42, run=r1
+    C, attempt1, SKIPPED, executed=false, build=b42, run=r1
+    D, attempt1, PASS, executed=true, build=b42, run=r1
+    E, attempt1, FAIL, executed=true, build=b42, run=r1
+    F, no attempt, NOT_RUN, build=b42
+    Defects: D1 OPEN BLOCKER build=b42 source=defects-v2; D2 CLOSED minor build=b42; D3 OPEN critical build=b41 (no applicability evidence for b42).
+    No release authorization record exists. Do not execute tests or infer actual results outside these rows.
+    Return the normal sourced report and append exactly one JSON object with counts (round percentages to 2 decimals), authoritative_attempts, current_open_blockers, unmapped_old_build_defects, recommendation, approval. PASS counts distinct cases, not attempts. The absence of authorization is UNKNOWN.
+judge:
+  type: "script"
+  script_path: "evals/graders/review-raw-execution-statistics.py"
+  timeout_seconds: 30

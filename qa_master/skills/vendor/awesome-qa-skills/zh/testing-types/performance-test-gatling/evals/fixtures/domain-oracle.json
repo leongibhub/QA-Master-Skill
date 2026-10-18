@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "G-1": "VALID",
+    "G-2": "UNSUPPORTED",
+    "G-3": "FAIL",
+    "G-4": "UNKNOWN"
+  },
+  "calculations": {},
+  "required_details": []
+}

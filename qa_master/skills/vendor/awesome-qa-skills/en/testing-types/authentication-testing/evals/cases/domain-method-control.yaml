@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "authentication-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use authentication-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 project login requires MFA: correct password enters challenged state; session only after MFA success. Recovery tokens are single-use. Recovery responses for existent/nonexistent accounts are both 202/"If eligible, email sent".
+    C2 is C1. T4 correct password→challenged/no session; successful MFA→authenticated; R first recovery succeeds, reuse rejected; both account types receive identical 202/message. No timing distribution or protected-resource permissions supplied.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept staged authentication and single-use recovery; challenged is not an erroneous login failure."
+    - "Leave timing enumeration and authorization unassessed; equal messages do not eliminate all enumeration risks."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

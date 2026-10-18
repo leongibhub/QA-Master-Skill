@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-idempotency-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use api-idempotency-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1: tenant+key lives for 60 s; same key/payload returns the original orderId and commits one order; different payload with that key gives 409 without a new order.
+    T1 tenant A/key K/{qty:1}: t=0 commits O1 then client times out; t=2 retry returns O1. D1 commit ledger contains O1 and O2, both key K/qty 1, at t=0/2.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify duplicate commits after timeout; replaying O1 does not negate D1's two writes."
+    - "Propose concurrent-key and payload-conflict checks while leaving unspecified concurrency response details open."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

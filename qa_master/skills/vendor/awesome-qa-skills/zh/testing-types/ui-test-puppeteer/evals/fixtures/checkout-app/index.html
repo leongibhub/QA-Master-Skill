@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Checkout</title>
+<h1>Checkout</h1>
+<p data-testid="principal"></p><p data-testid="order-id"></p>
+<p data-testid="amount">20</p><p role="status" data-testid="state">pending</p>
+<button data-testid="pay">Pay</button><button data-testid="receipt">Open receipt</button>
+<script>
+const params = new URLSearchParams(location.search);
+const principal = params.get('user') || 'A';
+const orderId = params.get('order') || `${principal}-1`;
+const mode = params.get('mode') || 'good';
+const key = `qa-fixture:${principal}:${orderId}`;
+document.querySelector('[data-testid="principal"]').textContent = principal;
+document.querySelector('[data-testid="order-id"]').textContent = orderId;
+document.querySelector('[data-testid="pay"]').addEventListener('click', () => {
+  if (mode === 'timeout') return;
+  setTimeout(() => {
+    const record = {principal, orderId, amount: 20, state: mode === 'bug' ? 'pending' : 'paid'};
+    localStorage.setItem(key, JSON.stringify(record));
+    document.querySelector('[data-testid="state"]').textContent = record.state;
+  }, 0);
+});
+document.querySelector('[data-testid="receipt"]').addEventListener('click', () => {
+  window.open(`/receipt.html?${params.toString()}`, '_blank');
+});
+window.fixtureRecord = () => JSON.parse(localStorage.getItem(key) || 'null');
+</script></html>

@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "accessibility-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use accessibility-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Project target: WCAG 2.2 AA, checkout dialog only. S-1: automated scan has zero findings. K-1: keyboard opens the dialog but Tab cannot reach Confirm payment; the project maps this to 2.1.1. K-2: closing restores focus to the trigger; project maps this to 2.4.3. R-1: screen-reader testing was not performed. Decide SCAN_CLEAR/FAIL/PASS/NOT_RUN per evidence ID with criterion and evidence type, without site-wide conformance claims.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

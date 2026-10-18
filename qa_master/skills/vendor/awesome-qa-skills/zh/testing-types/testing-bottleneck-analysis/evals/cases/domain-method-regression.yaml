@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "testing-bottleneck-analysis: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 testing-bottleneck-analysis 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    工单T1在0min进入、等环境0-40、执行40-50、返工50-60、完成60；runner等待期间空闲。B1分析主要耗时阶段。同日同复杂度：并发2时完成10项/小时，WIP4；并发4时完成6项/小时，WIP8且DB锁等待日志增加。B2声称加并发一定提效；B3把40min等环境当人力不足事实；B4有DB争用假设需受控复验。用DEPENDENCY_WAIT/UNSUPPORTED/HYPOTHESIS，拆分执行10min/返工10min，不把60min全记工时。
+    计算结果另用 `METRIC | VALUE | 单位/依据` 表输出，METRIC 使用以下键：dependency_wait_minutes, execution_minutes, rework_minutes。VALUE 只写数字。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

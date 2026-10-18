@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "secrets-exposure-review: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use secrets-exposure-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    F4 docs use ${SERVICE_SECRET}; scan fingerprint=mock-01, owner confirms an illustrative identifier, not a credential. Logs/CI/history absent. P4 records placeholder control/unassessed areas only.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept placeholder/confirmed-synthetic controls without forcing a leak finding or rotation."
+    - "Leave absent areas unassessed rather than declaring the repository secret-free or fully scanned."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

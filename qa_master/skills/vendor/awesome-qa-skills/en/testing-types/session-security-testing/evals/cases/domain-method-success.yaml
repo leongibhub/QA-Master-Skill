@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "session-security-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use session-security-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 opaque sessions rotate anonymous sid at login, revoke immediately on logout, and cannot retain removed admin privileges on the next request.
+    T1 anonymous label S0 remains S0 after login; logout→200 but S0 still reads private data; after admin revocation old sid permits admin writes. Labels only, no real credentials.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify rotation, post-logout credential and permission-change conflicts; logout 200 does not prove revocation."
+    - "Use labels/static limits and do not invent idle/absolute lifetimes."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

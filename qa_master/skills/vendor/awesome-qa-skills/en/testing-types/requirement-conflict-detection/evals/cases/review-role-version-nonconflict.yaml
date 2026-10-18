@@ -1,0 +1,25 @@
+id: "review-role-version-nonconflict"
+title: "Same verb under different actors or versions is not a same-scope conflict"
+description: "Same verb under different actors or versions is not a same-scope conflict"
+context:
+  files:
+    "scoped.md": |-
+      A1: version v2, actor admin, approve orders allowed.
+      A2: version v2, actor customer, approve orders prohibited.
+      V1: version v1 archived, export prohibited.
+      V2: version v2 active, export allowed.
+input:
+  prompt: "Use requirement-conflict-detection. Review scoped.md. Distinguish real conflicts from differing applicability and do not infer that archived v1 and active v2 are simultaneously binding."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "A1 admin may approve versus A2 customer may not approve have different actors, so no same-actor permission conflict."
+    - "V1/v2 export rules have disjoint archived/active versions; no current conflict is invented. Keeps original scope/version evidence and any uncertainty explicit."
+  pass_threshold: 1.0

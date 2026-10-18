@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "risk-based-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use risk-based-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Window30min. Project requires duplicate-debit protection:20min for same-ID retry, one ledger entry, and reconciled balance; tenant authorization also requires20min. Copy check takes5min. R1 has a known loss escape; R2 lacks authorization evidence; R3 is minor copy change. Decide MUST_PROTECT for R1/R2, DEFER for R3, and ESCALATE for BUDGET with concrete minimum evidence;30min cannot satisfy both mandatory checks and is no waiver.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

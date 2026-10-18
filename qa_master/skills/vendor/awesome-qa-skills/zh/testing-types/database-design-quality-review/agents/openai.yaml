@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "database-design-quality-review"
+interface:
+  display_name: "数据库设计质量评审"
+  short_description: "依据已提供证据审查数据库设计质量评审，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the database-design-quality-review skill to assess this database design before implementation or migration."
+policy:
+  allow_implicit_invocation: true

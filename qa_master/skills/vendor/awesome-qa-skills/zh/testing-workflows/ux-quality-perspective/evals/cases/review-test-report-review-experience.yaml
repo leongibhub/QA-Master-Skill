@@ -1,0 +1,35 @@
+id: "review-test-report-review-experience"
+title: "test-report-review 的 UX 观察结果成功路径"
+description: "test-report-review 的 UX 观察结果成功路径"
+context:
+  files:
+    "ux.csv": |-
+      id,device,input,assistive_technology,state,result,source
+      U1,desktop,keyboard,none,error,focus-lost,video-V1
+      U2,desktop,mouse,none,success,receipt-visible,screenshot-S1
+      U3,mobile,touch,unknown,error,NOT_RUN,plan-P1
+    "report.md": |-
+      # UX observations
+      Desktop screenshot shows receipt. Conclusion: all devices and assistive technology pass.
+input:
+  prompt: "使用 ux-quality-perspective。stage: test-report-review。读取 ux.csv 与 report.md，逐项保留可观察 UX 结果及准确范围。设备/输入/辅助技术/状态维度取自项目材料，不套通用必填矩阵。"
+expect:
+  must_contain:
+    - "U1"
+    - "U2"
+    - "U3"
+    - "video-V1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "保留 U1 桌面键盘错误态 video-V1 的焦点丢失、U2 桌面鼠标成功态 screenshot-S1 的收据可见、U3 手机触摸错误态 NOT_RUN。"
+    - "不能将 screenshot-S1 外推键盘/手机/读屏/所有状态，辅助技术未知是缺口，不是通过或确定缺陷。"
+    - "发现/行动引用提供证据，索取焦点/恢复/手机结果，不能认证后端或全局可访问性/发布批准。"
+  pass_threshold: 1.0

@@ -1,0 +1,22 @@
+id: "review-one-week-capacity"
+title: "One-week iteration preserves all phase gates"
+description: "One-week iteration preserves all phase gates"
+input:
+  prompt: "Use sprint-testing-workflow. Plan a five-working-day iteration with 20 QA hours: payment P0 checks 10h, setup/smoke 2h, critical regression 6h, review/report 2h. Goal is payment retry safety; owner Jia; build becomes installable on working day 2. Use the actual length/capacity and show every gate and one primary next Skill."
+expect:
+  must_contain:
+    - "Jia"
+    - "20"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Fits the supplied five-day/20h capacity instead of prescribing Day 12, retaining planning/setup/execution/regression/stabilization/review milestones and all entry/exit gates."
+    - "Does not start environment-dependent execution before the day-2 installable build, claim future smoke/regression passed, or silently cut P0/regression evidence."
+  pass_threshold: 1.0

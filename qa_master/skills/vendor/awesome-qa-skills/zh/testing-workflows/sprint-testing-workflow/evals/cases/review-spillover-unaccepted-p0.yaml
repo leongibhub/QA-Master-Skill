@@ -1,0 +1,23 @@
+id: "review-spillover-unaccepted-p0"
+title: "未接受 P0 与延期故事不能宣告完成"
+description: "未接受 P0 与延期故事不能宣告完成"
+input:
+  prompt: "使用 sprint-testing-workflow。评估最后里程碑：ST-1 重复扣款 P0 FAIL，B9 OPEN，未提供书面风险接受；ST-2 实现延期、测试 NOT_RUN；回归 R7 有两项 blocked。截止期已到，PM 要求两故事 done。输出退出状态与遗留记录。"
+expect:
+  must_contain:
+    - "B9"
+    - "ST-2"
+    - "R7"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "未接受 P0 B9 与未完成回归使退出阻断；PM 截止期/请求不是书面风险接受或测试证据。"
+    - "ST-1 失败、ST-2 未完成/NOT_RUN 和 R7 blocked 进入遗留/backlog，保留缺证据与未提供负责人，两故事不能 done。"
+  pass_threshold: 1.0

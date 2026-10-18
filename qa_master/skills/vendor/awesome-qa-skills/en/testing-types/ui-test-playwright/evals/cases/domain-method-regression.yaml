@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ui-test-playwright: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ui-test-playwright to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Project fixture locks Playwright1.48; Checkout title is constant. P1 payment remains pending but title-only assertion stays green. P2 toHaveText('paid') fails on pending, preserves trace, and CI exits nonzero. P3 two contexts share account/order and alter each other's data. P4 independent A/B principals/order_ids read own paid20 and clean without residuals. P5 only a generated file, no run. Decide REPAIR/EXPECTED_FAILURE/ISOLATION_FAIL/VALID/NOT_RUN; neither trace existence nor a normal title proves acceptance.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

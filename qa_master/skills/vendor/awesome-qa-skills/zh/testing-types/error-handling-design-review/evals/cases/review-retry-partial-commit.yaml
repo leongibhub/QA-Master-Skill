@@ -1,0 +1,34 @@
+id: "review-retry-partial-commit"
+title: "重试类别保留已提交事实与分层传播"
+description: "重试类别保留已提交事实与分层传播"
+context:
+  files:
+    "errors.md": |-
+      # Failure design v3
+      E1 invalid quantity: caller gets 400 VALIDATION, no retry.
+      E2 denied scope: 403 FORBIDDEN, no retry.
+      E3 provider unavailable before commit: 503 TEMPORARY, retry same key at most 2 times with 1s backoff.
+      T4: provider span S4 commits debit C4 with key K4 then response times out; gateway request R4 maps it to 504 OUTCOME_UNKNOWN. Retry must reuse K4 and query operation state first.
+      Compensation for committed debit: contract not supplied; Human authorization required for real writes.
+input:
+  prompt: "使用 error-handling-design-review。审阅 errors.md，逐模式写重试资格、调用方契约、幂等/补偿和可观察证据；同一 timeout 出现在 provider 与 gateway 两层，要保留传播身份。"
+expect:
+  must_contain:
+    - "C4"
+    - "S4"
+    - "R4"
+    - "K4"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "校验 E1 与权限 E2 不可重试，临时 E3 仅在给定 backoff/幂等预算下可重试，不得无限重试。"
+    - "T4 timeout 前已提交 C4，客户结果未知不等于确定失败；按幂等 key 查询后再重发，补偿需核对/授权，不能盲目再扣款。"
+    - "保留 provider span S4 -> gateway request R4 的传播链，缺补偿契约需标缺口。"
+  pass_threshold: 1.0

@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-data-generation: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 test-data-generation 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    schema：Order.id唯一、Refund.order_id必须存在、Refund.amount>0且累计<=Order.total；Order status=paid才能退款。D1 Order O1 total20 paid，Refund F1 O1 amount5，标valid。D2两个Order都id=O1，标valid。D3 Refund F2指O9不存在，标invalid，预期外键拒绝。D4 O2 pending却退款5，标valid。用VALID/INVALID/MATCHED_NEGATIVE逐组核对，交付一个固定seed7可重复的有效样本与清理Refund→Order。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

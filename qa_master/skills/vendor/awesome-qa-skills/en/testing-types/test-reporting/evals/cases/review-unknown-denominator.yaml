@@ -1,0 +1,19 @@
+id: "review-unknown-denominator"
+title: "Partial logs preserve unknown planned denominator"
+description: "Partial logs preserve unknown planned denominator"
+input:
+  prompt: "Use test-reporting. Only logs: T1 PASS run=r9 build=b42; T2 FAIL run=r9 build=b42. No planned manifest, skip/block/not-run rows, or defect source. Produce a report; report two observed executed cases and 50% observed pass rate, while planned total, execution coverage and unseen outcomes stay unknown."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Reports observed executed=2 and observed pass rate=50%, limited to r9/b42."
+    - "Keeps planned total, execution coverage, unseen skipped/blocked/not-run outcomes and defect inventory unknown; never invents zero values."
+    - "Does not declare an approved release or full test pass from partial logs."
+  pass_threshold: 1.0

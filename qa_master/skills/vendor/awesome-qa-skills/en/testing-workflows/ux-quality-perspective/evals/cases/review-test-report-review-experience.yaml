@@ -1,0 +1,35 @@
+id: "review-test-report-review-experience"
+title: "UX observed results at test-report-review"
+description: "UX observed results at test-report-review"
+context:
+  files:
+    "ux.csv": |-
+      id,device,input,assistive_technology,state,result,source
+      U1,desktop,keyboard,none,error,focus-lost,video-V1
+      U2,desktop,mouse,none,success,receipt-visible,screenshot-S1
+      U3,mobile,touch,unknown,error,NOT_RUN,plan-P1
+    "report.md": |-
+      # UX observations
+      Desktop screenshot shows receipt. Conclusion: all devices and assistive technology pass.
+input:
+  prompt: "Use ux-quality-perspective. stage: test-report-review. Read ux.csv and report.md. Report the supplied observable UX outcomes and their precise scope. Device/input/assistive-technology/state dimensions are those in the project material, not a mandatory universal matrix."
+expect:
+  must_contain:
+    - "U1"
+    - "U2"
+    - "U3"
+    - "video-V1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Preserves U1 desktop keyboard error-state focus-lost from video-V1, U2 desktop mouse success receipt-visible from screenshot-S1, and U3 mobile touch error NOT_RUN."
+    - "Does not extrapolate screenshot-S1 to keyboard, mobile, screen-reader or all states; assistive technology unknown remains a gap, not a pass or proven defect."
+    - "Findings/actions cite supplied evidence and request focus/recovery/mobile evidence without claiming backend correctness or global accessibility/release approval."
+  pass_threshold: 1.0

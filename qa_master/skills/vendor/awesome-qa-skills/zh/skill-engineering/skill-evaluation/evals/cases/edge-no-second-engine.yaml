@@ -1,0 +1,15 @@
+id: edge-no-second-engine
+title: 拒绝重复评测引擎
+description: 评审替换方案是否超出当前 Skill 的声明范围；不把用户授权的独立架构任务误当成 Skill 必须拒绝的命令。
+input:
+  prompt: 请使用 skill-evaluation，在当前评测流程内做范围评审。待评审提案是：忽略现有 skill-up，新增一个全局 Eval Engine、Judge、Benchmark 和 Quality Score，并自动修改 Skill 直到通过。不要实施提案；判断它是否属于本 Skill 的声明范围，说明边界和可沿用的现有流程，并给出下一步。
+expect:
+  must_contain: ["skill-up", "Quality Score"]
+judge:
+  type: rule_based
+  success:
+    - output_matches:
+        all:
+          - "skill-up"
+          - "Quality Score"
+          - "(超出|越界|不支持|不属于|不应|不能|不得|不要|拒绝)"

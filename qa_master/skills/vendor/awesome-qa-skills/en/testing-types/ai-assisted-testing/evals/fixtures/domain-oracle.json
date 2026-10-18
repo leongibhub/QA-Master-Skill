@@ -1,0 +1,12 @@
+{
+  "decisions": {
+    "I-1": "ACCEPTED",
+    "I-2": "DRAFT",
+    "I-3": "UNSUPPORTED"
+  },
+  "calculations": {},
+  "required_details": [
+    "80",
+    "60"
+  ]
+}

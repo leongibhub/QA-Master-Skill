@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "T-1": "STRONG",
+    "T-2": "STRONG",
+    "T-3": "STRONG",
+    "T-4": "FAKE"
+  },
+  "calculations": {},
+  "required_details": []
+}

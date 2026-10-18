@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "quality-metrics-design: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use quality-metrics-design to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Dictionary v1 counts new defects by distinct defect_id and first-attempt pass rate by each distinct test_id's first attempt. Events: D1 created/closed/reopened, D2 created, D1 imported twice. T1 first FAIL then rerun PASS; T2 first PASS; T3 planned without execution. K-1 claims four new defects. K-2 replaces the first failure with a rerun and claims 100% first-pass. K-3 recomputes both metrics. K-4 calls T3 passed. Decide WRONG/CALCULABLE/UNKNOWN with entity deduplication, the first-attempt denominator and missing execution.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: new_defects, first_attempt_pass_numerator, first_attempt_pass_denominator. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

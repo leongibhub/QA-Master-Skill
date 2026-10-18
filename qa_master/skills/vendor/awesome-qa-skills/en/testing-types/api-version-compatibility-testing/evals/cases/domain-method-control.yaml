@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "api-version-compatibility-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use api-version-compatibility-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C2 both clients read integer id/priceCents and ignore unknown fields; optional debug does not change units. S_old={id:1, priceCents:1200}; S_new adds debug:"x" only. Support policy covers all four cells; error/deprecation rules are absent.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept successful-response reading in all four cells; do not classify additive debug as universally breaking."
+    - "Leave errors, deprecation and live execution open rather than declaring whole-API compatibility."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

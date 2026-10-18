@@ -1,0 +1,27 @@
+id: "review-complete-operation-control"
+title: "A complete scoped operation permits no blocking design findings"
+description: "A complete scoped operation permits no blocking design findings"
+context:
+  files:
+    "contract.md": |-
+      # Orders v1 read contract
+      GET /orders/{id}; id is a nonempty string. Bearer authentication required; owner must match the authenticated subject.
+      200: {id:string, amount:integer USD cents}; nullable fields: none.
+      400 invalid id: {code:"INVALID_ID",message:string}; 401 no token; 403 non-owner; 404 no order, each with code and message.
+      C1 v1 expects these unchanged fields/types/units and ignores unknown optional fields. No version change is proposed.
+      This operation is read-only and has no pagination; writes and rate-limit policy are outside this review. Logs carry a redacted request_id.
+input:
+  prompt: "Use api-design-quality-review. Review contract.md for GET /orders/{id} only. The contract is the intended design, not execution evidence. Do not mechanically generate findings for non-applicable pagination, idempotent writes, or unspecified extra operations."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Does not falsely report missing path validation, error body, owner authorization, amount type, unit or consumer compatibility: all are explicitly supplied."
+    - "Allows no blocking design findings in this scoped read operation, while marking runtime unassessed and pagination/write-retry dimensions out of scope."
+  pass_threshold: 1.0

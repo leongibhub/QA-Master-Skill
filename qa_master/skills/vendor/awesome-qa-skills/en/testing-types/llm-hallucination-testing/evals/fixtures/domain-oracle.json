@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "H-1": "SUPPORTED",
+    "H-2": "CONTRADICTED",
+    "H-3": "MISSING_SOURCE",
+    "H-4": "UNASSESSABLE"
+  },
+  "calculations": {},
+  "required_details": []
+}

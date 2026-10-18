@@ -1,0 +1,31 @@
+id: "review-stage-pool-hypothesis"
+title: "Throughput knee and queue evidence guide a discriminator"
+description: "Throughput knee and queue evidence guide a discriminator"
+context:
+  files:
+    "stages.csv": |-
+      stage,offered_rps,completed_rps,p95_ms,cpu_pct,pool_busy,pool_capacity,pool_wait_ms,db_span_ms,generator_cpu_pct,dropped_iterations
+      A,100,100,80,40,10,20,0,10,25,0
+      B,200,190,180,60,20,20,50,10,30,0
+      C,400,195,600,62,20,20,400,10,30,0
+input:
+  prompt: "Use performance-bottleneck-analysis. Analyze stages.csv for build B41 in a sandbox. Load generation is not CPU-saturated and has no dropped iterations. Form competing hypotheses, prioritize evidence and propose the smallest isolated distinguishing experiment; no load execution now."
+expect:
+  must_contain:
+    - "190"
+    - "195"
+    - "400"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Identifies completed throughput190->195 despite offered200->400, saturated20/20 pool and pool wait50->400ms while DB span stays10ms; connection/pool queue is a stronger hypothesis than CPU root cause."
+    - "Does not assert pool is proven root cause or high CPU62% alone establishes a cause; alternative DB/lock/long-held connection explanation remains testable."
+    - "Proposes one controlled pool/concurrency or hold-time experiment with fixed workload/env and expected contrasting wait/throughput/DB signals; no wholesale optimization or invented capacity."
+  pass_threshold: 1.0

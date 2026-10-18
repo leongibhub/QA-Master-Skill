@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "boundary-value-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 boundary-value-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 score 为 integer，闭区间 [0,100]；长度按 Unicode codepoints，最多 1。
+    候选 P1 只含 [0,100]。R1 把 -1 与 101 判有效；R2 把单个 "😀" 判长度 2 并拒绝。金额字段允许 [0,100]，未给精度。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "导出 -1,0,1,99,100,101 并正确判 -1/101 无效，其余有效，指出 P1 缺邻值。"
+    - "指出 \"😀\" 为一个 codepoint 的编码口径冲突；金额精度保留未知，不自动用 0.01。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

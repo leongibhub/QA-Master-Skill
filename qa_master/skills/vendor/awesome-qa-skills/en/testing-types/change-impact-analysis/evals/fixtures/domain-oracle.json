@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "O1": "INCLUDE",
+    "O2": "INCLUDE",
+    "E3": "UNKNOWN",
+    "E4": "EXCLUDE"
+  },
+  "calculations": {},
+  "required_details": []
+}

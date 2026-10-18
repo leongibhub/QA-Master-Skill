@@ -1,0 +1,35 @@
+id: "review-complete-analysis-control"
+title: "Complete rules do not acquire fictional gaps or extra domains"
+description: "Complete rules do not acquire fictional gaps or extra domains"
+context:
+  files:
+    "requirement.md": |-
+      # Quantity edit requirement v4, source RQ-doc
+      Goal: users edit quantities safely. Scope: existing owned sandbox order, integer qty; no payment or deletion.
+      R1: authenticated owner may set qty to an integer in [1,10] inclusive.
+      R2: non-owner receives FORBIDDEN and qty does not change.
+      R3: noninteger or outside [1,10] receives INVALID_QTY and qty does not change.
+      R4: successful update returns the new qty; repeated same value keeps that qty.
+      Dependency: stub order store supports read/write in sandbox-A, fixture owner/non-owner accounts and qty1/10/0/11 exist; QA owner role maintains data cleanup.
+      Acceptance: observe stored qty and caller code for R1-R4. No latency target, mobile UI or real payment is in scope. Runtime is not supplied.
+input:
+  prompt: "Use requirements-analysis. Analyze requirement.md for quantity editing. Give traceable QA testability points and any genuine limitations; no new payment/shipping/latency requirement is needed for this explicitly scoped task."
+expect:
+  must_contain:
+    - "R1"
+    - "R2"
+    - "R3"
+    - "R4"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Derives R1 valid1/10, R2 non-owner no change, R3 invalid0/11/noninteger no change and R4 repeat same value; preserves exact observable outcomes/source IDs."
+    - "Does not invent missing actor, quantity limits or error behavior where supplied, or demand out-of-scope rules; runtime remains not supplied."
+  pass_threshold: 1.0

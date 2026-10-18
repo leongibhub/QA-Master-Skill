@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "capacity-planning-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use capacity-planning-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    E1 two instances, fixed mix; SLO p95<=200ms. Measurements:100RPS:p95=150ms/CPU55%;150RPS:p95=260ms. K-1 claims300RPS from CPU55%. K-2 constant arrival130RPS, validated service100RPS, scaling wait60s; calculate backlog. K-3 no one-instance-loss measurements. K-4 measured100RPS satisfies SLO. Decide UNSUPPORTED/CALCULABLE/UNKNOWN/SUPPORTED with conditions/provenance.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: backlog_requests. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

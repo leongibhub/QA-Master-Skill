@@ -1,0 +1,33 @@
+id: "review-state-rule-trace"
+title: "Analysis derives sourced test points without filling unknown timing"
+description: "Analysis derives sourced test points without filling unknown timing"
+context:
+  files:
+    "state.md": |-
+      # Checkout states v5
+      R1: NEW -> RESERVED before charging.
+      R2: RESERVED -> PAID after confirmed payment; each idempotency key may debit at most once.
+      R3: unpaid RESERVED eventually expires -> EXPIRED. TTL and expiry owner are not specified.
+      R4: PAID is terminal for this scope; refunds/shipping excluded.
+input:
+  prompt: "Use requirements-analysis. Analyze state.md@v5. Map each proposed test point to supplied R IDs; separate unknown expiry timing and ownership from confirmed transitions. Prioritize the highest-value closeable questions without writing a full test suite."
+expect:
+  must_contain:
+    - "R1"
+    - "R2"
+    - "R3"
+    - "Open Questions"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Derives R1 NEW->RESERVED before payment, R2 RESERVED->PAID exactly once per key, and R3 unpaid reservation expiry test intent from source, retaining state/version trace."
+    - "TTL and expiry ownership stay unknown; no invented15-minute expiration or automatic expiry after PAID."
+    - "Prioritizes retry/dedup outcome and expiry trigger/owner questions with specific evidence needed; known rules are facts and unstated expectations assumptions."
+  pass_threshold: 1.0

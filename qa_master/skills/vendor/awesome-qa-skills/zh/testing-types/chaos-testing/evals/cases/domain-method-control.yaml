@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "chaos-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 chaos-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    H2 staging 单实例、最多 5% 流量，持续<=30s；若任一重复订单或 30s 错误率>2% 即停止；每 5s 观察，owner=值班 QA；停止后移除扰动并核对账本、错误率恢复基线；另有不注入控制组。仅设计，未执行。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可 H2 对所列范围、停止和恢复条件的可复核性，不强加别的故障类型或阈值。"
+    - "仍标 NOT_RUN，不把准备完整说成实验安全通过或已授权生产注入。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

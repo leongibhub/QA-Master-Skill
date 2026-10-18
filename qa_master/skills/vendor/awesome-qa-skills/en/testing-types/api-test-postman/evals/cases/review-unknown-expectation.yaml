@@ -1,0 +1,18 @@
+id: "review-unknown-expectation"
+title: "Missing business expectation cannot produce an always-passing assertion"
+description: "Missing business expectation cannot produce an always-passing assertion"
+input:
+  prompt: "Use api-test-postman. Create a bounded Postman plan for GET /quote. Supplied example is 200 {amount:11}; no rule defines amount, currency or status guarantees. No execution authorized. Explain what can be checked and what remains unknown."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Does not set expected amount=11 or present status/body existence as a business correctness pass; example versus contract is distinguished."
+    - "Marks the business assertion blocked/unknown pending rule evidence and avoids pm.test(true), unconditional pass, or swallowing failed expectations."
+  pass_threshold: 1.0

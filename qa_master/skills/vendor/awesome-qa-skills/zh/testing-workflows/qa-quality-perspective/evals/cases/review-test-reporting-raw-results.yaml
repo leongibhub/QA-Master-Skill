@@ -1,0 +1,38 @@
+id: "review-test-reporting-raw-results"
+title: "QA test-reporting 有证据成功路径"
+description: "QA test-reporting 有证据成功路径"
+context:
+  files:
+    "results.csv": |-
+      id,build,status,defect
+      T1,B23,PASS,
+      T2,B23,FAIL,B9
+      T3,B23,SKIP,
+      T4,B23,BLOCKED,
+      T5,B23,PASS,
+      T6,B23,NOT_RUN,
+    "defects.json": "[{\"id\":\"B9\",\"priority\":\"P0\",\"status\":\"OPEN\",\"impact\":\"duplicate debit\",\"recovery_evidence\":null}]"
+    "report.md": |-
+      # QA report
+      Build B23: all 6 passed, 100%, no release risk.
+input:
+  prompt: "使用 qa-quality-perspective。stage: test-reporting。读取 results.csv 和 defects.json。给定统计口径 executed=PASS+FAIL，planned 含全部六个 ID。生成有证据的 QA 报告。 保留事实及定性风险依据。"
+expect:
+  must_contain:
+    - "B9"
+    - "T4"
+    - "T6"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "保留 planned 6、executed 3、passed 2、failed 1、skipped 1、blocked 1、NOT_RUN 1；通过率必须写分母 3（2/3），不能写六项全通过。"
+    - "B9 保持 open P0 重复扣款风险并回链 T2，T4/T6 是覆盖/证据缺口，不改成失败或通过。"
+    - "高风险解释为不可逆扣款影响与恢复证据缺失，不用虚构数值乘积评分，不宣布整体质量通过或发布批准。"
+  pass_threshold: 1.0

@@ -1,0 +1,999 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-10-12",
+  "source_revision": "3c97e86e0d144602c4485c93e4b19d84240c6523",
+  "source": "awesome-qa-skills canonical catalog; update when names change",
+  "installation_evidence": "UNKNOWN",
+  "skills": [
+    {
+      "name": "acceptance-criteria-review",
+      "category": "testing-types",
+      "capability": "Acceptance Criteria Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "accessibility-testing",
+      "category": "testing-types",
+      "capability": "Accessibility Testing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "agent-failure-recovery-testing",
+      "category": "testing-types",
+      "capability": "Agent Failure Recovery Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "agent-long-running-testing",
+      "category": "testing-types",
+      "capability": "Long-Running Agent Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "agent-loop-testing",
+      "category": "testing-types",
+      "capability": "Agent Loop Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "agent-memory-testing",
+      "category": "testing-types",
+      "capability": "Agent Memory Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "agent-permission-testing",
+      "category": "testing-types",
+      "capability": "Agent Permission Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "agent-tool-testing",
+      "category": "testing-types",
+      "capability": "Agent Tool Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ai-agent-testing",
+      "category": "testing-types",
+      "capability": "AI Agent Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ai-assisted-testing",
+      "category": "testing-types",
+      "capability": "AI-Assisted Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ai-feature-testing",
+      "category": "testing-types",
+      "capability": "AI Feature Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ai-generated-test-review",
+      "category": "testing-types",
+      "capability": "AI-Generated Test Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ai-safety-testing",
+      "category": "testing-types",
+      "capability": "AI Safety Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-contract-testing",
+      "category": "testing-types",
+      "capability": "API Contract Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-design-quality-review",
+      "category": "testing-types",
+      "capability": "API Design Quality Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-error-contract-testing",
+      "category": "testing-types",
+      "capability": "API Error Contract Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-idempotency-testing",
+      "category": "testing-types",
+      "capability": "API Idempotency Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-negative-testing",
+      "category": "testing-types",
+      "capability": "API Negative Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-pagination-testing",
+      "category": "testing-types",
+      "capability": "API Pagination Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-rate-limit-testing",
+      "category": "testing-types",
+      "capability": "API Rate Limit Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-schema-validation",
+      "category": "testing-types",
+      "capability": "API Schema Validation",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-security-testing",
+      "category": "testing-types",
+      "capability": "API Security Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-test-bruno",
+      "category": "testing-types",
+      "capability": "API Test Bruno",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-test-postman",
+      "category": "testing-types",
+      "capability": "Postman API Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-test-pytest",
+      "category": "testing-types",
+      "capability": "API Test Pytest",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-test-restassure",
+      "category": "testing-types",
+      "capability": "API Test RestAssure",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-test-supertest",
+      "category": "testing-types",
+      "capability": "API Test Supertest",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-testing",
+      "category": "testing-types",
+      "capability": "API Testing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "api-version-compatibility-testing",
+      "category": "testing-types",
+      "capability": "API Version Compatibility Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "authentication-testing",
+      "category": "testing-types",
+      "capability": "Authentication Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "authorization-testing",
+      "category": "testing-types",
+      "capability": "Authorization Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "automation-roi-analysis",
+      "category": "testing-types",
+      "capability": "Automation ROI Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "automation-testing",
+      "category": "testing-types",
+      "capability": "Automation Testing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "boundary-value-testing",
+      "category": "testing-types",
+      "capability": "Boundary Value Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "bug-reporting",
+      "category": "testing-types",
+      "capability": "Bug Reporting",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "business-rule-extraction",
+      "category": "testing-types",
+      "capability": "Business Rule Extraction",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "capacity-planning-analysis",
+      "category": "testing-types",
+      "capability": "Capacity Planning Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "change-impact-analysis",
+      "category": "testing-types",
+      "capability": "Change Impact Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "chaos-testing",
+      "category": "testing-types",
+      "capability": "Chaos Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ci-test-optimization",
+      "category": "testing-types",
+      "capability": "CI Test Pipeline Optimization",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "circuit-breaker-testing",
+      "category": "testing-types",
+      "capability": "Circuit-Breaker Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "code-review",
+      "category": "testing-types",
+      "capability": "Code Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "combinatorial-testing",
+      "category": "testing-types",
+      "capability": "Combinatorial Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "cross-browser-testing",
+      "category": "testing-types",
+      "capability": "Cross-Browser Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "daily-testing-workflow",
+      "category": "testing-workflows",
+      "capability": "Daily Testing Workflow",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "database-design-quality-review",
+      "category": "testing-types",
+      "capability": "Database Design Quality Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "decision-table-testing",
+      "category": "testing-types",
+      "capability": "Decision Table Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "dependency-failure-testing",
+      "category": "testing-types",
+      "capability": "Dependency-Failure Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "disaster-recovery-testing",
+      "category": "testing-types",
+      "capability": "Disaster-Recovery Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "discover-testing",
+      "category": "testing-workflows",
+      "capability": "Testing Skill Discovery",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "distributed-trace-analysis",
+      "category": "testing-types",
+      "capability": "Distributed Trace Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "edge-case-discovery",
+      "category": "testing-types",
+      "capability": "Edge Case Discovery",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "equivalence-partitioning",
+      "category": "testing-types",
+      "capability": "Equivalence Partitioning Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "error-handling-design-review",
+      "category": "testing-types",
+      "capability": "Error Handling Design Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "failover-testing",
+      "category": "testing-types",
+      "capability": "Failover Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "flaky-test-analysis",
+      "category": "testing-types",
+      "capability": "Flaky Test Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "functional-testing",
+      "category": "testing-types",
+      "capability": "Functional Testing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "llm-consistency-testing",
+      "category": "testing-types",
+      "capability": "LLM Consistency Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "llm-evaluation-design",
+      "category": "testing-types",
+      "capability": "LLM Evaluation Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "llm-hallucination-testing",
+      "category": "testing-types",
+      "capability": "LLM Hallucination Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "llm-testing",
+      "category": "testing-types",
+      "capability": "LLM Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "log-analysis",
+      "category": "testing-types",
+      "capability": "Log Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "manual-testing",
+      "category": "testing-types",
+      "capability": "Manual/Exploratory Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "metamorphic-testing",
+      "category": "testing-types",
+      "capability": "Metamorphic Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "metrics-anomaly-analysis",
+      "category": "testing-types",
+      "capability": "Metrics Anomaly Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "mobile-testing",
+      "category": "testing-types",
+      "capability": "Mobile Testing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "mock-quality-review",
+      "category": "testing-types",
+      "capability": "Mock Quality Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "model-based-testing",
+      "category": "testing-types",
+      "capability": "Model-Based Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "multi-agent-testing",
+      "category": "testing-types",
+      "capability": "Multi-Agent Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "multi-role-quality-synthesis",
+      "category": "testing-workflows",
+      "capability": "Multi-Role Quality Synthesis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "mutation-testing-analysis",
+      "category": "testing-types",
+      "capability": "Mutation Testing Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "negative-scenario-discovery",
+      "category": "testing-types",
+      "capability": "Negative Scenario Discovery",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "observability-design-review",
+      "category": "testing-types",
+      "capability": "Observability Design Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "one-page-test-strategy",
+      "category": "testing-types",
+      "capability": "One-Page Test Strategy",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "pairwise-testing",
+      "category": "testing-types",
+      "capability": "Pairwise Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-bottleneck-analysis",
+      "category": "testing-types",
+      "capability": "Performance Bottleneck Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-regression-analysis",
+      "category": "testing-types",
+      "capability": "Performance Regression Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-result-analysis",
+      "category": "testing-types",
+      "capability": "Performance Result Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-test-gatling",
+      "category": "testing-types",
+      "capability": "Performance Test Gatling",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-test-jmeter",
+      "category": "testing-types",
+      "capability": "JMeter Performance Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-test-k6",
+      "category": "testing-types",
+      "capability": "Performance Test k6",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-testing",
+      "category": "testing-types",
+      "capability": "Performance Testing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "performance-workload-modeling",
+      "category": "testing-types",
+      "capability": "Performance Workload Modeling",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "pr-test-impact-analysis",
+      "category": "testing-types",
+      "capability": "PR Test Impact Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "product-quality-perspective",
+      "category": "testing-workflows",
+      "capability": "Product Quality Perspective",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "production-incident-analysis",
+      "category": "testing-types",
+      "capability": "Production Incident Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "production-verification",
+      "category": "testing-types",
+      "capability": "Production Verification",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "project-delivery-perspective",
+      "category": "testing-workflows",
+      "capability": "Project Delivery Perspective",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "prompt-injection-testing",
+      "category": "testing-types",
+      "capability": "Prompt Injection Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "prompt-testing",
+      "category": "testing-types",
+      "capability": "Prompt Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "property-based-testing",
+      "category": "testing-types",
+      "capability": "Property-Based Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "qa-quality-perspective",
+      "category": "testing-workflows",
+      "capability": "QA quality perspective",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "quality-dashboard-design",
+      "category": "testing-types",
+      "capability": "Quality Dashboard Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "quality-debt-analysis",
+      "category": "testing-types",
+      "capability": "Quality Debt Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "quality-gate-design",
+      "category": "testing-types",
+      "capability": "Quality Gate Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "quality-maturity-assessment",
+      "category": "testing-types",
+      "capability": "Quality Maturity Assessment",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "quality-metrics-design",
+      "category": "testing-types",
+      "capability": "Quality Metrics Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "quality-productivity-metrics",
+      "category": "testing-types",
+      "capability": "Quality Productivity Metrics",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "quality-risk-analysis",
+      "category": "testing-types",
+      "capability": "Quality Risk Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "rag-quality-testing",
+      "category": "testing-types",
+      "capability": "RAG Quality Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "rag-retrieval-testing",
+      "category": "testing-types",
+      "capability": "RAG Retrieval Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "recovery-testing",
+      "category": "testing-types",
+      "capability": "Recovery Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "regression-optimization",
+      "category": "testing-types",
+      "capability": "Regression Optimization",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "regression-scope-analysis",
+      "category": "testing-types",
+      "capability": "Regression Scope Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "regression-test-selection",
+      "category": "testing-types",
+      "capability": "Regression Test Selection",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "release-testing-workflow",
+      "category": "testing-workflows",
+      "capability": "Release Testing Workflow",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "reliability-testing",
+      "category": "testing-types",
+      "capability": "Reliability Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirement-ambiguity-analysis",
+      "category": "testing-types",
+      "capability": "Requirement Ambiguity Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirement-conflict-detection",
+      "category": "testing-types",
+      "capability": "Requirement Conflict Detection",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirement-consistency-analysis",
+      "category": "testing-types",
+      "capability": "Requirement Consistency Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirement-gap-analysis",
+      "category": "testing-types",
+      "capability": "Requirement Gap Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirement-quality-review",
+      "category": "testing-types",
+      "capability": "Requirement Quality Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirement-traceability-analysis",
+      "category": "testing-types",
+      "capability": "Requirement Traceability Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirements-analysis",
+      "category": "testing-types",
+      "capability": "Requirements Analysis (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "requirements-analysis-plus",
+      "category": "testing-types",
+      "capability": "Requirements Analysis Plus",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "resilience-testing",
+      "category": "testing-types",
+      "capability": "Resilience Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "retry-testing",
+      "category": "testing-types",
+      "capability": "Retry Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "risk-based-testing",
+      "category": "testing-types",
+      "capability": "Risk-Based Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "root-cause-analysis",
+      "category": "testing-types",
+      "capability": "Root Cause Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "secrets-exposure-review",
+      "category": "testing-types",
+      "capability": "Secrets-Exposure Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "security-requirement-review",
+      "category": "testing-types",
+      "capability": "Security-Requirement Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "security-testing",
+      "category": "testing-types",
+      "capability": "Security Testing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "session-security-testing",
+      "category": "testing-types",
+      "capability": "Session-Security Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "skill-change-verification",
+      "category": "skill-engineering",
+      "capability": "Skill Change Verification",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "skill-evaluation",
+      "category": "skill-engineering",
+      "capability": "Skill Evaluation",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "skill-prose-review",
+      "category": "skill-engineering",
+      "capability": "Skill Prose Contract Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "skill-prose-trim",
+      "category": "skill-engineering",
+      "capability": "Process Prose Trimming",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "skill-quality-review",
+      "category": "skill-engineering",
+      "capability": "Skill Quality Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "sprint-testing-workflow",
+      "category": "testing-workflows",
+      "capability": "Sprint Testing Workflow",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "state-transition-testing",
+      "category": "testing-types",
+      "capability": "State Transition Test Design",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "technical-design-quality-review",
+      "category": "testing-types",
+      "capability": "Technical Design Quality Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "technical-quality-perspective",
+      "category": "testing-workflows",
+      "capability": "Technical quality perspective",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-case-reviewer",
+      "category": "testing-types",
+      "capability": "Test Case Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-case-reviewer-plus",
+      "category": "testing-types",
+      "capability": "Test Case Reviewer Plus",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-case-writing",
+      "category": "testing-types",
+      "capability": "Test Case Writing (English)",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-code-review",
+      "category": "testing-types",
+      "capability": "Test Code Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-data-generation",
+      "category": "testing-types",
+      "capability": "Test Data Generation",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-data-requirement-analysis",
+      "category": "testing-types",
+      "capability": "Test Data Requirement Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-effectiveness-analysis",
+      "category": "testing-types",
+      "capability": "Test Effectiveness Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-gap-analysis",
+      "category": "testing-types",
+      "capability": "Test Gap Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-maintenance-cost-analysis",
+      "category": "testing-types",
+      "capability": "Test Maintenance Cost Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-report-review",
+      "category": "testing-types",
+      "capability": "Test Report Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-reporting",
+      "category": "testing-types",
+      "capability": "Test Reporting",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-runtime-optimization",
+      "category": "testing-types",
+      "capability": "Test Runtime Optimization",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-scope-analysis",
+      "category": "testing-types",
+      "capability": "Test Scope Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-strategy",
+      "category": "testing-types",
+      "capability": "Test Strategy",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-strategy-plus",
+      "category": "testing-types",
+      "capability": "Test Strategy Plus",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-strategy-review",
+      "category": "testing-types",
+      "capability": "Test Strategy Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "test-suite-health-analysis",
+      "category": "testing-types",
+      "capability": "Test Suite Health Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "testability-analysis",
+      "category": "testing-types",
+      "capability": "Testability Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "testcase-writer-plus",
+      "category": "testing-types",
+      "capability": "Testcase Writer Plus",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "testing-bottleneck-analysis",
+      "category": "testing-types",
+      "capability": "Testing Bottleneck Analysis",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "threat-modeling",
+      "category": "testing-types",
+      "capability": "Threat Modeling",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "timeout-testing",
+      "category": "testing-types",
+      "capability": "Timeout Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-cypress",
+      "category": "testing-types",
+      "capability": "Cypress UI Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-playwright",
+      "category": "testing-types",
+      "capability": "Playwright UI Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-puppeteer",
+      "category": "testing-types",
+      "capability": "Puppeteer UI Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-selector-review",
+      "category": "testing-types",
+      "capability": "UI Test Selector Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-selenium",
+      "category": "testing-types",
+      "capability": "Selenium UI Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-strategy",
+      "category": "testing-types",
+      "capability": "UI Test Strategy",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-testcafe",
+      "category": "testing-types",
+      "capability": "TestCafe UI Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-wait-strategy-review",
+      "category": "testing-types",
+      "capability": "UI Test Wait Strategy Review",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ui-test-webdriverio",
+      "category": "testing-types",
+      "capability": "WebdriverIO UI Testing",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "ux-quality-perspective",
+      "category": "testing-workflows",
+      "capability": "UX Quality Perspective",
+      "availability": "UNKNOWN"
+    },
+    {
+      "name": "visual-regression-testing",
+      "category": "testing-types",
+      "capability": "Visual Regression Testing",
+      "availability": "UNKNOWN"
+    }
+  ]
+}

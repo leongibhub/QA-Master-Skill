@@ -1,0 +1,33 @@
+id: "review-located-case-defects"
+title: "用例评审定位弱预期和缺前置"
+description: "用例评审定位弱预期和缺前置"
+context:
+  files:
+    "requirement.md": |-
+      R1: authenticated owner of existing order, feature enabled, setting qty1 stores qty1 and returns UPDATED.
+      R2: feature disabled, setting qty1 returns FEATURE_DISABLED and leaves original qty2 unchanged.
+    "cases.md": |-
+      # Existing cases v1
+      Fields: ID | Preconditions | Steps | Expected
+      TC1 | owned order qty2, authenticated owner, feature disabled | set qty1 | works normally
+      TC2 | not specified | set qty1 | UPDATED
+input:
+  prompt: "使用 test-case-reviewer。仅按 requirement.md 评审 cases.md，以用例ID/行定位植入缺陷、给可观察修订，不从行业常识推断范围外必有漏测。"
+expect:
+  must_contain:
+    - "TC1"
+    - "TC2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "TC1 第3行 works normally 不可观察，disabled-state R2 应为 FEATURE_DISABLED、stored qty仍2。"
+    - "TC2 第4行缺 R1 的认证 owner/现有订单及初始qty前置，修为给定前置并确认stored qty1。"
+    - "按给定验收风险而非格式排优先级，不编支付/性能/安全需求或执行通过。"
+  pass_threshold: 1.0

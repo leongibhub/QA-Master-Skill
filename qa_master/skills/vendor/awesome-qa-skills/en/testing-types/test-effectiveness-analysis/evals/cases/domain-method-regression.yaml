@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-effectiveness-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use test-effectiveness-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Baseline passes99/100. Controlled F1 duplicates a debit; title-only T1 stays green. F2 changes amount; T2 ledger assertion fails. F3 disconnects environment; T3 fails startup without reaching business assertion. F4 is not injected. Separate historical one-week data has1 duplicate-debit escape. Decide MISSED/DETECTED/INCONCLUSIVE/NOT_RUN with injection denominator separate from historical escape;99% pass rate is no effectiveness proof.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "authentication-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 authentication-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 MFA 是本项目登录必需；密码正确后仅挑战中，MFA 成功才发会话。恢复令牌一次性；不存在/存在账户恢复响应均 202/"If eligible, email sent"。
+    C2 同 C1。T4 密码正确→challenged、无 session；MFA 成功→authenticated；R 首次恢复成功、再次拒绝；两种账户恢复响应均 202/相同文案。未提供时序分布或受保护资源权限。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可认证阶段和一次性恢复对照，不把 challenged 当登录失败缺陷。"
+    - "时序枚举和授权结论保持未评估，不由同文案推断所有枚举风险消失。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

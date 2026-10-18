@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "mobile-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use mobile-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Supplied support matrix: Android 14/D1 and iOS 17/D2. Raw coupon=A%2BB must decode once to A+B. B-1 drops coupon on D1 cold start. B-2 retains A+B, correct route and permission on D2 warm start. B-3 debits 20 for op7 before backgrounding, then debits another 20 on resume. B-4 queries op7 on resume and shows paid 20 with one ledger entry. B-5 calls Android 15 passed without execution. Decide FAIL/PASS/NOT_RUN with raw URI, persistent state and matrix gaps.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "one-page-test-strategy"
+interface:
+  display_name: "One-Page Test Strategy"
+  short_description: "One-page strategy with lifecycle, quadrants, lean layers, and iteration feedback; triggers include 一页纸测试策略 and one-page test strategy."
+  default_prompt: "Use the one-page-test-strategy skill to create a goal-driven one-page strategy covering lifecycle stages, test quadrants, lean layers, and iteration feedback."
+policy:
+  allow_implicit_invocation: true

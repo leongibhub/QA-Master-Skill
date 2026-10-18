@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "reliability-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use reliability-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    S2 time availability=available minutes/fully observed minutes, 60 min window, target>=99%. R3 available 59.7/60 min=99.5%; request counts absent; report compares S2 only, leaving long-term reliability unassessed.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept 99.5% for the time SLI/window goal; absent request counts do not invalidate that denominator."
+    - "Do not treat it as first-attempt success or yearly reliability."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

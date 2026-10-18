@@ -1,0 +1,13 @@
+{
+  "decisions": {
+    "S-1": "SCAN_CLEAR",
+    "K-1": "FAIL",
+    "K-2": "PASS",
+    "R-1": "NOT_RUN"
+  },
+  "calculations": {},
+  "required_details": [
+    "2.1.1",
+    "2.4.3"
+  ]
+}

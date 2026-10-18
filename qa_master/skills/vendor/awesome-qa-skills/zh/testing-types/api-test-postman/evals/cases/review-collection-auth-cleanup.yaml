@@ -1,0 +1,85 @@
+id: "review-collection-auth-cleanup"
+title: "Collection 授权作用域和清理具有可观察契约"
+description: "Collection 授权作用域和清理具有可观察契约"
+context:
+  files:
+    "collection.json": |-
+      {
+        "info": {
+          "name": "Orders fixture",
+          "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+        },
+        "item": [
+          {
+            "name": "Login",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/login"
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.globals.set(\"token\", pm.response.json().token);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "CreateOrder",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/orders",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"sku\":\"SKU-1\",\"qty\":1}"
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"status\", () => pm.response.to.have.status(200));"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    "environment.json": "{\"name\":\"sandbox\",\"values\":[{\"key\":\"base_url\",\"value\":\"https://api.example.test\"},{\"key\":\"token\",\"value\":\"PLACEHOLDER\"}]}"
+    "contract.md": |-
+      Login POST /login: 200 {access_token:string}.
+      Create POST /orders: 201 {id:string,sku:"SKU-1",qty:1}; only sandbox fixtures permitted.
+      Cleanup DELETE /orders/{id}: 204 after assertions.
+input:
+  prompt: "使用 api-test-postman。读取 collection.json、environment.json 与 contract.md。允许输出拟修正 Collection，不调用 Newman 或端点。核对 v2.1 结构、token 提取/作用域、订单后置条件及清理顺序。"
+expect:
+  must_contain:
+    - "access_token"
+    - "orderId"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Login 错取 token 而非 access_token，写 globals 又被 environment token 遮蔽；需统一 environment 作用域、登录成功后提取，不写真实凭据。"
+    - "CreateOrder 由 200 修为契约 201，包含 body id/sku/qty 断言和 orderId 捕获，不能只判断 HTTP 成功。"
+    - "检查后使用 DELETE /orders/{{orderId}}，清理 204 断言；保留请求/fixture 身份，Newman 为 NOT_RUN 而非已运行。"
+  pass_threshold: 1.0

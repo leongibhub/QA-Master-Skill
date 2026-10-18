@@ -1,0 +1,18 @@
+id: domain-method-success
+title: "security-requirement-review: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use security-requirement-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    S1 internal project Policy-X v3 requires invoice reads by same-tenant owners only. R1 "system must be secure" lacks subjects/acceptance. R2 requires login for GET invoice but no tenant/owner check; acceptance only "returns 200". No run evidence.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Map invoice, nonowner/foreign-tenant read, Policy-X obligation, server control and allow/deny acceptance; identify vague R1 and incomplete R2."
+    - "Login/200 does not establish authorization; do not invent external standards or compliance."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

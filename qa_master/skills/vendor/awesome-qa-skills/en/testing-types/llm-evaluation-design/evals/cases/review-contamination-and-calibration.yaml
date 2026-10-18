@@ -1,0 +1,69 @@
+id: "review-contamination-and-calibration"
+title: "Evaluation design resolves contamination and judge disagreement"
+description: "Evaluation design resolves contamination and judge disagreement"
+context:
+  files:
+    "dataset.json": |-
+      {
+        "task": "answer from cited product manual",
+        "risk_policy": {
+          "fabrication": "blocker",
+          "semantic_anchor": {
+            "2": "correct answer with supporting citation",
+            "1": "partly correct or weak citation",
+            "0": "contradiction or fabricated fact"
+          }
+        },
+        "samples": [
+          {
+            "id": "A",
+            "split": "train",
+            "family": "reset",
+            "text": "reset settings",
+            "source": "manual-S1"
+          },
+          {
+            "id": "B",
+            "split": "test",
+            "family": "reset",
+            "text": "reset settings",
+            "source": "manual-S1"
+          },
+          {
+            "id": "C",
+            "split": "test",
+            "family": "login",
+            "text": "login steps",
+            "source": "manual-S2"
+          }
+        ],
+        "human_labels": [
+          {
+            "id": "C",
+            "rater1": 2,
+            "rater2": 0
+          }
+        ],
+        "judge_proposal": "show candidate model name and always evaluate new output second"
+      }
+input:
+  prompt: "Use llm-evaluation-design. Design the smallest executable evaluation protocol from dataset.json. Specify dataset split/disposition, deterministic versus semantic checks, anchored calibration, blind order and human review; do not invent evaluation scores."
+expect:
+  must_contain:
+    - "A"
+    - "B"
+    - "C"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Flags A/B exact/family overlap as train/test contamination; isolates by family/source and excludes contaminated B from held-out claims pending new data."
+    - "Uses the supplied 0/1/2 anchor outcomes, calibrates on adjudicated human references including unresolved C 2-vs-0, and reports agreement/disagreement before a judge gate."
+    - "Masks model/version identity and randomizes/counterbalances A/B presentation rather than always new-second; proposes repeated pinned runs and per-stratum reporting, not overall fabricated business gain."
+  pass_threshold: 1.0

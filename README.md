@@ -167,22 +167,17 @@ python -m qa_master check report   # {"state": "PENDING", ...}
 
 带 `boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial` 的是 `qa_master.design_methods` 的**确定性有限合成方法**（无需模型，直接从结构化模型导出可审计用例）；等价类、场景法、分支/条件等由专业指南配合模型完成。详见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)。
 
-> 尚未原生实现的设计方法（model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，由互补库 awesome-qa-skills 提供，见 [互补技能库](docs/COMPLEMENTARY_SKILLS.md)。本仓库逐步把这些高价值方法原生化。
+> 尚未原生实现的设计方法（model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，已随内置的 awesome-qa-skills vendor 广度库提供（见下方「广度技能库」）；`qa-master plan` 会把这些阶段路由到对应 skill。本仓库仍逐步把高价值方法原生化。
 
 注册表只返回本地包中已验证存在的文件，绝不把「选择某一指南」说成已调用模型、已运行测试或已产生结论。这些指南和确定性生成器不等于完整语义 Agent。
 
-## 互补技能库：Awesome QA Skills
+## 广度技能库：内置 Awesome QA Skills（330 skill）
 
-本仓库是**确定性引擎 + 编排 + 6 份指南**，覆盖测试经典主干；[awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills) 是 **165-skill 的广度库**，覆盖 model-based / property-based / metamorphic、Playwright/Selenium/Cypress、k6/JMeter/Gatling、LLM/RAG/Agent 测试、chaos/circuit-breaker 等长尾专类方法与技巧。
+本仓库已把 [awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills) 的 **330 个 skill（165 中文 + 165 英文）** 以 vendor 形式内置到 `qa_master/skills/vendor/awesome-qa-skills/`（10 workflow + 150 testing-type + 5 skill-engineering），作为本仓库的「广度叶子」，随包分发、开箱即用，无需再单独安装。
 
-需要这些长尾方法时，直接安装互补库：
+**路由整合（本仓库独有）**：`qa-master plan` 通过 `core.SKILLS` / `core.DIMENSION_SKILLS` 把规划阶段映射到 canonical skill 名，再在 vendor 里选中中英双语对应 skill，结果输出在 `vendor_skills` 字段。这是 awesome-qa-skills 本身没有的——它有广度，但没有意图路由、`no_execution` 门控、可暂停恢复状态机、来源追踪、企业适配，以及确定性覆盖数组引擎（`boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial`）。
 
-```sh
-npx skills add naodeng/awesome-qa-skills --skill property-based-testing   # 装单个
-npx skills add naodeng/awesome-qa-skills                            # 装整个英文集合
-```
-
-本仓库会逐步把高价值方法原生化（路线图见下）。完整的覆盖对照、缺口清单、安装命令与使用决策见 [互补技能库](docs/COMPLEMENTARY_SKILLS.md)。
+长尾专类（model-based / property-based / metamorphic、Playwright/Selenium/Cypress、k6/JMeter/Gatling、LLM/RAG/Agent 测试、chaos/circuit-breaker 等）现在随本仓库提供；同时本仓库继续把高价值方法原生化。完整的覆盖对照、缺口清单与路线图见 [广度技能库](docs/COMPLEMENTARY_SKILLS.md)。
 
 ## 入口点
 
@@ -205,6 +200,7 @@ flowchart TD
     D -->|测试设计| F{确定性方法?}
     D -->|企业接入?| G{已预配企业适配器?}
     D -->|受控执行| H[本机 Runner<br/>任务调度核心]
+    D -->|长尾专类| V[Vendor 广度库<br/>330 skill · 中英双语]
     F -->|是 · 结构化模型| I[确定性引擎<br/>boundary · decision_table · state_transition · pairwise · combinatorial]
     F -->|否 · 需语义| J[专业指南 + 模型<br/>等价类 · 场景法 · 分支条件 · 安全 · 性能...]
     G -->|否 · 未预配| K[草稿产物<br/>用例 · 覆盖 · 缺口 · 追踪]
@@ -213,6 +209,7 @@ flowchart TD
     I --> K
     J --> K
     G2 --> K
+    V --> K
     K --> L{是否执行?}
     L -->|否| M([DRAFT_UNAPPROVED 交付])
     L -->|是 · 需授权| H
@@ -221,7 +218,7 @@ flowchart TD
     N --> M
 ```
 
-`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。三条关键分支：①意图路由（需求评审 / 测试设计 / 受控执行；企业接入是可选分支，需先在配置页预配适配器，未预配则跳过）；②测试设计里「结构化模型走确定性引擎，语义类走专业指南 + 模型」；③产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
+`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。关键分支：①意图路由（需求评审 / 测试设计 / 受控执行 / 长尾专类路由到 vendor 广度库；企业接入是可选分支，需先在配置页预配适配器，未预配则跳过）；②测试设计里「结构化模型走确定性引擎，语义类走专业指南 + 模型」；③长尾专类（model-based、工具自动化、AI 原生、可靠性等）由内置 330-skill vendor 广度库提供；④产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
 
 ## 仓库结构
 
@@ -230,7 +227,8 @@ QA-Master-Skill/
 ├── qa_master/                # Python 包：CLI、生成器、企业适配、评测运行时
 │   └── skills/
 │       ├── codex/            # Codex 技能入口 + references + examples
-│       └── professional/     # 6 份专业能力指南
+│       ├── professional/     # 6 份专业能力指南
+│       └── vendor/awesome-qa-skills/  # 内置广度库：330 skill（中英双语）
 ├── skills/qa-master/         # 源树入口（非独立安装包）
 ├── examples/                 # 教学模型（边界、决策表、状态迁移）
 ├── docs/                     # 交付边界、验收、评测与验证证据
@@ -273,7 +271,7 @@ CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一�
 | --- | --- |
 | [CODEX_CORE.md](docs/CODEX_CORE.md) | Codex 核心版交付边界 |
 | [SKILL_CAPABILITIES.md](docs/SKILL_CAPABILITIES.md) | 专业能力层设计与验收范围 |
-| [COMPLEMENTARY_SKILLS.md](docs/COMPLEMENTARY_SKILLS.md) | 互补库对照、缺口清单与补齐路线图 |
+| [COMPLEMENTARY_SKILLS.md](docs/COMPLEMENTARY_SKILLS.md) | 广度技能库对照、缺口清单与原生化路线图 |
 | [ENTERPRISE_ADAPTERS.md](docs/ENTERPRISE_ADAPTERS.md) | Jira / Confluence / SynapseRT 接口 |
 | [GITLAB_CI_ATTESTATION.md](docs/GITLAB_CI_ATTESTATION.md) | GitLab CI 制品核验 |
 | [LOCAL_RUNNER.md](docs/LOCAL_RUNNER.md) | 本机 Runner 授权与隔离 |

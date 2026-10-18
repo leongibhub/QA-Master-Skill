@@ -1,0 +1,17 @@
+id: review-repair-regression
+title: "api-test-bruno: sourced repair regression"
+input:
+  prompt: |
+    Use api-test-bruno.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附表 `ID | DECISION | Evidence`，每个 ID 一行，DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: BLOCKED, FAIL, INCOMPLETE, PASS.
+
+    Contract API-v1: POST /orders body {qty:1}, Content-Type application/json; expected statuses[201], expected JSON {qty:1}. A1 observed201/{qty:1}. A2 observed404/{qty:1}. A3 observed201/{qty:2}. A4 no expected statuses and required body missing. A5 empty endpoints. Explain exact payload preservation, no fixed latency or invented auth/body, and generated scaffolds versus actual run. Bruno requires {{baseUrl}}; Supertest target mode must be explicit.
+    决策契约：INCOMPLETE 表示已有端点缺少必要请求或预期数据；BLOCKED 表示端点集合本身为空，没有可生成的范围。两者均不代表真实请求执行结果。
+
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

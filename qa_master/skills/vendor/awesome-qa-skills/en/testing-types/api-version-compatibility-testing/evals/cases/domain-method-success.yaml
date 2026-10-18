@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-version-compatibility-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use api-version-compatibility-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 C_old requires integer priceCents; C_new accepts priceCents or price, interpreting price as integer cents. Policy supports both clients on both servers.
+    S_old returns {priceCents:1200}; S_new returns {price:12}, documented as dollars. T1 C_old/S_new misses a field; C_new/S_new reads 12 cents.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Show four cells; identify C_old/S_new's wire break and C_new/S_new's unit-semantic break."
+    - "Trace to C1/T1/change notes; parsing price does not establish compatibility."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

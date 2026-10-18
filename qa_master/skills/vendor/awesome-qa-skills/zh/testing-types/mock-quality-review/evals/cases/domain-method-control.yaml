@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "mock-quality-review: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 mock-quality-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 PriceService.total(qty) 应调用外部 TaxPort，税率来自 {rate:number}，异常时返回 error 而非 0。
+    C2 同 C1。F3 保留真实 total，注入 TaxPort 的 {rate:0.1}；qty=2、单价50，按项目总价=110 断言；TaxPort 抛异常时断言 error。调用后重置 stub。未提供真实集成结果。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可外部边界 mock 及成功/错误断言，不机械要求删 mock。"
+    - "仍保留真实 TaxPort 合同漂移验证缺口，不能说集成已通过。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

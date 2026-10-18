@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "api-rate-limit-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 api-rate-limit-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 每租户固定窗口 [0,10)、[10,20)，N=3，计所有到达请求；超额 429 且 Retry-After 为距下一窗口的整秒数，额度内 200。
+    C2 同 C1。T2 A@1/2/3→200，A@4→429/Retry-After:6，B@4→200，A@10→200。仅提供这一窗口的响应，没有数据库或生产压测证据。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "逐项认可额度内、超额、隔离与边界恢复响应符合 C2。"
+    - "不把该时间线外推为所有窗口、负载或副作用正确，保留相应缺口。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

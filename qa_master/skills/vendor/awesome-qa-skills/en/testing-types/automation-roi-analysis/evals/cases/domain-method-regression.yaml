@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "automation-roi-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use automation-roi-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    All costs are Human hours; monthly window: build=12h, manual=1h/run, automation+review=0.2h/run. R-1:20 runs/month, maintenance=4h/month, horizon=3 months. R-2:5 runs/month, maintenance=4h/month. R-3:20 runs/month, change raises maintenance to20h/month. R-4:frequency missing. Decide POSITIVE/NO_BREAK_EVEN/UNKNOWN; show R-1 three-month net labor saving and whole-month break-even, without unsourced monetary conversion.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: net_saving_h, break_even_months. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

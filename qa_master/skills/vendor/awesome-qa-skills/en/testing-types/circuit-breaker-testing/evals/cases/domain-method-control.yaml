@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "circuit-breaker-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use circuit-breaker-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 two consecutive dependency failures open for 10 s; half-open permits one concurrent probe, failure reopens for 10 s, success closes. Open returns cached without a dependency call.
+    C2 is C1. T2 t0/t1 fail→open; t2 cached/no dependency; t11 one successful probe→closed; t12 normal success. Failed-probe, rolling-window and real-concurrency logs are absent.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept T2's consecutive-failure and successful-probe path without substituting a rolling-ratio threshold."
+    - "Retain failed-probe/concurrency gaps; one matching path is not full breaker correctness."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

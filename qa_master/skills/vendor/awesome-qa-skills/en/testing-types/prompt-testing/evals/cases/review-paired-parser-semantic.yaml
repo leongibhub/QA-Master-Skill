@@ -1,0 +1,71 @@
+id: "review-paired-parser-semantic"
+title: "Paired prompt outputs use parser and calibrated semantic anchors"
+description: "Paired prompt outputs use parser and calibrated semantic anchors"
+context:
+  files:
+    "pairs.json": |-
+      {
+        "identity": {
+          "baseline_prompt": "P1",
+          "candidate_prompt": "P2",
+          "model": "fixture-model-v1",
+          "temperature": 0,
+          "seeds": [
+            1,
+            2
+          ],
+          "dataset": "D1",
+          "environment": "offline-A"
+        },
+        "schema": {
+          "answer": "string",
+          "source_ids": "array"
+        },
+        "source": {
+          "S1": "reset retains billing history"
+        },
+        "anchors": {
+          "pass": "same source-supported meaning with S1 citation",
+          "fail": "contradiction or unsupported claim"
+        },
+        "pairs": [
+          {
+            "id": "Q1",
+            "baseline": "{\"answer\":\"History remains.\",\"source_ids\":[\"S1\"]}",
+            "candidate": "{\"answer\":\"History is retained.\",\"source_ids\":[\"S1\"]}"
+          },
+          {
+            "id": "Q2",
+            "baseline": "{\"answer\":\"History remains.\",\"source_ids\":[\"S1\"]}",
+            "candidate": "{\"answer\":\"History is deleted.\",\"source_ids\":[\"S1\"]}"
+          },
+          {
+            "id": "Q3",
+            "baseline": "{\"answer\":\"History remains.\",\"source_ids\":[\"S1\"]}",
+            "candidate": "{\"answer\":\"History remains.\",\"source_ids\":\"S1\"}"
+          }
+        ]
+      }
+input:
+  prompt: "Use prompt-testing. Mode prompt-regression. Analyze pairs.json, parsing each JSON output under the supplied schema before applying S1 semantic anchors. Preserve identity and classify each pair; one observed difference is not a distribution-level regression claim."
+expect:
+  must_contain:
+    - "Q1"
+    - "Q2"
+    - "Q3"
+    - "P1"
+    - "P2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Q1 is a valid equivalent paraphrase, no semantic regression; Q2 is schema-valid contradiction of S1; Q3 is an array-type structural failure, not a semantic contradiction."
+    - "PRT findings for Q2/Q3 preserve P1/P2, model/settings/seeds, dataset D1 and input IDs, expected/observed/difference/evidence/validation/Human-decision fields."
+    - "Uses the supplied pass/fail anchors with reference checks, proposes repeated paired runs and blinded order before a broader gate, and makes no release/business approval."
+  pass_threshold: 1.0

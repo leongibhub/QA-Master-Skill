@@ -1,0 +1,15 @@
+id: review-rag-retrieval-neighbor
+title: "discover-testing: sourced repair regression"
+input:
+  prompt: |
+    Use discover-testing.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append `ID | DECISION | Evidence`, one row per ID, using the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: rag-retrieval-testing.
+
+    Route a request with labeled query->document relevance and top-k recall evidence; no answer text is supplied, target installation is unknown. Select retrieval evaluation, not answer-quality judgment. Append a table row `ROUTE | <exact canonical ID> | availability evidence`. The DECISION cell here is the canonical target ID.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-rag-retrieval-neighbor.py
+  timeout_seconds: 30

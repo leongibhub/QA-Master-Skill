@@ -1,0 +1,18 @@
+id: "review-seasonal-control-and-no-baseline"
+title: "Seasonal peak is not a deviation and missing baseline stays unknown"
+description: "Seasonal peak is not a deviation and missing baseline stays unknown"
+input:
+  prompt: "Use metrics-anomaly-analysis. Series A: current Monday12 p95=200ms; previous three Monday12 values are200,200,200ms, while Monday09 normal is100ms. Series C has current200ms only with no historical baseline. Classify both without inventing an alert threshold."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "A matches the same-season/time baseline and is not an evidenced 100% anomaly from an inappropriate09 comparison."
+    - "C baseline deviation is unassessed/unknown, not automatically normal or anomalous; no invented200ms SLO."
+  pass_threshold: 1.0

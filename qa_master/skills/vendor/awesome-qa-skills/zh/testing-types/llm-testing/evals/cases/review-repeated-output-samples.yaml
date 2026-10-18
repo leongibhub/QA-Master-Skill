@@ -1,0 +1,75 @@
+id: "review-repeated-output-samples"
+title: "LLM 样本区分 parser 与校准语义失败"
+description: "LLM 样本区分 parser 与校准语义失败"
+context:
+  files:
+    "outputs.json": |-
+      {
+        "model": "fixture-model-v1",
+        "temperature": 0.3,
+        "seed_policy": "record each seed",
+        "prompt_version": "P1",
+        "schema": {
+          "answer": "string",
+          "citations": "array of source IDs"
+        },
+        "source": {
+          "S1": "reset does not delete billing history"
+        },
+        "rubric": {
+          "pass": "answer preserves S1 meaning and cites S1",
+          "fail": "contradicts S1 or unsupported certainty"
+        },
+        "outputs": [
+          {
+            "id": "O1",
+            "input": "reset effect",
+            "seed": 1,
+            "context": "short",
+            "output": "{\"answer\":\"Billing history remains.\",\"citations\":[\"S1\"]}"
+          },
+          {
+            "id": "O2",
+            "input": "reset effect",
+            "seed": 2,
+            "context": "short",
+            "output": "{\"answer\":\"Billing history is retained.\",\"citations\":[\"S1\"]}"
+          },
+          {
+            "id": "O3",
+            "input": "reset effect",
+            "seed": 3,
+            "context": "long, S1 at beginning",
+            "output": "{\"answer\":\"Billing history is deleted.\",\"citations\":[\"S1\"]}"
+          },
+          {
+            "id": "O4",
+            "input": "reset effect",
+            "seed": 4,
+            "context": "long, S1 at beginning",
+            "output": "{\"answer\":\"Billing history remains.\",\"citations\":\"S1\"}"
+          }
+        ]
+      }
+input:
+  prompt: "使用 llm-testing。分析 outputs.json，不调用模型。逐输出给结构/语义分类、重复/长上下文限制和固定身份的后续设计；用 S1 锚点和等价改写对照校准。"
+expect:
+  must_contain:
+    - "O1"
+    - "O2"
+    - "O3"
+    - "O4"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "O1/O2 措辞不同但结构语义均满足；O3 schema 合法却与 S1 矛盾；O4 answer 语义正确但 citations 应为数组而结构失败。"
+    - "四输出中两项综合成功与结构 3/4 分列，不能用 parser 通过代替任务成功。"
+    - "O3 长上下文锚点遗失为观察，不能称普遍根因；后续固定输入参数、记录来源/seed/版本，重复改变 S1 位置/长度。"
+  pass_threshold: 1.0

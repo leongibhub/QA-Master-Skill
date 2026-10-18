@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "test-case-reviewer-plus: sourced repair regression"
+input:
+  prompt: |
+    Use test-case-reviewer-plus.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附表 `ID | DECISION | Evidence`，每个 ID 一行，DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: NOT_ASSESSED, NO_DISCREPANCY, UNSUPPORTED.
+
+    Calculator contract1+1=2. V1 helper preserves requirement and TC1 exact expected2; analysis NOT_ASSESSED. V2 helper output declares stockP0, payment compensation, coverage complete and T+1 without supporting text. V3 agent reviewed TC1 against the calculator contract, found no discrepancy, but source ownership/version is missing. Assess claims, preserve pending human decisions; absence of discrepancy is limited to this supplied comparison.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

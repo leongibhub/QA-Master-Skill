@@ -1,0 +1,27 @@
+id: "review-red-night-shift"
+title: "Red environment changes the night-shift queue"
+description: "Red environment changes the night-shift queue"
+context:
+  files:
+    "day.json": "{\"shift\":\"22:00-02:00 Asia/Shanghai\",\"capacity_hours\":4,\"build\":\"B17\",\"env\":\"RED\",\"smoke\":\"unavailable\",\"recovery_owner\":\"Lin\",\"items\":[{\"id\":\"P0-payment\",\"priority\":\"P0\",\"status\":\"NOT_RUN\"},{\"id\":\"P2-copy\",\"priority\":\"P2\",\"status\":\"NOT_RUN\"}]}"
+input:
+  prompt: "Use daily-testing-workflow. Read day.json. Make a bounded plan for the 22:00-02:00 shift using start/checkpoint/close milestones. Identify gate status and exactly one next Skill. Do not claim execution results."
+expect:
+  must_contain:
+    - "B17"
+    - "P0-payment"
+    - "Lin"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Marks the start/environment gate red for build B17, assigns/escalates recovery to the supplied owner Lin and uses offline change/case design while smoke is unavailable."
+    - "Does not report P0-payment passed or completed; retains its NOT_RUN/BLOCKED status and postpones P2-copy work."
+    - "Uses shift milestones rather than requiring a morning schedule, and gives one primary handoff with red-environment context."
+  pass_threshold: 1.0

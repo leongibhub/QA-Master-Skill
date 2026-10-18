@@ -14,7 +14,7 @@ from uuid import NAMESPACE_URL, uuid4, uuid5
 
 from .approval import artifact_digest
 from .intent import plan_task
-from .skill_registry import select_skills
+from .skill_registry import select_skills, select_vendor_skills
 from .state_store import save_document
 from .workflow import STEPS, Step, Workflow
 
@@ -283,6 +283,7 @@ class CampaignApplicationService:
                     if step in workflow.steps:
                         workflow.invalidate(step)
             output['professional_guidance'] = select_skills(output['stages'])
+            output['vendor_skills'] = select_vendor_skills(output['stages'])
             output['task_contract'] = deepcopy(contract)
         elif command == 'approve':
             if payload['kind'] not in ('requirements', 'cases', 'execution', 'report', 'plan', 'cycle', 'bug', 'regression', 'test_plan') or not payload['version']:

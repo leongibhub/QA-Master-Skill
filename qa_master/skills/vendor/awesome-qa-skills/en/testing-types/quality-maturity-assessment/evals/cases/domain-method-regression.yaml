@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-maturity-assessment: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use quality-maturity-assessment to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Project F1 rates regression management: L1 requires an approved template; L2 additionally requires runs and failure handling across at least two versions. Team A has a template and an interview claim of regular runs. Team B has the template, v1/v2 runs and failure tracking. M-1 assesses A; M-2 assesses B. M-3 has no security-dimension materials. M-4's hardware dimension is explicitly inapplicable to the software-only product. Decide L1/L2/UNKNOWN/N/A without an invented total score or treating A's claim as L2.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

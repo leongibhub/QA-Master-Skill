@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "decision-table-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 decision-table-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    B1 两布尔条件 member、coupon：00→full，01→coupon10，10→member20，11→member20。coupon 和会员优惠不叠加。
+    P1 表只有 00/01/10，且把 01→member20；11 未覆盖。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "列四组合，定位 01 动作错误与 11 缺规则；说明 10/11 可按已给规则合并 member=true,coupon=don't-care。"
+    - "不编造新的优惠比例或优先级。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

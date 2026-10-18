@@ -1,0 +1,18 @@
+id: "review-equivalent-safe-control"
+title: "Equivalent factual paraphrases do not count as regressions"
+description: "Equivalent factual paraphrases do not count as regressions"
+input:
+  prompt: "Use llm-testing. Source S1: reset keeps billing history. Two schema-valid outputs cite S1: A says \"billing history remains\"; B says \"billing history is retained\". Both model/prompt/dataset versions and settings are pinned. Review semantic equivalence and evidence limits."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Treats A/B as semantically equivalent under S1, not a failure solely from string difference."
+    - "No distribution-level robustness/regression claim is established by two outputs; further repeated evidence is required without declaring a fake confirmed defect."
+  pass_threshold: 1.0

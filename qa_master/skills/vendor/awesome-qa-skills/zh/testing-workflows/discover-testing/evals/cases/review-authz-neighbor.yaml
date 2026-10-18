@@ -1,0 +1,15 @@
+id: review-authz-neighbor
+title: "discover-testing: sourced repair regression"
+input:
+  prompt: |
+    Use discover-testing.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附表 `ID | DECISION | Evidence`，每个 ID 一行，DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: authorization-testing.
+
+    Route a request to check userA can read userB's record by changing objectID; login is already valid. The target is not installed. Name the canonical target and availability gap. Append a table row `ROUTE | <exact canonical ID> | availability evidence`. The DECISION cell here is the canonical target ID.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-authz-neighbor.py
+  timeout_seconds: 30

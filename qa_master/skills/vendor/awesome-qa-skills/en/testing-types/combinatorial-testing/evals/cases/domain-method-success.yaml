@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "combinatorial-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use combinatorial-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    M1 factors A/B/C each {0, 1}, no constraints. D1 triggers only at A=B=C=1 and requires 3-way coverage.
+    P1 suite=000, 011, 101, 110; report says complete pairwise therefore protects D1.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Confirm all pairs are covered but the 3-way universe has 8 tuples, missing 001/010/100/111 including D1's 111."
+    - "Identify strength/obligation mismatch without claiming tests caught a defect."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

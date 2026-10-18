@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "performance-testing: sourced repair regression"
+input:
+  prompt: |
+    Use performance-testing.
+    只分析以下脱敏静态材料，不执行外部操作。按主 Prompt 给出理由、来源、信息缺口和最小验证。最后附表 `ID | DECISION | Evidence`，每个 ID 一行，DECISION 使用所给枚举之一。PASS/FAIL 只表示材料比较，不代表真实测试执行。
+    Allowed DECISION values: FAIL, PASS, UNKNOWN.
+
+    Contract PERF-v2: achieved load >=100 RPS, error rate <=1% of all attempts. P1: requested100 RPS, achieved80 RPS; 8 business failures of400 attempts; CPU95%, generatorCPU99%. P2: achieved110 RPS; 1 business failure of500 attempts; resources recorded, source v2. P3: only requested100 RPS, no achieved count or denominator. Compute error rates and separate load validity, bottleneck inference and unobserved results.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

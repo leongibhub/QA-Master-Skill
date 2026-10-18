@@ -1,0 +1,35 @@
+id: "review-frequency-and-priority"
+title: "Bug facts preserve frequency and severity/priority distinction"
+description: "Bug facts preserve frequency and severity/priority distinction"
+context:
+  files:
+    "policy.md": |-
+      Q7: A confirmed order displays exactly one receipt.
+    "repro.md": |-
+      Build B31, sandbox-user, desktop Chromium.
+      Precondition: one confirmed order O31 and one debit.
+      Steps: log in, open O31, refresh once.
+      Runs: 1 one receipt; 2 two receipt cards; 3 one receipt. No duplicate debit was observed.
+      Evidence: screenshot S31, request R31; Authorization: Bearer ${API_TOKEN}; customer_email=[REDACTED].
+      Receipt feature release is tomorrow; severity/priority policy not supplied.
+input:
+  prompt: "Use bug-reporting. Write a bug report from repro.md and policy.md. Do not infer root cause. Preserve the 1/3 frequency and masked evidence. Assess severity separately from scheduling priority using only supplied facts."
+expect:
+  must_contain:
+    - "Q7"
+    - "1/3"
+    - "B31"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Expected receipt exactly once cites policy.md Q7; repro has account sandbox-user, build B31, login/order/refresh steps and actual two receipts in run 2."
+    - "Frequency stays 1/3 (one of three attempts), never always reproducible; evidence uses redacted request R31 and no real credential."
+    - "Severity rationale uses duplicate receipt impact (no double debit); priority uses upcoming receipt release, and neither is conflated with a financial-loss root cause."
+  pass_threshold: 1.0

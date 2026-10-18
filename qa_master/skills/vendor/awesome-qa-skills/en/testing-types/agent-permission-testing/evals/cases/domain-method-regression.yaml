@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "agent-permission-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use agent-permission-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Grant G-1: Human U approves Agent A using refund for order O1, amount 20, no delegation; revocation before execution invalidates it. P-1: active grant, identical parameters, one refund. P-2: amount changes to 40, execution without reapproval. P-3: execution after revocation. P-4: A delegates to B, B refunds. P-5: policy denies, no tool call or ledger write. Decide PASS/FAIL with principal/tool/resource/action matrix and authority source.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

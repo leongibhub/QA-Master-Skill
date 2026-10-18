@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-version-compatibility-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 api-version-compatibility-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 C_old 必须读取 integer priceCents；C_new 接受 priceCents 或 price，price 表示整数 cents；政策要求两客户端均可读两服务端。
+    S_old 响应 {priceCents:1200}；S_new 响应 {price:12} 且变更说明 price 单位为 dollars。T1 C_old/S_new 缺字段，C_new/S_new 读取 12 cents。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "列四格矩阵，指出 C_old/S_new 的 wire 破坏与 C_new/S_new 的单位语义破坏。"
+    - "来源关联 C1/T1/变更说明，不因 C_new 能解析 price 就判兼容。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

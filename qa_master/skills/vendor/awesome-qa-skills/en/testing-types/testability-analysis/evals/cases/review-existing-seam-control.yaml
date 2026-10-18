@@ -1,0 +1,28 @@
+id: "review-existing-seam-control"
+title: "Existing safe test seams are reused instead of adding backdoors"
+description: "Existing safe test seams are reused instead of adding backdoors"
+context:
+  files:
+    "interfaces.txt": |-
+      CheckoutService(clock:Clock,rng:SeededRNG,payment:PaymentProvider).
+      Clock.now(), SeededRNG.next(), PaymentProvider.debit(key,amount).
+      GET /operations/{operation_id}: tenant authorization required; masked status only.
+    "design.md": |-
+      # Checkout v9
+      operation_id propagates API/queue/worker. Production uses system clock/RNG and real authorized provider. Isolated tests use fake Clock/seeded RNG/payment stub configured only in sandbox; no client-accessible overrides.
+      No runtime test record supplied.
+input:
+  prompt: "Use testability-analysis. Mode architecture-testability-review. Review interfaces.txt and design.md. The supplied seams exist; separate static readiness from execution. Do not propose mandatory duplicate debug endpoints or weaker auth."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Recognizes injected Clock/RNG/PaymentProvider, sandbox dependency fake, operation_id/status and tenant-authorized read path; no false missing-seam blocker."
+    - "Reuses those controls with targeted deterministic/replay validation; no production auth bypass, real write, unconditional testability PASS or zero-risk claim."
+  pass_threshold: 1.0

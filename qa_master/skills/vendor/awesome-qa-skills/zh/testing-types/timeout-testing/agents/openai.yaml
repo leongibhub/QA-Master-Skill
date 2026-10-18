@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: timeout-testing
+interface:
+  display_name: "超时测试"
+  short_description: "依据输入证据进行超时测试分析与验证准备"
+  default_prompt: "使用 timeout-testing 技能，根据已提供证据开展分析，并明确假设、缺口和验证边界。"
+policy:
+  allow_implicit_invocation: true

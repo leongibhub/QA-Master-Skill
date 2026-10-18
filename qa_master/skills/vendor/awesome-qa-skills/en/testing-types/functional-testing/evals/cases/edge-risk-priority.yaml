@@ -1,0 +1,25 @@
+id: edge-risk-priority
+title: "Functional testing: cut scope for a short window"
+description: |
+  Many features + short window => P0 focus and deferrals.
+
+input:
+  prompt: |
+    Use functional-testing. Features: login, search, checkout, payment, coupons, points, tickets, admin reports.
+    Half-day release window. Keep only critical paths and explain what can be deferred.
+
+expect:
+  must_contain:
+    - "P0"
+  must_not_contain:
+    - "TODO"
+
+judge:
+  type: rule_based
+  success:
+    - output_matches:
+        all:
+          - "P0"
+          - "(?i)(critical path|critical scenario|core flow|release gate)"
+          - "(?i)(defer|deferred|deferral|out of scope|not in this pass)"
+          - "(?i)risk"

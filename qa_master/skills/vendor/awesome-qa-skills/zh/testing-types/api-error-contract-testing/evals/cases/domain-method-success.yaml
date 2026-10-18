@@ -1,0 +1,20 @@
+id: domain-method-success
+title: "api-error-contract-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 api-error-contract-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 错误合同 v1：POST /orders 和 POST /quotes 的 INVALID_QTY 均为 400；body 必需 code:string、requestId:string；retryable=false；不得包含 stack。
+    T1 /orders 响应 400 {code:INVALID_QTY,requestId:r1,retryable:false}，日志 requestId=r1。
+    T2 /quotes 响应 422 {code:INVALID_QTY,retryable:true,stack:"/srv/quote.py:18"}，日志 requestId=r2。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "将 T2 的 422、缺 requestId、retryable=true 与 stack 分别关联到 C1，给出可复核理由。"
+    - "将 T1 作为合法对照，不能因为 r1 和 r2 不同就认定关联 ID 冲突。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

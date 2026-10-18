@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-negative-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 api-negative-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 POST /items：qty 必需、非 null、integer 1..5；note 可省略，存在时为非空 string 且最多 8 codepoints；body<=100 bytes；跨租户拒绝 403。字段违规 400/INVALID_INPUT，无新 item。
+    T1 qty:null→201，D1 新 item I1。T2 qty:6→400/INVALID_INPUT，D2 无新 item。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "定位 T1 的 null 被接受且产生 I1，引用 C1；认可 T2 合法拒绝。"
+    - "候选区分缺失/null/空串/类型/6/长度/字节大小/跨租户，并只按 C1 写状态码。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

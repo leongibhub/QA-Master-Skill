@@ -1,0 +1,84 @@
+id: "review-mandatory-budget-infeasible"
+title: "强制集合预算不足必须显式暴露"
+description: "强制集合预算不足必须显式暴露"
+context:
+  files:
+    "inventory.json": |-
+      {
+        "budget_minutes": 8,
+        "changed_risks": [
+          "Q1",
+          "Q2"
+        ],
+        "tests": [
+          {
+            "id": "T0",
+            "minutes": 2,
+            "depends": [],
+            "risks": [],
+            "mandatory": true
+          },
+          {
+            "id": "T1",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T2",
+            "minutes": 5,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q2"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T3",
+            "minutes": 3,
+            "depends": [],
+            "risks": [
+              "copy"
+            ],
+            "mandatory": false
+          },
+          {
+            "id": "T4",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": false
+          }
+        ]
+      }
+input:
+  prompt: "使用 regression-test-selection。使用 inventory.json，但可用预算8分钟，强制 T0/T1/T2 需11分钟。选择/报告不能静默删风险覆盖，说明最小所需决定。"
+expect:
+  must_contain:
+    - "T0"
+    - "T1"
+    - "T2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "预算不可行，需11而仅8，保留全部强制 ID/依赖，不能称已有满足预算的充分子集。"
+    - "需至少额外3分钟或明确授权范围/风险取舍，删项不能写零残余风险。"
+  pass_threshold: 1.0

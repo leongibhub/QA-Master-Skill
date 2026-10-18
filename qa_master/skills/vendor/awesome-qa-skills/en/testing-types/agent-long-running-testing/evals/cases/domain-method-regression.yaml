@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "agent-long-running-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use agent-long-running-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Protocol L-v1: checkpoint v2 records committed steps; expired leases cannot commit; one execution per task_id; cancellation after commit returns completed. L-1: A commits before crash; v2 recovery runs only B; active resources=0. L-2: recovery repeats A with a second write. L-3: expired lease=4 still commits. L-4: cancellation follows commit; state completed, active resources=0. Decide PASS/FAIL for each, checking versions, writes, and release evidence.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

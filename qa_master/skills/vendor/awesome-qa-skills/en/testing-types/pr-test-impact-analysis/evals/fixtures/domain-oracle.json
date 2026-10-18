@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "E1": "INCLUDE",
+    "E2": "INCLUDE",
+    "E3": "COVERAGE_GAP",
+    "E4": "UNKNOWN",
+    "E5": "EXCLUDE"
+  },
+  "calculations": {},
+  "required_details": []
+}

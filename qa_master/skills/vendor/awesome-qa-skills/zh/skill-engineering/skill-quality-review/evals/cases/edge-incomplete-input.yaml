@@ -1,0 +1,18 @@
+id: edge-incomplete-input
+title: 缺少审查材料
+description: 用户要求结论但没有提供 Skill 包或环境。
+input:
+  prompt: 请确认这个 Skill 包已经通过质量审查，但不提供文件、范围、目标或运行环境。
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  context:
+    profile: minimal
+    final_message: include
+    transcript: omit
+    workspace_diff: include
+    generated_files: include
+  criteria:
+  - Do not certify quality or runtime success without the package or evidence; mark the result unassessed or evidence insufficient, with equivalent wording accepted.
+  - Identify the missing package files and scope or target needed to continue. Do not invent findings or a passing run.
+  pass_threshold: 1.0

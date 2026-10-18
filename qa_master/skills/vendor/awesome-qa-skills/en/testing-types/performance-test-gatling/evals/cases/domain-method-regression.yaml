@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "performance-test-gatling: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use performance-test-gatling to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    The synthetic build record establishes Java DSL/Gatling 3.13/JDK 17 and successful offline test-compile. G-1 has one request per user, no loops/retries, constantUsersPerSec(10).during(2), and 20 observed requests over 2 seconds. G-2 calls constantConcurrentUsers(10) a 10 RPS profile without completion counts. G-3 uses 5 queue feeder rows for 20 users feeding once and hides exhaustion at the sixth consumption. G-4 invents p95<500ms and calls it passed without an SLO. Decide VALID/UNSUPPORTED/FAIL/UNKNOWN, keeping compilation separate from runtime gates.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

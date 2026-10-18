@@ -1,0 +1,22 @@
+id: "review-unstarted-p0"
+title: "Priority checkpoint cuts P2 before unstarted P0"
+description: "Priority checkpoint cuts P2 before unstarted P0"
+input:
+  prompt: "Use daily-testing-workflow. At the priority checkpoint, environment B18 is green. Two hours remain; P0-refund requires 90 minutes and is NOT_RUN; P2-label requires 60 minutes and is in progress. Replan, state the gate failure, and hand off one next Skill."
+expect:
+  must_contain:
+    - "P0-refund"
+    - "P2-label"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Shows P0 not started as a failed checkpoint, makes P0-refund next, and defers/cuts P2-label because 150 minutes exceed 120 minutes."
+    - "Does not upgrade P0 to completed/passed or hide the capacity trade-off; next handoff focuses on P0 execution with one primary Skill."
+  pass_threshold: 1.0

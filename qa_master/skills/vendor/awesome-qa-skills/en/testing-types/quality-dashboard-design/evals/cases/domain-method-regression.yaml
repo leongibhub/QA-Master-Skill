@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "quality-dashboard-design: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use quality-dashboard-design to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Project gates: an open P0 blocks; data older than 24h is STALE; tests without execution are NOT_RUN. D-1 has 99/100 passes and one open P0. D-2 uses a 48-hour-old green source. D-3 shows zero failures and green despite no test run. D-4 has current 100/100 evidence, no P0, drill-down to run17 and a complete definition/window. Decide BLOCKED/STALE/NOT_RUN/PASS with decision/source/action mapping; missing data is not zero.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

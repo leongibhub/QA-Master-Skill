@@ -1,0 +1,32 @@
+id: "review-correct-patch-control"
+title: "等价正确 Patch 允许无发现"
+description: "等价正确 Patch 允许无发现"
+context:
+  files:
+    "patch.diff": |-
+      --- a/calc.py
+      +++ b/calc.py
+      @@ -1,2 +1,2 @@
+       def total(values):
+      -    return sum(values)
+      +    return sum(values, 0)
+    "calc.py": |-
+      def total(values):
+          return sum(values, 0)
+    "contract.md": |-
+      Values are a list of integer prices. Empty list total is 0.
+input:
+  prompt: "使用 code-review。审阅 fixture 仓库 orders 的 commit abc123、patch.diff 与 calc.py，范围仅整数金额累加。输出 P0/P1/P2（允许 None），不能为填表编造缺陷。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "身份和变更双门禁满足；给定整数价格契约下 sum(values,0) 与 sum(values) 等价且空列表都为 0，不误报财损/null/并发。"
+    - "P0/P1/P2 可为空，说明静态范围与未运行 runtime，不能自动批准发布。"
+  pass_threshold: 1.0

@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "api-schema-validation"
+interface:
+  display_name: "API Schema 校验"
+  short_description: "依据已提供证据设计API Schema 校验，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the api-schema-validation skill to produce ASV-## findings without claiming execution."
+policy:
+  allow_implicit_invocation: true

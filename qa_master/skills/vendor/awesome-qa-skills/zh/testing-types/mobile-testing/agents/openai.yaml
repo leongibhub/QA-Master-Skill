@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "mobile-testing"
+interface:
+  display_name: "移动端测试（中文版）"
+  short_description: "依据已提供证据分析移动端测试（中文版），明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the mobile-testing skill to complete this testing task with structured outputs and practical next steps."
+policy:
+  allow_implicit_invocation: true

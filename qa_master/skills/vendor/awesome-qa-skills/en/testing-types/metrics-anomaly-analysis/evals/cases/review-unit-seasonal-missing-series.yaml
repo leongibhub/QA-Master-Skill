@@ -1,0 +1,38 @@
+id: "review-unit-seasonal-missing-series"
+title: "Metric anomaly uses the supplied baseline and missing-value semantics"
+description: "Metric anomaly uses the supplied baseline and missing-value semantics"
+context:
+  files:
+    "series.csv": |-
+      window,region,p95_ms,requests
+      week1-Mon-09,A,100,100
+      week1-Mon-09,B,100,100
+      week2-Mon-09,A,110,100
+      week2-Mon-09,B,100,100
+      week3-Mon-09,A,90,100
+      week3-Mon-09,B,100,100
+      current-Mon-09:00,A,200,100
+      current-Mon-09:00,B,100,100
+      current-Mon-09:01,A,,0
+      current-Mon-09:02,A,200,100
+input:
+  prompt: "Use metrics-anomaly-analysis. Analyze series.csv: one-minute samples, p95 in milliseconds; blank value with requests0 is missing, not zero latency. The baseline is the three prior Monday-09 windows. B40 deploy occurred at current 09:00; no causal experiment exists. Do not average percentiles into a global p95."
+expect:
+  must_contain:
+    - "09:01"
+    - "100"
+    - "200"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Region A baseline mean of the supplied window p95 values is 100ms, observed200ms is +100ms/+100%; B remains100ms. This is a baseline of window statistics, not a pooled percentile."
+    - "09:01 missing remains a collection/data gap, so cannot assert an uninterrupted three-minute anomaly or interpolate zero."
+    - "Splits by region, preserves seasonal baseline and treats deployment alignment as correlation requiring a controlled comparison or query, not proven root cause/business loss."
+  pass_threshold: 1.0

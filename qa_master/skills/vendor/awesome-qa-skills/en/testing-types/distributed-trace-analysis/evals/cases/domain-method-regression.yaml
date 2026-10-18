@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "distributed-trace-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use distributed-trace-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Single clock:root R[0,100]ms; synchronous children A[10,70], B[40,90], both parent=R. X-1 claims end-to-end210ms by100+60+50. X-2 asks for observed exclusive time of R. X-3 asynchronous C links to R, no timing, asserted as root cause. X-4 queue enqueue20/dequeue35ms. Decide WRONG/CALCULABLE/UNKNOWN; show interval union and queue calculation without root-cause inference from duration.
+    Report calculations in a separate `METRIC | VALUE | Unit/evidence` table using these METRIC keys: observed_exclusive_ms, queue_ms. VALUE contains only the number.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

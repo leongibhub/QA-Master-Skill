@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "agent-loop-testing: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 agent-loop-testing 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    协议 Loop-v4：连续 3 个无进展周期升级；费用硬预算 1 元，触顶停止。B-1：同参数 search 与同观察重复 3 次，无状态变化，随后继续第 4 次。B-2：仅 2 次重复但累计费用=1 元，下一步未调用并终态 budget_stop。B-3：3 次调用每次获得新有效记录，目标前进且费用 0.6 元，继续执行。分别 PASS/FAIL，解释动作/观察去重与预算优先级。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

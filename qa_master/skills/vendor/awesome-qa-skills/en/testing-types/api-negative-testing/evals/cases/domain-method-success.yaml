@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "api-negative-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use api-negative-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 POST /items: qty required, non-null, integer 1..5; optional note, if present nonempty string of at most 8 codepoints; body<=100 bytes; foreign tenants rejected with 403. Field violations give 400/INVALID_INPUT without a new item.
+    T1 qty: null→201, D1 new item I1. T2 qty:6→400/INVALID_INPUT, D2 no new item.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Trace T1's acceptance and I1 side effect to C1; accept T2's correct rejection."
+    - "Separate missing/null/empty/type/6/length/byte-size/foreign-tenant candidates and use only C1's status rules."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

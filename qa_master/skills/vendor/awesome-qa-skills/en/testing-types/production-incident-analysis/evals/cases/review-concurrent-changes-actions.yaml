@@ -1,0 +1,73 @@
+id: "review-concurrent-changes-actions"
+title: "Incident timeline distinguishes observation, approval and causality"
+description: "Incident timeline distinguishes observation, approval and causality"
+context:
+  files:
+    "incident.json": |-
+      [
+        {
+          "time": "2026-10-06T09:00:00Z",
+          "id": "C1",
+          "event": "deploy B50",
+          "status": "executed"
+        },
+        {
+          "time": "2026-10-06T09:01:00Z",
+          "id": "C2",
+          "event": "cache config changed",
+          "status": "executed"
+        },
+        {
+          "time": "2026-10-06T09:02:00Z",
+          "id": "S1",
+          "event": "errors 1% -> 8%"
+        },
+        {
+          "time": "2026-10-06T09:03:00Z",
+          "id": "A1",
+          "event": "scale api 2 -> 4",
+          "status": "executed",
+          "result": "errors remain8%"
+        },
+        {
+          "time": "2026-10-06T09:06:00Z",
+          "id": "A2",
+          "event": "rollback B50",
+          "status": "approved_not_executed"
+        },
+        {
+          "time": "2026-10-06T09:08:00Z",
+          "id": "A3",
+          "event": "cache revert",
+          "status": "executed",
+          "result": "errors2%"
+        },
+        {
+          "time": "2026-10-06T09:08:00Z",
+          "id": "L1",
+          "event": "offered load reduced 400 -> 100RPS",
+          "status": "observed"
+        }
+      ]
+input:
+  prompt: "Use production-incident-analysis. Analyze incident.json; no production actions are authorized. Reconstruct the timeline, mitigation effectiveness and competing causes, separating proposed, approved and executed actions with validation/rollback prerequisites."
+expect:
+  must_contain:
+    - "A1"
+    - "A2"
+    - "A3"
+    - "L1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Keeps C1/C2 changes before S1 symptom; A1 scale had no observed improvement; A3 cache revert coincides with errors8->2% but L1 load also changed."
+    - "Does not call B50 rollback executed: A2 is approved_not_executed. Does not call cache revert a proven root cause because load reduction is a confounder."
+    - "Proposes one controlled config/load discriminator or evidence query, records current residual errors2%, and attaches owner authorization/rollback/verification to any risky proposed action without executing it."
+  pass_threshold: 1.0

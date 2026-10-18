@@ -1,0 +1,22 @@
+id: "review-continuous-flow"
+title: "持续流使用事件而非编造日期"
+description: "持续流使用事件而非编造日期"
+input:
+  prompt: "使用 sprint-testing-workflow。团队使用持续流，WIP 上限 2，没有迭代日期。ST-1 有可审查变更和绿色 smoke，ST-2 缺测试数据；合并候选时触发集成回归，工作项完成时评审。映射测试阶段/门禁并指定下一焦点交接。"
+expect:
+  must_contain:
+    - "ST-1"
+    - "ST-2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "按工作项和合并候选事件表达，不编造 Day 1/12 日期；保留就绪、功能完成和集成/退出证据。"
+    - "ST-2 仍因数据阻断，不能借 ST-1 绿色 smoke 记完成；下一交接唯一且包含当前工作项门禁。"
+  pass_threshold: 1.0

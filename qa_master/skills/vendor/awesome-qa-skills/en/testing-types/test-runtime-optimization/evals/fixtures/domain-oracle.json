@@ -1,0 +1,13 @@
+{
+  "decisions": {
+    "T1": "ACCEPT",
+    "T2": "REJECT",
+    "T3": "NOT_COMPARABLE",
+    "T4": "ESTIMATE"
+  },
+  "calculations": {
+    "baseline_seconds": 130,
+    "candidate_seconds": 90
+  },
+  "required_details": []
+}

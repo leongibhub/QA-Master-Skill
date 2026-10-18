@@ -1,0 +1,38 @@
+id: "review-reachable-null-defect"
+title: "A reachable removed guard still yields a located finding"
+description: "A reachable removed guard still yields a located finding"
+context:
+  files:
+    "patch.diff": |-
+      --- a/user.py
+      +++ b/user.py
+      @@ -1,5 +1,3 @@
+       def name(repo, ident):
+           u = repo.find(ident)
+      -    if u is None:
+      -        return None
+           return u["name"]
+    "user.py": |-
+      def name(repo, ident):
+          u = repo.find(ident)
+          return u["name"]
+    "contract.md": |-
+      find returns a mapping with name when present and None when absent; name returns None for absent user.
+input:
+  prompt: "Use code-review. Review orders commit bad789, patch.diff and user.py. Public find() may return None under the supplied contract. Give located impact and minimal correction."
+expect:
+  must_contain:
+    - "user.py"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Identifies user.py:3 dereferencing u[\"name\"] after removed None guard; trigger is find() returning None and observable error is TypeError, not an invented security issue."
+    - "Recommends restoring the guard or an equivalent declared not-found path and a focused None/valid-user regression test."
+  pass_threshold: 1.0

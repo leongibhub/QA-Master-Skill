@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "G-1": "UNKNOWN",
+    "G-2": "BLOCKED",
+    "G-3": "FAIL",
+    "G-4": "PASS",
+    "G-5": "UNKNOWN"
+  },
+  "calculations": {},
+  "required_details": []
+}

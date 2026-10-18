@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "disaster-recovery-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use disaster-recovery-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 region A fails to region B. RTO<=60 s from failure to business checkout readiness; RPO<=15 s from failure to latest restored commit point.
+    T1 failure 10:00:00; B health 10:00:30; identity dependency delays checkout until 10:01:10; actual restored point=09:59:40. Backup existence only, no restore validation.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Calculate business RTO=70 s and RPO=20 s, both over C1; do not substitute 30 s health readiness."
+    - "Identify identity/backup-restorability/consistency gaps without inventing a successful restore test."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

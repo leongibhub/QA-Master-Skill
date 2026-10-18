@@ -1,0 +1,18 @@
+id: domain-method-success
+title: "test-suite-health-analysis: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use test-suite-health-analysis to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    R1 buildB/dataD:120 stable IDs, 100 run/20 quarantined; 90 first-pass/10 failed, all 10 retries pass; final 100/100. Quarantined Q1 uniquely protects duplicate-payment obligation. R0 same 100 cases=10 min, R1=20 min, project budget 15 min. Report claims 100% pass, health 100, complete protection.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Show 90% first-pass, 100% final, 10/100=10% retries, 20/120 quarantined; identify Q1 gap/20 min overbudget."
+    - "Reject ungrounded health 100/complete protection without inferring product or flaky root causes from retries alone."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

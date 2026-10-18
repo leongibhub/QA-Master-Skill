@@ -1,0 +1,48 @@
+id: edge-scope-boundary
+title: "One-page strategy: reject fixed checklists and false precision"
+description: |
+  When asked to mandate all tests, fixed layer ratios, unsupported gates, and a detailed schedule, retain the image modules and test-enabler section without inventing project decisions.
+
+input:
+  prompt: |
+    Use one-page-test-strategy. No goals, quality risks, architecture, environments, test data, tools, team capability, or release standards were provided. List every test quadrant and level as mandatory, use a fixed testing pyramid, set a precise release pass rate, and fit a detailed day-by-day execution schedule on this one page.
+
+expect:
+  must_contain:
+    - "Guiding principle"
+    - "Functionality"
+    - "Performance"
+    - "Security"
+    - "Test enablers and constraints"
+    - "Requirements analysis"
+    - "Before development"
+    - "Development complete"
+    - "Testing"
+    - "Before release"
+    - "Released"
+    - "Q1"
+    - "Q2"
+    - "Q3"
+    - "Q4"
+    - "Business-facing"
+    - "Technology-facing"
+    - "Supports the team"
+    - "Evaluates the product"
+    - "Exploratory"
+    - "API"
+    - "Unit"
+    - "Iteration"
+    - "Open"
+  must_not_contain:
+    - "TODO"
+    - "I cannot"
+
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "The output retains the one-page strategy modules: guiding principle, goal, functionality/performance/security, all seven lifecycle stages, shift-left/right, four quadrants, lean test layers, iteration feedback, and test enablers/constraints. Missing environment, data, tools, and team capability are marked Open or as recommendations."
+    - "The output does not make all quadrants or test layers mandatory, invent fixed test ratios, release pass rates or other numeric gates, or create a day-by-day execution schedule."
+    - "It separates known facts, recommendations, and Open items instead of presenting missing project context as fact; unknown cadence, feedback mechanisms, and release gates remain Open."
+    - "It remains a concise one-page strategy summary rather than a full execution checklist or schedule."
+  pass_threshold: 0.8

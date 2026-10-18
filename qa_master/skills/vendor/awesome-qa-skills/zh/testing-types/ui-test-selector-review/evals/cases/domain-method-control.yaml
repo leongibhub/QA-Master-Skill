@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "ui-test-selector-review: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 ui-test-selector-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    D3 #billing button[data-action="commit"] 在所有给定语言/状态均唯一；data-action是项目稳定测试合同，不受样式影响。T3 使用CSS #billing button[data-action="commit"]，目标保存billing。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可稳定有作用域且唯一的CSS，不仅因为不是role/testid就判缺陷。"
+    - "将可见性/未来状态/真实运行证据未给的部分标缺口，不声称永久稳定。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "resilience-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use resilience-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 recommendation failure permits hidden recommendations but checkout remains available; one charge per order; recommendations return within 30 s of dependency recovery.
+    T1 normal before; during failure checkout succeeds/recommendations hidden; payment retry charges O1 twice; dependency recovers t100, recommendations still hidden t150.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept hidden recommendations as allowed degradation but identify duplicate charges and recovery beyond 30 s."
+    - "Do not declare overall resilience from available checkout or equate material with a chaos run/long-term reliability."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "llm-hallucination-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use llm-hallucination-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Policy D1-v2 section 2 permits returns within 14 days of receipt; section 3 excludes shipping refunds. H-1 claims returns within 14 days. H-2 claims shipping is refunded. H-3 claims section 9 grants lifetime warranty, although the supplied document contains only sections 1–3 and no warranty information. H-4 claims an overseas clause was added today, but the current source is inaccessible. Map each to SUPPORTED/CONTRADICTED/MISSING_SOURCE/UNASSESSABLE; do not let one supported claim approve the whole answer.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,29 @@
+id: "review-competing-hypotheses"
+title: "Competing hypotheses retain counter-evidence and a minimal discriminator"
+description: "Competing hypotheses retain counter-evidence and a minimal discriminator"
+context:
+  files:
+    "evidence.md": |-
+      H1: CPU saturation. H2: leaked pool leases.
+      09:00 deploy B60;09:01 load100->200RPS;09:03 wait5s, pool20/20, CPU40%. Last log: request timeout.
+      No lease release records or source code provided. Same process restart at09:05 restores pool0/20 and latency, but load also returns100RPS.
+input:
+  prompt: "Use root-cause-analysis. Analyze evidence.md. Compare H1 CPU saturation and H2 leaked pool leases; distinguish trigger, contributors, symptom and root-cause certainty. Propose one minimal isolated discriminator; do not run it."
+expect:
+  must_contain:
+    - "H1"
+    - "H2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Uses CPU40% as counter-evidence to CPU saturation, pool20/20 and growing wait as support for H2; final timeout log remains symptom, not the root cause."
+    - "H2 remains a hypothesis because lease acquisition/release and code path evidence are missing; deployment/load timing alone is not causal proof."
+    - "Proposes pinned-load lease-accounting or exception-path release test with contrasting expected pool/wait behavior, rather than blindly expanding pool or blaming a person."
+  pass_threshold: 1.0

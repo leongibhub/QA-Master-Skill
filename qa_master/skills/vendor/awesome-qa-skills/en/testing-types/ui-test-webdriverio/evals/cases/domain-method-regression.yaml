@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ui-test-webdriverio: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use ui-test-webdriverio to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Fixture WebdriverIO8 async with matched browser. W1 config names a service package not installed; startup log identifies the missing module. W2 does not await click and checks no state. W3 paid assertion fails on pending with test/worker/session/browser version/stack and nonzero CI. W4 each worker has independent account/order, awaited actions, paid20/principal assertions, and cleanup. W5 catches command timeout then reportsPASS and exits0. Decide CONFIG_ERROR/REPAIR/EXPECTED_FAILURE/VALID/FAILURE_HIDDEN with original diagnostic evidence, without switching frameworks.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

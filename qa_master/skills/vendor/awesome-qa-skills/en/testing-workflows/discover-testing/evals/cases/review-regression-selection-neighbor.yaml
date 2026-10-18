@@ -1,0 +1,15 @@
+id: review-regression-selection-neighbor
+title: "discover-testing: sourced repair regression"
+input:
+  prompt: |
+    Use discover-testing.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append `ID | DECISION | Evidence`, one row per ID, using the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: regression-test-selection.
+
+    Route a request to choose the smallest regression set from affected obligations and test costs. Change impact is already confirmed. Target is installed. Append a table row `ROUTE | <exact canonical ID> | availability evidence`. The DECISION cell here is the canonical target ID.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-regression-selection-neighbor.py
+  timeout_seconds: 30

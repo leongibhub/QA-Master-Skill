@@ -1,0 +1,31 @@
+id: "review-complete-rule-control"
+title: "A complete supplied rule is not rewritten by assumed policy"
+description: "A complete supplied rule is not rewritten by assumed policy"
+context:
+  files:
+    "policy.md": |-
+      # Policy v2, region R, effective 2026-10-01
+      | Rule | Condition | Action |
+      | P1 | order total >= 100 | shipping fee 0 |
+      | P2 | order total < 100 | shipping fee 5 |
+      Exception P3 takes precedence over P1/P2: remote-zone orders always pay shipping fee 8.
+      Tax treatment is not specified.
+input:
+  prompt: "Use business-rule-extraction. Extract only policy.md. Check the concrete examples against its supplied table and override. Do not add rules for domains outside shipping."
+expect:
+  must_contain:
+    - "100"
+    - "99"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "For total100 ordinary region uses fee0; total99 ordinary uses fee5; total100 remote uses fee8. Keeps explicit exception priority with no fabricated conflict."
+    - "Missing tax details are a scoped information gap, not an invented shipping condition or blanket blocker on these complete shipping rules."
+  pass_threshold: 1.0

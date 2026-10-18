@@ -1,0 +1,70 @@
+id: "review-risk-mapped-selection"
+title: "Selected set preserves mandatory dependencies and budget"
+description: "Selected set preserves mandatory dependencies and budget"
+context:
+  files:
+    "inventory.json": |-
+      {
+        "budget_minutes": 12,
+        "changed_risks": [
+          "Q1",
+          "Q2"
+        ],
+        "tests": [
+          {
+            "id": "T0",
+            "minutes": 2,
+            "depends": [],
+            "risks": [],
+            "mandatory": true
+          },
+          {
+            "id": "T1",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T2",
+            "minutes": 5,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q2"
+            ],
+            "mandatory": true
+          },
+          {
+            "id": "T3",
+            "minutes": 3,
+            "depends": [],
+            "risks": [
+              "copy"
+            ],
+            "mandatory": false
+          },
+          {
+            "id": "T4",
+            "minutes": 4,
+            "depends": [
+              "T0"
+            ],
+            "risks": [
+              "Q1"
+            ],
+            "mandatory": false
+          }
+        ]
+      }
+input:
+  prompt: "Use regression-test-selection. Select the smallest sufficient existing subset from inventory.json. Return JSON {\"selected\":[ids],\"execution_order\":[ids],\"total_minutes\":number,\"budget_status\":\"FEASIBLE|INFEASIBLE\",\"deferred\":[ids],\"uncovered_risks\":[ids]}. Mandatory items and prerequisites cannot be dropped; no new test ID or runtime result may be invented."
+judge:
+  type: "script"
+  script_path: "evals/graders/review-risk-mapped-selection.py"
+  timeout_seconds: 30

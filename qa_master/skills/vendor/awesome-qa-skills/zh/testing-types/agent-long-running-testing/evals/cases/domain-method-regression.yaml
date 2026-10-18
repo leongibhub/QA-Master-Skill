@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "agent-long-running-testing: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 agent-long-running-testing 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    协议 L-v1：checkpoint v2 存已提交步骤；过期 lease 禁止提交；同 task_id 只执行一次；取消提交点后返回已完成。L-1：崩溃前步骤 A 提交；从 v2 恢复只执行 B，资源 active=0。L-2：恢复再次执行 A 并产生第二条 A 写入。L-3：旧 lease=4 已失效，worker 仍提交。L-4：取消发生于任务提交后，返回 completed，资源 active=0。分别 PASS/FAIL，核对版本、提交和释放证据。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,89 @@
+id: "review-source-union"
+title: "Merged findings preserve all sources and minority P0"
+description: "Merged findings preserve all sources and minority P0"
+context:
+  files:
+    "reports.json": |-
+      [
+        {
+          "source_id": "qa-1",
+          "version": "v1",
+          "stage": "test-report-review",
+          "source_role": "QA",
+          "facts": [],
+          "evidence": [
+            "run-R1"
+          ],
+          "findings": [
+            {
+              "id": "F-qa",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P0",
+              "blocking": true
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        },
+        {
+          "source_id": "tech-1",
+          "version": "v2",
+          "stage": "test-report-review",
+          "source_role": "technical",
+          "facts": [],
+          "evidence": [
+            "diff-D1"
+          ],
+          "findings": [
+            {
+              "id": "F-tech",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P1",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "medium"
+        },
+        {
+          "source_id": "product-1",
+          "version": "v3",
+          "stage": "test-report-review",
+          "source_role": "product",
+          "facts": [],
+          "evidence": [
+            "req-Q7"
+          ],
+          "findings": [
+            {
+              "id": "F-product",
+              "target": "invoice-import",
+              "condition": "same invoice uploaded twice",
+              "problem": "duplicate debit",
+              "severity": "P2",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        }
+      ]
+input:
+  prompt: "Use multi-role-quality-synthesis. Synthesize reports.json. Return one JSON object with source_register [{source_id,version}], findings [{id,input_finding_ids,sources,severity,original_severities,evidence_by_source}], blockers [finding id], and disagreements [{sources,topic}]. Keep different conditions/targets separate and preserve supplied severity evidence."
+judge:
+  type: "script"
+  script_path: "evals/graders/review-source-union.py"
+  timeout_seconds: 30

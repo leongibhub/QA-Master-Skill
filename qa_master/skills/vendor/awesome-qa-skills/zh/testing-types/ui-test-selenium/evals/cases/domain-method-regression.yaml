@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "ui-test-selenium: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 ui-test-selenium 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    fixture Selenium4/Python，driver版本匹配已确认。S1页面rerender后持有旧element重试点击付款3次。S2重新通过data-testid定位、等待paid状态，动作仅一次且账务一条。S3异常退出未quit，Grid session活跃。S4异常截图/原错误保留且finally quit，session为0。S5并行两个session共用账号/订单。用REPAIR/VALID/RESOURCE_LEAK/EXPECTED_FAILURE/ISOLATION_FAIL；不把sleep增大当通用修复。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

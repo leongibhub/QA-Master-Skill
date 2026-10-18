@@ -1,0 +1,18 @@
+id: domain-method-success
+title: "test-suite-health-analysis: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 test-suite-health-analysis 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    R1 buildB/dataD：套件120个stable IDs，100执行、20quarantine；首尝试90通过/10失败，10重试均通过；最终100/100。隔离Q1保护唯一支付重复扣费义务。R0相同100项耗时10min，R1为20min，项目budget15min。报告称100%通过、健康100分、完整保护。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "列首尝试90%、最终100%、重试10/100=10%、隔离20/120，指出Q1义务空缺与20min超budget。"
+    - "拒绝无权重健康100与完整保护，不凭重试直接断定产品根因或flaky根因。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

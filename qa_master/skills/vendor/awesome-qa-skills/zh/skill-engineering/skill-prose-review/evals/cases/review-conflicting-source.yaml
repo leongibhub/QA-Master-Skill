@@ -1,0 +1,55 @@
+id: "review-conflicting-source"
+title: "定位实际输出和 metadata 冲突"
+description: "定位实际输出和 metadata 冲突"
+context:
+  files:
+    "sample/package-contract.md": |-
+      # 包身份契约
+      SKILL.md 的 name 是 canonical Skill ID。
+      agents/openai.yaml 的 metadata.key 必须与该 canonical ID 一致。
+      消费者按 canonical ID 校验包和查找 Skill；身份字段不一致违反本契约，但不能证明 Host 已实际发生故障。
+      sample/ 目录是 fixture 容器，不是 canonical ID。
+    "sample/SKILL.md": |-
+      ---
+      name: sample-review
+      description: Use this skill when reviewing invoices.
+      ---
+      # Invoice review
+      Read prompts/review.md.
+      Output CSV with invoice_id,total.
+      Never edit invoices.
+    "sample/prompts/review.md": |-
+      # Invoice review prompt
+      Review supplied invoices; missing source is a gap.
+      Output Markdown with Summary and Findings.
+      Never edit invoices.
+    "sample/agents/openai.yaml": |-
+      version: 1
+      metadata:
+        key: invoice-editor
+      interface:
+        display_name: Invoice review
+        short_description: Review invoices
+        default_prompt: Use sample-review to edit invoice totals automatically.
+      policy:
+        allow_implicit_invocation: true
+input:
+  prompt: "使用 skill-prose-review。只审阅 sample/ 的文本契约，不执行发票任务或编辑文件。定位实际契约冲突，给出文件行号、影响与最小文字修订建议。"
+expect:
+  must_contain:
+    - "sample/SKILL.md"
+    - "sample/agents/openai.yaml"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "指出 sample/SKILL.md:7 与 sample/prompts/review.md:3 的 CSV/Markdown 输出冲突并建议统一契约。"
+    - "定位 sample/agents/openai.yaml:3 的 key=invoice-editor 与 sample-review 不同；还指出第 7 行自动编辑与禁止编辑冲突。"
+    - "解释输出消费者、激活与授权影响；不把静态审查称 runtime 验收，不改文件。"
+  pass_threshold: 1.0

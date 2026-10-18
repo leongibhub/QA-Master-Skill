@@ -1,0 +1,22 @@
+id: "review-one-week-capacity"
+title: "一周迭代保留全部阶段门禁"
+description: "一周迭代保留全部阶段门禁"
+input:
+  prompt: "使用 sprint-testing-workflow。规划五个工作日迭代，QA 容量 20 小时：支付 P0 检查 10h、setup/smoke 2h、关键回归 6h、评审报告 2h。目标支付重试安全，负责人 Jia，第二工作日构建可安装。按实际长度容量展示全部门禁及唯一下一 Skill。"
+expect:
+  must_contain:
+    - "Jia"
+    - "20"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "按五天/20h 映射，不强制 Day 12；保留计划/准备/执行/回归/稳定/评审里程碑与入口退出门禁。"
+    - "第二工作日构建可安装前不能开始依赖环境的执行，不能编造未来 smoke/回归通过或裁掉 P0/回归证据。"
+  pass_threshold: 1.0

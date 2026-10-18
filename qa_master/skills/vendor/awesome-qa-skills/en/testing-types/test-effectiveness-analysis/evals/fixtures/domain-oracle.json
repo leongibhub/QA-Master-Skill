@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "F1": "MISSED",
+    "F2": "DETECTED",
+    "F3": "INCONCLUSIVE",
+    "F4": "NOT_RUN"
+  },
+  "calculations": {},
+  "required_details": []
+}

@@ -1,0 +1,74 @@
+id: "review-obligation-evidence-states"
+title: "已映射、已执行、未知和不适用状态需区分"
+description: "已映射、已执行、未知和不适用状态需区分"
+context:
+  files:
+    "obligations.json": |-
+      {
+        "build": "B70",
+        "environment": "sandbox-A",
+        "timestamp": "2026-10-06T09:00:00Z",
+        "obligations": [
+          {
+            "id": "O1",
+            "rule": "receipt visible",
+            "applicable": true,
+            "test": "T1",
+            "run_status": "NOT_RUN"
+          },
+          {
+            "id": "O2",
+            "rule": "at most one debit",
+            "applicable": true,
+            "test": "T2",
+            "run_status": "PASS",
+            "assertion": "HTTP200 only",
+            "observed_debits": 2
+          },
+          {
+            "id": "O3",
+            "rule": null,
+            "applicable": null,
+            "test": null,
+            "run_status": null
+          },
+          {
+            "id": "O4",
+            "rule": "mobile UI",
+            "applicable": false,
+            "scope_source": "backend-only scope S1",
+            "test": null
+          },
+          {
+            "id": "O5",
+            "rule": "qty1 persists",
+            "applicable": true,
+            "test": "T5",
+            "run_status": "PASS",
+            "observed_qty": 1
+          }
+        ]
+      }
+input:
+  prompt: "使用 test-gap-analysis。分析 obligations.json，以义务状态表和有证据缺口的 TG 发现输出，逐缺口给关闭证据；不能由五项数量算有效覆盖率。"
+expect:
+  must_contain:
+    - "O1"
+    - "O2"
+    - "O3"
+    - "O4"
+    - "O5"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "O1 已映射但 NOT_RUN 为 unverified_execution；O2 HTTP-only PASS 但观察两扣款违反最多一次，为 uncovered_risk/行为未满足，不是缺映射或已满足。"
+    - "O3 规则/适用性/映射均缺，保持 unassessed 并提出材料/映射问题，不能称确定执行缺陷；O4 明确不适用，不是强制漏测。"
+    - "O5 在给定qty范围有支持，不误报；O1需带版本运行结果关闭，O2需业务断言及单次ledger证据，不能用项数算有效覆盖百分比。"
+  pass_threshold: 1.0

@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "resilience-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 resilience-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 推荐服务故障时结账仍可用、推荐可隐藏；每订单只扣一次，依赖恢复30s内应恢复推荐。
+    T1 扰动前正常；推荐失败中结账成功/推荐隐藏；支付重试使 O1 扣两次；推荐依赖 t100 恢复，t150 仍隐藏。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可中段推荐隐藏的合法降级，但指出重复扣费和超过30s未恢复违反 C1。"
+    - "不因为结账可用就断言整体有韧性，也不把此材料等同混沌实验或长期可靠性。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

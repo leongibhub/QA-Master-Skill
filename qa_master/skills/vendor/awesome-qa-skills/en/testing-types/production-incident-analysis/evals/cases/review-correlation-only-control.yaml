@@ -1,0 +1,18 @@
+id: "review-correlation-only-control"
+title: "A nearby deployment alone is not an incident root cause"
+description: "A nearby deployment alone is not an incident root cause"
+input:
+  prompt: "Use production-incident-analysis. Only records supplied: 09:00Z deploy B51, 09:02Z latency alert; no traces, workload, config diff or mitigation result. Draft evidence-bounded incident analysis and minimum cause-discriminating evidence request."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Reports temporal association only and keeps root cause unknown; does not blame B51 or invent rollback success."
+    - "Requests a discriminating workload/resource/version comparison or raw trace instead of treating last log or proximity as causality."
+  pass_threshold: 1.0

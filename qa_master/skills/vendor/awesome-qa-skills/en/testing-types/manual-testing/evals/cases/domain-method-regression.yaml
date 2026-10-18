@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "manual-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use manual-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    A 20-minute refund charter uses recoverable order O1; one refund_id must refund 20 only once. M-1 executed two submissions and observed cumulative refund 40, evidence E1. M-2 executed a normal order view with correct amount, E2. M-3's planned weak-network retry has not started. M-4 cannot read back state because the environment disconnected. Cleanup restored O1's original amount, E3. Decide FAIL/PASS/NOT_RUN/BLOCKED with concrete steps, a charter and unfinished work.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

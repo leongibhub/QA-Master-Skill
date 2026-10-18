@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "C1": "FEASIBLE",
+    "C2": "ESCALATE",
+    "C3": "NOT_RUN",
+    "C4": "UNKNOWN"
+  },
+  "calculations": {},
+  "required_details": []
+}

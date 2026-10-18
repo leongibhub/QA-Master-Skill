@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "model-based-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use model-based-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    M1 starts at D: D-submit(qty>0)→S, S-pay(success)→P, S-cancel→C, P-ship→F. C/F terminal; L has no incoming edge. Goal covers all reachable edges.
+    P1 only has D-S-P-F plus D-F "direct shipping", claiming complete state/edge coverage.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify missing S-cancel-C, nonexistent D-F transition and unreachable L; add legal D-S-C."
+    - "Retain qty/pay guards and state/action oracles per step, not merely state names."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

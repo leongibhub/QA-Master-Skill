@@ -1,0 +1,35 @@
+id: "review-frequency-and-priority"
+title: "缺陷保留频率并区分 severity/priority"
+description: "缺陷保留频率并区分 severity/priority"
+context:
+  files:
+    "policy.md": |-
+      Q7: A confirmed order displays exactly one receipt.
+    "repro.md": |-
+      Build B31, sandbox-user, desktop Chromium.
+      Precondition: one confirmed order O31 and one debit.
+      Steps: log in, open O31, refresh once.
+      Runs: 1 one receipt; 2 two receipt cards; 3 one receipt. No duplicate debit was observed.
+      Evidence: screenshot S31, request R31; Authorization: Bearer ${API_TOKEN}; customer_email=[REDACTED].
+      Receipt feature release is tomorrow; severity/priority policy not supplied.
+input:
+  prompt: "使用 bug-reporting。根据 repro.md 与 policy.md 写缺陷报告，不推断根因。保留 1/3 频率与脱敏证据。仅基于所给事实分别评估 severity 和排期 priority。"
+expect:
+  must_contain:
+    - "Q7"
+    - "1/3"
+    - "B31"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "预期收据只一次回链 policy.md Q7，复现含 sandbox-user、B31、登录/订单/刷新与 run 2 两收据事实。"
+    - "频率保持 1/3，不能改为必现；证据使用脱敏 R31，不出现真实凭据。"
+    - "severity 按重复收据影响（未重复扣款）解释，priority 按收据发布排期解释，不能混同财损根因。"
+  pass_threshold: 1.0

@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "C1": "VALID",
+    "C2": "REPAIR",
+    "C3": "EXPECTED_FAILURE",
+    "C4": "INVALID",
+    "C5": "VALID"
+  },
+  "calculations": {},
+  "required_details": []
+}

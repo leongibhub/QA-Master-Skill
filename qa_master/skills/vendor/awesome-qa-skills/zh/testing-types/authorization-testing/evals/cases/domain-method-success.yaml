@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "authorization-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 authorization-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 member 可读同租户自己的订单；admin 可读同租户全部订单，不能跨租户；委派只授权 read，到期 t=10 即无效；未列许可默认拒绝。
+    资源 O1 owner=u1/tenant=A。T1 u2/member/A read O1→allow；T2 admin/B read O1→allow；T3 delegate read O1@11→allow。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "将 T1/T2/T3 分别定位所有权、跨租户和到期委派违反，不能赋予 admin 全局权限。"
+    - "保留写操作/拒绝后副作用缺口，建议相同条件下允许与拒绝对照。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

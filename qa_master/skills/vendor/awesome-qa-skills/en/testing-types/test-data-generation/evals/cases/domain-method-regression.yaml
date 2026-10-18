@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-data-generation: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use test-data-generation to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Schema:unique Order.id; Refund.order_id must exist; amount>0 and cumulative refunds<=Order.total; only paid orders may refund. D1 O1 total20 paid with F1 amount5, labeled valid. D2 two orders with idO1, labeled valid. D3 F2 references absent O9, labeled invalid with expected foreign-key rejection. D4 O2 pending with refund5, labeled valid. Decide VALID/INVALID/MATCHED_NEGATIVE per group, deliver a reproducible seed7 valid sample, and cleanup Refund before Order.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

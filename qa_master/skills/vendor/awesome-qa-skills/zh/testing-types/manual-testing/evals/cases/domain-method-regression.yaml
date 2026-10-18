@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "manual-testing: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 manual-testing 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    20分钟退款 charter，订单 O1 可恢复；规则同refund_id只退20元一次。M-1 已执行两次提交，账务累计40元，证据E1。M-2 已执行正常查看订单，显示金额正确，证据E2。M-3 原计划弱网重试尚未开始。M-4 执行中测试环境断开，未能读回状态。清理记录O1已恢复原始金额，证据E3。判 M-1 FAIL/M-2 PASS/M-3 NOT_RUN/M-4 BLOCKED 或据材料选择枚举，提交具体步骤、charter与未完成项。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "S1": "REPAIR",
+    "S2": "VALID",
+    "S3": "RESOURCE_LEAK",
+    "S4": "EXPECTED_FAILURE",
+    "S5": "ISOLATION_FAIL"
+  },
+  "calculations": {},
+  "required_details": []
+}

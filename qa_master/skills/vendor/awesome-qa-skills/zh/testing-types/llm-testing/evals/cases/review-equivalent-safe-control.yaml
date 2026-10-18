@@ -1,0 +1,18 @@
+id: "review-equivalent-safe-control"
+title: "等价事实改写不能当退化"
+description: "等价事实改写不能当退化"
+input:
+  prompt: "使用 llm-testing。来源 S1：reset 保留 billing history；两个结构合法且引用 S1 的输出，A 为 billing history remains，B 为 billing history is retained。模型/Prompt/数据版本和参数固定。评审语义等价与证据限制。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "A/B 在 S1 下语义等价，不能仅字符串差异判失败。"
+    - "两输出不能证明分布层鲁棒性/退化，后续需重复证据，不能宣称虚构确定缺陷。"
+  pass_threshold: 1.0

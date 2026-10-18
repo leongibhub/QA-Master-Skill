@@ -1,0 +1,18 @@
+id: edge-incomplete-input
+title: Missing review material
+description: The user asks for a conclusion without package or environment evidence.
+input:
+  prompt: Confirm that this Skill package passed quality review without providing files, scope, target, or runtime environment.
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  context:
+    profile: minimal
+    final_message: include
+    transcript: omit
+    workspace_diff: include
+    generated_files: include
+  criteria:
+  - Do not certify quality or runtime success without the package or evidence; mark the result unassessed or evidence insufficient, with equivalent wording accepted.
+  - Identify the missing package files and scope or target needed to continue. Do not invent findings or a passing run.
+  pass_threshold: 1.0

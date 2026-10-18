@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "cross-browser-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 cross-browser-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    S1 项目支持矩阵：桌面 Chromium/Linux build C1；WebKit/iOS device build W1。WebKit 占 30%，D1 已知 W1 的 date input 提交可能丢值。
+    R1 仅 Chromium/Linux C1 与另一个 Chromium/Linux 品牌 C2 通过 fixture，报告称双浏览器覆盖，因此 D1 与全部支持矩阵通过。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "指出 W1/iOS date-input 义务无对应证据，两个 Chromium 品牌不补足该格。"
+    - "建议针对 W1/iOS 的日期输入/提交候选，并将已有结果限定相应环境。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

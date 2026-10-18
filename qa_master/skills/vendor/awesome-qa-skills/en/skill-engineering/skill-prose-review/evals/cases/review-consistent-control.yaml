@@ -1,0 +1,50 @@
+id: "review-consistent-control"
+title: "Accept a coherent prose contract"
+description: "Accept a coherent prose contract"
+context:
+  files:
+    "sample/package-contract.md": |-
+      # Package identity contract
+      The name in SKILL.md is the canonical Skill ID.
+      agents/openai.yaml metadata.key must equal that canonical ID.
+      Consumers use the canonical ID for package validation and lookup; mismatched identity fields violate this contract but do not prove observed Host failure.
+      The sample/ directory is a fixture container, not the canonical ID.
+    "sample/SKILL.md": |-
+      ---
+      name: sample-review
+      description: Use this skill when reviewing invoices.
+      ---
+      # Invoice review
+      Read prompts/review.md.
+      Output Markdown with Summary and Findings.
+      Never edit invoices.
+    "sample/prompts/review.md": |-
+      # Invoice review prompt
+      Review supplied invoices; missing source is a gap.
+      Output Markdown with Summary and Findings.
+      Never edit invoices.
+    "sample/agents/openai.yaml": |-
+      version: 1
+      metadata:
+        key: sample-review
+      interface:
+        display_name: Invoice review
+        short_description: Review invoices
+        default_prompt: Use sample-review to review supplied invoices without edits.
+      policy:
+        allow_implicit_invocation: true
+input:
+  prompt: "Use skill-prose-review. Review the supplied sample/ prose only, without edits. Report a pass or no blocking prose findings when justified; separate runtime not supplied from a prose defect."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Does not falsely report CSV/Markdown mismatch, metadata-name mismatch, or authorized-edit conflict: both documents say Markdown, key/name both sample-review, and editing is prohibited throughout."
+    - "Allows no blocking prose findings and records runtime/eval execution as unverified rather than a proven pass or an invented prose blocker."
+  pass_threshold: 1.0

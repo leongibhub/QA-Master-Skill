@@ -1,0 +1,31 @@
+id: "review-complete-rule-control"
+title: "完整规则不被默认政策改写"
+description: "完整规则不被默认政策改写"
+context:
+  files:
+    "policy.md": |-
+      # Policy v2, region R, effective 2026-10-01
+      | Rule | Condition | Action |
+      | P1 | order total >= 100 | shipping fee 0 |
+      | P2 | order total < 100 | shipping fee 5 |
+      Exception P3 takes precedence over P1/P2: remote-zone orders always pay shipping fee 8.
+      Tax treatment is not specified.
+input:
+  prompt: "使用 business-rule-extraction。只抽取 policy.md，按表和优先级核对给定例子，不增加 shipping 外领域规则。"
+expect:
+  must_contain:
+    - "100"
+    - "99"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "total100 普通地区 fee0、total99 普通 fee5、total100 remote fee8，保留明示例外优先级，不编造冲突。"
+    - "税细节缺失是范围信息缺口，不能新增 shipping 条件或阻断完整 shipping 规则。"
+  pass_threshold: 1.0

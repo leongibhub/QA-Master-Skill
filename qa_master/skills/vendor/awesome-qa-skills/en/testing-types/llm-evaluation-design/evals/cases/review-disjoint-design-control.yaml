@@ -1,0 +1,18 @@
+id: "review-disjoint-design-control"
+title: "Disjoint splits with calibrated anchors do not invent leakage"
+description: "Disjoint splits with calibrated anchors do not invent leakage"
+input:
+  prompt: "Use llm-evaluation-design. Review this supplied protocol only: train family reset/source S1; validation family login/source S2; test family billing/source S3; content hashes differ. Judges use adjudicated 0/1/2 references, blinded identities and balanced order. No model outputs or metrics exist yet."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Does not falsely claim observed cross-split leakage, uncalibrated rubric or ordering bias for controls explicitly supplied."
+    - "Distinguishes sound protocol readiness from NOT_RUN model effectiveness and real business acceptance."
+  pass_threshold: 1.0

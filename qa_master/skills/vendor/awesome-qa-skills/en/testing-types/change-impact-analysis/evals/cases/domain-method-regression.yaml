@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "change-impact-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use change-impact-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Config v8 changes money units cents→decimal. E1:config→checkout reader→refund obligation O1→T-refund. E2:checkout→invoice shared amount→O2→T-invoice. E3:dynamic plugin-registry consumers unknown. E4:image service has a confirmed independent contract and never reads money config. Decide INCLUDE/EXCLUDE/UNKNOWN for O1,O2,E3,E4 with edge sources and conservative validation for unknown dependencies.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

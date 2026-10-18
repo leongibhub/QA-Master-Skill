@@ -1,0 +1,18 @@
+id: "review-reliable-error-control"
+title: "已有受限重试控制不应误报缺失"
+description: "已有受限重试控制不应误报缺失"
+input:
+  prompt: "使用 error-handling-design-review。审阅只读缓存读取设计：校验错误 400/不重试，临时连接失败在 100ms 内最多重试一次并关联 R5，无写副作用；耗尽后 503 RETRY_LATER 并记录 R5。范围仅此读取。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "识别受限重试、不可重试校验、调用方结果和关联证据；只读无副作用操作不能误报缺幂等/补偿。"
+    - "runtime 保持未评估，可选增强不能升级无依据阻塞或已证明 SLA 满足。"
+  pass_threshold: 1.0

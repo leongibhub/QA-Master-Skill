@@ -1,0 +1,27 @@
+id: basic-success
+title: "Testability Analysis: domain-complete scenario"
+description: |
+  Checks that the skill produces domain-specific, evidence-based, prioritized, executable output.
+
+input:
+  prompt: |
+    Use the testability-analysis skill for this scenario: an async refund flow spans three services with plain logs but no correlation ID, sandbox callback, or status query. The basic scope is available. Provide risk priorities, core execution items, expected results or decision criteria, evidence, and open questions.
+
+expect:
+  must_contain:
+    - "P0"
+  must_not_contain:
+    - "TODO"
+    - "I cannot"
+    - "unable to help"
+
+judge:
+  type: rule_based
+  success:
+    - output_matches:
+        all:
+          - "(?i)task understanding"
+          - "(?i)input audit"
+          - "(?i)risks?"
+          - "P0"
+          - "(?i)(expected|decision criterion|acceptance)"

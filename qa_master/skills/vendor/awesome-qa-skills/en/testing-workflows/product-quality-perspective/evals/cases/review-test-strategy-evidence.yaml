@@ -1,0 +1,27 @@
+id: "review-test-strategy-evidence"
+title: "Product strategy prioritizes irreversible user loss"
+description: "Product strategy prioritizes irreversible user loss"
+context:
+  files:
+    "product.json": "{\"source_id\":\"prod-strategy\",\"version\":\"v3\",\"goal\":\"safe refunds\",\"constraints\":{\"QA_days\":1},\"requirements\":[{\"id\":\"Q1\",\"rule\":\"one debit per refund operation\",\"impact\":\"irreversible customer loss if violated\"},{\"id\":\"Q2\",\"rule\":\"receipt appears after confirmed refund\",\"impact\":\"delayed feedback if missing\"}],\"execution\":null}"
+input:
+  prompt: "Use product-quality-perspective. stage: test-strategy. Read product.json; create a product-quality perspective report, not the detailed strategy. Use the supplied report identity and actionable evidence requests."
+expect:
+  must_contain:
+    - "Q1"
+    - "Q2"
+    - "prod-strategy"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Prioritizes Q1 one-debit-per-refund and Q2 receipt visibility using the supplied irreversible-loss versus delayed-feedback impacts; does not invent test results or acceptance thresholds."
+    - "Preserves source_id prod-strategy/version v3, gives stable finding IDs with source/evidence, and links actions to evidence needed for duplicate-debit and receipt coverage."
+    - "Staffing only covers one QA day: states the product trade-off and required Human decision, without approving release."
+  pass_threshold: 1.0

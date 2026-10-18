@@ -1,0 +1,18 @@
+id: "review-unknown-scope"
+title: "范围未知不能确认冲突"
+description: "范围未知不能确认冲突"
+input:
+  prompt: "使用 requirement-conflict-detection。S1 要求 exports CSV，versionv2/actoradmin；S2 要求 JSON，但无 actor/version/time。分析适用范围及关闭所需证据。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "保留两原句，S2 适用性建立前是 ambiguous/unassessed 的可能冲突，不是已确认当前互斥规则。"
+    - "需 S2 角色/版本/时间/对象与授权决定，不能静默选 CSV/JSON。"
+  pass_threshold: 1.0

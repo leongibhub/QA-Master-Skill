@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "agent-memory-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use agent-memory-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    M-v3 policy: strict tenant isolation; highest valid preference version wins; no retrieval immediately after deletion acknowledgment. M-1: A's preference query retrieves B/m9. M-2: A/m1 v1=SMS, v2=email, both valid; response still uses v1. M-3: A/m2 deletion acknowledged but index returns m2. M-4: A retrieves its own valid m3 v2 with no B records. M-5: assess backup expiry without a backup retention policy. Decide FAIL/PASS/UNKNOWN per ID.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

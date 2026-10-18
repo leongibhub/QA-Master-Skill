@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "C-1": "EQUIVALENT",
+    "C-2": "CONTRADICTED",
+    "C-3": "NOT_COMPARABLE",
+    "C-4": "EQUIVALENT"
+  },
+  "calculations": {},
+  "required_details": []
+}

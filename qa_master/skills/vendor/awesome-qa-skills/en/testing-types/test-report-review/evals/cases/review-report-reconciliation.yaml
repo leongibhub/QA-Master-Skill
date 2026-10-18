@@ -1,0 +1,21 @@
+id: "review-report-reconciliation"
+title: "Reject inconsistent report; accept consistent control"
+description: "Reject inconsistent report; accept consistent control"
+input:
+  prompt: |-
+    Use test-report-review. Build b42; planned manifest v2 has A,B,C,D,E,F.
+    Raw execution rows (latest attempt is authoritative per case, keep all attempts):
+    A, attempt1, FAIL, executed=true, build=b42, run=r1
+    A, attempt2, PASS, executed=true, build=b42, run=r2
+    B, attempt1, BLOCKED, executed=false, build=b42, run=r1
+    C, attempt1, SKIPPED, executed=false, build=b42, run=r1
+    D, attempt1, PASS, executed=true, build=b42, run=r1
+    E, attempt1, FAIL, executed=true, build=b42, run=r1
+    F, no attempt, NOT_RUN, build=b42
+    Defects: D1 OPEN BLOCKER build=b42 source=defects-v2; D2 CLOSED minor build=b42; D3 OPEN critical build=b41 (no applicability evidence for b42).
+    No release authorization record exists. Do not execute tests or infer actual results outside these rows.
+    Report bad-v1 says passed=4/executed=4/pass_rate=100%, b41 defects are all closed, release APPROVED without authorization. Control good-v2 states planned6, executed3, attempts4, passed2, failed1, blocked1, skipped1, notrun1, pass_rate66.67%; current blockerD1 remains open; D3 attribution unknown; recommendation NO_GO; approval UNKNOWN. Audit both reports. Append JSON JSON keys bad_report and good_report (ACCEPT or REJECT), and wrong_fields (field names of identified inconsistencies). ACCEPT is consistency of supplied evidence only.
+judge:
+  type: "script"
+  script_path: "evals/graders/review-report-reconciliation.py"
+  timeout_seconds: 30

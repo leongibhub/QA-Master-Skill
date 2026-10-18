@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "rag-quality-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use rag-quality-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    A refund query retrieves C1-v2: returns within 14 days if unused; shipping is not refunded. The rubric requires time and unused conditions. A-1 says shipping is refundable within 14 days and cites C1. A-2 includes both conditions and excludes shipping. A-3 says only 'within 14 days', omitting unused. A-4 asks a warranty question outside the corpus and correctly states insufficient evidence, requesting policy. Decide CONTRADICTED/PASS/INCOMPLETE/APPROPRIATE_REFUSAL with claim/citation mapping; citation presence alone cannot pass.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

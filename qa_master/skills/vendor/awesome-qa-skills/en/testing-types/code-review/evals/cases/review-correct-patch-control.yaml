@@ -1,0 +1,32 @@
+id: "review-correct-patch-control"
+title: "Equivalent correct patch permits empty finding lists"
+description: "Equivalent correct patch permits empty finding lists"
+context:
+  files:
+    "patch.diff": |-
+      --- a/calc.py
+      +++ b/calc.py
+      @@ -1,2 +1,2 @@
+       def total(values):
+      -    return sum(values)
+      +    return sum(values, 0)
+    "calc.py": |-
+      def total(values):
+          return sum(values, 0)
+    "contract.md": |-
+      Values are a list of integer prices. Empty list total is 0.
+input:
+  prompt: "Use code-review. Review fixture repository orders, commit abc123, patch.diff and changed calc.py. Scope is integer price aggregation only. Give P0/P1/P2 lists (None is allowed); do not invent a defect merely to populate the report."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Both identity/change gates pass, and sum(values,0) is equivalent to sum(values) for the supplied integer-price contract including empty list; no false financial, null or concurrency finding."
+    - "Allows empty P0/P1/P2 and states static scope with runtime not executed; does not substitute automatic release approval."
+  pass_threshold: 1.0

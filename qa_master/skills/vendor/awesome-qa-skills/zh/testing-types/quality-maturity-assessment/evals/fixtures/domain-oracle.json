@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "M-1": "L1",
+    "M-2": "L2",
+    "M-3": "UNKNOWN",
+    "M-4": "N/A"
+  },
+  "calculations": {},
+  "required_details": []
+}

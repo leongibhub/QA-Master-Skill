@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "api-schema-validation: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use api-schema-validation to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    S2 JSON Schema 2020-12: {"oneOf":[{"type":"integer"}, {"type":"string"}]}; samples 1 and "1" each match one branch, and R2 labels both valid.
+    S3={"$ref":"missing.json#/$defs/X"}; missing.json is not supplied.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept both valid S2 controls rather than rejecting composed schemas categorically."
+    - "Mark S3 unresolved/blocked without deciding validity or inventing X."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

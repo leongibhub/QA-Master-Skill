@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "disaster-recovery-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 disaster-recovery-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 区域 A 故障切区域 B；RTO<=60s，从故障到业务结账可用；RPO<=15s，从故障到恢复的最新提交点。
+    T1 故障 10:00:00；B health 10:00:30；结账因身份依赖到 10:01:10 才可用；实际恢复数据点 09:59:40。仅有备份存在说明，无 restore 校验。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "计算业务 RTO=70s、RPO=20s，分别超过 C1；不采用 health 的 30s 代替业务恢复。"
+    - "指出身份依赖与备份可恢复性/一致性缺口，不捏造恢复验证成功。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

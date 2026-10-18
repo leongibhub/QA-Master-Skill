@@ -1,0 +1,18 @@
+id: "review-disjoint-design-control"
+title: "分层独立且有校准锚点时不编造泄漏"
+description: "分层独立且有校准锚点时不编造泄漏"
+input:
+  prompt: "使用 llm-evaluation-design。仅审阅给定协议：train reset/S1，validation login/S2，test billing/S3，内容 hash 不同；judge 有裁定的 0/1/2 参考、身份盲评与平衡顺序；尚无模型输出或指标。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "不能误报已观察跨 split 泄漏、rubric 未校准或顺序偏差，相关控制已明确提供。"
+    - "良好协议就绪与 NOT_RUN 模型效果/真实业务验收需区分。"
+  pass_threshold: 1.0

@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "automation-roi-analysis: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 automation-roi-analysis 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    单位全部为人工小时，窗口每月：建设 12h，人工单次 1h，自动执行+复核单次 0.2h。R-1：每月20次，维护4h/月，分析3个月。R-2：每月5次，维护4h/月。R-3：每月20次，但变更使维护升到20h/月。R-4：缺执行频率。给每项 POSITIVE/NO_BREAK_EVEN/UNKNOWN，R-1 输出3个月净节省和整月回本点，勿换算成没有费率的钱。
+    计算结果另用 `METRIC | VALUE | 单位/依据` 表输出，METRIC 使用以下键：net_saving_h, break_even_months。VALUE 只写数字。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

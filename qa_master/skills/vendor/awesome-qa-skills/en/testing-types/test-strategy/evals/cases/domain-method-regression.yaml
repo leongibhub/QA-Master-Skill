@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-strategy: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use test-strategy to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Project gate requires independent executed assertions for refund idempotency and tenant isolation,20min each, with isolated environment and existing Playwright/API assets. C1 QA-A has45min and can run both sequentially. C2 QA-A has25min with no risk waiver. C3 only a case plan is called passed. C4 applies95% though no other pass-rate gate is supplied. Decide FEASIBLE/ESCALATE/NOT_RUN/UNKNOWN with obligation/owner/depth/evidence table, retaining capacity tradeoffs.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

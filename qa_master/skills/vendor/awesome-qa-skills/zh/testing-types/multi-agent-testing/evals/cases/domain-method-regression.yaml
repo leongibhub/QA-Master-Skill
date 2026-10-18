@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "multi-agent-testing: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 multi-agent-testing 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    协议 Team-v1：每任务一owner，同task_id提交一次；只接收当前共享版本，失败任务必须有重派或明确升级。A-1 taskT被workerW1与W2同时认领并各写一条。A-2 共享v3，收到v2旧委派后拒绝且无副作用。A-3 子任务失败后主任务completed，未完成任务无人接管也未升级。A-4 W1提交后重复消息重投，查taskT已完成并ACK，不再写。逐项 PASS/FAIL，列消息、所有权、版本与交接证据。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

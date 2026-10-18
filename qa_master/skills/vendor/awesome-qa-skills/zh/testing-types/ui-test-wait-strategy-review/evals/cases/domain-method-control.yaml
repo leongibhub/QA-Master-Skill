@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "ui-test-wait-strategy-review: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 ui-test-wait-strategy-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C2 显示加载报表的目标reportId/version=7且ready，budget3000ms；T2只读轮询该状态，t1200匹配并渲染；后台analytics持续请求，但不重复点击Load；未给固定sleep或网络idle要求。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可业务关联/version信号与1200ms预算，不因后台网络活跃而误报未就绪。"
+    - "其他迟到版本/取消路径保持未知，不能推断所有等待稳定。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

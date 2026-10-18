@@ -1,0 +1,18 @@
+id: "review-met-target-control"
+title: "A valid steady result can pass its explicit local target"
+description: "A valid steady result can pass its explicit local target"
+input:
+  prompt: "Use performance-result-analysis. Run PR43/B43/perf-A steady60s: target200RPS achieved200RPS, completed12000, errors60, p95=250ms. Targets: p95<=300ms, errors/completed<=1%, achievedRPS>=200. Scope is this sandbox read workload only."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Calculates60/12000=0.5% and permits all three explicit local targets met; does not falsely reject because production evidence is absent."
+    - "Retains the60s/sample/environment/workload limit and makes no production ceiling or business approval claim."
+  pass_threshold: 1.0

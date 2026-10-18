@@ -1,0 +1,14 @@
+{
+  "decisions": {
+    "O1": "SATISFIED",
+    "O2": "STALE",
+    "O3": "MAPPED",
+    "O9": "IDENTITY_CONFLICT"
+  },
+  "calculations": {
+    "mapped_obligations": 2,
+    "satisfied_obligations": 1,
+    "current_obligation_denominator": 3
+  },
+  "required_details": []
+}

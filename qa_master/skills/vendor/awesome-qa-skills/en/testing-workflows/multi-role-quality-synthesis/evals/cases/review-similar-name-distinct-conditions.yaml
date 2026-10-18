@@ -1,0 +1,77 @@
+id: "review-similar-name-distinct-conditions"
+title: "Same finding title does not prove equivalence"
+description: "Same finding title does not prove equivalence"
+context:
+  files:
+    "reports.json": |-
+      [
+        {
+          "source_id": "qa-1",
+          "version": "v1",
+          "stage": "test-report-review",
+          "source_role": "QA",
+          "facts": [],
+          "evidence": [
+            "run-R1"
+          ],
+          "findings": [
+            {
+              "id": "F-qa",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P0",
+              "blocking": true
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        },
+        {
+          "source_id": "product-1",
+          "version": "v3",
+          "stage": "test-report-review",
+          "source_role": "product",
+          "facts": [],
+          "evidence": [
+            "req-Q7"
+          ],
+          "findings": [
+            {
+              "id": "F-product",
+              "target": "invoice-import",
+              "condition": "same invoice uploaded twice",
+              "problem": "duplicate debit",
+              "severity": "P2",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        }
+      ]
+input:
+  prompt: "Use multi-role-quality-synthesis. Synthesize the two reports in reports.json. Explain any merge decisions using target, condition, and outcome, not finding title alone."
+expect:
+  must_contain:
+    - "F-qa"
+    - "F-product"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Keeps refund/retry-after-commit/F-qa separate from invoice-import/same-upload/F-product although both say duplicate debit; cites their distinct evidence and sources."
+    - "Retains P0 and its blocker; does not average P0/P2 or declare consensus."
+  pass_threshold: 1.0

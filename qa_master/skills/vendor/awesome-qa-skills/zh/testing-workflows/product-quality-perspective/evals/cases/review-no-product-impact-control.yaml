@@ -1,0 +1,18 @@
+id: "review-no-product-impact-control"
+title: "无产品影响的后端变更不生成填充发现"
+description: "无产品影响的后端变更不生成填充发现"
+input:
+  prompt: "使用 product-quality-perspective。stage: code-review。变更 C22 仅重命名私有局部变量，负责人材料说明无外部行为或产品需求变化，未提供用户影响背景。判断适用性，不能编造业务发现。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "无可追踪产品影响时输出不适用或明确受限的无产品发现结果，并说明剩余证据缺口。"
+    - "不能编造支付/业务规则/验收缺陷，不能认证代码正确。"
+  pass_threshold: 1.0

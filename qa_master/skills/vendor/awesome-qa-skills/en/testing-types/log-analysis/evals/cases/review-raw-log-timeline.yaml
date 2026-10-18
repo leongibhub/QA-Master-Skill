@@ -1,0 +1,32 @@
+id: "review-raw-log-timeline"
+title: "Raw logs preserve UTC order, request correlation and missing segment"
+description: "Raw logs preserve UTC order, request correlation and missing segment"
+context:
+  files:
+    "logs.jsonl": |-
+      {"id":"L3","time":"2026-10-06T02:01:10Z","service":"api","request_id":"R2","level":"ERROR","code":"DB_TIMEOUT","token":"[REDACTED]"}
+      {"id":"L1","time":"2026-10-06T10:01:05+08:00","service":"api","request_id":"R1","level":"ERROR","code":"DB_TIMEOUT"}
+      {"id":"L0","time":"2026-10-06T10:00:00+08:00","service":"deploy","version":"B40","level":"INFO"}
+      {"id":"L2","time":"2026-10-06T02:01:03Z","service":"db","request_id":"R1","level":"ERROR","code":"POOL_WAIT_TIMEOUT"}
+input:
+  prompt: "Use log-analysis. Analyze logs.jsonl. Deployment B40 was 02:00Z. Provided clocks are synchronized and sampling is unknown. Sort the events, cluster errors by request, identify missing cross-service evidence and propose minimum hypothesis checks."
+expect:
+  must_contain:
+    - "L0"
+    - "L2"
+    - "R1"
+    - "R2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Normalizes +08:00 and Z to UTC and orders L0,L2,L1,L3; correlates L2/L1 as R1 while R2/L3 lacks a matching DB segment."
+    - "Distinguishes two failed request IDs from three error lines and does not invent error rate without total-request denominator."
+    - "B40 temporal correlation and POOL_WAIT_TIMEOUT support hypotheses only; gives a minimal before/after pool/wait/config check or controlled rollback comparison, preserving sampling/gap/redaction limits."
+  pass_threshold: 1.0

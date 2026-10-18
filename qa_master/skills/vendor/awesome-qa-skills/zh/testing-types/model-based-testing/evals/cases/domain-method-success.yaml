@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "model-based-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 model-based-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    M1 初始 D；D-submit(qty>0)→S；S-pay(success)→P；S-cancel→C；P-ship→F；C/F 终止。L 无入边。目标覆盖全部可达边。
+    P1 只有路径 D-S-P-F，另写 D-F“直接发货”；报告称全部状态/边已覆盖。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "指出缺 S-cancel-C、D-F 无模型转移、L 不可达，给合法补路径 D-S-C。"
+    - "每步保留 qty/pay guard 与状态动作 oracle，不能只列状态名称。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

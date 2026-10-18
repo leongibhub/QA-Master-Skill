@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-scope-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use test-scope-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    New v2 refund feature: confirmed web/API and paid orders; native explicitly excluded; guest refunds undefined. S1 web/API paid path; S2 native; S3 guest boundary; S4 proposed real production debit lacks authority, with a critical obligation needing isolated verification. Decide INCLUDE/EXCLUDE/UNKNOWN/BLOCKED with version/layer/platform/state cells and reassessment triggers when policy arrives; new-feature scope is not merely regression scope.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

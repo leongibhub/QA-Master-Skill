@@ -1,0 +1,60 @@
+id: "review-stage-targets-and-denominator"
+title: "Actual stage result validates attained load and error denominator"
+description: "Actual stage result validates attained load and error denominator"
+context:
+  files:
+    "report.json": |-
+      {
+        "run_id": "PR42",
+        "build": "B42",
+        "environment": "perf-A",
+        "targets": {
+          "rps": 200,
+          "p95_ms_max": 300,
+          "error_rate_max": 0.01
+        },
+        "error_denominator": "completed requests",
+        "stages": [
+          {
+            "id": "warmup",
+            "duration_s": 10,
+            "target_rps": 200,
+            "achieved_rps": 80,
+            "completed": 800,
+            "errors": 0,
+            "p95_ms": 90,
+            "steady": false
+          },
+          {
+            "id": "steady",
+            "duration_s": 60,
+            "target_rps": 200,
+            "achieved_rps": 180,
+            "completed": 10800,
+            "errors": 216,
+            "p95_ms": 350,
+            "steady": true
+          }
+        ]
+      }
+input:
+  prompt: "Use performance-result-analysis. Analyze report.json. Targets apply to the steady stage, not warmup. Compute attained load, errors and latency verdict, and state environment/workload capacity limits without executing any test."
+expect:
+  must_contain:
+    - "PR42"
+    - "10800"
+    - "216"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Steady achieved180/200RPS=90% of target, p95350ms exceeds300ms, and216/10800=2% exceeds1%; warmup p9590 is not the acceptance stage."
+    - "Does not use intended200RPS, warmup0 errors, or combined-stage average to claim pass; records stage duration/sample counts and unachieved target as limitations."
+    - "Conclusion is limited to PR42/B42/perf-A supplied workload and cannot certify production capacity or business release acceptance."
+  pass_threshold: 1.0

@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "api-error-contract-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use api-error-contract-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C2 operation contract: GET /orders/{id} maps MISSING to 404; GET /search has 200 [] for no matches, a different condition. Errors require code/requestId, not retryable.
+    T3 GET /orders/O9: 404 {code: MISSING, requestId: r3}. T4 GET /search: 200 [].
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept T3/T4 under C2, without flagging operation differences or absent retryable."
+    - "Limit conclusions because other errors and log evidence are absent; do not declare all errors consistent."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

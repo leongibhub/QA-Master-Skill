@@ -1,0 +1,36 @@
+id: "review-online-mixed-version-migration"
+title: "Online migration must explain coexistence, lock evidence and rollback"
+description: "Online migration must explain coexistence, lock evidence and rollback"
+context:
+  files:
+    "schema.sql": |-
+      -- orders v2 proposed migration
+      ALTER TABLE orders ADD COLUMN region TEXT NOT NULL;
+      CREATE INDEX orders_region_idx ON orders(region);
+    "migration.md": |-
+      # Mixed-version migration v2
+      Populated orders table; v1 inserts id,tenant_id,created_at only. v1/v2 coexist for 24 hours. Proposed: run schema.sql then switch all services.
+      Business region for historical orders is not decided; no default or backfill specified.
+      Access pattern: tenant_id + created_at range, not region alone.
+      Write-lock budget 500ms; lock measurement and rollback rehearsal not supplied. Rollback proposal: drop region immediately.
+input:
+  prompt: "Use database-design-quality-review. Review migration.md and schema.sql statically for the supplied mixed-version period. Give staged compatibility, default/backfill, locking evidence, access-path, rollback and validation findings. Do not execute SQL."
+expect:
+  must_contain:
+    - "region"
+    - "v1"
+    - "500"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Identifies required region without a default/backfill against populated rows and v1 inserts that omit region; locates schema.sql:2 and migration mixed-version section rather than claiming an observed outage."
+    - "Proposes expand (compatible nullable/default strategy), versioned writers/readers, batch backfill with validation, and contract enforcement only after old writers retire; defaults follow supplied business semantics or remain a decision."
+    - "Treats lock duration and p95 query effect as unmeasured: requests representative lock/access-pattern evidence under the stated budget; rollback includes old-reader compatibility and data preservation, not an unconditional destructive drop."
+  pass_threshold: 1.0

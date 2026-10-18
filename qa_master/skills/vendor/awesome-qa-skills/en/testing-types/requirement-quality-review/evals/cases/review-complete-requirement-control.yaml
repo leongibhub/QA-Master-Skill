@@ -1,0 +1,29 @@
+id: "review-complete-requirement-control"
+title: "Complete scoped requirements do not require invented blockers"
+description: "Complete scoped requirements do not require invented blockers"
+context:
+  files:
+    "requirement.md": |-
+      # Quantity edit requirement v4, source RQ-doc
+      Goal: users edit quantities safely. Scope: existing owned sandbox order, integer qty; no payment or deletion.
+      R1: authenticated owner may set qty to an integer in [1,10] inclusive.
+      R2: non-owner receives FORBIDDEN and qty does not change.
+      R3: noninteger or outside [1,10] receives INVALID_QTY and qty does not change.
+      R4: successful update returns the new qty; repeated same value keeps that qty.
+      Dependency: stub order store supports read/write in sandbox-A, fixture owner/non-owner accounts and qty1/10/0/11 exist; QA owner role maintains data cleanup.
+      Acceptance: observe stored qty and caller code for R1-R4. No latency target, mobile UI or real payment is in scope. Runtime is not supplied.
+input:
+  prompt: "Use requirement-quality-review. Review requirement.md only for the supplied quantity-edit scope. A no-blocking-findings result is allowed. Distinguish requirement readiness from runtime verification and final product approval."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Recognizes goal, actor/auth, inclusive integer boundaries, success/error observable criteria, unchanged-state failures, dependency/data/cleanup and scope evidence; no false missing core rule blocker."
+    - "Does not demand latency/mobile/payment requirements explicitly outside scope, manufacture3-5 filler questions, or claim tests ran/passed."
+  pass_threshold: 1.0

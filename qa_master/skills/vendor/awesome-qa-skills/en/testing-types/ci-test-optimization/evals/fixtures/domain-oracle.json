@@ -1,0 +1,16 @@
+{
+  "decisions": {
+    "CI-1": "ACCEPT",
+    "CI-2": "REJECT",
+    "CI-3": "REJECT",
+    "CI-4": "UNKNOWN"
+  },
+  "calculations": {
+    "baseline_seconds": 115,
+    "candidate_seconds": 95
+  },
+  "required_details": [
+    "115",
+    "95"
+  ]
+}

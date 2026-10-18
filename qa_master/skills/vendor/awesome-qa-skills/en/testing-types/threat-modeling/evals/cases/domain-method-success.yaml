@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "threat-modeling: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use threat-modeling to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    A1 architecture: untrusted browser→API→InvoiceDB; browser sends tenantId; API directly queries by it without binding authenticated identity. Asset=tenant invoices; P1 allows own-tenant reads only.
+    Only these three components are in scope; no queue, admin entry or cloud config supplied.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Model browser/API boundary and controlled-tenantId cross-tenant candidate path under A1/P1, with server-binding control proposal."
+    - "Do not add queue/admin/cloud threats or claim foreign data was read; retain validation/residual risk."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

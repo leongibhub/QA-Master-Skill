@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "E1": "INCLUDE",
+    "E2": "INCLUDE",
+    "E3": "UNKNOWN",
+    "E4": "EXCLUDE",
+    "BUDGET": "ESCALATE"
+  },
+  "calculations": {},
+  "required_details": []
+}

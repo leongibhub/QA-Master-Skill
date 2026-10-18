@@ -1,0 +1,30 @@
+id: "review-trace-and-timeout"
+title: "Missing selection and infrastructure timeout are distinct"
+description: "Missing selection and infrastructure timeout are distinct"
+context:
+  files:
+    "artifacts/events.jsonl": |-
+      {"case":"trigger-1","event":"agent.response","text":"useful answer"}
+      {"case":"timeout-1","event":"environment.start","error":"deadline exceeded","agent_started":false}
+    "artifacts/results.json": "[{\"id\":\"trigger-1\",\"status\":\"completed\",\"outcome\":\"PASS\",\"selection\":null},{\"id\":\"timeout-1\",\"status\":\"error\",\"engine_started\":false},{\"id\":\"ambiguous-1\",\"status\":\"FAIL\",\"raw_judge\":null}]"
+input:
+  prompt: "Use skill-evaluation. Interpret artifacts/events.jsonl and artifacts/results.json. The timeout happened before agent startup. The completed response has no selection event. Report trigger and outcome status for each case and failure attribution; do not create a second evaluation engine."
+expect:
+  must_contain:
+    - "trigger-1"
+    - "timeout-1"
+    - "ambiguous-1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "For trigger-1, the helpful completed output does not establish Skill selection: trigger evidence is BLOCKED, not a negative trigger PASS or FAIL."
+    - "For timeout-1, records Infrastructure Defect and BLOCKED/NOT_RUN behavior because startup never occurred; does not call it Skill Defect."
+    - "Preserves unknown attribution for ambiguous-1, where only a generic failure exists, and proposes obtaining trace/raw judge evidence rather than guessing."
+  pass_threshold: 1.0

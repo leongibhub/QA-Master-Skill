@@ -1,0 +1,69 @@
+id: "review-contamination-and-calibration"
+title: "评测设计处理污染和 judge 分歧"
+description: "评测设计处理污染和 judge 分歧"
+context:
+  files:
+    "dataset.json": |-
+      {
+        "task": "answer from cited product manual",
+        "risk_policy": {
+          "fabrication": "blocker",
+          "semantic_anchor": {
+            "2": "correct answer with supporting citation",
+            "1": "partly correct or weak citation",
+            "0": "contradiction or fabricated fact"
+          }
+        },
+        "samples": [
+          {
+            "id": "A",
+            "split": "train",
+            "family": "reset",
+            "text": "reset settings",
+            "source": "manual-S1"
+          },
+          {
+            "id": "B",
+            "split": "test",
+            "family": "reset",
+            "text": "reset settings",
+            "source": "manual-S1"
+          },
+          {
+            "id": "C",
+            "split": "test",
+            "family": "login",
+            "text": "login steps",
+            "source": "manual-S2"
+          }
+        ],
+        "human_labels": [
+          {
+            "id": "C",
+            "rater1": 2,
+            "rater2": 0
+          }
+        ],
+        "judge_proposal": "show candidate model name and always evaluate new output second"
+      }
+input:
+  prompt: "使用 llm-evaluation-design。根据 dataset.json 设计最小可执行评测协议，明确数据分层/处置、确定性与语义检查、锚点校准、盲评顺序与人工复核，不编造评测分数。"
+expect:
+  must_contain:
+    - "A"
+    - "B"
+    - "C"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "A/B 文本/家族重叠构成 train/test 污染；按家族/来源隔离，新增数据前 B 不进入 held-out 结论。"
+    - "使用给定 0/1/2 锚点，在人工裁定参考上校准含 C 的 2-vs-0 分歧，judge 门禁前报告一致与分歧。"
+    - "隐藏模型版本身份并随机/平衡 A/B 顺序而非恒新版本第二；固定身份重复运行和分层报告，不能编造业务增益。"
+  pass_threshold: 1.0

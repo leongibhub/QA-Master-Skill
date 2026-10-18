@@ -1,0 +1,9 @@
+id: "review-strategy-control-and-conflicts"
+title: "Valid strategy versus gate and responsibility conflicts"
+description: "Valid strategy versus gate and responsibility conflicts"
+input:
+  prompt: "Use test-strategy-review. Strategy contract STR-v3: refund idempotency and timeout compensation are in scope; QA Mei owns regression; Engineer Lin prepares env Thu09:00; evidence deadline Fri12:00; risk acceptor Chen; rollback owner Ops Qiao; entry is env healthy, exit is both named P0 obligations passed with source/version. Control C1 has exactly these responsibilities, env Thu09:00 and Fri12:00 evidence plan, gated rollback and no claim of execution. C2 moves env readiness to nextMon while retaining Fri evidence deadline. C3 removes every exit-gate evidence owner. C4 only proposes a nicer report layout; all gates remain. Audit the supplied strategy. Append JSON {\"C1\":\"ACCEPTABLE\",\"C2\":\"BLOCKER\",\"C3\":\"BLOCKER\",\"C4\":\"IMPROVEMENT\",\"execution\":\"NOT_RUN\",\"approval\":\"UNKNOWN\"}; do not turn layout preference into a blocker."
+judge:
+  type: "script"
+  script_path: "evals/graders/review-strategy-control-and-conflicts.py"
+  timeout_seconds: 30

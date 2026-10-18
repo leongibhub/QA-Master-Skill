@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "visual-regression-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use visual-regression-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 key=checkout/v1/desktop1280/browserB/fontF/dataD; pixel change>1% requires review, and Pay must remain unobscured.
+    T1 same-key diff 3%, banner covers Pay; no approved design change. P1 proposes masking Pay and directly updating baseline.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify same-environment Pay obstruction/C1 conflict and 3% review trigger; mask/update would hide the defect."
+    - "Propose regional verification/recomparison after repair without baseline mutation/invented approval."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

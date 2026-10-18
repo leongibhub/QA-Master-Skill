@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "test-code-review: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use test-code-review to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C2 calcAsync(2, 3) must return 5; returning 4 or throwing must fail the test.
+    F4 async test(){actual=await calcAsync(2, 3); assertEqual(actual, 5); } runner awaits test/rejects on exceptions. Parallel tests use unique orderIds and delete their own orders in finally. Subject is not mocked. Static snippets only.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept await, actual-value assertion, error failure and independent cleanup; async/finally are not defects themselves."
+    - "Keep live runs, other branches and resource leaks unassessed rather than passing the suite."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

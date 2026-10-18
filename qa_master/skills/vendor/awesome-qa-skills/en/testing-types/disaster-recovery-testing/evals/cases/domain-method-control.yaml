@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "disaster-recovery-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use disaster-recovery-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 region A fails to region B. RTO<=60 s from failure to business checkout readiness; RPO<=15 s from failure to latest restored commit point.
+    C2 is C1. T2 failure=10:00:00; recovered point=09:59:50 with checksum/isolated-restore record; business/identity ready=10:00:45. Recovered ledger IDs/amounts match source through 09:59:50. Supplied fixture only.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Compare RTO 45 s/RPO 10 s with C2 and accept reconciliation through the recovered point, without imposing RPO=0."
+    - "Retain live-environment/post-point compensation limits; do not claim a completed disaster drill."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

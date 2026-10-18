@@ -1,0 +1,20 @@
+id: domain-method-control
+title: "api-negative-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 api-negative-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 POST /items：qty 必需、非 null、integer 1..5；note 可省略，存在时为非空 string 且最多 8 codepoints；body<=100 bytes；跨租户拒绝 403。字段违规 400/INVALID_INPUT，无新 item。
+    C2 即 C1。T3 {qty:1}→201/I3；T4 {qty:5,note:"12345678"}→201/I4，body 40 bytes。T5 {qty:"1"}→400/INVALID_INPUT，账本无新增。
+    未提供多约束同时违规时的错误优先级。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "认可边界 1/5 与长度 8 的合法对照，区分 string \"1\" 与 integer 1。"
+    - "将多重错误优先级标待确认，不能擅自要求某一个错误先返回。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

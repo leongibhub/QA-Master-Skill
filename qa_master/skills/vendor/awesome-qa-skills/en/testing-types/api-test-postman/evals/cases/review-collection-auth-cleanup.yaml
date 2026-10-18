@@ -1,0 +1,85 @@
+id: "review-collection-auth-cleanup"
+title: "Collection auth scope and cleanup have observable contracts"
+description: "Collection auth scope and cleanup have observable contracts"
+context:
+  files:
+    "collection.json": |-
+      {
+        "info": {
+          "name": "Orders fixture",
+          "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+        },
+        "item": [
+          {
+            "name": "Login",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/login"
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.globals.set(\"token\", pm.response.json().token);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "CreateOrder",
+            "request": {
+              "method": "POST",
+              "url": "{{base_url}}/orders",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{token}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"sku\":\"SKU-1\",\"qty\":1}"
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test(\"status\", () => pm.response.to.have.status(200));"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    "environment.json": "{\"name\":\"sandbox\",\"values\":[{\"key\":\"base_url\",\"value\":\"https://api.example.test\"},{\"key\":\"token\",\"value\":\"PLACEHOLDER\"}]}"
+    "contract.md": |-
+      Login POST /login: 200 {access_token:string}.
+      Create POST /orders: 201 {id:string,sku:"SKU-1",qty:1}; only sandbox fixtures permitted.
+      Cleanup DELETE /orders/{id}: 204 after assertions.
+input:
+  prompt: "Use api-test-postman. Read collection.json, environment.json and contract.md. You may author a proposed corrected Collection in output but do not call Newman or an endpoint. Check v2.1 structure, token extraction/scope, order postcondition, and cleanup order with evidence."
+expect:
+  must_contain:
+    - "access_token"
+    - "orderId"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Finds Login extracting token instead of supplied access_token and setting global while environment token shadows it; proposes one consistent environment scope with a successful-login guard and no literal credential."
+    - "Corrects CreateOrder expectation from 200 to contract 201 and includes body id/sku/qty assertions plus capturing orderId; not just HTTP success."
+    - "Includes DELETE /orders/{{orderId}} after checks with 204 cleanup assertion; retains request/fixture identity and describes Newman execution as NOT_RUN rather than completed."
+  pass_threshold: 1.0

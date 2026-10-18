@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "visual-regression-testing: 正确对照与边界判定"
+input:
+  prompt: |
+    请使用 visual-regression-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C2 baseline v1；设计D2已由design owner批准v2按钮颜色变更，ticket A2只适用v2。T2 同视口/浏览器/字体/数据比较v1与v2，diff2%，仅按钮颜色，布局/Pay可见性相同。另T3使用缺失字体与v1比较diff5%。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "将T2归有来源的已批准设计差异、可提v2基线候选而非产品缺陷；不将A2扩到别版本或自行更新。"
+    - "T3先标字体环境不可比/噪声待核对，不能仅凭5%判布局回归。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

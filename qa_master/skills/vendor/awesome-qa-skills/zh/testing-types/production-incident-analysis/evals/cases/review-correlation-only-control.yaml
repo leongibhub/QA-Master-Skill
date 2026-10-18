@@ -1,0 +1,18 @@
+id: "review-correlation-only-control"
+title: "相邻部署单独不能确定事故根因"
+description: "相邻部署单独不能确定事故根因"
+input:
+  prompt: "使用 production-incident-analysis。仅提供 09:00Z 部署 B51、09:02Z 延迟告警，无 traces、负载、配置 diff 或缓解结果。输出受限事故分析和最小区分原因证据请求。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "仅时间关联，根因未知，不能归罪 B51 或编回滚成功。"
+    - "索取可区分负载/资源/版本对比或原 trace，不能凭末条日志或时间接近定因果。"
+  pass_threshold: 1.0

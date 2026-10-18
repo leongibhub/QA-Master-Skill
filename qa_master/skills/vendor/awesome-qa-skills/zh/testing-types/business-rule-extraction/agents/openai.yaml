@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "business-rule-extraction"
+interface:
+  display_name: "业务规则提取"
+  short_description: "依据已提供证据分析业务规则提取，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the business-rule-extraction skill to extract evidence-bounded business rules from these materials."
+policy:
+  allow_implicit_invocation: true

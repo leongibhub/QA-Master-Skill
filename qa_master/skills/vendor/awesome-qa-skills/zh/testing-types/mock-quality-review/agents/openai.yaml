@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "mock-quality-review"
+interface:
+  display_name: "Mock 质量评审"
+  short_description: "依据已提供证据审查Mock 质量评审，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the mock-quality-review skill to produce MQR-## findings without claiming execution."
+policy:
+  allow_implicit_invocation: true

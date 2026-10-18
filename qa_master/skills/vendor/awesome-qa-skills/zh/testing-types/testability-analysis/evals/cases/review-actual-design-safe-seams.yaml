@@ -1,0 +1,33 @@
+id: "review-actual-design-safe-seams"
+title: "架构和接口导出最小安全测试缝"
+description: "架构和接口导出最小安全测试缝"
+context:
+  files:
+    "architecture.md": |-
+      # Checkout v8
+      API -> queue -> worker -> payment provider. Worker runs reservation expiry with real clock and random jitter.
+      No operation_id propagation or status observation is specified. Production auth/tenant isolation must remain intact.
+    "interfaces.txt": |-
+      POST /orders: authorized tenant caller; creates async work.
+      PaymentProvider.debit(order_id,amount): external side effect.
+      Clock/RNG adapters and provider substitution are not supplied.
+input:
+  prompt: "使用 testability-analysis。模式 architecture-testability-review。读取 architecture.md 与 interfaces.txt，识别最小观测点、时钟随机控制、依赖替身，附安全范围和成本/验证，不授权生产 debug bypass。"
+expect:
+  must_contain:
+    - "operation_id"
+    - "PaymentProvider"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "回链 API->queue->worker->payment，缺操作关联/结果状态为安全观测缺口；建议现有 tenant 授权下脱敏 operation_id/status，而非凭据/数据 dump。"
+    - "real clock/random 需隔离测试注入 clock/seed RNG 和接口边界 payment fake，不能开放生产任意时间覆盖或绕权限端点。"
+    - "每缝含定位、预期证据、隔离范围、价值成本；设计建议不是已证明架构可测/runtime通过。"
+  pass_threshold: 1.0

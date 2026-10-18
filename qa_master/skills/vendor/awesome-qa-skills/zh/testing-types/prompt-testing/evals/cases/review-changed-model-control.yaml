@@ -1,0 +1,18 @@
+id: "review-changed-model-control"
+title: "Prompt 归因需相同模型和数据身份"
+description: "Prompt 归因需相同模型和数据身份"
+input:
+  prompt: "使用 prompt-testing。模式 prompt-regression：P1 为 model-A/temperature0/datasetD1，P2 为 model-B/temperature0.7/datasetD2；结构合法但措辞不同，无重复。输出可比性与最小重跑。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "模型、参数、数据都变，不能把文字/质量差异归因 P2，分类不可比/未评估。"
+    - "需相同模型参数输入配对重复和语义锚点，不能凭词差编缺陷。"
+  pass_threshold: 1.0

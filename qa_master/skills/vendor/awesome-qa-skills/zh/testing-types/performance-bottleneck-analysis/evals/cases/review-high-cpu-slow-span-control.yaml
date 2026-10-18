@@ -1,0 +1,18 @@
+id: "review-high-cpu-slow-span-control"
+title: "高 CPU 或单慢 span 不足以确定瓶颈"
+description: "高 CPU 或单慢 span 不足以确定瓶颈"
+input:
+  prompt: "使用 performance-bottleneck-analysis。负载100->200RPS，完成100->200RPS，p95 40->45ms、queue0/pool-wait0、CPU95%；10000请求中一条span500ms，采样未知。分析，不能直接断言根因。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "未证实吞吐拐点/队列饱和，高 CPU 单独不能确定限制瓶颈。"
+    - "单慢 span 不具代表性根因证据，应索取分布/关联/profile 并保留采样限制。"
+  pass_threshold: 1.0

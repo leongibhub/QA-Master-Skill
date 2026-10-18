@@ -1,0 +1,33 @@
+id: "review-test-report-evidence"
+title: "产品报告评审识别无证据全范围结论"
+description: "产品报告评审识别无证据全范围结论"
+context:
+  files:
+    "report.md": |-
+      # Refund report
+      Build B21. All refunds are covered; release ready.
+    "results.csv": |-
+      id,build,requirement,status
+      R1,B21,Q1,PASS
+      R2,B21,Q1,BLOCKED
+    "product.json": "{\"source_id\":\"prod-review\",\"version\":\"v4\",\"requirements\":[{\"id\":\"Q1\",\"rule\":\"one debit per refund operation\",\"impact\":\"duplicate debit is irreversible loss\"}]}"
+input:
+  prompt: "使用 product-quality-perspective。stage: test-report-review。用 results.csv 与 product.json 审阅 report.md；保留原始事实，区分报告表达问题与新编测试结果。"
+expect:
+  must_contain:
+    - "Q1"
+    - "R2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "报告声称退款全部覆盖无证据：happy path R1 PASS，但 retry R2 BLOCKED，回链 Q1 重复扣款用户损失。"
+    - "不能把 BLOCKED 改成 FAIL/PASS，不新增未证实缺陷或批准发布。"
+    - "使用 prod-review/v4 与稳定发现/行动证据链接，关闭报告结论缺口前索取 retry 结果。"
+  pass_threshold: 1.0

@@ -1,0 +1,18 @@
+id: domain-method-success
+title: "security-requirement-review: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 security-requirement-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    S1 项目内部 Policy-X v3 要求 invoice 只能同租户所有者读取。R1 “系统必须安全”，无主体/验收；R2 GET invoice 需身份，但未写 tenant/owner 检查，验收仅“返回200”。无执行证据。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "将 invoice/非所有者或跨租户主体/读取路径/Policy-X义务/服务端控制/许可拒绝验收串联，定位 R1模糊与R2缺口。"
+    - "不以已登录/200替代授权，不编造外部标准版本或合规结论。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "G1": "COMPLETE",
+    "G2": "MISSING_RULE",
+    "G3": "MISSING_MATERIAL",
+    "G4": "CONFLICT",
+    "G5": "N/A"
+  },
+  "calculations": {},
+  "required_details": []
+}

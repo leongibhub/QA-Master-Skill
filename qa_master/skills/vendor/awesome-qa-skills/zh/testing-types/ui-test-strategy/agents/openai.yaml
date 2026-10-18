@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "ui-test-strategy"
+interface:
+  display_name: "UI 测试策略"
+  short_description: "依据已提供证据审查UI 测试策略，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the ui-test-strategy skill to produce UTS-## findings without claiming execution."
+policy:
+  allow_implicit_invocation: true

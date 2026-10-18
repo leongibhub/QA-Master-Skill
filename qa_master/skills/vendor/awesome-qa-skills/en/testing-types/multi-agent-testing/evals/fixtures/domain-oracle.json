@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "A-1": "FAIL",
+    "A-2": "PASS",
+    "A-3": "FAIL",
+    "A-4": "PASS"
+  },
+  "calculations": {},
+  "required_details": []
+}

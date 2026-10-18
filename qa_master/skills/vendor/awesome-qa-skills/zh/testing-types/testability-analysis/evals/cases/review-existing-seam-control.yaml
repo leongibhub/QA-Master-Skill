@@ -1,0 +1,28 @@
+id: "review-existing-seam-control"
+title: "已有安全测试缝需复用而非新增后门"
+description: "已有安全测试缝需复用而非新增后门"
+context:
+  files:
+    "interfaces.txt": |-
+      CheckoutService(clock:Clock,rng:SeededRNG,payment:PaymentProvider).
+      Clock.now(), SeededRNG.next(), PaymentProvider.debit(key,amount).
+      GET /operations/{operation_id}: tenant authorization required; masked status only.
+    "design.md": |-
+      # Checkout v9
+      operation_id propagates API/queue/worker. Production uses system clock/RNG and real authorized provider. Isolated tests use fake Clock/seeded RNG/payment stub configured only in sandbox; no client-accessible overrides.
+      No runtime test record supplied.
+input:
+  prompt: "使用 testability-analysis。模式 architecture-testability-review。审阅 interfaces.txt 与 design.md，已有所给测试缝，区分静态就绪与执行，不强制新增重复debug端点或弱化auth。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "识别注入 Clock/RNG/PaymentProvider、sandbox替身、operation_id/status 与 tenant授权读取，不误报缺测试缝阻塞。"
+    - "复用控制做定向确定性/重放验证，不能建议生产绕auth、真实写入、无条件可测PASS或零风险。"
+  pass_threshold: 1.0

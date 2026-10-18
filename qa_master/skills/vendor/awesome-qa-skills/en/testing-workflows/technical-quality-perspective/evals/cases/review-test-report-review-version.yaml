@@ -1,0 +1,23 @@
+id: "review-test-report-review-version"
+title: "Technical report review preserves version mismatch"
+description: "Technical report review preserves version mismatch"
+input:
+  prompt: "Use technical-quality-perspective. stage: test-report-review. Report claims build B25 retry safety passed; raw run R24 tested B24 only and has one FAIL. Review without executing code or approving release."
+expect:
+  must_contain:
+    - "B25"
+    - "B24"
+    - "R24"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Locates B25/B24 evidence mismatch and R24 FAIL; does not relabel a B24 run as proof for B25 or change FAIL into PASS."
+    - "Gives source-bound follow-up for B25 identity and retry evidence, while preserving unknown implementation correctness and release state."
+  pass_threshold: 1.0

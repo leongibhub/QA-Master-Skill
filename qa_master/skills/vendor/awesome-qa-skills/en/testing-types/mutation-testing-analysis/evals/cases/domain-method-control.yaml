@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "mutation-testing-analysis: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use mutation-testing-analysis to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    POL2 supplies no scoring formula. R2 a killed, b survived, c no-coverage, d timeout with traceable operators/logs; report lists counts 1/1/1/1 without a score. Equivalence evidence absent.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept distribution/absent formula rather than imposing POL1 or a required score."
+    - "Separate sensitivity, coverage and execution-anomaly follow-up for b/c/d."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

@@ -1,0 +1,78 @@
+id: "review-duplicate-source-version"
+title: "同一 source_id 的不同版本不能混淆身份"
+description: "同一 source_id 的不同版本不能混淆身份"
+context:
+  files:
+    "reports.json": |-
+      [
+        {
+          "source_id": "qa-1",
+          "version": "v1",
+          "stage": "test-report-review",
+          "source_role": "QA",
+          "facts": [],
+          "evidence": [
+            "run-R1"
+          ],
+          "findings": [
+            {
+              "id": "F-qa",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P0",
+              "blocking": true
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        },
+        {
+          "source_id": "qa-1",
+          "version": "v2",
+          "stage": "test-report-review",
+          "source_role": "technical",
+          "facts": [],
+          "evidence": [
+            "diff-D1"
+          ],
+          "findings": [
+            {
+              "id": "F-tech",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P1",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "medium"
+        }
+      ]
+input:
+  prompt: "使用 multi-role-quality-synthesis。先检查 reports.json 的身份冲突再汇总。两份报告同为 qa-1，却为 v1/v2 且严重度和证据不同。没有明确替代决定时不能自行选最新版。"
+expect:
+  must_contain:
+    - "qa-1"
+    - "v1"
+    - "v2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "显式记录 qa-1 v1/v2 身份歧义，保留两边严重度和证据，要求唯一/版本限定身份或授权替代决定。"
+    - "不能用 P1/diff-D1 覆盖 P0/run-R1，不能把一个来源的两版本称为多来源共识。"
+  pass_threshold: 1.0

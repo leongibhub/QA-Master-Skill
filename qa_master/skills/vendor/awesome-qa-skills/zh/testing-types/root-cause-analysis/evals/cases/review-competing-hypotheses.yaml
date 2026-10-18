@@ -1,0 +1,29 @@
+id: "review-competing-hypotheses"
+title: "竞争假设保留反证和最小区分实验"
+description: "竞争假设保留反证和最小区分实验"
+context:
+  files:
+    "evidence.md": |-
+      H1: CPU saturation. H2: leaked pool leases.
+      09:00 deploy B60;09:01 load100->200RPS;09:03 wait5s, pool20/20, CPU40%. Last log: request timeout.
+      No lease release records or source code provided. Same process restart at09:05 restores pool0/20 and latency, but load also returns100RPS.
+input:
+  prompt: "使用 root-cause-analysis。分析 evidence.md，对比 H1 CPU 饱和与 H2 pool lease 泄漏，区分触发、贡献因素、症状与根因确定度。提出一次最小隔离区分实验，不执行。"
+expect:
+  must_contain:
+    - "H1"
+    - "H2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "CPU40% 为 H1 饱和反证，pool20/20 与等待增长支持 H2，末尾 timeout 是症状而非根因。"
+    - "H2 缺 lease 获取/释放和代码路径证据仍为假设，部署/负载时序不能证明因果。"
+    - "固定负载检查 lease 配平或异常释放路径并给 pool/wait 区分预期，不能盲扩池或归罪个人。"
+  pass_threshold: 1.0

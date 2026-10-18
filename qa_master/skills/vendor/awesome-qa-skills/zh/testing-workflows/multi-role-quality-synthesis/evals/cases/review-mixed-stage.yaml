@@ -1,0 +1,103 @@
+id: "review-mixed-stage"
+title: "混入不同 stage 不得静默汇总"
+description: "混入不同 stage 不得静默汇总"
+context:
+  files:
+    "reports.json": |-
+      [
+        {
+          "source_id": "qa-1",
+          "version": "v1",
+          "stage": "test-report-review",
+          "source_role": "QA",
+          "facts": [],
+          "evidence": [
+            "run-R1"
+          ],
+          "findings": [
+            {
+              "id": "F-qa",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P0",
+              "blocking": true
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        },
+        {
+          "source_id": "tech-1",
+          "version": "v2",
+          "stage": "test-strategy",
+          "source_role": "technical",
+          "facts": [],
+          "evidence": [
+            "diff-D1"
+          ],
+          "findings": [
+            {
+              "id": "F-tech",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P1",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "medium"
+        },
+        {
+          "source_id": "product-1",
+          "version": "v3",
+          "stage": "test-report-review",
+          "source_role": "product",
+          "facts": [],
+          "evidence": [
+            "req-Q7"
+          ],
+          "findings": [
+            {
+              "id": "F-product",
+              "target": "invoice-import",
+              "condition": "same invoice uploaded twice",
+              "problem": "duplicate debit",
+              "severity": "P2",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        }
+      ]
+input:
+  prompt: "使用 multi-role-quality-synthesis。仅在 stage 能支持单阶段结论时汇总 reports.json；即使阻断也保留输入来源清单。"
+expect:
+  must_contain:
+    - "qa-1"
+    - "tech-1"
+    - "product-1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "识别 test-strategy 与 test-report-review 冲突，阻断联合结论，列出 stage/source 对并要求按阶段拆分。"
+    - "三份来源仍可追踪，不制造共识，也不能因汇总阻断而抹去 P0。"
+  pass_threshold: 1.0

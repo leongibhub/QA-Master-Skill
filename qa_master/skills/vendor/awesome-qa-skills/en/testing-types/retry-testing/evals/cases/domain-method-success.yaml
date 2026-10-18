@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "retry-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use retry-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 at most 3 dependency attempts end-to-end, deadline 1000 ms; 400 permanent/no retry, 503 retryable; payment timeout reconciles/retries the same key without duplicate charge.
+    T1 outer 3 × inner 3 = 9 calls, total 1200 ms; first commits P1 then times out, retry changes key/commits P2. T2 retries twice after 400.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Identify 9>3 attempts, 1200>1000 ms, duplicate charge/new key and 400 retries under C1."
+    - "Do not equate outer count with end-to-end count or timeout with no commit."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

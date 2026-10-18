@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "combinatorial-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 combinatorial-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    M1 三因素 A/B/C，各值 {0,1}，无约束。缺陷 D1 仅 A=B=C=1 触发，要求 3-way。
+    P1 候选 000,011,101,110，报告声称 pairwise 完整因此 D1 已受保护。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "核对 P1 所有 pairs 可覆盖，但 3-way universe 为 8，缺 001/010/100/111，尤其 D1 的 111。"
+    - "指出强度与义务不匹配，不把静态覆盖写成缺陷已被测试捕获。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

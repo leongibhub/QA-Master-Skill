@@ -1,0 +1,9 @@
+id: "review-offline-arrival-artifacts"
+title: "Offline k6 assets retain load delivery and business checks"
+description: "Offline k6 assets retain load delivery and business checks"
+input:
+  prompt: "Use performance-test-k6. Author perf/options.json and perf/scripts/order.js only; do not run load. Target is independent arrivals100/s for1m, allocated20/max50 VUs; gate p95<300ms, http errors<1%, zero dropped iterations and all business checks true. Contract POST /orders body {sku:\"SKU-1\",qty:1} ->201 {id:nonempty string,state:\"CREATED\",sku:\"SKU-1\",qty:1}. Export options from init-only JSON.parse(open(\"../options.json\")); use variable body for res.json(). Use BASE_URL/API_TOKEN via __ENV. Return JSON {\"execution_status\":\"NOT_RUN\"}. Explain check versus threshold and achieved-load limits outside the JSON if useful."
+judge:
+  type: "script"
+  script_path: "evals/graders/review-offline-arrival-artifacts.py"
+  timeout_seconds: 30

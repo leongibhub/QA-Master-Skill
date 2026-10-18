@@ -1,0 +1,19 @@
+id: domain-method-control
+title: "dependency-failure-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use dependency-failure-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C2 async notifications: committed orders may have pending notifications; notification timeout must not duplicate the order; recovery deduplicates messageId.
+    T2 O2 commits once; M2 delayed, caller notification pending; M2 consumed twice after recovery but sent once. No synchronous-payment behavior supplied.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept async pending/deduplication under C2 without demanding immediate synchronous success or borrowing C1."
+    - "Leave payment, backlog limits and recovery timing unknown; one message does not prove all isolation."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

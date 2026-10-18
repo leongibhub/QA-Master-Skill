@@ -1,0 +1,18 @@
+id: "review-closed-model-control"
+title: "Fixed-user workload is not forced into arrival-rate model"
+description: "Fixed-user workload is not forced into arrival-rate model"
+input:
+  prompt: "Use performance-test-k6. Existing options specify constant-vus, vus20, duration1m. Goal is20 concurrent users, each waits1s after completion; no target RPS. Supplied result checks=100% but no checks threshold, p95 target present. Review model choice and pass/fail limits without running."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Keeps closed constant-vus for supplied concurrency/user pacing instead of wrongly requiring independent100RPS arrival rate."
+    - "Explains checks record condition outcomes while thresholds gate exit; no checks threshold means check failures alone do not establish the configured CI exit decision, and no production capacity is inferred."
+  pass_threshold: 1.0

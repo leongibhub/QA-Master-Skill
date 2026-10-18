@@ -1,0 +1,20 @@
+id: "review-authorized-trim"
+title: "Remove process residue while preserving exact durable facts"
+description: "Remove process residue while preserving exact durable facts"
+context:
+  files:
+    "contract.md": |-
+      # Safe review
+      Never send production writes.
+      This PR fixed the reviewer concern and now we should keep it.
+      Measured limit: one local fixture; runtime effectiveness is UNASSESSED.
+      History: 2026-09-18, issue #42 recorded the schema change.
+      Formal reference: https://example.test/spec/v1
+    "fixtures/recorded.json": |-
+      {"recorded_at":"2026-09-18","expected":"This PR is fixture payload"}
+input:
+  prompt: "Use skill-prose-trim. You are authorized to edit contract.md only. Remove unresolved process narration; preserve every other line, including the measured limit, date, issue, URL, and prohibition. Do not edit fixtures/recorded.json. Return JSON {\"mode\":\"edited\"}."
+judge:
+  type: "script"
+  script_path: "evals/graders/review-authorized-trim.py"
+  timeout_seconds: 30

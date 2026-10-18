@@ -1,0 +1,20 @@
+id: domain-method-control
+title: "api-negative-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use api-negative-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 POST /items: qty required, non-null, integer 1..5; optional note, if present nonempty string of at most 8 codepoints; body<=100 bytes; foreign tenants rejected with 403. Field violations give 400/INVALID_INPUT without a new item.
+    C2 is C1. T3 {qty:1}→201/I3; T4 {qty:5, note:"12345678"}→201/I4, body 40 bytes. T5 {qty:"1"}→400/INVALID_INPUT, no ledger addition.
+    No error-precedence rule is supplied for multiple violations.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Accept valid boundaries 1/5 and length 8; distinguish string \"1\" from integer 1."
+    - "Leave multi-error precedence open rather than requiring a particular first error."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

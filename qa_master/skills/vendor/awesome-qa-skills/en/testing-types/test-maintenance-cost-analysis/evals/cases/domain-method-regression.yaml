@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-maintenance-cost-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use test-maintenance-cost-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Same month,20h each. A:16h duplicated selector implementations,4h product change. B:16h runner outage/wait/retry,4h product change. C:20h without causes. M1 recommends deduplication for A while retaining business assertions. M2 prioritizes environment reliability for B. M3 infers identical root causes from equal totals. M4 labels C personally inefficient. Decide SUPPORTED/UNSUPPORTED/UNKNOWN for recommendations, with source-based cost groups and no performance ranking from total hours. M5: C has no cause records; classify its maintenance cause UNKNOWN.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

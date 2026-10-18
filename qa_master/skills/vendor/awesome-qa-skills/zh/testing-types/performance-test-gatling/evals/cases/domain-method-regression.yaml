@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "performance-test-gatling: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 performance-test-gatling 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    fixture版本由构建记录确认 Java DSL/Gatling3.13/JDK17，离线test-compile日志成功。G-1 单请求/用户，无循环重试，constantUsersPerSec(10).during(2)，实际20请求/2秒。G-2 constantConcurrentUsers(10)却未给完成请求数，宣称10RPS。G-3 queue feeder仅5行，20个用户各feed一次，第6次耗尽但忽略错误。G-4 未给SLO仍写p95<500ms并宣称通过。用 VALID/UNSUPPORTED/FAIL/UNKNOWN 判断；解释compile不等于运行通过及feeder需求。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

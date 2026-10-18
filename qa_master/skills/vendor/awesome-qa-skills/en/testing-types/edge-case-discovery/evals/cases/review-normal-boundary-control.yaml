@@ -1,0 +1,18 @@
+id: "review-normal-boundary-control"
+title: "A normal example is not a proven boundary failure"
+description: "A normal example is not a proven boundary failure"
+input:
+  prompt: "Use edge-case-discovery. R1 allows max4 codepoints AND max8 UTF-8 bytes; sample label ab has 2 codepoints/2 bytes. Only label scope is provided. Classify this sample and propose sourced neighboring candidates without inventing failure states or limits."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Treats ab as within both provided limits, not a confirmed failure; candidate boundary proposals are not execution proof."
+    - "Does not invent timezone/mobile/concurrency requirements or fixed error code for overflow."
+  pass_threshold: 1.0

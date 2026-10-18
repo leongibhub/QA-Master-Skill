@@ -1,0 +1,64 @@
+id: "review-comparable-runs"
+title: "比较身份固定的 previous/current 工件"
+description: "比较身份固定的 previous/current 工件"
+context:
+  files:
+    "artifacts/runs.json": |-
+      {
+        "previous": {
+          "run_id": "run-prev",
+          "skill_version": "v1",
+          "eval_version": "e1",
+          "skill_up": "0.12.0",
+          "engine": "codex",
+          "model": "model-fixture",
+          "parameters": {
+            "temperature": 0,
+            "seed": 7
+          },
+          "input_hash": "cases-A",
+          "judge": "rubric-A",
+          "environment": "sandbox-A",
+          "timestamp": "2026-10-01T09:00:00Z",
+          "passed": 8,
+          "total": 10
+        },
+        "current": {
+          "run_id": "run-current",
+          "skill_version": "v2",
+          "eval_version": "e1",
+          "skill_up": "0.12.0",
+          "engine": "codex",
+          "model": "model-fixture",
+          "parameters": {
+            "temperature": 0,
+            "seed": 7
+          },
+          "input_hash": "cases-A",
+          "judge": "rubric-A",
+          "environment": "sandbox-A",
+          "timestamp": "2026-10-02T09:00:00Z",
+          "passed": 6,
+          "total": 10
+        }
+      }
+input:
+  prompt: "使用 skill-evaluation。将 artifacts/runs.json 解读为 previous/current 评测报告，不运行引擎。写明比较类型、通过率事实变化、可比依据、不确定性与发布结论所缺证据。"
+expect:
+  must_contain:
+    - "run-prev"
+    - "run-current"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "分类为 Version Regression，不能称为 with/without benchmark，回链 run-prev/run-current 和固定模型、输入、judge、环境。"
+    - "保留 8/10=80%、6/10=60%，下降 20 个百分点；不能误称相对下降 20%（相对下降为 25%）。"
+    - "下降结论限定于这十个用例和样本，不外推生产/业务批准或统计意义上的整体退化。"
+  pass_threshold: 1.0

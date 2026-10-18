@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "requirements-analysis-plus: sourced repair regression"
+input:
+  prompt: |
+    Use requirements-analysis-plus.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append `ID | DECISION | Evidence`, one row per ID, using the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: PREPARED, UNKNOWN, UNSUPPORTED.
+
+    Parsed input has 55 lines including Rule55 and user_id >= -1; retry-count > 3; password length12..64. Helper mode=evidence_preparation, analysis_status=NOT_ASSESSED, versions=UNKNOWN. Q1: source preservation verified. Q2: somebody declares "requirements are partially testable and inventory risk is P0" solely from that helper. Q3: user asks whether missing source versions are confirmed. Distinguish material preparation from semantic conclusions.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

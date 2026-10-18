@@ -1,0 +1,18 @@
+id: domain-method-success
+title: "failover-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use failover-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 partitions allow one writer; A must be fenced before switching to B. Business RTO<=20 s. T1 t0 partition; t5 B primary; t8 routing/business ready on B; A unfenced; t9 A writes O1=10 and B O1=20. Reconciliation/failback evidence absent.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Compare RTO 8 s with target but identify unfenced dual writes/O1 conflict under C1; availability does not pass failover."
+    - "Retain reconciliation/failback gaps; role strings do not prove single-writer enforcement."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

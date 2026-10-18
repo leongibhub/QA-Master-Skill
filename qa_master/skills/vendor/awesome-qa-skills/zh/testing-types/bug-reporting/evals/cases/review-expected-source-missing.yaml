@@ -1,0 +1,18 @@
+id: "review-expected-source-missing"
+title: "缺预期来源不能虚构规则"
+description: "缺预期来源不能虚构规则"
+input:
+  prompt: "使用 bug-reporting。B32 观察到报价显示 11，未提供预期行为。输出受限缺陷草稿，明确缺少预期来源与下一核实行动，不能认定正确值为 10。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "显示 11 为观察事实，预期结果需需求/契约来源且保持未知。"
+    - "不能虚构 amount=10、确定报价缺陷、必现频率或根因。"
+  pass_threshold: 1.0

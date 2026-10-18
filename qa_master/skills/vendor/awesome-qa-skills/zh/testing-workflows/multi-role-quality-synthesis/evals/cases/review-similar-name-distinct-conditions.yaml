@@ -1,0 +1,77 @@
+id: "review-similar-name-distinct-conditions"
+title: "发现同名不能证明语义等价"
+description: "发现同名不能证明语义等价"
+context:
+  files:
+    "reports.json": |-
+      [
+        {
+          "source_id": "qa-1",
+          "version": "v1",
+          "stage": "test-report-review",
+          "source_role": "QA",
+          "facts": [],
+          "evidence": [
+            "run-R1"
+          ],
+          "findings": [
+            {
+              "id": "F-qa",
+              "target": "refund",
+              "condition": "retry after commit",
+              "problem": "duplicate debit",
+              "severity": "P0",
+              "blocking": true
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        },
+        {
+          "source_id": "product-1",
+          "version": "v3",
+          "stage": "test-report-review",
+          "source_role": "product",
+          "facts": [],
+          "evidence": [
+            "req-Q7"
+          ],
+          "findings": [
+            {
+              "id": "F-product",
+              "target": "invoice-import",
+              "condition": "same invoice uploaded twice",
+              "problem": "duplicate debit",
+              "severity": "P2",
+              "blocking": false
+            }
+          ],
+          "risks": [],
+          "gaps": [],
+          "questions": [],
+          "actions": [],
+          "confidence": "high"
+        }
+      ]
+input:
+  prompt: "使用 multi-role-quality-synthesis。汇总 reports.json 中两份报告。合并依据需是目标、条件和结果，不能只看发现标题。"
+expect:
+  must_contain:
+    - "F-qa"
+    - "F-product"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "refund/提交后重试/F-qa 与 invoice-import/重复上传/F-product 虽都叫 duplicate debit，目标条件不同须分开且引用各自证据来源。"
+    - "保留 P0 阻塞，不能平均 P0/P2 或制造共识。"
+  pass_threshold: 1.0

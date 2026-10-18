@@ -1,0 +1,18 @@
+id: "review-incomparable-load-control"
+title: "负载与环境不同阻断版本退化归因"
+description: "负载与环境不同阻断版本退化归因"
+input:
+  prompt: "使用 performance-regression-analysis。baseline B1/perf-A 为100RPS read、p95=100ms；candidate B2/perf-B 为200RPS write、p95=160ms。给出数值观察和可比性，限制版本退化结论。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "观察 +60ms/+60%，但环境、混合读写与速率均改变，不能归因 B2 版本退化。"
+    - "退化为未评估/不可比，重跑需固定环境/负载/数据/参数只改 build，不能由数差证明因果。"
+  pass_threshold: 1.0

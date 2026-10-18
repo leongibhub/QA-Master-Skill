@@ -1,0 +1,63 @@
+id: "review-incomparable-runs"
+title: "Changed input and model prevent attribution"
+description: "Changed input and model prevent attribution"
+context:
+  files:
+    "artifacts/runs.json": |-
+      {
+        "previous": {
+          "run_id": "run-prev",
+          "skill_version": "v1",
+          "eval_version": "e1",
+          "skill_up": "0.12.0",
+          "engine": "codex",
+          "model": "model-fixture",
+          "parameters": {
+            "temperature": 0,
+            "seed": 7
+          },
+          "input_hash": "cases-A",
+          "judge": "rubric-A",
+          "environment": "sandbox-A",
+          "timestamp": "2026-10-01T09:00:00Z",
+          "passed": 8,
+          "total": 10
+        },
+        "current": {
+          "run_id": "run-current",
+          "skill_version": "v2",
+          "eval_version": "e1",
+          "skill_up": "0.12.0",
+          "engine": "codex",
+          "model": "model-other",
+          "parameters": {
+            "temperature": 0,
+            "seed": 7
+          },
+          "input_hash": "cases-B",
+          "judge": "rubric-A",
+          "environment": "sandbox-A",
+          "timestamp": "2026-10-02T09:00:00Z",
+          "passed": 6,
+          "total": 10
+        }
+      }
+input:
+  prompt: "Use skill-evaluation. Review artifacts/runs.json. The current run additionally changes model=model-other and input_hash=cases-B. Report any numerical observations separately from a version-regression conclusion. Propose the smallest controlled rerun."
+expect:
+  must_contain:
+    - "model-other"
+    - "cases-B"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Identifies both model-other and cases-B as comparison confounders and does not attribute the 80%-to-60% change to the Skill version."
+    - "Marks the regression conclusion unassessed or insufficient-evidence, while preserving the two observed rates; proposes a rerun with identical model/settings/input/judge/environment and changed Skill only."
+  pass_threshold: 1.0

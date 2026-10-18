@@ -1,0 +1,25 @@
+id: "review-role-version-nonconflict"
+title: "同词不同角色或版本不是同范围冲突"
+description: "同词不同角色或版本不是同范围冲突"
+context:
+  files:
+    "scoped.md": |-
+      A1: version v2, actor admin, approve orders allowed.
+      A2: version v2, actor customer, approve orders prohibited.
+      V1: version v1 archived, export prohibited.
+      V2: version v2 active, export allowed.
+input:
+  prompt: "使用 requirement-conflict-detection。审阅 scoped.md，区分真实冲突与适用范围不同，不能假定 archived v1 和 active v2 同时生效。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "A1 admin 可 approve 与 A2 customer 不可 approve 角色不同，不是同角色权限冲突。"
+    - "V1/v2 export 为不同 archived/active 版本，不编造当前冲突，保留范围版本证据与不确定性。"
+  pass_threshold: 1.0

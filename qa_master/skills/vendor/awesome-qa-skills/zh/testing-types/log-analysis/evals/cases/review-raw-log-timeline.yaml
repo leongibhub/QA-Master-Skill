@@ -1,0 +1,32 @@
+id: "review-raw-log-timeline"
+title: "原始日志保留 UTC 顺序、请求关联与缺失段"
+description: "原始日志保留 UTC 顺序、请求关联与缺失段"
+context:
+  files:
+    "logs.jsonl": |-
+      {"id":"L3","time":"2026-10-06T02:01:10Z","service":"api","request_id":"R2","level":"ERROR","code":"DB_TIMEOUT","token":"[REDACTED]"}
+      {"id":"L1","time":"2026-10-06T10:01:05+08:00","service":"api","request_id":"R1","level":"ERROR","code":"DB_TIMEOUT"}
+      {"id":"L0","time":"2026-10-06T10:00:00+08:00","service":"deploy","version":"B40","level":"INFO"}
+      {"id":"L2","time":"2026-10-06T02:01:03Z","service":"db","request_id":"R1","level":"ERROR","code":"POOL_WAIT_TIMEOUT"}
+input:
+  prompt: "使用 log-analysis。分析 logs.jsonl，B40 部署为 02:00Z，给定时钟已同步但采样未知。排序事件、按请求聚类、定位跨服务缺段并提出最小假设核实。"
+expect:
+  must_contain:
+    - "L0"
+    - "L2"
+    - "R1"
+    - "R2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "将 +08:00/Z 换 UTC，顺序 L0,L2,L1,L3；L2/L1 关联 R1，R2/L3 缺对应 DB 段。"
+    - "两个失败请求 ID 与三条错误行区分，无请求总数不能编错误率。"
+    - "B40 时间关联与 POOL_WAIT_TIMEOUT 只支持假设，给最小前后 pool/wait/config 核对或受控版本对比，保留采样/缺段/脱敏限制。"
+  pass_threshold: 1.0

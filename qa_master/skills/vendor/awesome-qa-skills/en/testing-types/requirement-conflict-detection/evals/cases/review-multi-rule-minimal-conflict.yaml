@@ -1,0 +1,33 @@
+id: "review-multi-rule-minimal-conflict"
+title: "Three rules can conflict even when every pair is satisfiable"
+description: "Three rules can conflict even when every pair is satisfiable"
+context:
+  files:
+    "rules.md": |-
+      # Same job J1, version v3; all times are minutes from the same origin.
+      Invariant I1: finish = start + duration; duration >=0.
+      R1: start >=10.
+      R2: duration >=20.
+      R3: finish <=25.
+      No rule precedence or waiver is supplied.
+input:
+  prompt: "Use requirement-conflict-detection. Find requirement conflicts in rules.md for the same job/version/scope. Identify participating rule IDs and a smallest unsatisfiable set; preserve source statements and give a decision question, not a chosen precedence."
+expect:
+  must_contain:
+    - "R1"
+    - "R2"
+    - "R3"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Finds minimal conflict {R1,R2,R3}: start>=10, duration>=20 and finish=start+duration imply finish>=30, contradicting finish<=25."
+    - "Explains that each proper pair can satisfy the invariant, so no invented pairwise contradictory statement; includes all three sources in RF findings."
+    - "Does not silently reduce duration/change deadline or select precedence; asks authorized owner which constraint to revise."
+  pass_threshold: 1.0

@@ -1,0 +1,21 @@
+id: domain-method-success
+title: "test-code-review: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 test-code-review 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    C1 calc(2,3)必须=5，抛异常或返回4时测试必须失败；runner等候async test返回。
+    F1 L1 try {calc(2,3)} catch(e) {}，没有assert。
+    F2 L2 actual=calc(2,3); assert(2+3===5)。
+    F3 L3 两个并行测试写固定共享orderId=1且不清理，合同要求独立订单。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "定位L1吞异常且无断言、L2只断言常量而未检查actual；给L1吞掉异常、L2返回4仍通过的具体反例。"
+    - "定位L3共享ID冲突与cleanup缺口，不能只列一般可维护性建议。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

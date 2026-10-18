@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "D1": "VALID",
+    "D2": "INVALID",
+    "D3": "MATCHED_NEGATIVE",
+    "D4": "INVALID"
+  },
+  "calculations": {},
+  "required_details": []
+}

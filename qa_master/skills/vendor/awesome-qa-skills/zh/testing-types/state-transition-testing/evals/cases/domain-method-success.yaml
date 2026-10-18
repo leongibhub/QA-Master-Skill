@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "state-transition-testing: 领域流程与结果判定"
+input:
+  prompt: |
+    请使用 state-transition-testing 分析以下提供的脱敏静态 fixture。仅分析材料，不执行测试或修改资产。
+    完成六类输入审计，按主提示词交付来源化发现，并给出逐项预期、材料中的观察、判定理由和最小验证方法；没有问题的对照不得虚构发现。
+
+    M1 初始DRAFT，submit仅qty>0→SUBMITTED；pay成功→PAID并且仅扣一次；DRAFT不能ship；pay失败必须保持SUBMITTED且不扣费。
+    T1 qty0 submit→SUBMITTED；T2 DRAFT ship→SHIPPED；T3 pay失败但状态PAID并扣费一次。
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "分别定位guard边界、非法迁移和失败原子性/副作用冲突，引用M1/T1-T3。"
+    - "给qty0/1、合法pay及非法ship对照，不能只输出状态列表。"
+    - "把结论限制为给定 fixture 的静态比对；保留缺少的项目证据，不声称材料未支持的真实测试通过、漏洞利用成功或 Human 已批准。"
+  pass_threshold: 1.0

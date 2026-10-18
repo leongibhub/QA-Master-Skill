@@ -1,0 +1,18 @@
+id: "review-changed-model-control"
+title: "Prompt attribution requires unchanged model and data identity"
+description: "Prompt attribution requires unchanged model and data identity"
+input:
+  prompt: "Use prompt-testing. Mode prompt-regression: P1 output was model-A/temperature0/datasetD1; P2 output was model-B/temperature0.7/datasetD2. Both outputs are structurally valid but wording differs. No repetitions. Report comparison validity and minimum rerun."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Cannot attribute wording/quality difference to P2 because model, parameters and dataset all changed; classification remains incomparable/unassessed."
+    - "Requests same-model/settings/input paired repeats and semantic anchors; no invented defect based on words alone."
+  pass_threshold: 1.0

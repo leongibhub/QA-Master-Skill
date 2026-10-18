@@ -1,0 +1,33 @@
+id: "review-state-rule-trace"
+title: "分析导出有来源测试点但不补未知时间"
+description: "分析导出有来源测试点但不补未知时间"
+context:
+  files:
+    "state.md": |-
+      # Checkout states v5
+      R1: NEW -> RESERVED before charging.
+      R2: RESERVED -> PAID after confirmed payment; each idempotency key may debit at most once.
+      R3: unpaid RESERVED eventually expires -> EXPIRED. TTL and expiry owner are not specified.
+      R4: PAID is terminal for this scope; refunds/shipping excluded.
+input:
+  prompt: "使用 requirements-analysis。分析 state.md@v5，将测试点回链 R ID，区分未知过期时间/负责人和确认状态转移，优先高价值可关闭问题，不写整套用例。"
+expect:
+  must_contain:
+    - "R1"
+    - "R2"
+    - "R3"
+    - "Open Questions"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "从来源导出 R1 NEW->RESERVED 先于支付、R2 RESERVED->PAID 每key一次、R3 未支付预留过期测试意图，保留状态版本 Trace。"
+    - "TTL 与过期负责人未知，不能编15分钟或 PAID 后自动过期。"
+    - "优先重试/去重结果和过期触发/负责人问题，明确所需证据，已知规则为事实、未述预期为假设。"
+  pass_threshold: 1.0

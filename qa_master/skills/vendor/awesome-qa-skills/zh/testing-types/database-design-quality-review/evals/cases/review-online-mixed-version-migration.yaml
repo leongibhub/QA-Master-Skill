@@ -1,0 +1,36 @@
+id: "review-online-mixed-version-migration"
+title: "在线迁移需说明混合版本、锁证据和回滚"
+description: "在线迁移需说明混合版本、锁证据和回滚"
+context:
+  files:
+    "schema.sql": |-
+      -- orders v2 proposed migration
+      ALTER TABLE orders ADD COLUMN region TEXT NOT NULL;
+      CREATE INDEX orders_region_idx ON orders(region);
+    "migration.md": |-
+      # Mixed-version migration v2
+      Populated orders table; v1 inserts id,tenant_id,created_at only. v1/v2 coexist for 24 hours. Proposed: run schema.sql then switch all services.
+      Business region for historical orders is not decided; no default or backfill specified.
+      Access pattern: tenant_id + created_at range, not region alone.
+      Write-lock budget 500ms; lock measurement and rollback rehearsal not supplied. Rollback proposal: drop region immediately.
+input:
+  prompt: "使用 database-design-quality-review。静态审阅 migration.md 与 schema.sql 的混合版本窗口，给出分阶段兼容、默认/回填、锁证据、访问路径、回滚和验证发现，不执行 SQL。"
+expect:
+  must_contain:
+    - "region"
+    - "v1"
+    - "500"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "region 必填但无默认/回填，与已有行及 v1 插入省略 region 冲突，定位 schema.sql:2 与混合版本章节，不能称已观察停机。"
+    - "建议 expand 兼容 nullable/默认策略、版本读写、批量回填验证、旧写入退役后才 contract；默认遵循已给业务语义或待决定。"
+    - "锁时长和 p95 查询影响为未测，按给定预算索取代表性锁/访问证据；回滚保留旧读兼容和数据，不默认破坏性 drop。"
+  pass_threshold: 1.0

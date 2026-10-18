@@ -1,0 +1,35 @@
+id: "review-only-trim"
+title: "纯审查区分建议和实际编辑"
+description: "纯审查区分建议和实际编辑"
+context:
+  files:
+    "contract.md": |-
+      # Safe review
+      Never send production writes.
+      This PR fixed the reviewer concern and now we should keep it.
+      Measured limit: one local fixture; runtime effectiveness is UNASSESSED.
+      History: 2026-09-18, issue #42 recorded the schema change.
+      Formal reference: https://example.test/spec/v1
+    "fixtures/recorded.json": |-
+      {"recorded_at":"2026-09-18","expected":"This PR is fixture payload"}
+input:
+  prompt: "使用 skill-prose-trim。只审查 contract.md，不改任何文件。仅对过程残留给出 before/after 修订建议，逐行列出保留内容，说明为何不能改 recorded fixture。在保留内容报告中写出原日期、issue 编号、正式 URL 和测量状态，便于逐项核对；引用记录载荷仅用于说明其保护理由，不清理或修改载荷。"
+expect:
+  must_contain:
+    - "contract.md"
+    - "2026-09-18"
+    - "UNASSESSED"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "只建议删除第 3 行，并明确是建议，不能称已编辑文件。"
+    - "保留禁止生产写入、单 fixture 的 UNASSESSED 限制、2026-09-18 / issue #42 历史和正式 URL。"
+    - "fixtures/recorded.json 中 This PR 为记录载荷，不能当文档过程残留删除。"
+  pass_threshold: 1.0

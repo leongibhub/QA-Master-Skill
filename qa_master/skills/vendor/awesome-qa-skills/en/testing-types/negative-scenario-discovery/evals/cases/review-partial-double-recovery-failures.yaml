@@ -1,0 +1,31 @@
+id: "review-partial-double-recovery-failures"
+title: "Negative paths retain outcome-unknown and recovery consistency expectations"
+description: "Negative paths retain outcome-unknown and recovery consistency expectations"
+context:
+  files:
+    "failures.md": |-
+      N1: provider committed debit D1 under K1; caller timed out. Rule R1: at most one debit per K1; query operation state before retry. Caller error code is not defined.
+      N2: payment P2 failed; reservation release R2 also failed. Rule R2: unpaid orders eventually release reservation; release owner is Ops.
+      N3: recovery worker persisted completed_step=2 then crashed; restart must resume after completed steps. Rule R3: each compensation effect once. Recovery error mapping is missing.
+input:
+  prompt: "Use negative-scenario-discovery. Discover NS candidates from failures.md only; each candidate needs stimulus/precondition, rejection or recovery expectation, visible result, consistency impact and required evidence. No fault injection is authorized."
+expect:
+  must_contain:
+    - "N1"
+    - "N2"
+    - "N3"
+    - "K1"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "N1 timeout after committed payment is outcome unknown, so retries reuse K1/query state and must not cause a second debit; no invented HTTP mapping."
+    - "N2 payment failure plus reservation-release failure is a double failure with pending reservation risk and reconciliation/Human handoff expectation; preserves both layer sources."
+    - "N3 recovery worker crash after writing step2 requires resume/dedup at persisted step, with verification of no duplicate compensation; unknown recovery error code remains a question."
+  pass_threshold: 1.0

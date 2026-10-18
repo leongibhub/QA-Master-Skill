@@ -1,0 +1,18 @@
+id: domain-method-regression
+title: "quality-metrics-design: 领域结果、正确对照与证据边界"
+description: "校验逐项领域决策，保留合法对照与未知证据，不以通用标题代替结果。"
+input:
+  prompt: |
+    请使用 quality-metrics-design 分析以下脱敏静态 fixture，仅分析提供材料，不执行外部动作。按主提示词提供领域步骤、可观察预期、来源、缺口和最小验证。
+    追加一个逐项判定表，固定表头为 `ID | DECISION | 依据`；每项独占一行，DECISION 格只写一个提供的枚举值，不列备选。FAIL/PASS 等仅表示 fixture 静态比对，不能说已经执行真实测试。
+
+    字典v1：本月新缺陷按distinct defect_id；首次通过率按distinct test_id首次尝试。事件D1创建/关闭/重开，D2创建，D1重复导入；测试T1首FAIL后重跑PASS，T2首PASS，T3计划但无执行。K-1有人说新缺陷4个。K-2首通过率用重跑替代失败而说100%。K-3按定义计算新缺陷与首次执行通过率。K-4声称T3通过。给WRONG/CALCULABLE/UNKNOWN，保留缺陷实体、首次分母和未执行状态。
+    计算结果另用 `METRIC | VALUE | 单位/依据` 表输出，METRIC 使用以下键：new_defects, first_attempt_pass_numerator, first_attempt_pass_denominator。VALUE 只写数字。
+
+    只输出一个决策表，每个fixture ID恰好一行、三列且依据非空；不要重复或输出未知ID。计算表同样每键一行、单位/依据非空。
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

@@ -1,0 +1,60 @@
+id: basic-success
+title: Complete Skill contract review
+description: Complete static sources support a coherent read-only contract review, separate from runtime acceptance.
+context:
+  files:
+    sample/package-contract.md: '# Package contract
+
+      The SKILL.md name is the canonical ID; metadata.key must equal it.
+
+      The supplied material supports static prose review only, without Host or evaluation-run evidence.
+
+      sample/ is a fixture container, not the canonical ID.'
+    sample/SKILL.md: '---
+
+      name: receipt-reader
+
+      description: Use this skill when reviewing receipt records.
+
+      ---
+
+      # Receipt review
+
+      Input: receipt records supplied by the user; missing source is an information gap.
+
+      Read prompts/review.md; return a Markdown table with receipt_id and finding.
+
+      Report findings only; never edit receipts or any file.'
+    sample/prompts/review.md: '# Receipt review prompt
+
+      Inspect only supplied receipt records; missing source or receipt_id is a gap, never invented.
+
+      Return a Markdown table with receipt_id and finding; state no findings when appropriate.
+
+      Report only; never edit receipts or other files.'
+    sample/agents/openai.yaml: "version: 1\nmetadata:\n  key: receipt-reader\ninterface:\n  display_name: Receipt review\n\
+      \  short_description: Read-only review of supplied receipts\n  default_prompt: Use receipt-reader to review supplied\
+      \ receipts and report findings without edits.\npolicy:\n  allow_implicit_invocation: true"
+input:
+  prompt: 'Use skill-prose-review. Read-only review of the supplied receipt Skill in sample/: do not execute its business
+    task or edit files. Assess triggers, inputs, steps, outputs, constraints and evidence, and give a source-grounded prose
+    verdict; absent runtime evidence alone is not a prose blocker.'
+expect:
+  must_contain:
+  - sample/SKILL.md
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  context:
+    profile: minimal
+    final_message: include
+    transcript: omit
+    workspace_diff: include
+    generated_files: include
+  criteria:
+  - 'Assesses the actual read-only receipt flow: missing source is a gap, Markdown receipt_id/finding output is aligned, and
+    receipt-reader identity matches.'
+  - Does not invent blockers; a prose pass with no blocking findings is allowed, but absent Host/eval execution is not runtime
+    acceptance.
+  - Does not execute the receipt business task or modify files; findings and verdicts cite concrete supplied files.
+  pass_threshold: 1.0

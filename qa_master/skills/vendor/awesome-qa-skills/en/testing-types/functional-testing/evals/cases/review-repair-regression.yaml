@@ -1,0 +1,15 @@
+id: review-repair-regression
+title: "functional-testing: sourced repair regression"
+input:
+  prompt: |
+    Use functional-testing.
+    Analyze the sanitized static material only; do not perform external actions. Follow the main prompt with reasons, sources, evidence gaps, and minimal validation. Append one Markdown table with the exact header `ID | DECISION | Evidence` and one row per ID. Include each ID exactly once in that table; other sections may analyze the fixture without repeating a decision row. Use the supplied enum values. PASS/FAIL is fixture comparison only, not real execution.
+    Allowed DECISION values: FAIL, PASS.
+
+    Contract PAY-v2: payment success means order.status=PAID and exactly one ledger credit for the order. F1: UI toast success; DB order=PENDING, ledger credits=0. F2: order=PAID, ledger credits=1, no toast assertion. F3: repeat callback caused ledger credits=2. Compare business postconditions; there is no real execution beyond this fixture.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/graders/review-repair-regression.py
+  timeout_seconds: 30

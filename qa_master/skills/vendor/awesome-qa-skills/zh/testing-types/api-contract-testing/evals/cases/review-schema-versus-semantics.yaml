@@ -1,0 +1,32 @@
+id: "review-schema-versus-semantics"
+title: "整数 schema 不变仍可能破坏消费者语义"
+description: "整数 schema 不变仍可能破坏消费者语义"
+context:
+  files:
+    "old-schema.json": "{\"type\": \"object\", \"required\": [\"amount\", \"currency\"], \"properties\": {\"amount\": {\"type\": \"integer\", \"description\": \"USD major units\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"USD\"]}}, \"additionalProperties\": true}"
+    "new-schema.json": "{\"type\": \"object\", \"required\": [\"amount\", \"currency\"], \"properties\": {\"amount\": {\"type\": \"integer\", \"description\": \"USD cents, minor units\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"USD\"]}}, \"additionalProperties\": true}"
+    "old-client.py": |-
+      # Consumer C1, version 1
+      def provider_cents(body):
+          return body["amount"] * 100
+    "response.json": "{\"amount\":1000,\"currency\":\"USD\"}"
+input:
+  prompt: "使用 api-contract-testing。比较 old-schema.json、new-schema.json 和 old-client.py。两 schema 均允许示例整数。区分语法与 C1 旧消费者 amount 语义兼容性，计算给定响应的影响并指出迁移证据。"
+expect:
+  must_contain:
+    - "C1"
+    - "amount"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "amount 整数结构类型可兼容，但主单位变分单位语义不兼容，引用 description 与 C1 乘法。"
+    - "新响应 amount=1000 时旧客户端输出 provider cents=100000 而非 1000，放大 100 倍；不能称已实际扣款。"
+    - "未提供适配器/版本 rollout 时迁移未知，提出固定旧消费者契约测试和明确单位/版本映射。"
+  pass_threshold: 1.0

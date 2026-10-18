@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "P1": "REPAIR",
+    "P2": "EXPECTED_FAILURE",
+    "P3": "ISOLATION_FAIL",
+    "P4": "VALID",
+    "P5": "NOT_RUN"
+  },
+  "calculations": {},
+  "required_details": []
+}

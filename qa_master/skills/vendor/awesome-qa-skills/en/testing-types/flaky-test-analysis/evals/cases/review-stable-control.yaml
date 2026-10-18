@@ -1,0 +1,18 @@
+id: "review-stable-control"
+title: "A passing small sample is neither flaky proof nor zero-risk proof"
+description: "A passing small sample is neither flaky proof nor zero-risk proof"
+input:
+  prompt: "Use flaky-test-analysis. F2 has four supplied runs: seed7/worker1 PASS twice and seed8/worker2 PASS twice. No failures or timing evidence are supplied. Report what can and cannot be inferred without proposing automatic quarantine."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Reports observed 0/4 failures but cannot establish flakiness or guaranteed stability; no invented race/root cause."
+    - "Does not quarantine F2 as a confirmed flaky test; any further sampling is a bounded evidence request."
+  pass_threshold: 1.0

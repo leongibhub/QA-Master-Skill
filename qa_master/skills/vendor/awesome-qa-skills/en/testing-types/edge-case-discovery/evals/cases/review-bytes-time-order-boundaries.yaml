@@ -1,0 +1,31 @@
+id: "review-bytes-time-order-boundaries"
+title: "Boundary candidates retain exact units, timezone and event order"
+description: "Boundary candidates retain exact units, timezone and event order"
+context:
+  files:
+    "rules.md": |-
+      R1: label max 4 Unicode codepoints AND max 8 UTF-8 bytes.
+      R2: expires when now >= 2026-10-07T00:00:00+08:00.
+      R3: cancel before confirmation -> CANCELLED; confirmation before cancel -> CONFIRMED and cancel rejected.
+    "examples.json": "{\"labels\":[\"éééé\",\"€€€\"],\"normal\":\"ab\",\"events\":[[\"cancel\",\"confirm\"],[\"confirm\",\"cancel\"]]}"
+input:
+  prompt: "Use edge-case-discovery. Discover only the smallest high-risk EC candidates from rules.md and examples.json. Compute supplied character/byte limits, local-time expiration neighbors and both event orders; cite rule IDs. Do not produce a full suite or executed results."
+expect:
+  must_contain:
+    - "R1"
+    - "R2"
+    - "R3"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "R1 character<=4 versus UTF-8 bytes<=8: four U+00E9 characters have 4 codepoints/8 bytes (valid boundary), while three U+20AC have 3 codepoints/9 bytes (byte overflow); does not confuse counts."
+    - "R2 expiry at 2026-10-07 00:00+08:00 corresponds to 2026-10-06 16:00Z; proposes immediately before/at/after with inclusive expiry rule preserved."
+    - "R3 cancel-before-confirm versus confirm-before-cancel remain distinct order candidates with the supplied terminal-state expectations; no invented concurrency count or unrelated platform explosion."
+  pass_threshold: 1.0

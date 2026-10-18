@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "requirement-consistency-analysis"
+interface:
+  display_name: "需求一致性分析"
+  short_description: "依据已提供证据分析需求一致性分析，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the requirement-consistency-analysis skill to compare these requirement artifacts and preserve source and scope evidence."
+policy:
+  allow_implicit_invocation: true

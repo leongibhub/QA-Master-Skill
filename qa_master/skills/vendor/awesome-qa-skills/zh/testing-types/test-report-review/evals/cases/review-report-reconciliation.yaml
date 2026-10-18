@@ -1,0 +1,22 @@
+id: "review-report-reconciliation"
+title: "拒绝冲突报告并接受一致对照"
+description: "拒绝冲突报告并接受一致对照"
+input:
+  prompt: |-
+    使用 test-report-review。审查以下原始材料与两个报告：错误报告把重跑计为通过用例、构建错配并虚构批准；正确对照完整保留分类及缺口，不能误拒绝。
+    Build b42; planned manifest v2 has A,B,C,D,E,F.
+    Raw execution rows (latest attempt is authoritative per case, keep all attempts):
+    A, attempt1, FAIL, executed=true, build=b42, run=r1
+    A, attempt2, PASS, executed=true, build=b42, run=r2
+    B, attempt1, BLOCKED, executed=false, build=b42, run=r1
+    C, attempt1, SKIPPED, executed=false, build=b42, run=r1
+    D, attempt1, PASS, executed=true, build=b42, run=r1
+    E, attempt1, FAIL, executed=true, build=b42, run=r1
+    F, no attempt, NOT_RUN, build=b42
+    Defects: D1 OPEN BLOCKER build=b42 source=defects-v2; D2 CLOSED minor build=b42; D3 OPEN critical build=b41 (no applicability evidence for b42).
+    No release authorization record exists. Do not execute tests or infer actual results outside these rows.
+    错误报告 bad-v1：通过4/执行4/100%，把b41缺陷当已关闭，未经授权宣称APPROVED。正确报告 good-v2：计划6、执行3、尝试4、通过2、失败1、阻塞1、跳过1、未运行1、通过率66.67%；D1开放，D3归属未知；NO_GO建议，approval UNKNOWN。追加JSON JSON keys bad_report and good_report (ACCEPT or REJECT), and wrong_fields (field names of identified inconsistencies)。ACCEPT仅代表材料一致性。
+judge:
+  type: "script"
+  script_path: "evals/graders/review-report-reconciliation.py"
+  timeout_seconds: 30

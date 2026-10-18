@@ -1,0 +1,9 @@
+version: 1
+metadata:
+  key: "requirement-traceability-analysis"
+interface:
+  display_name: "需求可追踪性分析"
+  short_description: "依据已提供证据分析需求可追踪性分析，明确来源、缺口与尚未执行的验证。"
+  default_prompt: "Use the requirement-traceability-analysis skill to build a bidirectional requirement-to-evidence mapping and expose coverage gaps."
+policy:
+  allow_implicit_invocation: true

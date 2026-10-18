@@ -1,0 +1,11 @@
+{
+  "decisions": {
+    "Q-1": "LOWER_PRIORITY",
+    "Q-2": "HIGHER_PRIORITY",
+    "Q-3": "PRODUCT_DEFECT",
+    "Q-4": "NOT_CLOSED",
+    "Q-5": "CLOSED"
+  },
+  "calculations": {},
+  "required_details": []
+}

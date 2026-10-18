@@ -1,0 +1,25 @@
+id: "review-compatible-additive-control"
+title: "容忍未知字段的消费者可接受可选新增字段"
+description: "容忍未知字段的消费者可接受可选新增字段"
+context:
+  files:
+    "old-schema.json": "{\"type\": \"object\", \"required\": [\"amount\", \"currency\"], \"properties\": {\"amount\": {\"type\": \"integer\", \"description\": \"USD major units\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"USD\"]}}, \"additionalProperties\": true}"
+    "new-schema.json": "{\"type\": \"object\", \"required\": [\"amount\", \"currency\"], \"properties\": {\"amount\": {\"type\": \"integer\", \"description\": \"USD major units\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"USD\"]}, \"memo\": {\"type\": \"string\"}}, \"additionalProperties\": true}"
+    "consumer.py": |-
+      def parse(body):
+          return body["amount"], body["currency"]
+input:
+  prompt: "使用 api-contract-testing。审阅给定 old/new schema 与消费者，范围仅 C1 响应解析。新增可选 memo 不改变 amount 单位/类型，C1 忽略未知响应字段。区分设计兼容与运行测试。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "不能把可选 memo 对明确容忍未知字段的 C1 误判为已证实破坏变更，amount 主单位语义不变。"
+    - "可在提供的解析范围内判兼容，但不能称整个 API/runtime 已通过或编造迁移阻塞。"
+  pass_threshold: 1.0

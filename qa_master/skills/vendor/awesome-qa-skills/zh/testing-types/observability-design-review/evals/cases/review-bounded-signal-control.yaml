@@ -1,0 +1,18 @@
+id: "review-bounded-signal-control"
+title: "明确基数与传播控制需被识别"
+description: "明确基数与传播控制需被识别"
+input:
+  prompt: "使用 observability-design-review。设计范围：指标 status(5)×region(3)、预算10000，request_id 仅脱敏日志；traceparent 和共享 head sampling 决定 gateway->worker 传播；告警 owner Ops，runbook 检查 pool wait 并升级值班。静态审阅，无 runtime 信号。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "上界15低于预算，不能对已提供控制误报高基数、缺传播或缺 owner/runbook。"
+    - "自洽设计不能称已验证检测、runtime 健康或 SLO 满足。"
+  pass_threshold: 1.0

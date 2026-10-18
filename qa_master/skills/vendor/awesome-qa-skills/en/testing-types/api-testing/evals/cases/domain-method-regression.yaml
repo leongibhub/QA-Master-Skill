@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "api-testing: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use api-testing to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    Contract v2: REST refund returns 200 and refunds 20 once; nonempty GraphQL errors means that field failed; cleanup deletes refunds before orders. A-1: refund 200 but GET order cumulative refund=0. A-2: same refund_id returns 200 twice, read-back=20, one ledger entry. A-3: GraphQL HTTP 200 with data.refund=null and nonempty errors. A-4: only a gRPC name, no proto/results. Decide FAIL/PASS/UNKNOWN with business postconditions and cleanup order.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

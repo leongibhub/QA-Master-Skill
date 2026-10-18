@@ -1,0 +1,10 @@
+{
+  "decisions": {
+    "R1": "AMBIGUOUS",
+    "R2": "MISSING_RULE",
+    "R3": "CONFLICT",
+    "R4": "CLEAR"
+  },
+  "calculations": {},
+  "required_details": []
+}

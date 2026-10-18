@@ -1,0 +1,18 @@
+id: domain-method-control
+title: "visual-regression-testing: Correct control and boundary decisions"
+input:
+  prompt: |
+    Use visual-regression-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C2 baseline v1; design owner approved v2 button-color change in A2, v2 only. T2 same viewport/browser/font/data compares v1/v2, diff 2%, button color only, layout/Pay visibility unchanged. T3 compares missing-font output to v1, diff 5%.
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Classify T2 as sourced approved-design difference and v2 baseline candidate, not a product defect; do not extend A2 or auto-update."
+    - "Mark T3 font mismatch/noncomparability for investigation rather than inferring layout regression from 5%."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

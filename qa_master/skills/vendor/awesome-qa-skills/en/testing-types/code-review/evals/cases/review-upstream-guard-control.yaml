@@ -1,0 +1,37 @@
+id: "review-upstream-guard-control"
+title: "Visible upstream guard prevents a false index finding"
+description: "Visible upstream guard prevents a false index finding"
+context:
+  files:
+    "patch.diff": |-
+      --- a/items.py
+      +++ b/items.py
+      @@ -1,2 +1,2 @@
+       def first(items):
+      -    return next(iter(items))
+      +    return items[0]
+    "items.py": |-
+      def first(items):
+          return items[0]
+
+      def choose(items):
+          if not items:
+              return None
+          return first(items)
+    "scope.md": |-
+      first is private; choose is its only caller in this package.
+input:
+  prompt: "Use code-review. Review repository orders commit def456, supplied patch.diff and complete items.py call path. Check whether changed first(items) can see an empty list from the only supplied public entrypoint."
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "Recognizes choose() returns None before first() on an empty list; cannot report items[0] as a proven reachable empty-list crash under the supplied only-caller scope."
+    - "May note the private helper precondition, but does not turn a hypothetical unsupplied caller into P0/P1 or demand unrelated redesign."
+  pass_threshold: 1.0

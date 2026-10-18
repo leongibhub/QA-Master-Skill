@@ -1,0 +1,19 @@
+id: domain-method-success
+title: "recovery-testing: Domain procedure and result oracle"
+input:
+  prompt: |
+    Use recovery-testing to analyze the supplied redacted static fixture. Analyze material only; do not execute tests or edit assets.
+    Complete the six-part input audit and sourced findings required by the main prompt. Show expected behavior, observations in the material, decision reasons, and minimal validation for each item; do not invent findings for correct controls.
+
+    C1 RTO<=30 s from failure to order read/write readiness; RPO<=5 s; orders in the restored interval must be unique and retain source amounts.
+    T1 failure t100, health t110, business t140, recovered point t92. Source O1=10, O2=20; restored [O1=10, O2=25, O2=25].
+expect:
+  exit_code: 0
+judge:
+  type: agent_judge
+  model: openai/gpt-5
+  criteria:
+    - "Calculate RTO 40 s/RPO 8 s over target and O2 duplicate/amount conflict; do not substitute health 10 s."
+    - "Specify reconciliation/deduplication/compensation/business evidence, without editing data."
+    - "Limit conclusions to static comparison of the supplied fixture; preserve missing project evidence and do not claim an unsupplied real-test pass, exploit success, or Human approval."
+  pass_threshold: 1.0

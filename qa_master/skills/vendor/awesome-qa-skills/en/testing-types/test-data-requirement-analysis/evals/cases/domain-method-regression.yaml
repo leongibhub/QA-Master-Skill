@@ -1,0 +1,17 @@
+id: domain-method-regression
+title: "test-data-requirement-analysis: Domain outcomes, correct controls, and evidence boundaries"
+description: "Checks per-item domain decisions, legitimate controls, and unknown evidence rather than generic headings."
+input:
+  prompt: |
+    Use test-data-requirement-analysis to analyze this sanitized static fixture, without external actions. Follow the main prompt with domain steps, observable oracles, sources, gaps, and minimal validation.
+    Append a decision table with columns `ID | DECISION | Evidence`; give one row per ID and exactly one supplied enum value in the DECISION cell. FAIL/PASS denotes comparison of this fixture only, not a real test execution.
+
+    S1 has3 parallel workers, each with independent paid Order and related Refund, sharing forbidden. S2 is a refund scenario without schema/fields. S3 requests real customer emails without collection/sanitization authority. S4 retries the same order twice and must reuse refund_id rather than creating two business keys. Decide SPECIFIED/UNKNOWN/BLOCKED/SPECIFIED with relationships and quantity basis; do not generate or acquire real data.
+
+    Output exactly one decision table, each fixture ID once, exactly three cells and nonempty evidence; no duplicates or unknown IDs. Calculation keys likewise occur once with nonempty units/evidence.
+expect:
+  exit_code: 0
+judge:
+  type: script
+  script_path: evals/fixtures/check_domain_decisions.py
+  timeout_seconds: 10

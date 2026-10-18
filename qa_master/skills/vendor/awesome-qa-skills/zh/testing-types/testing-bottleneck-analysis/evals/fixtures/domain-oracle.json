@@ -1,0 +1,14 @@
+{
+  "decisions": {
+    "B1": "DEPENDENCY_WAIT",
+    "B2": "UNSUPPORTED",
+    "B3": "UNSUPPORTED",
+    "B4": "HYPOTHESIS"
+  },
+  "calculations": {
+    "dependency_wait_minutes": 40,
+    "execution_minutes": 10,
+    "rework_minutes": 10
+  },
+  "required_details": []
+}

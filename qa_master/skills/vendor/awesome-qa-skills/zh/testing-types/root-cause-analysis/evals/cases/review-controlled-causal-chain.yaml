@@ -1,0 +1,31 @@
+id: "review-controlled-causal-chain"
+title: "受控复现支持受限因果解释"
+description: "受控复现支持受限因果解释"
+context:
+  files:
+    "controlled.md": |-
+      Sandbox build B60, load100RPS/dataD1 fixed.
+      H1 CPU saturation vs H2 pool lease leak.
+      Trace E1: acquire lease; handler raises; no release event. After20 injected exception requests pool20/20; CPU40%. Three identical isolated repeats reproduce.
+      Patch B61 uses finally release; same20 exception requests release20 leases and pool0/20 in three repeats; CPU40%, same load/data.
+      Production mapping is not supplied.
+input:
+  prompt: "使用 root-cause-analysis。仅分析 controlled.md，说明 fixture 中哪假设有因果支持，与未知生产影响区分，不授权后续动作。"
+expect:
+  must_contain:
+    - "H2"
+    - "B60"
+    - "B61"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "exception 路径获取未释放、固定负载复现20/20耗尽支持 H2；finally-release 修复后给定重复中泄漏消失，CPU/负载不变。"
+    - "因果结论限定隔离路径/运行证据，不能涵盖所有生产事故或永久零风险；生产映射缺证据另列。"
+  pass_threshold: 1.0

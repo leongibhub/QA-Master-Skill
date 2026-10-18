@@ -1,0 +1,18 @@
+id: "review-unknown-expectation"
+title: "业务预期缺失不能生成总通过断言"
+description: "业务预期缺失不能生成总通过断言"
+input:
+  prompt: "使用 api-test-postman。为 GET /quote 创建受限 Postman 计划。仅有示例 200 {amount:11}，无 amount、currency 或状态保证规则，不授权执行。说明可检查内容与未知项。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "不能把 amount=11 定为业务预期，也不能把状态/字段存在称业务正确通过，需区分示例与契约。"
+    - "缺业务规则时断言 blocked/unknown，不能使用 pm.test(true)、无条件通过或吞失败预期。"
+  pass_threshold: 1.0

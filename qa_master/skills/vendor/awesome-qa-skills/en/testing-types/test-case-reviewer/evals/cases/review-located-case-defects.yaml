@@ -1,0 +1,33 @@
+id: "review-located-case-defects"
+title: "Case review locates weak oracle and missing preconditions"
+description: "Case review locates weak oracle and missing preconditions"
+context:
+  files:
+    "requirement.md": |-
+      R1: authenticated owner of existing order, feature enabled, setting qty1 stores qty1 and returns UPDATED.
+      R2: feature disabled, setting qty1 returns FEATURE_DISABLED and leaves original qty2 unchanged.
+    "cases.md": |-
+      # Existing cases v1
+      Fields: ID | Preconditions | Steps | Expected
+      TC1 | owned order qty2, authenticated owner, feature disabled | set qty1 | works normally
+      TC2 | not specified | set qty1 | UPDATED
+input:
+  prompt: "Use test-case-reviewer. Review cases.md against requirement.md only. Locate each planted defect by case ID/line, give observable repairs, and do not infer industry-standard extra tests absent from scope."
+expect:
+  must_contain:
+    - "TC1"
+    - "TC2"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "TC1 line3 expected \"works normally\" is not observable under disabled-state R2; revises to FEATURE_DISABLED and stored qty unchanged2."
+    - "TC2 line4 lacks authenticated owner/existing order and initial qty preconditions for R1; proposes exact supplied prerequisites and stored qty1 confirmation."
+    - "Severity/priority is based on the supplied acceptance risk, not formatting; no invented payment/performance/security requirement or execution pass."
+  pass_threshold: 1.0

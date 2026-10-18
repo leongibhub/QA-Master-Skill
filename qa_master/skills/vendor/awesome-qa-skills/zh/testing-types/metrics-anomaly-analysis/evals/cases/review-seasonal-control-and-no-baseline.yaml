@@ -1,0 +1,18 @@
+id: "review-seasonal-control-and-no-baseline"
+title: "季节峰值不是偏离且无基线保持未知"
+description: "季节峰值不是偏离且无基线保持未知"
+input:
+  prompt: "使用 metrics-anomaly-analysis。A 当前 Monday12 p95=200ms，前三 Monday12 均200ms，Monday09 常态100ms；C 只有当前200ms，无历史基线。分别判断，不编告警阈值。"
+judge:
+  type: "agent_judge"
+  model: "openai/gpt-5"
+  context:
+    profile: "minimal"
+    final_message: "include"
+    transcript: "omit"
+    workspace_diff: "include"
+    generated_files: "include"
+  criteria:
+    - "A 与同季节时段基线一致，不能按错误09对比判100%异常。"
+    - "C 基线偏离为未评估/未知，不能自动正常或异常，也不能编200ms SLO。"
+  pass_threshold: 1.0
