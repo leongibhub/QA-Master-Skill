@@ -4,7 +4,8 @@
 - Change: `CR-029`
 - Document State: `DRAFT`
 - Evaluation State: `IN_REVIEW`
-- Evidence Status: `PENDING`
+- Evidence Status: `OBSERVED` — attempt 1 implementation is retained; its
+  provenance-digest check failed and the corrective retry remains `PENDING`.
 
 ## Purpose and boundary
 
@@ -15,11 +16,17 @@ and provenance increment.  It does not assert that every listed Skill has been
 executed, is equally capable, or is superior to another product.
 
 The current installed bundle is the only delivery subject for the visibility work.
-Current upstream contents and the identity of the imported snapshot must be
-investigated separately before any refresh or parity statement.  CR-028 recorded
-the absence of independently established package provenance as P3.  A concurrent
-candidate provenance file may be examined under TASK-121, but it is not treated as
-independently verified until its retrieval basis and digest are checked.
+CR-028 recorded the absence of independently established package provenance as P3.
+TASK-121 attempt 1 committed a candidate snapshot at `024505b`: it added a source
+record, updated the retained upstream README, and aligned the bilingual Playwright
+runner.  An independent check confirmed the declared 5,816 `en/` and `zh/` paths
+and their upstream blobs for the pinned source revision.  That narrow equivalence
+does not make a general present-day-upstream, quality, or release claim.
+
+`TC-CAT-007` nevertheless failed: the declared raw-byte snapshot digest did not
+recompute in the Windows worktree because CRLF conversion changed eligible file
+bytes.  The source record must therefore not be promoted to verified provenance.
+The corrective retry and retained refresh report are `PENDING`.
 
 ## REQ-026 — complete user-facing catalogue visibility
 
@@ -37,18 +44,18 @@ independently verified until its retrieval basis and digest are checked.
 | Item | Requirement |
 | --- | --- |
 | Priority | P1 |
-| Expected behaviour | The vendored catalogue records machine-readable provenance for the exact packaged snapshot: source repository URL, immutable source revision, retrieval or refresh date, applicable licence reference, and a deterministic snapshot digest over the declared asset set.  A record may explicitly use `NOT_AVAILABLE` for a fact that cannot be established; it must never borrow a revision from a different checkout, historical comparison arm, or current network state. |
-| Refresh rule | A future update first records the candidate upstream revision and retrieval date, produces a source-to-package path/digest diff, retains notices and licence obligations, and keeps the previous package recoverable by the existing installer contract.  The update is a new scoped change with fresh test and review evidence. |
+| Expected behaviour | The vendored catalogue records machine-readable provenance for the exact packaged snapshot: source repository URL, immutable source revision, retrieval or refresh date, applicable licence reference, and a deterministic snapshot digest over the declared asset set.  The digest contract must specify whether it consumes raw Git blobs or normalizes line endings, and the verifier must implement the same rule. A record may explicitly use `NOT_AVAILABLE` for a fact that cannot be established; it must never borrow a revision from a different checkout, historical comparison arm, or current network state. |
+| Refresh rule | A future update first records the candidate upstream revision and retrieval date, produces a retained source-to-package path/digest diff (including added, removed, changed, and line-ending-normalized classifications), retains notices and licence obligations, and keeps the previous package recoverable by the existing installer contract. The report location is `docs/verification/catalog-provenance-refresh-2026-10-19.md`; it identifies the source revision, baseline, verifier digest rule, result, and any unresolved paths. The update is a new scoped change with fresh test and review evidence. |
 | Scope boundary | Provenance proves the identity of packaged bytes.  It does not prove upstream completeness, present-day upstream parity, licence interpretation beyond the retained notice, product quality, or permission to change third-party content. |
-| Measurable acceptance | (1) The immutable revision, date, source URL, licence reference and snapshot digest are present or each absent fact is explicitly marked `NOT_AVAILABLE`. (2) A verifier can recompute the snapshot digest from the packaged inventory without network access. (3) A refresh report identifies added, removed and changed paths and preserves the previous provenance record. (4) No README claim calls the delivered set current, complete relative to upstream, or superior unless separately evidenced. |
-| Verification | `TC-CAT-007` and `TC-CAT-008`; no upstream retrieval, package mutation or licence decision has occurred under this requirement draft. |
+| Measurable acceptance | (1) The immutable revision, date, source URL, licence reference and snapshot digest are present or each absent fact is explicitly marked `NOT_AVAILABLE`. (2) A verifier can recompute the snapshot digest from the packaged inventory without network access using the declared byte/line-ending rule. (3) A refresh report identifies added, removed, changed, and normalized-line-ending paths and preserves the previous provenance record. (4) No README claim calls the delivered set current, complete relative to upstream, or superior unless separately evidenced. |
+| Verification | `TC-CAT-007` attempt 1 is `FAIL`: a 5,816-path/upstream-blob check passed, but the raw-byte digest mismatched after CRLF conversion. `TC-CAT-008` and the corrective retry are `NOT_EXECUTED`/`PENDING`. The initial upstream retrieval and package mutation are retained at `024505b`; no licence decision, release, quality, or superiority conclusion follows. |
 
 ## Planned work and test cases
 
 | ID | Work / check | Owner role | Expected evidence state |
 | --- | --- | --- |
 | TASK-120 | Build the README catalogue and align the stable index to REQ-026; retain a local structural check. | documentation_manager | `PENDING` |
-| TASK-121 | Inspect the current upstream catalogue, including Playwright-related entries, and establish or explicitly retain the exact vendor provenance record before proposing any package refresh. | researcher / developer | `PENDING` |
+| TASK-121 | Inspect the current upstream catalogue, including Playwright-related entries, and establish or explicitly retain the exact vendor provenance record before proposing any package refresh. | researcher / developer | Attempt 1 `OBSERVED` at `024505b`; corrective digest retry `PENDING` |
 | TASK-122 | Independently test the frozen documentation and provenance implementation. | tester | `PENDING` |
 | TASK-123 | Independently review scope, catalogue truthfulness, path integrity, provenance treatment and licence-boundary claims. | reviewer | `PENDING` |
 | TC-CAT-001 | Enumerate logical canonical names from the packaged inventory and compare the exact set with README catalogue markers. | tester | `NOT_EXECUTED` |
@@ -57,8 +64,8 @@ independently verified until its retrieval basis and digest are checked.
 | TC-CAT-004 | Compare README logical count and name set with `docs/SKILL_CATALOG.md`. | tester | `NOT_EXECUTED` |
 | TC-CAT-005 | Check that each catalogue description and boundary statement is compatible with the linked asset and contains no execution, quality, release or superiority claim. | tester | `NOT_EXECUTED` |
 | TC-CAT-006 | Fresh-install check: resolve sampled and exhaustive catalogue paths within an installed package rather than the source checkout. | tester | `NOT_EXECUTED` |
-| TC-CAT-007 | Validate required vendor-provenance fields and recompute the snapshot digest offline from the declared inventory. | tester | `NOT_EXECUTED` |
-| TC-CAT-008 | For a proposed refresh only, independently compare the recorded upstream revision and retrieval evidence with the candidate path/digest diff; otherwise record no refresh as `NOT_EXECUTED`. | tester | `NOT_EXECUTED` |
+| TC-CAT-007 | Validate required vendor-provenance fields and recompute the snapshot digest offline from the declared inventory. | tester | Attempt 1 `FAIL`; corrective retry `PENDING` |
+| TC-CAT-008 | Independently compare the recorded upstream revision and retrieval evidence with the candidate path/digest diff, including raw-blob or line-ending-normalization treatment; otherwise record no refresh as `NOT_EXECUTED`. | tester | `NOT_EXECUTED` |
 
 ## Change impact
 

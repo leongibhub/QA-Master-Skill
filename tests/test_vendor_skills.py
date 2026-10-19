@@ -32,7 +32,7 @@ class VendorSkillsTests(unittest.TestCase):
         )
         manifest = b"".join(
             f"{path.relative_to(root).as_posix()}|"
-            f"{hashlib.sha256(path.read_bytes()).hexdigest()}\n".encode("utf-8")
+            f"{hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest()}\n".encode("utf-8")
             for path in files
         )
         self.assertEqual(metadata["snapshot"]["file_count"], len(files))

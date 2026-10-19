@@ -14,7 +14,7 @@
     ],
     "scope": "The en/ and zh/ subtrees only; excludes QA Master wrapper files such as this metadata, README.md, UPSTREAM_README.md, and LICENSE.",
     "file_count": 5816,
-    "sha256": "9748da3b31ffb05def989bc8828a7760b0a2cb57d9b442f49164fee7a54f7b33",
-    "algorithm": "SHA-256 of UTF-8 lines sorted by relative path: <path>|<SHA-256(file bytes)>\\n"
+    "sha256": "45e4f8de6aeab3734e412c4e875aa350f5e95e9fa2cf7a41446300f74243c214",
+    "algorithm": "SHA-256 of UTF-8 lines sorted by relative path: <path>|<SHA-256(file bytes with CRLF normalized to LF)>\\n"
   }
 }
