@@ -1,0 +1,135 @@
+{
+  "source_freeze": "6907fd4819daf931061fbbc69bcbdead51026208",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "attempt1-report.md",
+      "bytes": 4946,
+      "sha256": "ade7a231c4fdb103551e9a4d8c177606a46931976d73f71256ec4f43393784c4"
+    },
+    {
+      "path": "attempt2/check_provenance.py",
+      "bytes": 1193,
+      "sha256": "30a9c034e6d6ebae8cf1260eebb2dc5d1e571c911facb096bde1734f0015827e"
+    },
+    {
+      "path": "attempt2/check_route_edges.py",
+      "bytes": 1515,
+      "sha256": "69243a479b7a48103ae8507042c6e8984b3a3161897b5bf65d678bb593afcb8b"
+    },
+    {
+      "path": "attempt2/ci-readback.json",
+      "bytes": 2355,
+      "sha256": "ae6214ff046ebedfa9c4d1f5121399a8ef40cc622d40a67f0e7390e14a98e691"
+    },
+    {
+      "path": "attempt2/delivery-commands.json",
+      "bytes": 749057,
+      "sha256": "75ab85cfc6162e6e83afda03d26f458f27c3df308217421d50d0236ef2bf2656"
+    },
+    {
+      "path": "attempt2/delivery-summary.json",
+      "bytes": 493,
+      "sha256": "e73fc27b10ae48fed84f856e7fa1908745eeb36303fe7d9592d1aa5ef4f1283b"
+    },
+    {
+      "path": "attempt2/delivery.log",
+      "bytes": 495,
+      "sha256": "f80d776254338126ee2f43be327bc2783bc19e1e891a740bdf06935ea3bba6e3"
+    },
+    {
+      "path": "attempt2/environment.json",
+      "bytes": 340,
+      "sha256": "4399c86788a9177996567778014e7239765d284111cefb5f844468af27b2e79f"
+    },
+    {
+      "path": "attempt2/final-report.md",
+      "bytes": 10541,
+      "sha256": "dd58b6c0972b23059886a03d30f348aedfad5a3216ad89bb9406f351d011c6b9"
+    },
+    {
+      "path": "attempt2/import-and-route-provenance.json",
+      "bytes": 148539,
+      "sha256": "e5d3ab23c626427d038ae1b9cb576da146629402affcc7c99ed7996ef9c7fc61"
+    },
+    {
+      "path": "attempt2/legacy-update-targeted.log",
+      "bytes": 307,
+      "sha256": "1e61c148d35415392866c29d9fbce85624ee19be5399fd679a5fbda5ace45b7f"
+    },
+    {
+      "path": "attempt2/readme-local-links.json",
+      "bytes": 63370,
+      "sha256": "01f9107c3b5c9db58d81a29d6169380a732f11c13eb040fa4ea48d4a55f25baa"
+    },
+    {
+      "path": "attempt2/route-edges.json",
+      "bytes": 2637,
+      "sha256": "fcead1b9050a90b4eef8204665ff674fbb8b9248e4e834ab85c8c62513f0ef93"
+    },
+    {
+      "path": "attempt2/vendor-equivalence.json",
+      "bytes": 1394796,
+      "sha256": "7405bb3d6cb617961f5c4c0e7d2e19463be0eefe555ae9b289ce4c78ae2842a8"
+    },
+    {
+      "path": "attempt2/verify_delivery.py",
+      "bytes": 6131,
+      "sha256": "c8f8ac684059099fa66840902dc70b6425ab9b09d20db7302e9fe83e364bccc6"
+    },
+    {
+      "path": "delivery-commands.json",
+      "bytes": 716968,
+      "sha256": "dfbe45207561d4ac2354f1b8bf7b3428b75c98b5586f3a83ca362b47856148eb"
+    },
+    {
+      "path": "delivery.log",
+      "bytes": 859,
+      "sha256": "5dd4f7f2d48eb10d4cf9d759f54f8ba94b8352b2ee3f3145c304fd426005c30e"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 278,
+      "sha256": "ecae388c13c591a537635b26ed76037e4c152735baa0f19a569e74c053401ec3"
+    },
+    {
+      "path": "example-interactions.json",
+      "bytes": 2883,
+      "sha256": "7682d9d607b32e594e1aba9bd6347d6bf7f08ed2d8c661957e3b27b48b9b5e03"
+    },
+    {
+      "path": "focused.log",
+      "bytes": 1014,
+      "sha256": "eb6566fd3cf18302893cac2dda7c2d4689941de2b4d46f170178e73bceee8ac5"
+    },
+    {
+      "path": "readme-local-links.json",
+      "bytes": 63370,
+      "sha256": "01f9107c3b5c9db58d81a29d6169380a732f11c13eb040fa4ea48d4a55f25baa"
+    },
+    {
+      "path": "strict.log",
+      "bytes": 2533,
+      "sha256": "58cba1872157bb7eeb9adb2c9c9ee3774a0163605d25d85b76eb677151a94e09"
+    },
+    {
+      "path": "test-build-dependencies.log",
+      "bytes": 581,
+      "sha256": "020ef68250adf7bc020b583760ad8cbbff367e5f2e427b97391aedb621639d75"
+    },
+    {
+      "path": "verify_delivery.py",
+      "bytes": 6131,
+      "sha256": "c8f8ac684059099fa66840902dc70b6425ab9b09d20db7302e9fe83e364bccc6"
+    },
+    {
+      "path": "wheel-hidden-assets-failure.json",
+      "bytes": 888,
+      "sha256": "b27411f583d16577a3a62af8517e3ea4f7d25b3722bc27909ab08dbcaaca7d55"
+    }
+  ]
+}

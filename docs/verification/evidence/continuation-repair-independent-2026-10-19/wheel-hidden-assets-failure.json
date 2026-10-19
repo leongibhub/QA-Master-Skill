@@ -1,0 +1,15 @@
+{
+  "source_freeze": "0ff9ad47ab0d442dff2157f6bf7d10e322a83f75",
+  "wheel": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-cr028-independent-xl5ewgeo\\wheels\\qa_master_skill-1.0.0-py3-none-any.whl",
+  "sha256": "2e1d8100328bff053267d56a43b69a4d57bee1159b96c4e93edf16a847041998",
+  "inventory_count": 5819,
+  "missing": [
+    "vendor/awesome-qa-skills/en/testing-types/performance-test-gatling/reports/.gitignore",
+    "vendor/awesome-qa-skills/en/testing-types/performance-test-k6/reports/.gitignore",
+    "vendor/awesome-qa-skills/zh/testing-types/accessibility-testing/examples/axe-playwright/.gitignore",
+    "vendor/awesome-qa-skills/zh/testing-types/performance-test-gatling/reports/.gitignore",
+    "vendor/awesome-qa-skills/zh/testing-types/performance-test-k6/reports/.gitignore"
+  ],
+  "install_exit_code": 2,
+  "install_error": "SKILL_VENDOR_RESOURCE_INVALID"
+}

@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\docs\verification\evidence\continuation-repair-independent-2026-10-19\verify_delivery.py", line 50, in <module>
+    run([python, '-I', '-m', 'qa_master', 'install-codex', '--project', str(project)], project)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-PR2\docs\verification\evidence\continuation-repair-independent-2026-10-19\verify_delivery.py", line 24, in run
+    raise RuntimeError(f'command failed: {args}: {result.stderr}')
+RuntimeError: command failed: ['C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-cr028-independent-xl5ewgeo\\venv\\Scripts\\python.exe', '-I', '-m', 'qa_master', 'install-codex', '--project', 'C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\qa-cr028-independent-xl5ewgeo\\consumer project']: 

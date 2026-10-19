@@ -1,0 +1,11 @@
+{
+  "source_freeze": "6907fd4819daf931061fbbc69bcbdead51026208",
+  "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "setuptools": "84.0.0",
+    "wheel": "0.48.0",
+    "packaging": "26.3",
+    "cryptography": "50.0.0"
+  }
+}

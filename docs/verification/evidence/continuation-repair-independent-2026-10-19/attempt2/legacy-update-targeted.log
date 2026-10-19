@@ -1,0 +1,6 @@
+test_managed_update_replaces_bundle_and_keeps_complete_backup (tests.test_codex_skill_independent.IndependentCodexSkillInstallTests.test_managed_update_replaces_bundle_and_keeps_complete_backup) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 134.105s
+
+OK

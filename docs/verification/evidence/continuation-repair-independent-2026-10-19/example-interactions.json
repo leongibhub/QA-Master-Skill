@@ -1,0 +1,100 @@
+{
+  "model_results": [
+    {
+      "model_id": "DM-PAY",
+      "method": "combinatorial",
+      "input_sha256": "c7a5f56a65a4ae578080818a7f1585756671b529a4ae2c2c1252de23a7b397de",
+      "candidate_ids": [
+        "TC-MD-130CE50095169BB55E82",
+        "TC-MD-7113E3DF9C8E5EF7D85D",
+        "TC-MD-7377ED0CA9479FA82FCA",
+        "TC-MD-8D88216913FACFC15073",
+        "TC-MD-CC73329299E7B4FFD57D",
+        "TC-MD-E948BCF36F27F23EC157",
+        "TC-MD-F0FF4B84CA25A9AAD995",
+        "TC-MD-F1ECA00D0131814C7A22"
+      ],
+      "obligation_ids": [],
+      "coverage": {
+        "state": "ASSESSED",
+        "denominator_name": "interactions",
+        "denominator": 8,
+        "candidate_ready": 8,
+        "oracle_missing": 0,
+        "gap": 0,
+        "overlap": 0,
+        "conflict": 0,
+        "unevaluable": 0,
+        "unreachable": 0,
+        "out_of_scope": 0,
+        "ratio": {
+          "numerator": 8,
+          "denominator": 8
+        }
+      },
+      "analysis": {
+        "parameter_count": 3,
+        "value_counts": {
+          "currency": 2,
+          "method": 2,
+          "save": 2
+        },
+        "strength": 3,
+        "cartesian_size": 8,
+        "interaction_count": 8,
+        "covering_array_size": 8,
+        "candidate_row_count": 8,
+        "oracle_missing_row_count": 0
+      }
+    },
+    {
+      "model_id": "DM-SEARCH",
+      "method": "pairwise",
+      "input_sha256": "38d402ef3ec910c22f233d31af59520b3f3fd6efee63233424c80fe416034947",
+      "candidate_ids": [
+        "TC-MD-44C4F28048334480DD03",
+        "TC-MD-629075FDE5A154B3C72D",
+        "TC-MD-6BA3E0DBD9D9AC7C8A19",
+        "TC-MD-B02E18E22A8689FBB2D3",
+        "TC-MD-C2C592CCCCBABA07F0E6",
+        "TC-MD-C570323D7E7724AECD56"
+      ],
+      "obligation_ids": [],
+      "coverage": {
+        "state": "ASSESSED",
+        "denominator_name": "interactions",
+        "denominator": 16,
+        "candidate_ready": 16,
+        "oracle_missing": 0,
+        "gap": 0,
+        "overlap": 0,
+        "conflict": 0,
+        "unevaluable": 0,
+        "unreachable": 0,
+        "out_of_scope": 0,
+        "ratio": {
+          "numerator": 16,
+          "denominator": 16
+        }
+      },
+      "analysis": {
+        "parameter_count": 3,
+        "value_counts": {
+          "category": 2,
+          "in_stock": 2,
+          "sort": 3
+        },
+        "strength": 2,
+        "cartesian_size": 12,
+        "interaction_count": 16,
+        "covering_array_size": 6,
+        "candidate_row_count": 6,
+        "oracle_missing_row_count": 0
+      }
+    }
+  ],
+  "independent_pairwise_unique": 16,
+  "independent_with_duplicated_rows": 16,
+  "partial_one_row_unique": 3,
+  "boundary": "partial and duplicate input are independent oracle checks only; engine accepts models, not supplied covering rows"
+}
