@@ -23,20 +23,50 @@ class VendorSkillsTests(unittest.TestCase):
         self.assertEqual(metadata["upstream_tree_git_sha1"],
                          "694cf0b677cb90cee101e7806657537b016c356c")
         self.assertEqual(metadata["license_path"], "LICENSE")
-        self.assertEqual(metadata["verification_status"], "VERIFIED")
+        self.assertEqual(metadata["verification_status"], "OBSERVED")
+        self.assertEqual(metadata["independent_verification_status"], "PENDING")
         self.assertRegex(metadata["retrieved_at"], r"^\d{4}-\d{2}-\d{2}$")
         self.assertEqual(metadata["snapshot"]["included_paths"], ["skills/en", "skills/zh"])
         files = sorted(
             path for language in ("en", "zh") for path in (root / language).rglob("*")
             if path.is_file()
         )
+        snapshot = metadata["snapshot"]
+        text_extensions = set(snapshot["text_extensions"])
+        binary_extensions = set(snapshot["binary_extensions"])
+
+        def canonical_bytes(path):
+            content = path.read_bytes()
+            if path.suffix.lower() in text_extensions or path.name in text_extensions:
+                content.decode("utf-8", errors="strict")
+                return content.replace(b"\r\n", b"\n")
+            self.assertIn(path.suffix.lower(), binary_extensions,
+                          f"undeclared vendor file extension: {path}")
+            return content
+
+        observed_extensions = {path.name if path.name in text_extensions else path.suffix.lower()
+                               for path in files}
+        self.assertEqual(observed_extensions, text_extensions | binary_extensions)
+        self.assertFalse(text_extensions & binary_extensions)
         manifest = b"".join(
             f"{path.relative_to(root).as_posix()}|"
-            f"{hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest()}\n".encode("utf-8")
+            f"{hashlib.sha256(canonical_bytes(path)).hexdigest()}\n".encode("utf-8")
             for path in files
         )
-        self.assertEqual(metadata["snapshot"]["file_count"], len(files))
-        self.assertEqual(metadata["snapshot"]["sha256"], hashlib.sha256(manifest).hexdigest())
+        self.assertEqual(snapshot["file_count"], len(files))
+        self.assertEqual(snapshot["sha256"], hashlib.sha256(manifest).hexdigest())
+        with tempfile.TemporaryDirectory() as directory:
+            invalid_text = Path(directory) / "invalid.md"
+            invalid_text.write_bytes(b"\xff")
+            with self.assertRaises(UnicodeDecodeError):
+                canonical_bytes(invalid_text)
+            unknown_extension = Path(directory) / "unknown.extension"
+            unknown_extension.write_bytes(b"text")
+            with self.assertRaises(AssertionError):
+                canonical_bytes(unknown_extension)
+            binary_file = Path(directory) / "binary.docx"
+            binary_file.write_bytes(b"\xff\r\n")
+            self.assertEqual(canonical_bytes(binary_file), b"\xff\r\n")
 
     def test_playwright_runner_keeps_json_report_contract_bilingually(self):
         root = vendor_skill_root()

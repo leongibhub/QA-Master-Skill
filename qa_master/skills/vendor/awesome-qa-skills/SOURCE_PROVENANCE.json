@@ -5,7 +5,8 @@
   "upstream_commit_time": "2026-10-19T01:50:43Z",
   "upstream_tree_git_sha1": "694cf0b677cb90cee101e7806657537b016c356c",
   "license_path": "LICENSE",
-  "verification_status": "VERIFIED",
+  "verification_status": "OBSERVED",
+  "independent_verification_status": "PENDING",
   "retrieved_at": "2026-10-19",
   "snapshot": {
     "included_paths": [
@@ -15,6 +16,17 @@
     "scope": "The en/ and zh/ subtrees only; excludes QA Master wrapper files such as this metadata, README.md, UPSTREAM_README.md, and LICENSE.",
     "file_count": 5816,
     "sha256": "45e4f8de6aeab3734e412c4e875aa350f5e95e9fa2cf7a41446300f74243c214",
-    "algorithm": "SHA-256 of UTF-8 lines sorted by relative path: <path>|<SHA-256(file bytes with CRLF normalized to LF)>\\n"
+    "algorithm": "SHA-256 of UTF-8 lines sorted by relative path: <path>|<SHA-256(canonical file bytes)>\\n",
+    "text_extensions": [
+      ".bru", ".bruno", ".cjs", ".csv", ".curl", ".env", ".gatling", ".gitignore",
+      ".html", ".ini", ".java", ".jmx", ".js", ".json", ".md", ".mjs",
+      ".properties", ".py", ".pytest", ".restassure", ".scala", ".sh",
+      ".supertest", ".ts", ".tsv", ".txt", ".wsdl", ".xml", ".yaml", ".yml"
+    ],
+    "binary_extensions": [
+      ".docx"
+    ],
+    "text_encoding": "UTF-8 strict",
+    "text_newline_normalization": "CRLF to LF"
   }
 }
