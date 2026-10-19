@@ -1,15 +1,6 @@
 import tempfile, unittest
 from pathlib import Path
-from qa_master.approval import artifact_digest
-from qa_master.workflow import VerifiedCompletionReceipt, Workflow
-
-def synthetic_receipt_verifier(receipt,binding):
- # Test-only host fixture. It is not a production approval or authenticated receipt.
- if not (receipt=='synthetic-test-receipt' and binding['project']=='demo' and
-         binding['step']=='test_plan' and binding['result_ref']=='plan1'):
-  return None
- return VerifiedCompletionReceipt('fixture-plan1','synthetic-test-host',
-  '2026-10-14T00:00:00Z','2026-10-14T01:00:00Z',artifact_digest(binding),'plan1')
+from qa_master.workflow import Workflow
 
 class WorkflowTests(unittest.TestCase):
  def setup_workflow(self):
@@ -33,21 +24,18 @@ class WorkflowTests(unittest.TestCase):
   with self.assertRaises(ValueError):self.setup_workflow().approve('requirements','v1','')
  def test_unknown_approval(self):
   with self.assertRaises(ValueError):self.setup_workflow().approve('unknown','v1','demo')
- def test_side_effect_blocked(self):self.assertEqual(self.setup_workflow().evaluate('test_plan'),'PENDING')
+ def test_side_effect_blocked(self):self.assertEqual(self.setup_workflow().evaluate('execution'),'PENDING')
  def test_full_preflight(self):
   w=self.setup_workflow();w.answer('source','doc');w.complete('requirements','req');w.complete('review','review')
-  w.approve('requirements','r1','demo');w.complete('baseline','base');w.complete('design','draft')
-  w.approve('cases','c1','demo');w.complete('case_review','cases')
-  for k in ('jira_project','plan_name','cycle_name'):w.answer(k,k+'-val')
+  w.approve('requirements','r1','demo');w.complete('baseline','base')
+  w.answer('plan_name','plan-val')
   self.assertEqual(w.evaluate('test_plan'),'WAITING_APPROVAL')
-  artifact={'case_ids':['TC-1'],'scope':'demo'}
   w.approve('test_plan','p1','demo')
-  self.assertEqual(w.evaluate_exact('test_plan',{'test_plan':artifact},{'test_plan':'demo'}),'WAITING_APPROVAL')
-  w.approve_exact('test_plan','demo',artifact,'reviewer')
-  self.assertEqual(w.evaluate_exact('test_plan',{'test_plan':artifact},{'test_plan':'demo'}),'READY')
-  w.complete_exact('test_plan','plan1',{'test_plan':artifact},{'test_plan':'demo'},
-                   receipt='synthetic-test-receipt',verifier=synthetic_receipt_verifier)
-  w.answer('build_ref','sha1');w.answer('environment','lab')
+  self.assertEqual(w.evaluate('test_plan'),'READY')
+  w.complete('test_plan','plan')
+  w.complete('design','draft')
+  w.approve('cases','c1','demo');w.complete('case_review','cases')
+  for k in ('build_ref','environment','jira_project','cycle_name'):w.answer(k,k+'-val')
   self.assertEqual(w.evaluate('execution'),'WAITING_APPROVAL')
   w.approve('execution','sha1','demo-lab');self.assertEqual(w.evaluate('execution'),'READY')
  def test_downstream_invalidation(self):

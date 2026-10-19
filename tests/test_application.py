@@ -179,12 +179,15 @@ class ApplicationTests(unittest.TestCase):
     def test_recursive_exact_ancestor_change_invalidates_completed_descendant(self):
         workflow = Workflow('demo'); workflow.request(['design'])
         workflow.answer('source', 'doc')
-        artifacts = {'requirements': {'text': 'v1'}}
-        scopes = {'requirements': 'demo'}
+        artifacts = {'requirements': {'text': 'v1'}, 'test_plan': {'plan': 'definition'}}
+        scopes = {'requirements': 'demo', 'test_plan': 'demo'}
         workflow.complete_exact('requirements', 'req', artifacts, scopes)
         workflow.complete_exact('review', 'review', artifacts, scopes)
         workflow.approve_exact('requirements', 'demo', artifacts['requirements'], 'local-reviewer')
         workflow.complete_exact('baseline', 'baseline', artifacts, scopes)
+        workflow.answer('plan_name', 'plan')
+        workflow.approve_exact('test_plan', 'demo', artifacts['test_plan'], 'local-reviewer')
+        workflow.complete_exact('test_plan', 'plan', artifacts, scopes)
         workflow.complete_exact('design', 'cases', artifacts, scopes)
         artifacts['requirements']['text'] = 'changed'
         self.assertEqual(workflow.evaluate_exact('design', artifacts, scopes), 'STALE')

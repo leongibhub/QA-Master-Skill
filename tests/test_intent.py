@@ -26,4 +26,4 @@ class IntentTests(unittest.TestCase):
  def test_test_plan(self):self.assertEqual(plan_task('只写测试计划',{'requirements':'doc'})['stages'],['test_plan'])
  def test_case_review(self):self.assertEqual(plan_task('只做用例评审',{'requirements':'doc'})['stages'],['case_review'])
  def test_bug_and_regression(self):self.assertEqual(plan_task('执行测试并提交bug然后回归',{'requirements':'doc'})['stages'],['execution','regression'])
- def test_combined_modules(self):self.assertEqual(plan_task('需求评审和测试计划和测试用例编写',{'requirements':'doc'})['stages'],['review','design','test_plan'])
+ def test_combined_modules(self):self.assertEqual(plan_task('需求评审和测试计划和测试用例编写',{'requirements':'doc'})['stages'],['review','test_plan','design'])

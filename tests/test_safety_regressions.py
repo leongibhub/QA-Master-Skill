@@ -121,33 +121,36 @@ class SafetyRegressionTests(unittest.TestCase):
 
     def test_answer_change_invalidates_completed_side_effect_step_and_approval(self):
         workflow = Workflow("demo")
-        workflow.request(["test_plan"])
+        workflow.request(["execution"])
         workflow.answer("source", "spec")
         workflow.complete("requirements", "req")
         workflow.complete("review", "review")
         workflow.approve("requirements", "r1", "demo")
         workflow.complete("baseline", "baseline")
+        workflow.answer("plan_name", "plan-one")
+        workflow.approve("test_plan", "t1", "demo")
+        workflow.complete("test_plan", "plan")
         workflow.complete("design", "cases")
         workflow.approve("cases", "c1", "demo")
         workflow.complete("case_review", "case-review")
-        for key in ("jira_project", "plan_name", "cycle_name"):
+        for key in ("build_ref", "environment", "jira_project", "cycle_name"):
             workflow.answer(key, key + "-one")
         artifact = {"cases": ["TC-1"]}
-        workflow.approve_exact("test_plan", "demo", artifact, "synthetic-reviewer")
+        workflow.approve_exact("execution", "demo", artifact, "synthetic-reviewer")
 
         def synthetic_receipt_verifier(receipt, binding):
             # This checks local binding propagation only; it is not production authorization.
-            if receipt != "synthetic-test-receipt" or binding["step"] != "test_plan" or binding["project"] != "demo":
+            if receipt != "synthetic-test-receipt" or binding["step"] != "execution" or binding["project"] != "demo":
                 return None
-            return VerifiedCompletionReceipt("fixture-plan-result", "synthetic-test-host",
-                "2026-10-14T00:00:00Z", "2026-10-14T01:00:00Z", artifact_digest(binding), "plan-result")
+            return VerifiedCompletionReceipt("fixture-execution-result", "synthetic-test-host",
+                "2026-10-14T00:00:00Z", "2026-10-14T01:00:00Z", artifact_digest(binding), "execution-result")
 
-        workflow.complete_exact("test_plan", "plan-result", {"test_plan": artifact}, {"test_plan": "demo"},
+        workflow.complete_exact("execution", "execution-result", {"execution": artifact}, {"execution": "demo"},
                                 receipt="synthetic-test-receipt", verifier=synthetic_receipt_verifier)
-        self.assertEqual(workflow.steps["test_plan"].status, "DONE")
-        workflow.answer("plan_name", "plan_name-two")
-        self.assertEqual(workflow.steps["test_plan"].status, "PENDING")
-        self.assertNotIn("test_plan", workflow.approvals)
+        self.assertEqual(workflow.steps["execution"].status, "DONE")
+        workflow.answer("cycle_name", "cycle-two")
+        self.assertEqual(workflow.steps["execution"].status, "PENDING")
+        self.assertNotIn("execution", workflow.approvals)
 
     def test_mutation_flags_require_exact_boolean_true(self):
         for value in ("true", 1, False, None):

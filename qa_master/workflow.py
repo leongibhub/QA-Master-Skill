@@ -30,11 +30,11 @@ STEPS={
  'requirements':Step('requirements',required=['source']),
  'review':Step('review',['requirements']),
  'baseline':Step('baseline',['review'],approvals=['requirements']),
- 'design':Step('design',['baseline']),
+ 'test_plan':Step('test_plan',['baseline'],required=['plan_name'],approvals=['test_plan']),
+ 'design':Step('design',['test_plan']),
  'case_review':Step('case_review',['design'],approvals=['cases']),
  'code_refinement':Step('code_refinement',['case_review'],required=['git_ref']),
- 'test_plan':Step('test_plan',['case_review'],required=['jira_project','plan_name','cycle_name'],approvals=['test_plan'],side_effect=True),
- 'execution':Step('execution',['case_review','test_plan'],required=['build_ref','environment'],approvals=['execution'],side_effect=True),
+ 'execution':Step('execution',['case_review','test_plan'],required=['build_ref','environment','jira_project','cycle_name'],approvals=['execution'],side_effect=True),
  'regression':Step('regression',['execution'],required=['fix_ref'],approvals=['regression'],side_effect=True),
  'report':Step('report',['execution'])
 }

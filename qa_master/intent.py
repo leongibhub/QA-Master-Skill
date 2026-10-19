@@ -5,10 +5,10 @@ STAGE_ALIASES={
  'requirements':('需求分析','分析需求','整理需求','逆向需求','requirements analysis'),
  'review':('需求评审','评审需求','review requirements'),
  'baseline':('需求基线','建立基线','基线确认','baseline'),
+ 'test_plan':('测试计划','测试方案','测试规划','test plan'),
  'design':('测试用例','写用例','生成用例','用例设计','测试设计','test cases','test case'),
  'case_review':('用例评审','评审用例','用例审查','用例复核','case review'),
  'code_refinement':('分析代码','阅读源码','白盒','code review','代码分析','更新用例'),
- 'test_plan':('测试计划','测试方案','测试规划','test plan'),
  'execution':('执行测试','开始测试','运行测试','跑测试','run tests','execute tests','提交bug','提交 bug','提交缺陷','缺陷提交','提bug'),
  'regression':('回归','regression'),
  'report':('测试报告','生成报告','测试总结','test report')}

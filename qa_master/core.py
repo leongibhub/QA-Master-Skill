@@ -7,7 +7,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
 DIMENSIONS = ('functional','api','whitebox','integration','performance','load','stress','stability','compatibility','negative','security','recovery','regression')
-STAGES = ('discovery','requirements','review','baseline','design','case_review','code_refinement','execution','regression','report')
+STAGES = ('discovery','requirements','review','baseline','test_plan','design','case_review','code_refinement','execution','regression','report')
 SKILLS = {
  'requirements': ['requirements-analysis'],
  'review': ['requirements-analysis', 'requirement-quality-review'],
