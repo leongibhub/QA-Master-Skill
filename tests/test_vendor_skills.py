@@ -27,9 +27,13 @@ class VendorSkillsTests(unittest.TestCase):
         self.assertEqual(metadata["independent_verification_status"], "PENDING")
         self.assertRegex(metadata["retrieved_at"], r"^\d{4}-\d{2}-\d{2}$")
         self.assertEqual(metadata["snapshot"]["included_paths"], ["skills/en", "skills/zh"])
+        def relative_path(path):
+            return path.relative_to(root).as_posix()
+
         files = sorted(
-            path for language in ("en", "zh") for path in (root / language).rglob("*")
-            if path.is_file()
+            (path for language in ("en", "zh") for path in (root / language).rglob("*")
+            if path.is_file()),
+            key=lambda path: relative_path(path).encode("utf-8"),
         )
         snapshot = metadata["snapshot"]
         text_extensions = set(snapshot["text_extensions"])
@@ -48,8 +52,14 @@ class VendorSkillsTests(unittest.TestCase):
                                for path in files}
         self.assertEqual(observed_extensions, text_extensions | binary_extensions)
         self.assertFalse(text_extensions & binary_extensions)
+        self.assertIn("UTF-8 bytewise relative POSIX path order", snapshot["algorithm"])
+        self.assertEqual(
+            sorted(["zh/Z.md", "en/a.md", "en/A.md", "en/é.md"],
+                   key=lambda path: path.encode("utf-8")),
+            ["en/A.md", "en/a.md", "en/é.md", "zh/Z.md"],
+        )
         manifest = b"".join(
-            f"{path.relative_to(root).as_posix()}|"
+            f"{relative_path(path)}|"
             f"{hashlib.sha256(canonical_bytes(path)).hexdigest()}\n".encode("utf-8")
             for path in files
         )
