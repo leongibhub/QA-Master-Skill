@@ -6,7 +6,7 @@ import json
 import os
 import stat
 from importlib import resources
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import tempfile
 from zipfile import ZipFile, ZIP_DEFLATED
 from uuid import uuid4
@@ -31,12 +31,50 @@ def _linked(path):
 
 
 def _files(root, prefix=''):
+    if isinstance(root, Path) and _linked(root):
+        raise SkillInstallError('SKILL_RESOURCE_LINK_FORBIDDEN')
     for item in sorted(root.iterdir(), key=lambda value: value.name):
+        if isinstance(item, Path) and _linked(item):
+            raise SkillInstallError('SKILL_RESOURCE_LINK_FORBIDDEN')
         name = prefix + item.name
         if item.is_dir():
             yield from _files(item, name + '/')
         elif item.is_file() and item.name.endswith(('.md', '.py', '.json')):
             yield name, item.read_bytes()
+
+
+def _vendor_files(package):
+    """Copy the packaged inventory, never arbitrary source-tree additions."""
+    inventory = package.joinpath('skills', 'vendor-files.json')
+    try:
+        for parent in (package, package.joinpath('skills'), inventory):
+            if isinstance(parent, Path) and _linked(parent):
+                raise SkillInstallError('SKILL_RESOURCE_LINK_FORBIDDEN')
+        data = inventory.read_bytes()
+        manifest = json.loads(data)
+        names = manifest['files']
+        if (type(manifest.get('schema_version')) is not int
+                or manifest['schema_version'] != 1 or not isinstance(names, list)
+                or not names or any(not isinstance(name, str) for name in names)
+                or len(names) != len(set(names))):
+            raise ValueError()
+        for name in names:
+            parts = PurePosixPath(name).parts
+            if (not parts or parts[0] != 'vendor' or len(parts) < 3
+                    or any(part in {'.', '..'} or ':' in part for part in parts)
+                    or '\\' in name or '/'.join(parts) != name):
+                raise ValueError()
+            item = package
+            for part in ('skills', *parts):
+                item = item.joinpath(part)
+                if isinstance(item, Path) and _linked(item):
+                    raise SkillInstallError('SKILL_RESOURCE_LINK_FORBIDDEN')
+            yield name, item.read_bytes()
+        yield 'vendor-files.json', data
+    except SkillInstallError:
+        raise
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        raise SkillInstallError('SKILL_VENDOR_RESOURCE_INVALID') from None
 
 
 def skill_bundle():
@@ -46,12 +84,16 @@ def skill_bundle():
     if 'SKILL.md' not in result:
         raise SkillInstallError('SKILL_RESOURCE_MISSING')
     for item in package.iterdir():
+        if isinstance(item, Path) and _linked(item):
+            raise SkillInstallError('SKILL_RESOURCE_LINK_FORBIDDEN')
         if item.is_file() and item.name.endswith('.py'):
             result['scripts/qa_master/' + item.name] = item.read_bytes()
     for name, data in _files(package.joinpath('skills', 'professional')):
         result['scripts/qa_master/skills/professional/' + name] = data
     for name, data in _files(package.joinpath('semantic_quality_assets')):
         result['scripts/qa_master/semantic_quality_assets/' + name] = data
+    for name, data in _vendor_files(package):
+        result['scripts/qa_master/skills/' + name] = data
     result['scripts/qa.py'] = (
         'from pathlib import Path\n'
         'import sys\n'

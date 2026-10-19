@@ -2,309 +2,179 @@
 
 # QA Master Skill
 
-**一个受人类门控、可恢复的 QA 工作流控制器，外加一个 Codex QA 技能（Agent Skill）。**
+**把需求变成可追踪的测试工作：从评审、计划和用例，到授权执行、缺陷回归与报告。**
 
-评审需求、设计来源可链接的软件测试，并在 Codex 中协调分阶段 QA。
-
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)](./pyproject.toml)
-[![Status](https://img.shields.io/badge/status-released-green)]()
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](pyproject.toml)
 [![CI](https://github.com/leongibhub/QA-Master-Skill/actions/workflows/test.yml/badge.svg)](https://github.com/leongibhub/QA-Master-Skill/actions/workflows/test.yml)
-[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](./LICENSE)
+[![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue)](LICENSE)
+
+[快速开始](#快速开始) · [使用示例](#按你需要的范围工作) · [完整技能目录](docs/SKILL_CATALOG.md) · [操作指南](docs/GETTING_STARTED.md) · [验证记录](docs/verification/)
 
 </div>
 
-> ⚠️ **已发布 1.0.0；企业 E2E、性能、远程执行等能力尚未验收，见下方「当前边界」。** 无需另装其它 QA Skill 仓库。
+## 你可以用它完成什么
 
-**快速链接：** [安装](#快速开始) · [用法](#用法) · [专业能力指南](#专业能力指南) · [入口点](#入口点) · [文档地图](#文档地图) · [验证证据](docs/verification/)
+给 QA Master 一份需求、代码仓库或接口说明，再说明你需要的交付物。它通过 Agent 阅读来源、选择专业指南、形成测试产物；本地工具负责状态保存、规则路由、确定性设计与证据校验。开发尚未完成时，可以先完成评审和设计，保存交接信息后继续。
 
----
-
-## 能做什么
-
-一个仓库、一个 QA Master 入口。每个专业指南可单独路由，也可按「需求分析 → 测试设计 →（可选）企业接入 → 本地执行」组成一条质量工作流。企业接入不是必经步骤：默认不连任何企业系统，需要时先在配置页（`config_ui`）预配适配器并授权。
-
-| 场景 | 入口 | 帮助 |
+| 你的任务 | 交付物 | 适用例子 |
 | --- | --- | --- |
-| 需求评审与测试计划 | 需求评审指南 · `qa-master plan` | 多源需求冲突、功能边界与状态、风险 → 可追踪的测试计划与用例 |
-| 功能 / API / 白盒 / 集成测试设计 | 功能/API、结构/集成指南 · `campaign_cli` | 生成可审查的草稿用例、追踪、覆盖与缺口 |
-| 确定性测试方法 | 边界值 · 决策表 · 状态迁移 · 成对组合 · 组合测试 | 从模型导出可审计的用例组合 |
-| 企业工具接入（可选） | Jira · Confluence · SynapseRT · GitLab CI | 先在配置页预配适配器，再读取 / 受控写入 / JUnit 制品核验 |
-| 本地受控执行 | 本机 Runner · 任务调度核心 | 可信宿主授权、环境隔离、超时清理 |
+| 看懂需求、识别风险 | 冲突清单、待确认问题、可测试条件 | 多份需求不一致、验收标准不明确 |
+| 制定测试计划 | 范围、优先级、环境与数据需求、退出条件 | 新版本测试、接口改造、系统集成 |
+| 编写和评审用例 | 前置条件、步骤、预期结果、来源追踪、覆盖缺口 | 功能、API、状态机、权限、异常路径 |
+| 选择专项测试方法 | 相关指南、测试策略与可审查草稿 | Web UI、性能、安全、AI/RAG、混沌测试 |
+| 执行、跟踪与回归 | 获授权的执行记录、缺陷材料、回归范围、证据报告 | 已有可测版本、明确环境和执行权限 |
+| 跨会话继续工作 | 当前阶段、未决问题、暂停原因与下一步 | 等待构建、等待需求澄清、分阶段交付 |
 
-内置指南覆盖需求冲突、功能边界/状态、API、白盒、集成、性能/负载/压力/稳定性、兼容性、安全/恢复、回归与证据报告。详见 [专业能力](docs/SKILL_CAPABILITIES.md)。
+**单独做一个阶段、组合多个阶段或规划完整流程，都使用同一个入口。** 企业系统接入可选；需求评审和本地设计无需 Jira、GitLab 或测试机。
 
 ## 快速开始
 
-需要 Python 3.10 或以上；Windows 与 Linux 使用相同的 Python 命令。
+需要 Python 3.10+、Git，以及支持加载 Skill 的 Agent。下面使用项目级 Codex 安装，避免修改全局技能目录。
 
-```sh
+### Windows · PowerShell
+
+```powershell
 git clone https://github.com/leongibhub/QA-Master-Skill.git
 cd QA-Master-Skill
-
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-# Linux:   source .venv/bin/activate
-
-python -m pip install .
-python -m qa_master install-codex --user
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install .
+.\.venv\Scripts\python.exe -m qa_master install-codex --project .
 ```
 
-安装器把入口、专业指南、领域参考和本地助手一起装到 `~/.agents/skills/qa-master`。在 Codex 或 OpenCode 中打开待测项目，直接描述目标即可：
+### Linux · Bash
 
-> `$qa-master 评审这份需求并生成测试用例，开发还未完成，不执行测试`
-
-只供单个项目使用时，改用 `python -m qa_master install-codex --project <项目目录>`，装到该项目的 `.agents/skills/qa-master`。安装后的 Skill 不依赖原始源码目录或另一个 QA Skills 仓库；本地助手需要 Python 3.10+，没有 Python 时仍可只按指南由 Codex 完成分析设计。详细交付边界见 [Codex 核心版](docs/CODEX_CORE.md)。
-
-## 支持的 Agent 工具
-
-本 Skill 遵循 Agent Skills 开放标准（一个目录 + `SKILL.md` + frontmatter）。安装器把完整技能装到 `.agents/skills/qa-master`，凡是读取 `.agents/skills/` 的工具都能直接发现。
-
-| 工具 | 安装位置 | 方式 |
-| --- | --- | --- |
-| Codex CLI | `~/.agents/skills/qa-master` | `python -m qa_master install-codex --user`（原生） |
-| OpenCode | `~/.agents/skills/qa-master`（全局）· `.agents/skills/qa-master`（项目） | 同上——OpenCode 也读 `.agents/skills/`（agent-compatible） |
-| Claude Code | `~/.claude/skills/qa-master` | 手动复制或软链（Claude Code 读 `.claude/skills/`） |
-| WorkBuddy（腾讯云） | `.workbuddy/skills/qa-master` | 手动复制或软链（支持 Agent Skills 标准） |
-
-- **全局**：`install-codex --user` → `~/.agents/skills/qa-master`，Codex CLI 与 OpenCode 都能发现。
-- **项目**：`install-codex --project <项目目录>` → `<项目>/.agents/skills/qa-master`，在该项目内被 Codex CLI 与 OpenCode 发现。
-- **Claude Code** 读 `~/.claude/skills/`，把装好的 `qa-master` 目录复制/软链过去即可；`SKILL.md` 的 frontmatter 只含 `name`/`description`，跨工具通用。
-
-安装后若工具没刷新技能列表，重新打开会话。
-
-## 用法
-
-在支持 Agent Skills 标准自动发现的工具里，用自然语言描述目标即可；需要显式调用时直接点名入口。
-
-| 你可以说 | 推荐入口 |
-| --- | --- |
-| 「评审这份需求，列出冲突和测试点」 | 需求评审指南 / `qa-master plan` |
-| 「为这个登录流程生成测试用例」 | 功能/API 指南 / `campaign_cli` |
-| 「给这个状态机补非法迁移用例」 | 状态迁移（`references/design-methods.md`） |
-| 「读 Jira 需求并做核验」 | [企业接口](docs/ENTERPRISE_ADAPTERS.md) |
-| 「在本机受控跑这份测试」 | [本机 Runner](docs/LOCAL_RUNNER.md) |
-
-不知道从哪开始时，先跑 `qa-master plan`，它会输出规划阶段、信息缺口和匹配的专业指南。
-
-## 最佳实践
-
-一条质量工作流覆盖「需求 → 测试计划 → 测试用例 → 执行 → 报告」。以下每条都是本仓库真实命令与真实输出，在仓库根目录可直接复现。
-
-**① 需求：先暴露信息缺口，再谈用例。** `plan` 是意图路由而非生成器，优先回答「缺什么」。
-
-```sh
-python -m qa_master init demo-login
-python -m qa_master plan "评审用户上传文档功能的需求，列出冲突和测试点"
+```bash
+git clone https://github.com/leongibhub/QA-Master-Skill.git
+cd QA-Master-Skill
+python3 -m venv .venv
+.venv/bin/python -m pip install .
+.venv/bin/python -m qa_master install-codex --project .
 ```
 
-输出：`no_execution: true`、`questions` 列出信息缺口（例如「请提供需求文件 / Wiki / GitLab 仓库地址」）、`professional_guidance.selected` 自动选中 `requirements-review`。**先补齐来源再设计**——别让 Agent 在缺需求来源时凭空生成用例。
-
-**② 测试计划：把需求写成结构化 bundle。** 结构化需求（`id` / `text` / `source` / `approved` / `dimension` / `acceptance` / `preconditions` / `test_data` / `priority`）让评审与追踪可核对，示例见 `examples/campaign.json`。
-
-```sh
-python -m qa_master.campaign_cli --input examples/campaign.json --output .qa-master/design.json
-```
-
-产出 JSON 里：`requirement_review.approval = PENDING_HUMAN`（不替人类拍板）、`requirement_findings` 列出冲突/阻断。**`approved` 只对已确认需求打 `true`，评审结论永远停在 `PENDING_HUMAN` 由人决定。**
-
-**③ 测试用例：草稿与覆盖缺口一起看。** 生成的用例默认 `approval=DRAFT`，同时给出 13 维度的覆盖矩阵。
-
-产出 JSON：`test_cases[]` 每条带 `trace`（回指需求）、`dimension`、`steps`、`expected`；`coverage.*` 中 `DRAFT` = 已生成、`UNASSESSED` = 未覆盖维度。**先扫 `coverage` 里的 `UNASSESSED`，那才是缺口，别只看用例数量。**
-
-**④ 测试用例（进阶）：能结构化就用确定性方法。** 边界值 / 决策表 / 状态迁移 / 成对组合 / 组合测试不依赖模型猜测，直接从结构化模型导出可审计用例（示例 `examples/design-methods.json`）。
-
-```sh
-python -m qa_master design --input examples/design-methods.json --output .qa-master/methods.json
-```
-
-输出：`method_candidates = 14`、`status = DRAFT_UNAPPROVED`、`execution = NOT_EXECUTED`。**结构能明确时别交给语义模型猜，确定性引擎结果可复现、可审计。**
-
-**⑤ 执行：默认拒绝，显式授权后才动。** 受人类门控是特性，不是 bug。
-
-```sh
-python -m qa_master check execution
-# {"state": "DENIED_BY_TASK_SCOPE", "execution_authorized": false, ...}
-```
-
-**草稿停在 `DRAFT_UNAPPROVED`，只有显式授权（可信宿主 + 审批验证）才进入执行，没有默认放行器。**
-
-**⑥ 报告：如实反映门控状态，不做「通过」宣称。**
-
-```sh
-python -m qa_master check report   # {"state": "PENDING", ...}
-```
-
-产出 JSON：`workflow.requirements_review = WAITING_HUMAN_APPROVAL`、`workflow.execution = NOT_AUTHORIZED`、`case_review.trace_matrix`（需求→用例追踪）。**报告是「追踪 + 门控状态」的证据，不是「测试通过」的结论——没有执行授权就没有执行结论。**
-
-## 专业能力指南
-
-6 份原创、可被注册表发现的审查与设计指南（`qa_master/skills/professional/`）：
-
-| 指南 | 覆盖维度 |
-| --- | --- |
-| `requirements-review` | 多源需求冲突、边界、人工复核 |
-| `functional-api` | 功能流程、API 合约/鉴权/负向 |
-| `structural-integration` | 白盒分支与路径、集成 |
-| `nonfunctional-compatibility` | 性能/负载/压力/稳定性、兼容性 |
-| `security-recovery` | 安全、恢复 |
-| `regression-evidence` | 回归、缺陷与证据报告 |
-
-**13 个测试维度**（用于指南路由与覆盖判定）：`functional`、`api`、`whitebox`、`integration`、`performance`、`load`、`stress`、`stability`、`compatibility`、`negative`、`security`、`recovery`、`regression`。
-
-**测试设计方法**（确定性引擎 + 专业指南共同覆盖）：
-
-| 方法 | 确定性引擎 | 说明 |
-| --- | --- | --- |
-| 等价类划分 | — | 有效/无效等价类 + 边界（`functional-api` 指南） |
-| 边界值分析 | `boundary` | 双侧端点 + 内侧步进点 + 越界邻域 |
-| 决策表 / 判定表 | `decision_table` | 条件组合、约束排除、规则冲突/缺口 |
-| 状态迁移 | `state_transition` | 状态、触发、守卫/效果、闭环非法迁移 |
-| 成对组合 | `pairwise` | 固定强度 2，贪心覆盖数组覆盖所有参数对 |
-| 组合测试 | `combinatorial` | 可选强度 2–3，贪心覆盖数组覆盖所有 t 元交互 |
-| 分支 / 条件覆盖 | — | 复合谓词、决策/条件证据（`structural-integration` 指南） |
-| 场景法 | — | 正常交付、契约不符、超时、重试耗尽、重复消息、乱序、部分副作用等 |
-
-带 `boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial` 的是 `qa_master.design_methods` 的**确定性有限合成方法**（无需模型，直接从结构化模型导出可审计用例）；等价类、场景法、分支/条件等由专业指南配合模型完成。详见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)。
-
-> 尚未原生实现的设计方法（model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，已随内置的 vendor 广度库提供（见下方「广度技能库」）；`qa-master plan` 会把这些阶段路由到对应 skill。本仓库仍逐步把高价值方法原生化。
-
-注册表只返回本地包中已验证存在的文件，绝不把「选择某一指南」说成已调用模型、已运行测试或已产生结论。这些指南和确定性生成器不等于完整语义 Agent。
-
-## 广度技能库：内置 330 skill（中英双语）
-
-本仓库以 vendor 形式内置了 **330 个 skill（165 中文 + 165 英文）**（10 workflow + 150 testing-type + 5 skill-engineering），作为「广度叶子」，随包分发、开箱即用，无需再单独安装。
-
-**路由整合（本仓库独有）**：`qa-master plan` 通过 `core.SKILLS` / `core.DIMENSION_SKILLS` 把规划阶段映射到 canonical skill 名，再在 vendor 里选中中英双语对应 skill，结果输出在 `vendor_skills` 字段——vendor 里的广度 skill 只是提示词，本身没有意图路由、`no_execution` 门控、可暂停恢复状态机、来源追踪、企业适配，以及确定性覆盖数组引擎（`boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial`）。
-
-长尾专类（model-based / property-based / metamorphic、Playwright/Selenium/Cypress、k6/JMeter/Gatling、LLM/RAG/Agent 测试、chaos/circuit-breaker 等）现在随本仓库提供；同时本仓库继续把高价值方法原生化。完整的覆盖对照、缺口清单与路线图见 [广度技能库](docs/COMPLEMENTARY_SKILLS.md)。
-
-## 入口点
-
-| 命令 | 能做什么 | 边界 |
-| --- | --- | --- |
-| `qa-master plan "任务"` | 规划阶段、信息缺口、专业指南，保存禁止执行的任务范围 | 保守规则解析，不授权执行 |
-| `qa-master pause` / `resume` | 保存暂停状态，恢复后重查流程条件 | 暂停期间拒绝推进；恢复不增加授权 |
-| `python -m qa_master.campaign_cli --input examples/campaign.json --output .qa-master/design.json` | 结构化需求草稿、追踪、覆盖与缺口 | 草稿，不能代替人类批准 |
-| `qa-master-paired-eval` | 同题、同模型、同设置的双边评测资料校验 | 缺少双方实际输出时不能得出优劣 |
-| `python -m qa_master.config_ui --config .qa-master/config.json` | 本机配置页面（默认 `http://127.0.0.1:8765`）——预配企业适配器与测试机连接 | 仅非秘密配置与凭据环境变量引用 |
-
-## 架构流程图
-
-```mermaid
-flowchart TD
-    A([用户 · 自然语言需求]) --> B[Agent 工具<br/>Codex CLI · OpenCode · Claude Code · WorkBuddy]
-    B --> C[qa-master SKILL.md<br/>总控入口]
-    C --> D{意图路由<br/>qa-master plan}
-    D -->|解析为阶段序列<br/>单独 / 组合 / 全流程| P[阶段流水线]
-
-    subgraph P[阶段流水线]
-        direction LR
-        P1[① 需求评审] --> P2[② 需求基线] --> P3[③ 测试计划] --> P4[④ 编写用例] --> P5[⑤ 用例评审] --> P6[⑥ 执行测试<br/>提交 bug] --> P7[⑦ 回归测试] --> P8[⑧ 测试报告]
-    end
-
-    P1 -.-> R1[需求评审指南<br/>requirements-analysis]
-    P3 -.-> R3[test-strategy<br/>test-scope-analysis]
-    P4 -.-> R4a[确定性引擎<br/>boundary · decision_table<br/>state_transition · pairwise · combinatorial]
-    P4 -.-> R4b[专业指南 + 模型<br/>等价类 · 场景法 · 分支条件]
-    P5 -.-> R5[test-case-reviewer]
-    P6 -.-> R6[functional · api · automation<br/>bug-reporting]
-    P7 -.-> R7[regression-test-selection<br/>回归证据指南]
-    P8 -.-> R8[test-reporting]
-
-    P6 --> E{企业接入已预配?}
-    E -->|是 · 已授权| E2[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
-    E -->|否 · 未预配| K[草稿产物<br/>用例 · 覆盖 · 缺口 · 追踪]
-    E2 --> K
-    K --> L{是否执行?}
-    L -->|否| M([DRAFT_UNAPPROVED 交付])
-    L -->|是 · 需授权| H[本机 Runner<br/>受控执行]
-    H --> N[证据与验证<br/>attestation · paired-evaluation]
-    N --> M
-```
-
-`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。关键点：①意图路由把自然语言解析为阶段序列——支持单独模块（如「只需求评审」）、任意组合（如「需求评审 + 测试计划 + 编写用例」）与全流程（需求评审 → 基线 → 测试计划 → 编写用例 → 用例评审 → 执行测试·提交 bug → 回归 → 报告）；②每个阶段路由到确定性引擎（结构化模型走 boundary/decision_table/state_transition/pairwise/combinatorial）、原生专业指南（语义类）与内置 vendor 广度库（330 skill 长尾专类）；③企业接入是可选分支，需先在配置页预配适配器，未预配则跳过；④产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
-
-## 仓库结构
+以上命令无需激活虚拟环境。安装到自己的业务项目时，将最后一个 `.` 换成该项目的路径。在目标项目中打开新的 Codex 会话，然后输入：
 
 ```text
-QA-Master-Skill/
-├── qa_master/                # Python 包：CLI、生成器、企业适配、评测运行时
-│   └── skills/
-│       ├── codex/            # Codex 技能入口 + references + examples
-│       ├── professional/     # 6 份专业能力指南
-│       └── vendor/            # 内置广度库：330 skill（中英双语）
-├── skills/qa-master/         # 源树入口（非独立安装包）
-├── examples/                 # 教学模型（边界、决策表、状态迁移）
-├── docs/                     # 交付边界、验收、评测与验证证据
-├── tests/                    # unittest 套件
-├── .github/workflows/        # CI（ubuntu/windows × py3.10/3.12）
-├── pyproject.toml
-├── LICENSE                   # PolyForm Noncommercial 1.0.0
-└── README.md
+$qa-master 阅读 docs/requirements.md，评审需求并生成测试用例。
+开发还未完成，不执行测试，不向外部系统写入。
+请交付需求问题清单、带来源的用例草稿、覆盖缺口和后续交接说明。
 ```
 
-## 设计原则
+入口位于 `<项目>/.agents/skills/qa-master/SKILL.md`，安装包包含指南、双语技能资料和本地助手。需要全局安装时使用 `install-codex --user`。更新与安装自检见 [操作指南](docs/GETTING_STARTED.md)。其他 Agent 的发现目录和加载方式需要按其宿主配置核对；这里不把文件可复制等同于跨工具验收。
 
-- **受人类门控：** 不提供默认放行器；单独填写 `approved_by`、设置环境变量或调用旧版 `approve` 命令都不能获得实际执行权限。
-- **证据可核验：** 执行回执和结果来源由宿主验证，默认拒绝；任何 JSON 布尔值或审批人文本均不能证明真实身份。
-- **来源可链接：** 用例与结论链接到需求来源，区分草稿、观察与已执行证据。
-- **可恢复：** 状态在 schema v2 下保存，暂停/恢复/迁移都有明确边界。
-- **独立安装：** 安装后的 Skill 不依赖源码目录；企业写入与执行仍需可信集成方实现宿主验证。
-- **安全默认：** 不要把真实 Token、密码、Cookie、私钥、公司测试资料提交到这个 Public 仓库。
+## 按你需要的范围工作
 
-## 验证与质量
+以下是发给 Agent 的任务示例；把文件名替换成项目中的真实来源。
 
-提交改动前，从仓库根目录运行：
+### 只做一个阶段
 
-```sh
-python -m pip install ".[test]"      # 安装测试依赖（含 attestation 验签所需的 cryptography）
+```text
+$qa-master 只评审 docs/requirements.md，列出矛盾、边界和无法验收的条款。
+不要生成用例，也不要执行测试。
+```
+
+```text
+$qa-master 只评审 tests/cases.md 的测试用例。
+不要提交缺陷，只指出来源缺失、预期不明确和重复覆盖的问题。
+```
+
+### 组合工作
+
+```text
+$qa-master 根据 docs/requirements.md 和 openapi.yaml，完成需求评审、
+测试计划、API 用例设计和用例评审。每条用例标明来源；
+403/404 等冲突保留为待确认项，不替产品决定。不执行测试。
+```
+
+### 规划完整流程
+
+```text
+$qa-master 为这个版本规划全流程：需求分析与评审 → 基线确认 → 测试计划
+→ 编写用例 → 用例评审 → 获授权后执行 → 缺陷记录 → 回归 → 测试报告。
+先读取当前材料并完成设计；执行环境、权限和外部写入范围确认后再推进。
+```
+
+```mermaid
+flowchart LR
+    A[需求与来源] --> B[评审与基线]
+    B --> C[测试计划]
+    C --> D[用例设计与评审]
+    D --> E{执行条件与授权}
+    E -->|未满足| F[保存草稿与交接]
+    E -->|满足| G[执行与证据]
+    G --> H[缺陷记录与回归]
+    H --> I[测试报告]
+```
+
+执行阶段的选择不会自动授予权限；外部缺陷提交也需要明确的写入范围。没有执行证据时，报告保留 `NOT_EXECUTED` 等真实状态。
+
+### 指定专项能力
+
+```text
+$qa-master 使用 rag-quality-testing，为检索增强问答设计质量评估方案。
+先列出所需的数据集和判断依据，不运行评测。
+```
+
+```text
+$qa-master 使用 ui-test-playwright，评审登录页面的浏览器自动化测试设计。
+```
+
+可以使用技能的 canonical name 或已支持的中英文别名。模糊请求可能需要澄清，例如“RAG 测试”可能涉及检索或答案质量；规则路由不能理解所有任意表述。完整名称和文件入口见 [165 项双语技能目录](docs/SKILL_CATALOG.md)。
+
+## 三层能力，各有用途
+
+| 层次 | 内容 | 如何使用 |
+| --- | --- | --- |
+| 工作流与专业指南 | 阶段路由、暂停恢复、6 份专业指南、13 个测试维度 | Agent 阅读来源并组织交付；本地助手保存与检查状态 |
+| 确定性设计引擎 | `boundary`、`decision_table`、`state_transition`、`pairwise`、`combinatorial` | 将结构化模型转换为可复核的候选用例和覆盖义务 |
+| 专项技能资料 | **165 个逻辑技能，中文和英文各一份，共 330 个目录** | 选择工作流、测试类型或技能工程指南，由 Agent 应用到当前任务 |
+
+165 项按用途分为 10 项工作流、150 项测试类型、5 项技能工程。中英文版本不重复计为独立能力；资料数量也不代表自动执行能力或质量评分。等价类、场景法、属性测试等指南能力与上述 5 种确定性算法分开标注。
+
+## 本地工具：可观察、可复核
+
+在仓库根目录、已激活的虚拟环境中运行；未激活时用虚拟环境 Python 的完整路径替换 `python`。
+
+```bash
+python -m qa_master init demo-login
+python -m qa_master plan "需求评审 + 测试计划 + 编写用例，不执行测试"
+python -m qa_master skills
+python -m qa_master design --input examples/design-methods.json --output .qa-master/methods.json
+python -m qa_master status
+```
+
+- `plan` 返回阶段、信息缺口和所选指南，不会替你阅读需求并生成完整方案。
+- `skills` 可检查本地实际发现的指南及双语资料数量。
+- `design` 使用仓库中的教学模型；产物标记为 `DRAFT_UNAPPROVED`、`NOT_EXECUTED`，不是业务测试通过证明。
+- `pause` / `resume` 保存和恢复流程状态；恢复不会新增执行权限。
+
+普通需求文档可以直接交给 Agent 分析，无需先手工编写 JSON。只有使用确定性引擎时才需要符合契约的结构化输入。更多示例见 [设计方法](qa_master/skills/codex/references/design-methods.md) 和 [Campaign CLI](docs/CAMPAIGN_CLI.md)。
+
+## 文档导航
+
+| 想了解什么 | 入口 |
+| --- | --- |
+| 安装、自检、更新、第一次任务 | [操作指南](docs/GETTING_STARTED.md) |
+| 浏览所有专项技能 | [双语技能目录](docs/SKILL_CATALOG.md) |
+| 6 份专业指南与能力边界 | [专业能力](docs/SKILL_CAPABILITIES.md) · [核心版交付](docs/CODEX_CORE.md) |
+| 本机配置及企业适配 | [配置中心](docs/CONFIGURATION.md) · [企业接口](docs/ENTERPRISE_ADAPTERS.md) |
+| 执行授权、调度与证据 | [本机 Runner](docs/LOCAL_RUNNER.md) · [任务调度](docs/JOB_SCHEDULER.md) · [证据绑定](docs/EVIDENCE_BINDING.md) |
+| 测试报告与发布判断 | [测试报告](docs/TEST_REPORT.md) · [发布门控](docs/RELEASE_GATE.md) |
+| 验收与真实验证记录 | [验收范围](docs/V1_ACCEPTANCE.md) · [验证记录](docs/verification/) |
+| 评测方法与双方原始产物要求 | [评测协议](docs/BENCHMARK.md) · [双边评测](docs/PAIRED_EVALUATION.md) |
+
+## 当前交付边界
+
+本仓库提供 Skill、Python 工具与适配接口。真实企业环境端到端、远程测试机执行、生产身份和密钥管理仍需相应集成及验收；本机配置页保存连接元数据，不会自动完成这些集成。安装成功、指南被选中或单元测试通过，也不能代替具体项目的验收。
+
+## 参与开发
+
+```bash
+python -m pip install ".[test]"
 python -W error::ResourceWarning -m unittest discover -s tests
 ```
 
-CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一命令（先 `pip install ".[test]"` 再跑测试）。`cryptography` 是可选运行时依赖：只做需求评审/测试设计而不做 attestation 验签时，基础 `pip install .` 即可。
+提交改动时附上问题场景、需求关联和验证结果；不要把凭据或私人项目材料提交到公共仓库。历史结果保存在验证目录，当前状态以对应版本的测试和评审记录为准。
 
-- 复测证据位于 [docs/verification/](docs/verification/)，原始基线失败与修复记录均保留；历史 README 已归档至 [docs/history/](docs/history/)。
-- 双边评测资料校验与协议见 [docs/BENCHMARK.md](docs/BENCHMARK.md) 和 [docs/PAIRED_EVALUATION.md](docs/PAIRED_EVALUATION.md)。
-- 验证轨迹汇总见 [docs/verification/verification-trajectory-summary.md](docs/verification/verification-trajectory-summary.md)。
+## 许可证与资料来源
 
-真实企业环境 E2E 为 `NOT_EXECUTED`。
-
-## 文档地图
-
-| 文档 | 用途 |
-| --- | --- |
-| [CODEX_CORE.md](docs/CODEX_CORE.md) | Codex 核心版交付边界 |
-| [SKILL_CAPABILITIES.md](docs/SKILL_CAPABILITIES.md) | 专业能力层设计与验收范围 |
-| [COMPLEMENTARY_SKILLS.md](docs/COMPLEMENTARY_SKILLS.md) | 广度技能库对照、缺口清单与原生化路线图 |
-| [ENTERPRISE_ADAPTERS.md](docs/ENTERPRISE_ADAPTERS.md) | Jira / Confluence / SynapseRT 接口 |
-| [GITLAB_CI_ATTESTATION.md](docs/GITLAB_CI_ATTESTATION.md) | GitLab CI 制品核验 |
-| [LOCAL_RUNNER.md](docs/LOCAL_RUNNER.md) | 本机 Runner 授权与隔离 |
-| [JOB_SCHEDULER.md](docs/JOB_SCHEDULER.md) | 本地任务生命周期核心 |
-| [SECURITY_CONTINUATION.md](docs/SECURITY_CONTINUATION.md) | 安全约束与身份边界 |
-| [V1_ACCEPTANCE.md](docs/V1_ACCEPTANCE.md) | V1 验收范围 |
-| [BENCHMARK.md](docs/BENCHMARK.md) | 评测协议 |
-| [PAIRED_EVALUATION.md](docs/PAIRED_EVALUATION.md) | 双边评测运行时 |
-| [CAMPAIGN_CLI.md](docs/CAMPAIGN_CLI.md) | Campaign CLI 用法 |
-| [CONFIGURATION.md](docs/CONFIGURATION.md) | 配置页面与凭据引用 |
-| [requirement-traceability-matrix.md](docs/03-requirements/requirement-traceability-matrix.md) | 需求追踪矩阵 |
-| [verification/](docs/verification/) | 验证与复测证据 |
-
-## 当前边界
-
-V1.0 的如实边界——以下能力因需要外部资源或超出本地工具范围而尚未交付（`NOT_AVAILABLE` / `NOT_EXECUTED`）：
-
-- **完整多语言语义 Agent**：本技能是确定性控制器 + 指南，不是全自动 Agent。
-- **远程 SSH/WinRM 执行与资源调度**：需要可信宿主与基础设施。
-- **生产身份 / 密钥库**：需要企业级密钥管理。
-- **SynapseRT 全量业务操作与缺陷回归闭环**：需要具体部署环境。
-
-明确列出边界是为了不夸大能力、不做未经验证的宣称。
-
-## 贡献
-
-Issues 和 PR 欢迎：专业指南、生成器、企业适配、评测与文档改进。提交前请先跑测试套件，并把改动与对应需求/验证证据关联。
-
-## 许可证
-
-本仓库采用 [PolyForm Noncommercial License 1.0.0](./LICENSE)。您可以自由使用、修改和分发本软件，但仅限非商业目的（如个人学习、研究、实验、慈善机构、教育机构、公共研究组织、政府机构等用途）。
+使用条件见 [LICENSE](LICENSE)。内置第三方资料的来源、版权和许可证保留在对应目录及 [资料说明](docs/COMPLEMENTARY_SKILLS.md) 中；使用和分发时请一并保留。

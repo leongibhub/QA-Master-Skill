@@ -8,6 +8,32 @@ Use Codex's reasoning and available tools to produce the requested QA work. This
 skill includes professional guides and a local state helper; the helper alone is
 not a semantic testing agent or an execution authority.
 
+## Select an available specialist
+
+For a specialist task, read its bundled `SKILL.md` and follow its relative
+references. The installed library lives at
+`scripts/qa_master/skills/vendor/awesome-qa-skills/{en,zh}/{testing-workflows,testing-types,skill-engineering}/{name}/SKILL.md`,
+relative to this entry. In the source checkout, use the corresponding
+`qa_master/skills/vendor/awesome-qa-skills/` directory. Prefer the user's language.
+You can inspect these directories directly without Python; do not require a
+separate upstream installation. Preserve the included license and attribution.
+
+The optional local `plan` command described in the work protocol returns
+`vendor_skills.selected` with actual file paths. It recognizes exact catalog
+names and a bounded alias set: property-based testing / 属性测试, chaos engineering
+/ 混沌测试, Playwright, and RAG testing / RAG 测试. RAG selects both retrieval and
+answer-quality candidates and reports `AMBIGUOUS_SPECIALIST_REQUEST`; decide from
+the user's sources which work applies, or ask if that distinction matters.
+Unmatched names and missing files remain explicit gaps. This keyword helper does
+not understand every natural-language request. If it misses the task, inspect
+the actual catalog and relevant skill descriptions instead of inventing support.
+
+Selection means reading guidance, not running tests or granting write access.
+Preserve negative instructions independently (for example, run tests but do not
+submit bugs). A specialist end-to-end testing request does not imply the full
+QA lifecycle. Do not run a selected skill's external commands beyond the user's
+scope, and do not claim execution from the mere presence of its instructions.
+
 ## Start with the requested outcome
 
 Identify the project, requested stages, available sources, development stage,
