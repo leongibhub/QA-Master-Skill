@@ -193,32 +193,37 @@ python -m qa_master check report   # {"state": "PENDING", ...}
 
 ```mermaid
 flowchart TD
-    A([用户 · 自然语言]) --> B[Agent 工具<br/>Codex CLI · OpenCode · Claude Code · WorkBuddy]
+    A([用户 · 自然语言需求]) --> B[Agent 工具<br/>Codex CLI · OpenCode · Claude Code · WorkBuddy]
     B --> C[qa-master SKILL.md<br/>总控入口]
     C --> D{意图路由<br/>qa-master plan}
-    D -->|需求评审| E[需求评审指南<br/>冲突 · 边界 · 人工复核]
-    D -->|测试设计| F{确定性方法?}
-    D -->|企业接入?| G{已预配企业适配器?}
-    D -->|受控执行| H[本机 Runner<br/>任务调度核心]
-    D -->|长尾专类| V[Vendor 广度库<br/>330 skill · 中英双语]
-    F -->|是 · 结构化模型| I[确定性引擎<br/>boundary · decision_table · state_transition · pairwise · combinatorial]
-    F -->|否 · 需语义| J[专业指南 + 模型<br/>等价类 · 场景法 · 分支条件 · 安全 · 性能...]
-    G -->|否 · 未预配| K[草稿产物<br/>用例 · 覆盖 · 缺口 · 追踪]
-    G -->|是 · 已授权| G2[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
-    E --> K
-    I --> K
-    J --> K
-    G2 --> K
-    V --> K
+    D -->|解析为阶段序列<br/>单独 / 组合 / 全流程| P[阶段流水线]
+
+    subgraph P[阶段流水线]
+        direction LR
+        P1[① 需求评审] --> P2[② 需求基线] --> P3[③ 测试计划] --> P4[④ 编写用例] --> P5[⑤ 用例评审] --> P6[⑥ 执行测试<br/>提交 bug] --> P7[⑦ 回归测试] --> P8[⑧ 测试报告]
+    end
+
+    P1 -.-> R1[需求评审指南<br/>requirements-analysis]
+    P3 -.-> R3[test-strategy<br/>test-scope-analysis]
+    P4 -.-> R4a[确定性引擎<br/>boundary · decision_table<br/>state_transition · pairwise · combinatorial]
+    P4 -.-> R4b[专业指南 + 模型<br/>等价类 · 场景法 · 分支条件]
+    P5 -.-> R5[test-case-reviewer]
+    P6 -.-> R6[functional · api · automation<br/>bug-reporting]
+    P7 -.-> R7[regression-test-selection<br/>回归证据指南]
+    P8 -.-> R8[test-reporting]
+
+    P6 --> E{企业接入已预配?}
+    E -->|是 · 已授权| E2[企业适配<br/>Jira · Confluence · SynapseRT · GitLab CI]
+    E -->|否 · 未预配| K[草稿产物<br/>用例 · 覆盖 · 缺口 · 追踪]
+    E2 --> K
     K --> L{是否执行?}
     L -->|否| M([DRAFT_UNAPPROVED 交付])
-    L -->|是 · 需授权| H
+    L -->|是 · 需授权| H[本机 Runner<br/>受控执行]
     H --> N[证据与验证<br/>attestation · paired-evaluation]
-    K --> N
     N --> M
 ```
 
-`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。关键分支：①意图路由（需求评审 / 测试设计 / 受控执行 / 长尾专类路由到 vendor 广度库；企业接入是可选分支，需先在配置页预配适配器，未预配则跳过）；②测试设计里「结构化模型走确定性引擎，语义类走专业指南 + 模型」；③长尾专类（model-based、工具自动化、AI 原生、可靠性等）由内置 330-skill vendor 广度库提供；④产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
+`SKILL.md` 是给 Agent 的入口；`qa_master` CLI 是本地确定性工具。关键点：①意图路由把自然语言解析为阶段序列——支持单独模块（如「只需求评审」）、任意组合（如「需求评审 + 测试计划 + 编写用例」）与全流程（需求评审 → 基线 → 测试计划 → 编写用例 → 用例评审 → 执行测试·提交 bug → 回归 → 报告）；②每个阶段路由到确定性引擎（结构化模型走 boundary/decision_table/state_transition/pairwise/combinatorial）、原生专业指南（语义类）与内置 vendor 广度库（330 skill 长尾专类）；③企业接入是可选分支，需先在配置页预配适配器，未预配则跳过；④产出默认停在 `DRAFT_UNAPPROVED`，只有显式授权才进入受控执行并落到证据与验证。
 
 ## 仓库结构
 

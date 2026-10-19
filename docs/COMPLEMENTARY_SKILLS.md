@@ -63,18 +63,24 @@
 
 `qa-master plan` 的整合路径：
 
-1. `intent.py` 把自然语言保守解析为规划阶段（`requirements`/`review`/`design`/`execution`/…），识别 `no_execution` 与信息缺口。
+1. `intent.py` 把自然语言保守解析为阶段序列（`requirements` → `review` → `baseline` → `design` → `case_review` → `code_refinement` → `test_plan` → `execution` → `regression` → `report`），识别 `no_execution` 与信息缺口。支持**单独模块**（「只需求评审」）、**任意组合**（「需求评审 + 测试计划 + 编写用例」）与**全流程**（「全流程」展开全部阶段）。
 2. `skill_registry.select_skills` 按阶段/维度选出**原生指南**，输出在 `professional_guidance`。
 3. `skill_registry.select_vendor_skills` 通过 `core.SKILLS` / `core.DIMENSION_SKILLS` 把阶段映射到 canonical skill 名，再在 vendor 里选中**中英双语**对应 skill，输出在 `vendor_skills`。
 4. 名字在 vendor 里不存在（如 `regression-testing` / `compatibility-testing`，对应已有原生指南的维度）会被**优雅跳过**，不报错。
 
 ```
-qa-master plan "评审需求并设计测试用例"
-# → stages: [review, design]
-# → professional_guidance: requirements-review, functional-api, …
-# → vendor_skills.wanted: requirements-analysis, test-strategy, test-case-writing, test-case-reviewer
-# → vendor_skills.selected: 每个名字 × {en, zh}（共 8 个叶子）
+qa-master plan "只需求评审"
+# → stages: [review]
+
+qa-master plan "需求评审 + 测试计划 + 编写用例"
+# → stages: [review, design, test_plan]
+# → vendor_skills.wanted: requirements-analysis, test-strategy, test-case-writing, test-case-reviewer, test-scope-analysis, …
+
+qa-master plan "全流程"
+# → stages: requirements → review → baseline → design → case_review → code_refinement → test_plan → execution → regression → report
 ```
+
+> 注：`test_plan`（测试计划）在流程中位于用例评审之后——它表示「在 Jira/SynapseRT 创建测试计划」，需先有用例并评审；「制定测试策略/方案」这类规划动作由 `test-strategy` / `one-page-test-strategy` / `test-scope-analysis` 等 skill 提供。
 
 验证在 `tests/test_vendor_skills.py`：330 发现、阶段/维度路由、双语、优雅跳过。
 

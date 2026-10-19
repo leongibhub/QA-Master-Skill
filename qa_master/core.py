@@ -9,11 +9,16 @@ from pathlib import Path
 DIMENSIONS = ('functional','api','whitebox','integration','performance','load','stress','stability','compatibility','negative','security','recovery','regression')
 STAGES = ('discovery','requirements','review','baseline','design','case_review','code_refinement','execution','regression','report')
 SKILLS = {
- 'requirements': ['requirements-analysis'], 'review':['requirements-analysis'],
- 'design':['test-strategy','test-case-writing','test-case-reviewer'],
- 'code_refinement':['code-review','api-testing','test-case-writing'],
- 'execution':['automation-testing','functional-testing','api-testing'],
- 'regression':['regression-testing'], 'report':['test-reporting'],
+ 'requirements': ['requirements-analysis'],
+ 'review': ['requirements-analysis', 'requirement-quality-review'],
+ 'baseline': ['requirements-analysis', 'requirement-traceability-analysis'],
+ 'design': ['test-strategy', 'test-case-writing', 'test-case-reviewer'],
+ 'case_review': ['test-case-reviewer', 'test-case-reviewer-plus'],
+ 'test_plan': ['test-strategy', 'one-page-test-strategy', 'test-scope-analysis'],
+ 'code_refinement': ['code-review', 'api-testing', 'test-case-writing'],
+ 'execution': ['automation-testing', 'functional-testing', 'api-testing', 'bug-reporting'],
+ 'regression': ['regression-testing', 'regression-test-selection', 'regression-scope-analysis', 'regression-optimization'],
+ 'report': ['test-reporting'],
 }
 DIMENSION_SKILLS = {
  'functional':'functional-testing','api':'api-testing','whitebox':'code-review',

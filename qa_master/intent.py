@@ -4,11 +4,14 @@ from dataclasses import dataclass, asdict
 STAGE_ALIASES={
  'requirements':('需求分析','分析需求','整理需求','逆向需求','requirements analysis'),
  'review':('需求评审','评审需求','review requirements'),
+ 'baseline':('需求基线','建立基线','基线确认','baseline'),
  'design':('测试用例','写用例','生成用例','用例设计','测试设计','test cases','test case'),
+ 'case_review':('用例评审','评审用例','用例审查','用例复核','case review'),
  'code_refinement':('分析代码','阅读源码','白盒','code review','代码分析','更新用例'),
- 'regression':('回归测试','做回归','回归验证','regression'),
- 'report':('测试报告','生成报告','测试总结','test report'),
- 'execution':('执行测试','开始测试','运行测试','跑测试','run tests','execute tests')}
+ 'test_plan':('测试计划','测试方案','测试规划','test plan'),
+ 'execution':('执行测试','开始测试','运行测试','跑测试','run tests','execute tests','提交bug','提交 bug','提交缺陷','缺陷提交','提bug'),
+ 'regression':('回归','regression'),
+ 'report':('测试报告','生成报告','测试总结','test report')}
 NEGATED_EXECUTION=('不执行测试','不要执行测试','暂不执行测试','不开始测试','先不测试','开发还没完成',
  '开发还在进行','等待开发','不跑测试','不要运行测试','严禁执行','禁止执行','无需执行','不得执行','不能执行','do not run tests','without executing','never execute','must not execute')
 NEGATED_WRITE=('不导入','不要导入','不创建','不要创建','不要写入','不提交bug','不要提交bug','不修改jira','不操作jira')
