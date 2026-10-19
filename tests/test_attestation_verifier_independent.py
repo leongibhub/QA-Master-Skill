@@ -5,6 +5,7 @@ negative/boundary cases beyond the developer suite. Synthetic keys only; no
 provider evidence, model call, pair run or holdout material is involved.
 """
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -29,6 +30,11 @@ class IndependentVerifierTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
+        if sys.platform == 'win32':
+            # 8.3 short names (e.g. LEON~1.WAN for a >8-char username) make
+            # pip's venv relocation check see short vs long paths and abort
+            # the fresh-wheel install; resolve to the long form up front.
+            self.root = self.root.resolve()
         self.path, self.excluded, self.manifest = fixture(self.root)
         self.issuer = Ed25519PrivateKey.generate()
         self.public_hex = self.issuer.public_key().public_bytes(
@@ -210,6 +216,11 @@ class IndependentVerifierTests(unittest.TestCase):
             py = venv_dir/'Scripts'/'python.exe'
         else:
             py = venv_dir/'bin'/'python'
+        # pip's PEP 517 build writes build/ and *.egg-info/ back into the source
+        # tree; a stale bdist wheel dir makes the next local run fail with
+        # WinError 183 on Windows. Clear them so repeated runs stay green.
+        for residue in (REPO/'build', REPO/'qa_master_skill.egg-info'):
+            shutil.rmtree(residue, ignore_errors=True)
         subprocess.run([str(py), '-m', 'pip', 'install', '--quiet',
                         str(REPO), 'cryptography'], capture_output=True, check=True)
         # Exploratory validates without flags.
