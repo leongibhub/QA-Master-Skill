@@ -8,6 +8,29 @@
 - Research date: 2026-10-15
 - Scope: public upstream material and the current QA Master working tree. No comparator was installed, invoked, scored, or modified.
 
+## CR-029 catalogue update — 2026-10-19
+
+The original snapshot below is retained as historical research. This update uses
+the public upstream README pinned at
+[`547fbcd9c417ab8afbde1cd9f18b40ecbae0333b`](https://github.com/naodeng/awesome-qa-skills/tree/547fbcd9c417ab8afbde1cd9f18b40ecbae0333b)
+and the independent CR-029 evidence. It is a catalogue/presentation comparison,
+not a behavioural evaluation.
+
+| Topic | Upstream observable fact | QA Master observable fact | Implication / boundary |
+| --- | --- | --- | --- |
+| Intended user and scenario | The public README describes a bilingual, composable Agent-Skill library for QA work across requirements, testing, release/production and AI/Agent safety scenarios. | QA Master presents one installed product and routes request stages while retaining draft/no-execution boundaries. | These are different delivery shapes; catalog breadth alone cannot rank product usefulness. |
+| Catalogue presentation | The upstream README gives a quick-entry navigation to a complete index, composition routes, installation material and an online catalogue. | Before CR-029, detailed physical paths were primarily in `docs/SKILL_CATALOG.md`; `024505b` adds README-level hierarchical navigation and purposes for the packaged set. | The documented presentation gap is addressed in the final subject: focused structural checks and a fresh-wheel consumer installation passed on `523ec34`. |
+| Current pinned catalogue | The README declares 10 workflows, 150 testing types and 5 Skill-engineering entries per language: 165 logical names and 330 language directories. | Final CR-029 checks found 165 canonical names, 330 bilingual leaves, a 5,816/5,816 pinned upstream/vendor Git-blob match with zero differences, and clean-wheel inventory/installer-manifest validation. | This verifies a pinned Git-blob comparison, declared canonical-content contract and delivery structure only. It does not establish later upstream currency, execution, quality, or equivalence of every skill. |
+| Technology / integration | The upstream README documents independent installation/copy flows for Agent-Skill-aware tools. | QA Master packages the vendor assets through its own installer and exposes a unified helper and routing layer. | Cross-tool support and actual installation interoperability require fresh installed-product evidence; they are not inferred from documentation. |
+| Commercial / licence signal | The pinned upstream README displays PolyForm Noncommercial 1.0.0. No pricing or commercial service model was reviewed in this update. | User stated personal noncommercial research; QA Master retains the upstream notice in the vendor package. | Licence compliance and any future commercial use require separate legal/owner review; no such decision is recorded. |
+
+The CR-029 provenance chain retains attempt 1's digest failure, attempt 2's
+rejected binary normalization and attempt 3's P2 path-order defect. Attempt 4
+(`523ec34`) passed independent checks in its declared scope and review is `PASS
+WITH P3 FOLLOW-UP` (freeze-time embedded verification status has ambiguous later
+lifetime). This is neither a current-upstream claim nor a Gate, release, quality,
+or comparison result.
+
 ## Decision boundary
 
 This report supports product and evaluation planning. It is not a quality score, a competitive claim, a human assessment, or a release/acceptance decision. In particular, catalog directories, source-file presence, local unit-test counts, static validation, and a successful CLI process are not behavioral quality evidence.
