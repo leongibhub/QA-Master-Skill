@@ -7,3 +7,4 @@ docs/verification/semantic-quality-links-independent.md -text -whitespace
 docs/verification/public-api-*.md -text -whitespace
 docs/01-research/public-development-linux-qa-evaluation-plan.md -text -whitespace
 docs/verification/public-api-ci-38743135594.md -text -whitespace
+docs/verification/continuation-repair-*.md -text -whitespace
