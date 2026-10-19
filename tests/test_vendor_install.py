@@ -15,7 +15,7 @@ class VendorInstallTests(unittest.TestCase):
         bundle = skill_bundle()
         prefix = 'scripts/qa_master/skills/'
         inventory = json.loads(bundle[prefix + 'vendor-files.json'])['files']
-        self.assertEqual(len(inventory), 5819)
+        self.assertEqual(len(inventory), 5820)
         self.assertTrue(any(name.endswith('.yaml') for name in inventory))
         self.assertTrue(any(name.endswith('.csv') for name in inventory))
         self.assertIn('vendor/awesome-qa-skills/LICENSE', inventory)

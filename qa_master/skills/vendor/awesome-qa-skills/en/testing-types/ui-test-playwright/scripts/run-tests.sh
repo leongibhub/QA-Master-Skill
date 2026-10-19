@@ -10,4 +10,4 @@ REPORT_JSON="$REPORT_DIR/ui-test-playwright-$TS.json"
 echo "Running ui-test-playwright lightweight entry point"
 echo "Report path: $REPORT_JSON"
 
-npx playwright test --reporter=list,html
+PLAYWRIGHT_JSON_OUTPUT_FILE="$REPORT_JSON" npx playwright test --reporter=list,html,json

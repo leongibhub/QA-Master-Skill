@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/naodeng/awesome-qa-skills",
+  "source_commit": "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b",
+  "upstream_commit_time": "2026-10-19T01:50:43Z",
+  "upstream_tree_git_sha1": "694cf0b677cb90cee101e7806657537b016c356c",
+  "license_path": "LICENSE",
+  "verification_status": "VERIFIED",
+  "retrieved_at": "2026-10-19",
+  "snapshot": {
+    "included_paths": [
+      "skills/en",
+      "skills/zh"
+    ],
+    "scope": "The en/ and zh/ subtrees only; excludes QA Master wrapper files such as this metadata, README.md, UPSTREAM_README.md, and LICENSE.",
+    "file_count": 5816,
+    "sha256": "9748da3b31ffb05def989bc8828a7760b0a2cb57d9b442f49164fee7a54f7b33",
+    "algorithm": "SHA-256 of UTF-8 lines sorted by relative path: <path>|<SHA-256(file bytes)>\\n"
+  }
+}

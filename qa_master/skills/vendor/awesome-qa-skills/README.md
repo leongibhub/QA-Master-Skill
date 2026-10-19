@@ -8,6 +8,9 @@ This directory vendors the bilingual skill catalog from
 - **Vendored content:** `en/` and `zh/` — `testing-workflows` (10),
   `testing-types` (150), `skill-engineering` (5).
 - **Upstream README:** [UPSTREAM_README.md](./UPSTREAM_README.md)
+- **Source snapshot:** [SOURCE_PROVENANCE.json](./SOURCE_PROVENANCE.json) pins the
+  retrieved upstream commit and a byte-level digest of the `en/` and `zh/`
+  subtrees. It deliberately excludes QA Master wrapper files in this directory.
 
 ## Positioning
 

@@ -1,5 +1,7 @@
 import tempfile
 import unittest
+import hashlib
+import json
 from pathlib import Path
 
 from qa_master.skill_registry import (
@@ -10,6 +12,40 @@ from qa_master.skill_registry import (
 
 
 class VendorSkillsTests(unittest.TestCase):
+    def test_vendor_source_provenance_binds_bilingual_snapshot(self):
+        root = vendor_skill_root()
+        metadata = json.loads((root / "SOURCE_PROVENANCE.json").read_text(encoding="utf-8"))
+        self.assertEqual(metadata["schema_version"], 1)
+        self.assertEqual(metadata["source_repository"],
+                         "https://github.com/naodeng/awesome-qa-skills")
+        self.assertEqual(metadata["source_commit"], "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b")
+        self.assertEqual(metadata["upstream_commit_time"], "2026-10-19T01:50:43Z")
+        self.assertEqual(metadata["upstream_tree_git_sha1"],
+                         "694cf0b677cb90cee101e7806657537b016c356c")
+        self.assertEqual(metadata["license_path"], "LICENSE")
+        self.assertEqual(metadata["verification_status"], "VERIFIED")
+        self.assertRegex(metadata["retrieved_at"], r"^\d{4}-\d{2}-\d{2}$")
+        self.assertEqual(metadata["snapshot"]["included_paths"], ["skills/en", "skills/zh"])
+        files = sorted(
+            path for language in ("en", "zh") for path in (root / language).rglob("*")
+            if path.is_file()
+        )
+        manifest = b"".join(
+            f"{path.relative_to(root).as_posix()}|"
+            f"{hashlib.sha256(path.read_bytes()).hexdigest()}\n".encode("utf-8")
+            for path in files
+        )
+        self.assertEqual(metadata["snapshot"]["file_count"], len(files))
+        self.assertEqual(metadata["snapshot"]["sha256"], hashlib.sha256(manifest).hexdigest())
+
+    def test_playwright_runner_keeps_json_report_contract_bilingually(self):
+        root = vendor_skill_root()
+        for language in ("en", "zh"):
+            script = root / language / "testing-types" / "ui-test-playwright" / "scripts" / "run-tests.sh"
+            content = script.read_text(encoding="utf-8")
+            self.assertIn('PLAYWRIGHT_JSON_OUTPUT_FILE="$REPORT_JSON"', content)
+            self.assertIn("--reporter=list,html,json", content)
+
     def test_vendor_catalog_is_discovered_bilingually(self):
         result = discover_vendor_skills()
         self.assertEqual(result["status"], "DISCOVERED")

@@ -2,6 +2,7 @@
   "schema_version": 1,
   "files": [
     "vendor/awesome-qa-skills/LICENSE",
+    "vendor/awesome-qa-skills/SOURCE_PROVENANCE.json",
     "vendor/awesome-qa-skills/README.md",
     "vendor/awesome-qa-skills/UPSTREAM_README.md",
     "vendor/awesome-qa-skills/en/README.md",
