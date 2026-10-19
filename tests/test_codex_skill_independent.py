@@ -80,7 +80,12 @@ class IndependentCodexSkillInstallTests(unittest.TestCase):
         recovery = Path(result["recovery_directory"])
         self.assertTrue(recovery.is_dir())
         self.assertTrue(recovery.is_relative_to(self.target.parent.parent / ".qa-master-recovery"))
-        self.assertEqual(list(self.target.parent.rglob("SKILL.md")), [self.target / "SKILL.md"])
+        # Vendored guidance may contain nested entries; updates must retain
+        # exactly the managed entries without a sibling/staging backup Skill.
+        expected_entries = {self.target / name for name in changed_bundle
+                            if Path(name).name == "SKILL.md"}
+        self.assertEqual(set(self.target.parent.rglob("SKILL.md")), expected_entries)
+        self.assertEqual(list(self.target.parent.glob("*/SKILL.md")), [self.target / "SKILL.md"])
         self.assertEqual((self.target / "SKILL.md").read_bytes(), changed_bundle["SKILL.md"])
         import zipfile
         with zipfile.ZipFile(result["backup"]) as archive:
