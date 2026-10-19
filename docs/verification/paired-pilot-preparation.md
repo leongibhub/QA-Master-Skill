@@ -22,7 +22,7 @@ product source, benchmark fixture, or upstream source was changed.
 
 The utility copied the current PR2 public visible inputs and bound the exact current
 participant contexts below. It downloaded six public comparator files from the fixed
-Awesome QA Skills commit `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`, checking each
+the upstream skill library commit `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`, checking each
 against the SHA-256 values recorded in the task protocol (external source read on
 2026-10-15). The snapshot is at:
 
@@ -46,7 +46,7 @@ prompt template, or response schema.
 | Arm | Source identity | Entry asset | Assets |
 | --- | --- | --- | --- |
 | A | `QA-Master-PR2` commit `96926a282739865f90bcedf9eab2ec6c5ada6176`, tree `803e1385ee6b06d4fd348472f164e574f1c6d108` | `qa_master/skills/codex/SKILL.md` | Current packaged entry, `domains.md`, `work-protocol.md`, and the original `functional-api.md`, `requirements-review.md`, and `structural-integration.md` guides. |
-| B | `awesome-qa-skills` commit `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`, tree `1671168ec44e760e4a191468722f35e2ae5fe164` | `skills/en/testing-types/boundary-value-testing/SKILL.md` | The pinned boundary, decision-table, and state-transition `SKILL.md` files and their declared method prompts. |
+| B | `upstream-skill-library` commit `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`, tree `1671168ec44e760e4a191468722f35e2ae5fe164` | `skills/en/testing-types/boundary-value-testing/SKILL.md` | The pinned boundary, decision-table, and state-transition `SKILL.md` files and their declared method prompts. |
 
 This replaces the earlier proposal's high-level QA Master context reference with the
 current canonical packaged entry asset and its directly needed original references

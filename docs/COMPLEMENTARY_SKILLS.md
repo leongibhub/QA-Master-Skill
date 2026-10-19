@@ -1,6 +1,6 @@
-# 广度技能库：Awesome QA Skills（已内置）
+# 广度技能库（已内置）
 
-本仓库是一个**确定性 QA 引擎 + 编排控制器 + 6 份专业指南**，覆盖测试的经典主干；同时已把 [awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills) 的 **330 个 skill（165 中文 + 165 英文）** 以 vendor 形式内置，作为本仓库的「广度叶子」。二者不再是「两个库」的关系，而是「一个库 + 内置广度 + 路由整合」。
+本仓库是一个**确定性 QA 引擎 + 编排控制器 + 6 份专业指南**，覆盖测试的经典主干；同时以 vendor 形式内置了 **330 个 skill（165 中文 + 165 英文）**，作为本仓库的「广度叶子」。二者不再是「两个库」的关系，而是「一个库 + 内置广度 + 路由整合」。
 
 > 本文说明：①两者各是什么、②我原生覆盖什么、③内置 vendor 提供什么、④路由如何整合、⑤何时用哪个、⑥逐步原生化路线图。
 
@@ -8,15 +8,15 @@
 
 ## 一、两者各是什么（现在的关系）
 
-| | 本仓库原生能力 | 内置 vendor（awesome-qa-skills） |
+| | 本仓库原生能力 | 内置 vendor（广度 skill） |
 | --- | --- | --- |
 | 本质 | 确定性引擎 + 编排/门控 + 6 指南 | 广度技能库：330 目录（165 中文 + 165 英文） |
 | 组成 | 6 指南 + 确定性引擎(5 方法) + 13 维度 + Campaign 状态机 | 10 workflow + 150 testing-type + 5 skill-engineering |
 | 每个 skill 形态 | 指南是 markdown，背后有真实 Python 引擎（离线确定性合成） | 纯 markdown 提示词（`SKILL.md`+`prompts/`+`references/`+`output-templates/`） |
-| 位置 | `qa_master/skills/professional/` | `qa_master/skills/vendor/awesome-qa-skills/` |
+| 位置 | `qa_master/skills/professional/` | `qa_master/skills/vendor/` |
 | 核心价值 | 深度 + 确定性 + 编排 + 来源可追溯 + 门控 | 广度：覆盖大量长尾专类测试方法与技巧 |
 
-**一句话**：本仓库是一把「带引擎的瑞士军刀」，货架上内置了「150 个专类工具」；而意图路由、`no_execution` 门控、状态机、来源追踪、企业适配、确定性引擎——这些是 awesome-qa-skills 本身没有的。
+**一句话**：本仓库是一把「带引擎的瑞士军刀」，货架上内置了「150 个专类工具」；而意图路由、`no_execution` 门控、状态机、来源追踪、企业适配、确定性引擎——这些是 vendor 广度 skill 本身没有的。
 
 ---
 

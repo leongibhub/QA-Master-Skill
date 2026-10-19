@@ -63,4 +63,4 @@ the full local report. The CLI summary never echoes those locators.
 
 ## Next release gates
 
-Real integration work, an AI semantic requirements analyst, expert test design for each domain, credential vault, authenticated approvals, remote execution, SynapseRT writeback and the head-to-head Awesome QA Skills evaluation remain unfulfilled.
+Real integration work, an AI semantic requirements analyst, expert test design for each domain, credential vault, authenticated approvals, remote execution, SynapseRT writeback and the head-to-head upstream skill library evaluation remain unfulfilled.

@@ -168,6 +168,6 @@ provenance ref. The token-form failures are confirmed instrument-side.
 The overall conclusion for the paired comparison is unchanged and now rests on a
 clean instrument: **the CR-018/CR-021 instruction upgrades do not transfer a
 generalizable advantage to fresh material.** Arm A is not better than arm B
-(Awesome QA Skills) on this set; on provenance it is marginally worse. Formal
-"stronger than Awesome QA Skills" claims remain `NOT_AVAILABLE` pending the
+(the upstream skill library) on this set; on provenance it is marginally worse. Formal
+"stronger than the upstream skill library" claims remain `NOT_AVAILABLE` pending the
 REQ-011 strict profile + independent human rating + independent holdout.

@@ -15,7 +15,7 @@
 
 ## Purpose and boundary
 
-`REQ-011` requires that any superiority claim over Awesome QA Skills rests on a
+`REQ-011` requires that any superiority claim over the upstream skill library rests on a
 same-model, same-input evaluation with a fixed scoring protocol, expert ratings
 and preserved artifacts.  Phase 3 of the quality contract
 (`DOC-QA-QUALITY-EVALUATION-REQ-001`) additionally requires an independently

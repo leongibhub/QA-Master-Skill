@@ -24,7 +24,7 @@ semantics.
 - Arm A: packaged assets at `62f22f6` (8 files: the 7 CR-017 files plus the
   new `references/typed-observations.md`; SKILL.md / functional-api.md /
   work-protocol.md upgraded per CR-018).
-- Arm B: pinned upstream Awesome QA Skills `1a8c57c` — all 6 file bytes
+- Arm B: pinned upstream skill library `1a8c57c` — all 6 file bytes
   re-verified identical to CR-017.
 - Assertion bundle re-bound to the new manifest hash; the 24 assertion values
   are byte-identical to CR-017.
@@ -58,14 +58,14 @@ Pre-registered exact typed-assertion grading:
 | | CR-017 (same 22) | CR-019 | Δ |
 |---|---|---|---|
 | A — QA Master post-CR018 | 8 | 8 | 0 |
-| B — Awesome QA Skills (pinned) | 6 | 7 | +1 |
+| B — the upstream skill library (pinned) | 6 | 7 | +1 |
 
 Pre-declared supplementary semantic layer (S1–S5):
 
 | | CR-017 (same 22) | CR-019 | Δ |
 |---|---|---|---|
 | A — QA Master post-CR018 | 12 | **14** | +2 |
-| B — Awesome QA Skills (pinned) | 10 | 11 | +1 |
+| B — the upstream skill library (pinned) | 10 | 11 | +1 |
 
 ### Mechanism verification (byte-level)
 
@@ -123,7 +123,7 @@ fresh scenarios before any broader statement.
 
 On the same 22 comparable public-development checks under the unchanged
 oracle: arm A (QA Master post-CR018) scores 8 vs 7 (exact) and 14 vs 11
-(semantic) against pinned Awesome QA Skills, versus 8 vs 6 and 12 vs 10 in
+(semantic) against the pinned upstream skill library, versus 8 vs 6 and 12 vs 10 in
 CR-017. The two newly-passing arm-A checks are precisely the CR-018 targets,
 verified at value level. This is exploratory evidence that the codified
 instructions closed the targeted failure modes on development material. It is

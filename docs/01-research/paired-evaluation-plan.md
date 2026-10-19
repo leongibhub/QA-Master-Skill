@@ -11,7 +11,7 @@
 
 ## Purpose and boundary
 
-This is a bounded execution plan for a future same-model, same-scenario comparison of QA Master with Awesome QA Skills. It specifies evidence that would make a pair reviewable. It does not authorize a model invocation, benchmark run, human rating, product change, remote action, Gate decision, or superiority conclusion.
+This is a bounded execution plan for a future same-model, same-scenario comparison of QA Master with the upstream skill library. It specifies evidence that would make a pair reviewable. It does not authorize a model invocation, benchmark run, human rating, product change, remote action, Gate decision, or superiority conclusion.
 
 The comparator is fixed to public commit `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`; the planned QA Master product subject is frozen source commit `e619c79` supplied by the CR-010 handoff. Both must be re-read and re-hashed during preflight. If either subject cannot be materialized exactly, the pair is `NOT_EXECUTED`.
 
@@ -103,7 +103,7 @@ Deterministic grading is an artifact-level check, not a human-quality score and 
 - Transition assertions check supplied source/target/guard/action references, valid and invalid transitions, and stated persistence/side-effect expectations. They must not infer unstated states or rules.
 - The grader, input grammar, fixture hash, and assertion outcomes are preserved. Parser failure, schema failure, timeout, unavailable model, and unknown semantics remain distinct outcomes.
 
-The QA Master deterministic product-verification track may use the same grader for its native structured artifacts. It must be reported separately from paired agent behaviour because Awesome QA Skills is a prompt library rather than a matching local deterministic engine.
+The QA Master deterministic product-verification track may use the same grader for its native structured artifacts. It must be reported separately from paired agent behaviour because the upstream skill library is a prompt library rather than a matching local deterministic engine.
 
 ## Human review protocol
 

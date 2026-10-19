@@ -8,7 +8,7 @@
 ## Competitor benchmark standard
 - Benchmark professional skills with the same input artifacts, model and scoring protocol. Test at least: conflicting specs, code-only candidate requirements, high-risk positive/negative/boundary, API contract/auth, performance without SLA, unreliable outputs, security side effects, 24-hour soak environment, regression impact and evidence-backed release report.
 - Every professional module must have: input contract, method/prompt, executable output schema, example, evaluations and run-time validation.
-- Do **not** claim QA Master surpasses Awesome QA Skills until actual side-by-side results are recorded.
+- Do **not** claim QA Master surpasses the upstream skill library until actual side-by-side results are recorded.
 
 ## Limits
 - No GitLab, Jira, SynapseRT, Confluence, browser, SSH or CI execution adapters.

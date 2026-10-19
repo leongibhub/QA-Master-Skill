@@ -15,7 +15,7 @@ record a supplied negative case.  It does not implement specialized boundary,
 decision-table, or state-transition synthesis.  This increment defines an
 original, deterministic, local test-design capability for those three finite
 models.  It advances the product's method depth; it does not establish that
-QA Master is better than Awesome QA Skills.
+QA Master is better than the upstream skill library.
 
 Sources and rationale:
 

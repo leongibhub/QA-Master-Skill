@@ -28,7 +28,7 @@ All six envelope hashes match that index.
 
 Arm A is `QA-Master-current-packaged` at source commit
 `96926a282739865f90bcedf9eab2ec6c5ada6176`; Arm B is
-`Awesome-QA-Skills-pinned` at source commit
+`upstream-skill-library-pinned` at source commit
 `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`, as bound by the frozen run
 manifest. These identities help locate the observations; they do not turn this
 single public-development run into a controlled product comparison.

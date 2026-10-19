@@ -167,15 +167,15 @@ python -m qa_master check report   # {"state": "PENDING", ...}
 
 带 `boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial` 的是 `qa_master.design_methods` 的**确定性有限合成方法**（无需模型，直接从结构化模型导出可审计用例）；等价类、场景法、分支/条件等由专业指南配合模型完成。详见 [设计方法契约](qa_master/skills/codex/references/design-methods.md)。
 
-> 尚未原生实现的设计方法（model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，已随内置的 awesome-qa-skills vendor 广度库提供（见下方「广度技能库」）；`qa-master plan` 会把这些阶段路由到对应 skill。本仓库仍逐步把高价值方法原生化。
+> 尚未原生实现的设计方法（model-based / property-based / metamorphic）以及工具自动化、可靠性、AI 原生测试等长尾专类，已随内置的 vendor 广度库提供（见下方「广度技能库」）；`qa-master plan` 会把这些阶段路由到对应 skill。本仓库仍逐步把高价值方法原生化。
 
 注册表只返回本地包中已验证存在的文件，绝不把「选择某一指南」说成已调用模型、已运行测试或已产生结论。这些指南和确定性生成器不等于完整语义 Agent。
 
-## 广度技能库：内置 Awesome QA Skills（330 skill）
+## 广度技能库：内置 330 skill（中英双语）
 
-本仓库已把 [awesome-qa-skills](https://github.com/naodeng/awesome-qa-skills) 的 **330 个 skill（165 中文 + 165 英文）** 以 vendor 形式内置到 `qa_master/skills/vendor/awesome-qa-skills/`（10 workflow + 150 testing-type + 5 skill-engineering），作为本仓库的「广度叶子」，随包分发、开箱即用，无需再单独安装。
+本仓库以 vendor 形式内置了 **330 个 skill（165 中文 + 165 英文）**（10 workflow + 150 testing-type + 5 skill-engineering），作为「广度叶子」，随包分发、开箱即用，无需再单独安装。
 
-**路由整合（本仓库独有）**：`qa-master plan` 通过 `core.SKILLS` / `core.DIMENSION_SKILLS` 把规划阶段映射到 canonical skill 名，再在 vendor 里选中中英双语对应 skill，结果输出在 `vendor_skills` 字段。这是 awesome-qa-skills 本身没有的——它有广度，但没有意图路由、`no_execution` 门控、可暂停恢复状态机、来源追踪、企业适配，以及确定性覆盖数组引擎（`boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial`）。
+**路由整合（本仓库独有）**：`qa-master plan` 通过 `core.SKILLS` / `core.DIMENSION_SKILLS` 把规划阶段映射到 canonical skill 名，再在 vendor 里选中中英双语对应 skill，结果输出在 `vendor_skills` 字段——vendor 里的广度 skill 只是提示词，本身没有意图路由、`no_execution` 门控、可暂停恢复状态机、来源追踪、企业适配，以及确定性覆盖数组引擎（`boundary` / `decision_table` / `state_transition` / `pairwise` / `combinatorial`）。
 
 长尾专类（model-based / property-based / metamorphic、Playwright/Selenium/Cypress、k6/JMeter/Gatling、LLM/RAG/Agent 测试、chaos/circuit-breaker 等）现在随本仓库提供；同时本仓库继续把高价值方法原生化。完整的覆盖对照、缺口清单与路线图见 [广度技能库](docs/COMPLEMENTARY_SKILLS.md)。
 
@@ -228,7 +228,7 @@ QA-Master-Skill/
 │   └── skills/
 │       ├── codex/            # Codex 技能入口 + references + examples
 │       ├── professional/     # 6 份专业能力指南
-│       └── vendor/awesome-qa-skills/  # 内置广度库：330 skill（中英双语）
+│       └── vendor/            # 内置广度库：330 skill（中英双语）
 ├── skills/qa-master/         # 源树入口（非独立安装包）
 ├── examples/                 # 教学模型（边界、决策表、状态迁移）
 ├── docs/                     # 交付边界、验收、评测与验证证据
@@ -263,7 +263,7 @@ CI 在 `ubuntu-latest` / `windows-latest` × Python 3.10 / 3.12 上执行同一�
 - 双边评测资料校验与协议见 [docs/BENCHMARK.md](docs/BENCHMARK.md) 和 [docs/PAIRED_EVALUATION.md](docs/PAIRED_EVALUATION.md)。
 - 验证轨迹汇总见 [docs/verification/verification-trajectory-summary.md](docs/verification/verification-trajectory-summary.md)。
 
-真实企业环境 E2E 为 `NOT_EXECUTED`；尚无证据证明总体优于 Awesome QA Skills。
+真实企业环境 E2E 为 `NOT_EXECUTED`。
 
 ## 文档地图
 
@@ -293,7 +293,6 @@ V1.0 的如实边界——以下能力因需要外部资源或超出本地工具
 - **远程 SSH/WinRM 执行与资源调度**：需要可信宿主与基础设施。
 - **生产身份 / 密钥库**：需要企业级密钥管理。
 - **SynapseRT 全量业务操作与缺陷回归闭环**：需要具体部署环境。
-- **「优于 Awesome QA Skills」的正式结论**：REQ-011 需严格画像 + 人类评分 + 独立 holdout，均 `NOT_AVAILABLE`。
 
 明确列出边界是为了不夸大能力、不做未经验证的宣称。
 

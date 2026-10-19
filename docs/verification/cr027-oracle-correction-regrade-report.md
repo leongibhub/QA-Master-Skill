@@ -92,7 +92,7 @@ residuals, which are genuine and match the CR-022/CR-024 classes.
 
 This is a bounded observation on two fresh (non-holdout) scenario sets. The
 set author is the same agent family as the instruction author (R-03a
-disclosed). Per REQ-011, a formal "stronger than Awesome QA Skills" claim
+disclosed). Per REQ-011, a formal "stronger than the upstream skill library" claim
 requires the strict profile, human scoring and an independent holdout — all
 `NOT_AVAILABLE`. No superiority, quality, acceptance, Gate or release claim is
 made here.

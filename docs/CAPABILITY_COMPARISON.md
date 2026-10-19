@@ -1,4 +1,4 @@
-# QA Master 与 Awesome QA Skills：能力盘点
+# QA Master 与上游广度技能库：能力盘点
 
 - Task: `TASK-012` (supports `REQ-011`)
 - Document State: `DRAFT`
@@ -7,7 +7,7 @@
 
 ## 上游快照与边界
 
-本盘点在 2026-10-14 从公开仓库 `https://github.com/naodeng/awesome-qa-skills` 浅克隆获得，固定 commit 为 `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`。该快照含 330 个 `SKILL.md` 文件：英文和中文各 165 个。上游 `docs/catalog/skills-index_EN.md` 描述每种语言含 10 个 workflow、150 个 testing type、5 个 skill-engineering package。
+本盘点在 2026-10-14 从公开上游仓库（固定 commit `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f`）浅克隆获得。该快照含 330 个 `SKILL.md` 文件：英文和中文各 165 个。上游 `docs/catalog/skills-index_EN.md` 描述每种语言含 10 个 workflow、150 个 testing type、5 个 skill-engineering package。
 
 本文件只使用目录、名称和上游公开目录页进行分类计数；没有复制其提示词、脚本、模板或实现。上游内容会变化，因此此表只对应上述 commit。下表也不是质量评分、功能等价证明或 superiority assertion。
 

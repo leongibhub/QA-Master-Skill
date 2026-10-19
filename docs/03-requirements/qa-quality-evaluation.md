@@ -11,7 +11,7 @@
 ## Purpose and evidence boundary
 
 The product goal is useful QA work and, only with adequate evidence, a future
-comparison with Awesome QA Skills.  The first CR-011 public-development pilot
+comparison with the upstream skill library.  The first CR-011 public-development pilot
 completed six real calls, but `DOC-PAIRED-PILOT-SEMANTIC-AUDIT-001` found that
 its exact JSON grade is not a valid QA-quality measurement.  Five exact-shape
 violations can retain the visible rule semantics; the grader does not inspect

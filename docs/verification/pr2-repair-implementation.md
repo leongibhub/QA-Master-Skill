@@ -26,4 +26,4 @@ and review are separately owned and recorded in `pr2-independent.md` and
 
 README now points to the upstream development branch for integration. This
 increment does not complete paired model evaluation, enterprise E2E, V1 acceptance,
-release, or evidence that QA Master outperforms Awesome QA Skills.
+release, or evidence that QA Master outperforms the upstream skill library.

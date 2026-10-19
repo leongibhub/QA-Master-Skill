@@ -47,7 +47,7 @@ py -3.10 -m qa_master plan "只生成测试用例，不执行测试"
 - `tests/test_generators.py`: 新增 17 项本地单元测试；合计 56 项本地通过（Python 3.13）。GitHub Actions 运行结果另行核验。
 
 ### 当前限制
-这里的生成器是**确定性基础能力**，尚不具备从自由文本自动抽取完整业务规则、基于多语言代码的深层语义分析、独立生成全部非功能用例、自动运行 API/性能测试或外部企业平台联动的能力。V0.3 **没有**超过 Awesome QA Skills 的实测证据。要达到该目标仍需按真实基准集持续开发和对比。
+这里的生成器是**确定性基础能力**，尚不具备从自由文本自动抽取完整业务规则、基于多语言代码的深层语义分析、独立生成全部非功能用例、自动运行 API/性能测试或外部企业平台联动的能力。V0.3 **没有**超过上游广度技能库的实测证据。要达到该目标仍需按真实基准集持续开发和对比。
 
 
 ## V1.0 development branch milestone: persistent workflow core (2026-10-14)
@@ -72,7 +72,7 @@ The new `qa_master/workflow.py` provides dependency expansion, required-input ch
 
 
 ## 当前真实交付状态（2026-10-14）
-**项目仍处于 V1.0 开发中，未通过端到端验收，也未证明优于 Awesome QA Skills。** 新增 `qa_master/enterprise.py` 和 `tests/test_enterprise.py`（只读接口保护、审批作用域、SynapseRT 计划 Dry-run、远程机器配置验证）。本地隔离环境 134 项单元测试通过。完整未完成项及正式版准入标准请见 [`docs/V1_ACCEPTANCE.md`](docs/V1_ACCEPTANCE.md)。
+**项目仍处于 V1.0 开发中，未通过端到端验收，也未证明优于上游广度技能库。** 新增 `qa_master/enterprise.py` 和 `tests/test_enterprise.py`（只读接口保护、审批作用域、SynapseRT 计划 Dry-run、远程机器配置验证）。本地隔离环境 134 项单元测试通过。完整未完成项及正式版准入标准请见 [`docs/V1_ACCEPTANCE.md`](docs/V1_ACCEPTANCE.md)。
 
 
 ## 2026-10-14 实际开发更新 — 企业控制与本机执行
@@ -82,7 +82,7 @@ The new `qa_master/workflow.py` provides dependency expansion, required-input ch
 - 测试：`tests/test_enterprise.py` 和 `tests/test_local_runner.py`；当前本地隔离测试共 **143 项通过**。
 - 文档：`docs/V1_ACCEPTANCE.md`、`docs/LOCAL_RUNNER.md`。
 
-**仍未具备 V1.0 正式发布条件**：公司 Jira/SynapseRT/Confluence 的真实接口对接和认证、远程 SSH/WinRM Runner、全类型专家测试引擎、端到端质量验收及与 Awesome QA Skills 的实测对标尚未完成。详见准入清单，不得用单元测试数量替代项目验收。
+**仍未具备 V1.0 正式发布条件**：公司 Jira/SynapseRT/Confluence 的真实接口对接和认证、远程 SSH/WinRM Runner、全类型专家测试引擎、端到端质量验收及与上游广度技能库的实测对标尚未完成。详见准入清单，不得用单元测试数量替代项目验收。
 
 
 ## 一键生成项目测试设计草稿（新增）

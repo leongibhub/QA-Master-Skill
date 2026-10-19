@@ -53,7 +53,7 @@ The fresh environment, wheel and installed verification script are local reprodu
 
 ## Handoff boundary
 
-This is developer verification of public-development fixtures, not independent verification or acceptance. Independent tests and review remain `PENDING`. Human assessment, governed holdout ownership, comparison thresholds and evidence demonstrating superiority over Awesome QA Skills remain `NOT_AVAILABLE`. No model task, enterprise operation, target execution, rating, winner, approval, Gate or release conclusion was produced. The evaluator measures the bounded published contract only; it cannot substitute for a human QA assessment or prove broad product superiority.
+This is developer verification of public-development fixtures, not independent verification or acceptance. Independent tests and review remain `PENDING`. Human assessment, governed holdout ownership, comparison thresholds and evidence demonstrating superiority over the upstream skill library remain `NOT_AVAILABLE`. No model task, enterprise operation, target execution, rating, winner, approval, Gate or release conclusion was produced. The evaluator measures the bounded published contract only; it cannot substitute for a human QA assessment or prove broad product superiority.
 
 ## Corrected historical evidence check
 

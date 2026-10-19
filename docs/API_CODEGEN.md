@@ -19,4 +19,4 @@ The generated tests should **only be run against explicitly authorized isolated 
 
 V0.4 scope: basic status and optional complete JSON equality assertions. No request-schema synthesis, parameter substitution, credentials management, remote runner, attack fuzzing, or network execution by the generator. `tests/test_api_codegen.py` provides offline tests; cloud CI results should be checked separately. The locally developed variant passed 74 tests in total, but the published test file currently contains fewer scenarios; GitHub CI is the authoritative evidence for the published commit.
 
-This is not evidence of superiority to Awesome QA Skills. A fair feature-and-quality benchmark remains pending.
+This is not evidence of superiority to the upstream skill library. A fair feature-and-quality benchmark remains pending.

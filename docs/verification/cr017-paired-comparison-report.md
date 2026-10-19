@@ -16,7 +16,7 @@
 
 ## Purpose and boundary
 
-The user directed an actual comparison with Awesome QA Skills now that
+The user directed an actual comparison with the upstream skill library now that
 development and testing are complete. This run executes that comparison under
 the retained paired-pilot machinery: one run manifest binds both arms to
 identical visible inputs, neutral response schema, prompt template, model
@@ -32,7 +32,7 @@ the same class as the retained three.
 | --- | --- |
 | Scenarios | 12 visible-input fixtures: `PE-BND-001..004`, `PE-DTT-001..004`, `PE-STT-001..004` (3 retained CR-011 fixtures reused byte-identically + 9 new; 4 embed deliberate ambiguities: `PE-BND-004`, `PE-DTT-002`, `PE-DTT-004`, `PE-STT-004`) |
 | Arm A | `QA-Master-current-HEAD` — packaged skill assets at commit `2c6fb290108a58d09a4f20c0835bea04bda38912` (SKILL.md, domains, work-protocol, design-methods, functional-api, requirements-review, structural-integration; 7 files) |
-| Arm B | `Awesome-QA-Skills-pinned-1a8c57c` — upstream `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f` specialist skills: boundary-value, decision-table, state-transition SKILL.md + prompts (6 files; all bytes re-verified against the pinned SHA-256 values before the run) |
+| Arm B | `upstream-skill-library-pinned-1a8c57c` — upstream `1a8c57c0e1c31b80aea5cb85dd830387dee09c9f` specialist skills: boundary-value, decision-table, state-transition SKILL.md + prompts (6 files; all bytes re-verified against the pinned SHA-256 values before the run) |
 | Model | `gpt-6-astra`, reasoning effort medium, both arms identical; provider revision `NOT_AVAILABLE`, system baseline `UNVERIFIED`, seed `NOT_AVAILABLE` |
 | Policy | read-only sandbox, ephemeral, all 15 features disabled (no tools, no shell, no network), `--ignore-user-config`, `--skip-git-repo-check` |
 | Schedule | 12 pairs, AB/BA orders alternated per method (6 AB, 6 BA); both orders represented |
@@ -47,7 +47,7 @@ the same class as the retained three.
   time 880 s; per-call durations 20–59 s.
 - Pre-registered exact grading (`grade_run` with the pre-bound bundle):
 
-| Metric (24 assertions) | Arm A (QA Master) | Arm B (Awesome QA Skills) |
+| Metric (24 assertions) | Arm A (QA Master) | Arm B (the upstream skill library) |
 | --- | --- | --- |
 | `SATISFIED` | **8** | 6 |
 | `VIOLATED` | 16 | 18 |
@@ -115,7 +115,7 @@ which arm B does not mention.
 
 1. Under identical inputs, model configuration and tool policy, QA Master's
    packaged skill produced more pre-registered typed-assertion passes than the
-   pinned Awesome QA Skills specialists on this 12-scenario public-development
+   the pinned upstream skill library specialists on this 12-scenario public-development
    set (8 vs 6 exact; 13 vs 11 semantic). The margin is small (2 assertions of
    24 in both layers) and the set is visible development material — this is an
    observed difference on these fixtures, not a general quality verdict.
@@ -155,7 +155,7 @@ which arm B does not mention.
 one manifest, graded by pre-bound typed assertions, and independently
 inspected (`INTACT`/`RECORDED`). On this bounded, visible 12-scenario set with
 identical model and policy, QA Master's current packaged skill passed more
-typed assertions than the pinned Awesome QA Skills specialists (8 vs 6 exact;
+typed assertions than the pinned upstream skill library specialists (8 vs 6 exact;
 13 vs 11 under declared semantic rules), and both arms handled the embedded
 ambiguities honestly. No superiority, quality, acceptance, Gate or release
 claim is made: the evidence class is exploratory, the margin is small, the

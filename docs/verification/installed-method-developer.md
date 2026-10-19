@@ -63,7 +63,7 @@ campaign compatibility. `py_compile` and `git diff --check` also passed.
 This is developer-owned local verification only. It does not establish the
 separate independent test or review tasks, a representative task-level Codex
 artifact, human assessment, any Gate result, product quality, or superiority
-over Awesome QA Skills. Those items remain pending or not executed.
+over the upstream skill library. Those items remain pending or not executed.
 
 ## v2 packaged-reference repair
 

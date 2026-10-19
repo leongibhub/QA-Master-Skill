@@ -29,7 +29,7 @@ Phase 3 strict-profile + human-rating + independent-holdout protocol.
 | CR-027 | FS-02 oracle token-form correction + re-grade (no re-run) | CR-026 envelopes | **transfer**: corrected semantic **A 16:16 vs B 13:16** |
 
 Arm A advances across rounds (`fa84f48` → `b379c941`); arm B is pinned
-byte-identical (`1a8c57c`, the Awesome QA Skills upstream). Same model
+byte-identical (`1a8c57c`, the upstream skill library upstream). Same model
 `gpt-6-astra`, same schema, same `NO_TOOL_USE`, AB/BA alternation throughout.
 
 ## Failure-class transfer (the core)
@@ -85,7 +85,7 @@ failure classes rather than on noise.
 - **Bounded observation, not a holdout.** Both fresh sets were authored by the
   same agent family as the instruction author (R-03a disclosed), so transfer
   is measured against the author's own oracle, not an independent one.
-- **No formal "stronger than Awesome QA Skills" claim is made.** Per REQ-011
+- **No formal "stronger than the upstream skill library" claim is made.** Per REQ-011
   that claim requires the strict profile, independent human rating, and an
   independent holdout — all `NOT_AVAILABLE` in this environment.
 - **Single-model, single-family evidence.** All runs use `gpt-6-astra`; the

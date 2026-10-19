@@ -21,7 +21,7 @@
   `fa84f489abe62cbf7cfe9185729fc480466a80d3` (post CR-018 + CR-021, including
   the R-01 family-consistency repair), 8 packaged instruction assets,
   entry asset `qa_master/skills/codex/SKILL.md`.
-- **Arm B** `Awesome-QA-Skills-pinned-1a8c57c` — byte-identical to the
+- **Arm B** `upstream-skill-library-pinned-1a8c57c` — byte-identical to the
   CR-017/CR-019 pinned upstream arm (6 assets), copied from the CR-019
   preparation bytes and re-hashed.
 

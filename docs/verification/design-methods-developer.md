@@ -11,7 +11,7 @@
 This task implements the pure local engine specified by `DES-033` and
 `ADR-004`. It deliberately excludes `campaign_cli.py`, installed-CLI checks,
 external adapters, runners, approval, execution, paired comparison, and any
-claim about superiority over Awesome QA Skills. Those items require separate
+claim about superiority over the upstream skill library. Those items require separate
 task ownership and independent evidence.
 
 The public API is `load_bundle_json`, `design_methods`, and the stable-code
