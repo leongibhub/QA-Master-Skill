@@ -1,4 +1,4 @@
-"""CR-030: concise Windows host-install instructions remain truthful."""
+"""CR-031: Windows install paths are actionable without inventing host evidence."""
 
 from pathlib import Path
 import unittest
@@ -13,35 +13,60 @@ class InstallationDocumentationTests(unittest.TestCase):
         cls.readme = (ROOT / 'README.md').read_text(encoding='utf-8')
         cls.guide = (ROOT / 'docs' / 'GETTING_STARTED.md').read_text(encoding='utf-8')
 
-    def test_windows_primary_path_uses_uv_without_manual_venv(self):
-        quickstart = self.readme[self.readme.index('## 快速开始'):self.readme.index('## 按你需要的范围工作')]
-        self.assertIn('uv tool install --force --python 3.13 .', quickstart)
-        self.assertNotIn('py -3 -m venv', quickstart)
-        self.assertNotIn('Activate.ps1', quickstart)
-
-    def test_documented_host_choices_and_safe_claude_boundary(self):
+    def test_windows_branches_cover_existing_and_managed_python(self):
         for text in (self.readme, self.guide):
-            self.assertIn('qa-master install-codex --user', text)
-            self.assertIn('$HOME\\.agents\\skills\\qa-master', text)
-            self.assertIn('qa-master install-codex --target "$HOME\\.claude\\skills\\qa-master"', text)
-            self.assertIn('$HOME\\.claude\\skills\\qa-master', text)
+            self.assertIn('仅克隆', text)
+            self.assertIn('py -3 -m qa_master install-codex --user', text)
+            self.assertIn('不依赖', text)
+            self.assertIn('winget install --id=astral-sh.uv -e', text)
+            self.assertIn('uv tool install --force --python 3.13 .', text)
+            self.assertIn('uv tool update-shell', text)
+            self.assertIn('uv tool run --from . --python 3.13 qa-master', text)
+            self.assertNotIn('py -3 -m venv', text)
+            self.assertNotIn('Activate.ps1', text)
+
+        self.assertIn('py -3 -m pip install --user .', self.readme)
+        self.assertIn('py -3 -m pip install --user .', self.guide)
+        self.assertIn('python -m qa_master', self.readme)
+        self.assertIn('python -m qa_master install-codex --user', self.guide)
+
+    def test_documented_windows_host_matrix_has_global_and_project_targets(self):
+        for text in (self.readme, self.guide):
+            self.assertIn('py -3 -m qa_master install-codex --user', text)
+            self.assertIn('%USERPROFILE%\\.agents\\skills\\qa-master', text)
+            self.assertIn('py -3 -m qa_master install-codex --project "<项目绝对路径>"', text)
+            self.assertIn('%USERPROFILE%\\.claude\\skills\\qa-master', text)
+            self.assertIn('<项目绝对路径>\\.claude\\skills\\qa-master', text)
+            self.assertIn('%USERPROFILE%\\.trae-cn\\skills\\qa-master', text)
+            self.assertIn('<项目绝对路径>\\.trae\\skills\\qa-master', text)
+
+    def test_direct_python_update_examples_do_not_depend_on_path(self):
+        self.assertIn(
+            'py -3 -m qa_master install-codex --target "%USERPROFILE%\\.claude\\skills\\qa-master" --update',
+            self.guide,
+        )
+        self.assertIn(
+            'py -3 -m qa_master install-codex --target "%USERPROFILE%\\.trae-cn\\skills\\qa-master" --update',
+            self.guide,
+        )
+        self.assertIn(
+            'python -m qa_master install-codex --target "%USERPROFILE%\\.trae-cn\\skills\\qa-master" --update',
+            self.guide,
+        )
+
+    def test_boundaries_verification_and_non_windows_instructions_are_retained(self):
+        for text in (self.readme, self.guide):
             self.assertIn('DeepSeek', text)
-            self.assertIn('不读取', text)
             self.assertIn('API Token', text)
-        self.assertIn('已写入的文件和本地助手自检证明的是安装交付', self.readme)
-        self.assertIn('qa-master install-codex --project "<项目绝对路径>"', self.guide)
-        self.assertIn('qa-master install-codex --target "<项目绝对路径>\\.claude\\skills\\qa-master"', self.guide)
-        self.assertIn('$HOME/.claude/skills/qa-master', self.guide)
-
-    def test_documented_verification_restart_prompt_and_update_boundary(self):
-        for text in (self.readme, self.guide):
-            self.assertIn('Test-Path', text)
+            self.assertIn('NOT_EXECUTED', text)
             self.assertIn('py -3 -I', text)
+            self.assertIn('uv run --no-project --python 3.13 python', text)
             self.assertIn('330', text)
             self.assertIn('165', text)
-            self.assertIn('/qa-master', text)
-            self.assertIn('--link-mode=copy', text)
             self.assertIn('hardlink', text)
+            self.assertIn('--link-mode=copy', text)
+            self.assertIn('Linux / macOS', text)
+            self.assertIn('python3 -m qa_master install-codex --user', text)
 
 
 if __name__ == '__main__':

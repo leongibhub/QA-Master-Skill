@@ -29,45 +29,73 @@
 
 ## 快速开始
 
-需要 Python 3.10+、Git、[uv](https://docs.astral.sh/uv/) 和支持加载 Skill 的 Agent。Windows 上不需要手工创建或激活 `.venv`：`uv tool` 会管理安装所需的隔离环境。
+需要 Git、支持加载 Skill 的 Agent，以及 Python 3.10+ **或** [uv](https://docs.astral.sh/uv/)。Windows 上不需要手工创建或激活 `.venv`。先克隆仓库；**仅克隆不会安装 `qa-master` 命令**。
 
-### Windows · PowerShell
+### Windows
 
-```powershell
+```cmd
 git clone https://github.com/leongibhub/QA-Master-Skill.git
 cd QA-Master-Skill
+```
+
+然后按机器情况选一条。先运行 `py -3 --version`：版本为 3.10 或更高时，直接从仓库运行即可，不依赖 `qa-master` 是否在 PATH 中：
+
+```cmd
+py -3 -m qa_master --help
+```
+
+若电脑已经装了 Python 3.10+，但没有 `py` 启动器，可将后续命令中的 `py -3` 换成 `python`。
+
+若没有 Python 3.10+，先安装 uv。可用 Windows 的官方 `winget` 包：
+
+```cmd
+winget install --id=astral-sh.uv -e
+```
+
+也可按 [uv Windows 安装说明](https://docs.astral.sh/uv/getting-started/installation/) 使用官方安装脚本。安装 uv 后新开一个终端，再运行：
+
+```cmd
 uv tool install --force --python 3.13 .
 ```
 
-选择与你使用的聊天宿主相符的一项安装命令：
+`uv` 会下载并管理所需的 Python 3.13。已有 Python 且希望以后也能直接输入 `qa-master` 的用户，可选运行 `py -3 -m pip install --user .`；若 PATH 没有刷新，继续使用稳定的 `py -3 -m qa_master ...` 即可。没有 `py` 启动器但 `python --version` 为 3.10+ 时，使用等价的 `python -m qa_master ...`。
 
-| 聊天宿主 | 安装命令 | Skill 位置 |
+如果 uv 安装完成后仍提示找不到 `qa-master`，运行 `uv tool update-shell`，关闭并重新打开终端后再试；需要立即运行时，可用不依赖 PATH 的前缀 `uv tool run --from . --python 3.13 qa-master`。
+
+选择宿主和范围。下表是已有 Python 用户可直接复制的 Windows `cmd` 命令；PowerShell 中将 `%USERPROFILE%` 改为 `$env:USERPROFILE`。若使用 uv 安装，把每条命令中的 `py -3 -m qa_master` 替换为 `qa-master`；PATH 尚未刷新时替换为上面的 `uv tool run ... qa-master` 前缀。
+
+| 聊天宿主 | 用户级安装 | 项目级安装 | Skill 位置 |
 | --- | --- | --- |
-| Codex 或 OpenCode | `qa-master install-codex --user` | `$HOME\.agents\skills\qa-master` |
-| VS Code 中的 Claude Code | `qa-master install-codex --target "$HOME\.claude\skills\qa-master"` | `$HOME\.claude\skills\qa-master` |
+| Codex 或 OpenCode | `py -3 -m qa_master install-codex --user` | `py -3 -m qa_master install-codex --project "<项目绝对路径>"` | `%USERPROFILE%\.agents\skills\qa-master`；`<项目>\.agents\skills\qa-master` |
+| VS Code 中的 Claude Code | `py -3 -m qa_master install-codex --target "%USERPROFILE%\.claude\skills\qa-master"` | `py -3 -m qa_master install-codex --target "<项目绝对路径>\.claude\skills\qa-master"` | `%USERPROFILE%\.claude\skills\qa-master`；`<项目>\.claude\skills\qa-master` |
+| TRAE CN | `py -3 -m qa_master install-codex --target "%USERPROFILE%\.trae-cn\skills\qa-master"` | `py -3 -m qa_master install-codex --target "<项目绝对路径>\.trae\skills\qa-master"` | `%USERPROFILE%\.trae-cn\skills\qa-master`；`<项目>\.trae\skills\qa-master` |
 
-上表是用户级安装。若只安装到一个项目，Codex/OpenCode 使用 `qa-master install-codex --project "<项目绝对路径>"`，入口为 `<项目>/.agents/skills/qa-master/SKILL.md`；Claude Code 使用 `qa-master install-codex --target "<项目绝对路径>\.claude\skills\qa-master"`。
+项目路径必须替换为真实绝对路径。`--user`、`--project` 和 `--target` 不能混用。完整的复制命令、更新与排错见 [操作指南](docs/GETTING_STARTED.md)。
 
-Claude Code 是 VS Code 中加载 Skill 的宿主；截图中已经选择的 DeepSeek 模型仍由 Claude Code 的现有配置使用。QA Master 不读取、不配置模型端点或 API Token。
+Codex/OpenCode 的项目级入口文件为 `<项目>/.agents/skills/qa-master/SKILL.md`。
 
-安装后检查所选目录。以下示例是 Codex/OpenCode；若安装到 Claude Code，将 `.agents` 替换为 `.claude`：
+Claude Code 或 TRAE CN 是加载 Skill 的宿主；DeepSeek 等模型仍由宿主的现有配置使用。QA Master 不读取、不配置模型端点、密码或 API Token。已验证的是安装包写入目标目录；实际某个版本的 Claude Code 或 TRAE CN 是否发现并调用 Skill 仍为 `NOT_EXECUTED`。
 
-```powershell
-Test-Path "$HOME\.agents\skills\qa-master\SKILL.md"
-py -3 -I "$HOME\.agents\skills\qa-master\scripts\qa.py" skills
+安装后检查所选目录。以下示例是 Codex/OpenCode；将路径替换为 Claude Code 或 TRAE CN 的实际 Skill 目录：
+
+```cmd
+dir "%USERPROFILE%\.agents\skills\qa-master\SKILL.md"
+py -3 -I "%USERPROFILE%\.agents\skills\qa-master\scripts\qa.py" skills
 ```
 
-第一条应返回 `True`；第二条 JSON 中应包含 `vendor.count = 330`，`en = 165` 和 `zh = 165`。关闭并新建目标聊天会话，使宿主重新发现 Skill。在 Claude Code 聊天中可先使用这一条最小任务：
+第一条应列出文件；第二条 JSON 中应包含 `vendor.count = 330`，`en = 165` 和 `zh = 165`。没有系统 Python、只安装了 uv 的机器，可把第二条的 `py -3` 换成 `uv run --no-project --python 3.13 python`。关闭并新建目标聊天会话，使宿主重新发现 Skill。在 Claude Code 等支持 `/` 命令的宿主中，可先使用这一条最小任务：
 
 ```text
 /qa-master 阅读当前项目需求并生成测试用例；只做设计，不执行测试，不写入外部系统。
 ```
 
+TRAE CN 中使用自然语言，例如：`使用 qa-master skill 阅读当前项目需求并生成测试用例；只做设计，不执行测试，不写入外部系统。`
+
 安装包包含指南、双语技能资料和本地助手。`uv` 显示 hardlink 失败并回退为复制时，安装仍可用；若想消除该提示，更新时增加 `--link-mode=copy`。更新与安装自检见 [操作指南](docs/GETTING_STARTED.md)。目录已写入只证明交付完成，不代表某个聊天宿主已经实际加载或端到端执行了 Skill。
 
 ### Linux / macOS
 
-同样使用 `uv tool install --force --python 3.13 .`，Codex/OpenCode 的 `--user` 命令不变；Claude Code 的目标目录写作 `$HOME/.claude/skills/qa-master`。完整命令和项目级安装见 [操作指南](docs/GETTING_STARTED.md)。
+已有 Python 3.10+ 时在仓库根目录运行 `python3 -m qa_master install-codex --user`；没有合适 Python 时，按 [uv 安装说明](https://docs.astral.sh/uv/getting-started/installation/) 安装 uv，再运行 `uv tool install --force --python 3.13 .` 和 `qa-master install-codex --user`。Claude Code 目标为 `$HOME/.claude/skills/qa-master`，项目目标为 `<项目>/.claude/skills/qa-master`。完整命令和项目级安装见 [操作指南](docs/GETTING_STARTED.md)。
 
 ## 按你需要的范围工作
 
