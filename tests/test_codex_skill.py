@@ -18,10 +18,11 @@ class CodexSkillTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.target = self.root / 'project with spaces' / '.agents' / 'skills' / 'qa-master'
 
-    def run_helper(self, *args):
+    def run_helper(self, *args, target=None):
         working = self.root / 'other-project'
         working.mkdir(exist_ok=True)
-        return subprocess.run([sys.executable, '-I', str(self.target / 'scripts' / 'qa.py'), *args],
+        target = target or self.target
+        return subprocess.run([sys.executable, '-I', str(target / 'scripts' / 'qa.py'), *args],
                               cwd=working, capture_output=True, text=True, timeout=15)
 
     def test_complete_install_runs_outside_checkout(self):
@@ -36,6 +37,16 @@ class CodexSkillTests(unittest.TestCase):
             # Compare existing canonical paths, retaining the containment check.
             guide_path = Path(guide['path']).resolve(strict=True)
             self.assertTrue(guide_path.is_relative_to(self.target.resolve(strict=True)))
+
+    def test_explicit_claude_target_runs_helper_outside_checkout(self):
+        target = self.root / 'fresh host' / '.claude' / 'skills' / 'qa-master'
+        install_skill(target)
+        result = self.run_helper('skills', target=target)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        value = json.loads(result.stdout)
+        self.assertEqual(value['vendor']['count'], 330)
+        self.assertEqual(value['vendor']['languages'], {'en': 165, 'zh': 165})
+        self.assertTrue((target / 'SKILL.md').is_file())
 
     def test_installed_cli_preserves_no_execution_and_pause(self):
         install_skill(self.target)

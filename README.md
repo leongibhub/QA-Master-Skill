@@ -29,37 +29,45 @@
 
 ## 快速开始
 
-需要 Python 3.10+、Git，以及支持加载 Skill 的 Agent。下面使用项目级 Codex 安装，避免修改全局技能目录。
+需要 Python 3.10+、Git、[uv](https://docs.astral.sh/uv/) 和支持加载 Skill 的 Agent。Windows 上不需要手工创建或激活 `.venv`：`uv tool` 会管理安装所需的隔离环境。
 
 ### Windows · PowerShell
 
 ```powershell
 git clone https://github.com/leongibhub/QA-Master-Skill.git
 cd QA-Master-Skill
-py -3 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install .
-.\.venv\Scripts\python.exe -m qa_master install-codex --project .
+uv tool install --force --python 3.13 .
 ```
 
-### Linux · Bash
+选择与你使用的聊天宿主相符的一项安装命令：
 
-```bash
-git clone https://github.com/leongibhub/QA-Master-Skill.git
-cd QA-Master-Skill
-python3 -m venv .venv
-.venv/bin/python -m pip install .
-.venv/bin/python -m qa_master install-codex --project .
+| 聊天宿主 | 安装命令 | Skill 位置 |
+| --- | --- | --- |
+| Codex 或 OpenCode | `qa-master install-codex --user` | `$HOME\.agents\skills\qa-master` |
+| VS Code 中的 Claude Code | `qa-master install-codex --target "$HOME\.claude\skills\qa-master"` | `$HOME\.claude\skills\qa-master` |
+
+上表是用户级安装。若只安装到一个项目，Codex/OpenCode 使用 `qa-master install-codex --project "<项目绝对路径>"`，入口为 `<项目>/.agents/skills/qa-master/SKILL.md`；Claude Code 使用 `qa-master install-codex --target "<项目绝对路径>\.claude\skills\qa-master"`。
+
+Claude Code 是 VS Code 中加载 Skill 的宿主；截图中已经选择的 DeepSeek 模型仍由 Claude Code 的现有配置使用。QA Master 不读取、不配置模型端点或 API Token。
+
+安装后检查所选目录。以下示例是 Codex/OpenCode；若安装到 Claude Code，将 `.agents` 替换为 `.claude`：
+
+```powershell
+Test-Path "$HOME\.agents\skills\qa-master\SKILL.md"
+py -3 -I "$HOME\.agents\skills\qa-master\scripts\qa.py" skills
 ```
 
-以上命令无需激活虚拟环境。安装到自己的业务项目时，将最后一个 `.` 换成该项目的路径。在目标项目中打开新的 Codex 会话，然后输入：
+第一条应返回 `True`；第二条 JSON 中应包含 `vendor.count = 330`，`en = 165` 和 `zh = 165`。关闭并新建目标聊天会话，使宿主重新发现 Skill。在 Claude Code 聊天中可先使用这一条最小任务：
 
 ```text
-$qa-master 阅读 docs/requirements.md，评审需求并生成测试用例。
-开发还未完成，不执行测试，不向外部系统写入。
-请交付需求问题清单、带来源的用例草稿、覆盖缺口和后续交接说明。
+/qa-master 阅读当前项目需求并生成测试用例；只做设计，不执行测试，不写入外部系统。
 ```
 
-入口位于 `<项目>/.agents/skills/qa-master/SKILL.md`，安装包包含指南、双语技能资料和本地助手。需要全局安装时使用 `install-codex --user`。更新与安装自检见 [操作指南](docs/GETTING_STARTED.md)。其他 Agent 的发现目录和加载方式需要按其宿主配置核对；这里不把文件可复制等同于跨工具验收。
+安装包包含指南、双语技能资料和本地助手。`uv` 显示 hardlink 失败并回退为复制时，安装仍可用；若想消除该提示，更新时增加 `--link-mode=copy`。更新与安装自检见 [操作指南](docs/GETTING_STARTED.md)。目录已写入只证明交付完成，不代表某个聊天宿主已经实际加载或端到端执行了 Skill。
+
+### Linux / macOS
+
+同样使用 `uv tool install --force --python 3.13 .`，Codex/OpenCode 的 `--user` 命令不变；Claude Code 的目标目录写作 `$HOME/.claude/skills/qa-master`。完整命令和项目级安装见 [操作指南](docs/GETTING_STARTED.md)。
 
 ## 按你需要的范围工作
 
@@ -452,9 +460,9 @@ Skill Engineering 服务所有能力层。每项均链接到 QA Master 当前随
 
 ## 支持方式与兼容边界
 
-QA Master 目前提供一个统一入口和一个可验证的 Codex 安装目标：`qa-master install-codex --project <项目路径>`。`--user` 会安装到当前用户的 Codex 发现目录；项目安装则写入 `<项目>/.agents/skills/qa-master/`。安装内容包含入口、Python 本地助手、6 份专业指南和上表全部双语资料。
+QA Master 只有一个安装器：`qa-master install-codex`。`--user` 写入 `$HOME/.agents/skills/qa-master`，供 Codex/OpenCode 发现；`--target <目录>` 让你把同一份内容写入宿主指定的目录，例如 Claude Code 的 `$HOME/.claude/skills/qa-master`。安装内容包含入口、Python 本地助手、6 份专业指南和上表全部双语资料。
 
-其他 Agent 宿主可以按自己的发现目录读取或复制该 Skill，但本仓库没有把文件可复制表述为已验证的安装器、自动加载或端到端兼容性。使用前需要按宿主的 Skill 发现规则配置，并检查入口和相对路径是否可用。
+已写入的文件和本地助手自检证明的是安装交付；它不等同于某个宿主自动加载、模型配置正确或端到端兼容已经验证。使用前仍应按宿主规则重新建立会话并检查入口。
 
 ## 仓库结构
 
@@ -472,7 +480,7 @@ QA-Master-Skill/
 
 ## 单个内置 Skill 的结构
 
-安装后，Codex 实际发现的是一个 QA Master 入口；它根据任务阶段和请求选择专业指南或目录中的专项资料，而不是要求用户为 165 项资料逐项安装。
+安装后，聊天宿主实际发现的是一个 QA Master 入口；它根据任务阶段和请求选择专业指南或目录中的专项资料，而不是要求用户为 165 项资料逐项安装。
 
 ```text
 <项目>/.agents/skills/qa-master/
