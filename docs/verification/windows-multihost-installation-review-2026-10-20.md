@@ -5,7 +5,7 @@
 - Reviewed subject: `ee3ecd6b8590eaefe363f7171fff3be1364b8ceb`
 - Reviewer: `/root/install_matrix_final_review`
 - Date: 2026-10-20
-- Conclusion: `CHANGES_REQUESTED`
+- Attempt 1 conclusion: `CHANGES_REQUESTED`
 
 ## Findings
 
@@ -57,3 +57,24 @@ No P0 or P1 finding was identified.
 - `pytest` was `NOT_AVAILABLE` in the selected system interpreter (`No module named pytest`); the same focused cases were executed successfully with their native `unittest` runner.
 
 The tester's `EVD-WINDOWS-MULTIHOST-INSTALLATION-001` and `BUG-015` are consistent: six ordinary-length package targets passed, the failed deliberately long target remains an open P3, and neither record claims actual host discovery. A physical Python-absent/old-Python installation and Codex/OpenCode/Claude Code/TRAE CN UI-session discovery remain `NOT_EXECUTED`.
+
+## Attempt 2 — repaired no-PATH update route
+
+- Reviewed subject: `6c56c43685df0b80154abf46cb11d95a9441bf59`.
+- Conclusion: `PASS WITH P3 FOLLOW-UP`.
+- Open findings from this attempt: P0 `0`; P1 `0`; P2 `0`; P3 `0` new. Attempt-1 P3-002 remains assigned to lifecycle governance and is not reclassified or closed by this reviewer-owned update.
+
+### Resolution readback
+
+- P2-001: `RESOLVED`. The existing-Python TRAE CN update example now uses `py -3 -m qa_master ... --update`, and explicitly supplies `python -m qa_master ... --update` when the `py` launcher is absent. The direct-Python path no longer requires the `qa-master` executable on `PATH`.
+- P3-001: `RESOLVED`. `tests/test_installation_docs.py` now asserts the `python -m qa_master` launcher fallback and the Claude/TRAE direct-Python update commands.
+- P3-002: remains `OPEN` as the retained lifecycle-governance follow-up from attempt 1. Per review scope, no non-reviewer governance state was changed in this attempt.
+
+### Attempt 2 verification
+
+- `py -3 -m unittest tests.test_installation_docs -v`: `4/4 PASS`.
+- `python --version`: `3.13.5`; `python -m qa_master --help`: exit `0`.
+- `uv tool run --from . --python 3.13 qa-master --help`: exit `0`.
+- `git diff --check ee3ecd6..6c56c43`: exit `0`.
+
+The first `CHANGES_REQUESTED` conclusion remains part of this record. Attempt 2 supersedes it only for the repaired frozen subject `6c56c43`; it does not change `BUG-015`, the physical Python-absent/old-machine `NOT_EXECUTED` boundary, or the host UI/session discovery `NOT_EXECUTED` boundary.
