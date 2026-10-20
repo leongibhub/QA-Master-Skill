@@ -40,6 +40,15 @@ class InstallationDocumentationTests(unittest.TestCase):
             self.assertIn('%USERPROFILE%\\.trae-cn\\skills\\qa-master', text)
             self.assertIn('<项目绝对路径>\\.trae\\skills\\qa-master', text)
 
+    def test_readme_windows_host_matrix_has_matching_markdown_columns(self):
+        """Keep GitHub from rendering the four-column install matrix as plain text."""
+        header = '| 聊天宿主 | 用户级安装 | 项目级安装 | Skill 位置 |'
+        separator = '| --- | --- | --- | --- |'
+
+        self.assertIn(header, self.readme)
+        self.assertIn(separator, self.readme)
+        self.assertEqual(header.count('|'), separator.count('|'))
+
     def test_direct_python_update_examples_do_not_depend_on_path(self):
         self.assertIn(
             'py -3 -m qa_master install-codex --target "%USERPROFILE%\\.claude\\skills\\qa-master" --update',
