@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/naodeng/awesome-qa-skills",
+  "source_commit": "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b",
+  "upstream_commit_time": "2026-10-19T01:50:43Z",
+  "upstream_tree_git_sha1": "694cf0b677cb90cee101e7806657537b016c356c",
+  "license_path": "LICENSE",
+  "verification_status": "OBSERVED",
+  "independent_verification_status": "PENDING",
+  "retrieved_at": "2026-10-19",
+  "snapshot": {
+    "included_paths": [
+      "skills/en",
+      "skills/zh"
+    ],
+    "scope": "The en/ and zh/ subtrees only; excludes QA Master wrapper files such as this metadata, README.md, UPSTREAM_README.md, and LICENSE.",
+    "file_count": 5816,
+    "sha256": "01c9414f426e36b8659aa08ac73d8db2042e2e1769aace4269881f7cb2c05799",
+    "algorithm": "SHA-256 of UTF-8 lines sorted by UTF-8 bytewise relative POSIX path order: <path>|<SHA-256(canonical file bytes)>\\n",
+    "text_extensions": [
+      ".bru", ".bruno", ".cjs", ".csv", ".curl", ".env", ".gatling", ".gitignore",
+      ".html", ".ini", ".java", ".jmx", ".js", ".json", ".md", ".mjs",
+      ".properties", ".py", ".pytest", ".restassure", ".scala", ".sh",
+      ".supertest", ".ts", ".tsv", ".txt", ".wsdl", ".xml", ".yaml", ".yml"
+    ],
+    "binary_extensions": [
+      ".docx"
+    ],
+    "text_encoding": "UTF-8 strict",
+    "text_newline_normalization": "CRLF to LF"
+  }
+}

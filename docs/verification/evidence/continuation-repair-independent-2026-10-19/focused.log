@@ -1,0 +1,10 @@
+test_coverage_counts_distinct_interactions_not_rows (tests.test_continuation_repair_independent.ContinuationIndependentTests.test_coverage_counts_distinct_interactions_not_rows) ... ok
+test_curated_and_ambiguous_requests_are_visible (tests.test_continuation_repair_independent.ContinuationIndependentTests.test_curated_and_ambiguous_requests_are_visible) ... ok
+test_every_canonical_skill_is_reachable_in_both_languages (tests.test_continuation_repair_independent.ContinuationIndependentTests.test_every_canonical_skill_is_reachable_in_both_languages) ... ok
+test_explicit_execution_remains_a_planning_request (tests.test_continuation_repair_independent.ContinuationIndependentTests.test_explicit_execution_remains_a_planning_request) ... ok
+test_negative_scope_survives_persistence (tests.test_continuation_repair_independent.ContinuationIndependentTests.test_negative_scope_survives_persistence) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 21.183s
+
+OK

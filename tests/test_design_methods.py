@@ -276,6 +276,12 @@ class CoveringArrayTests(unittest.TestCase):
         self.assertEqual(analysis["strength"], 2)
         self.assertEqual(analysis["cartesian_size"], 12)
         self.assertEqual(analysis["interaction_count"], 16)
+        coverage = result["model_results"][0]["coverage"]
+        self.assertEqual(coverage["denominator"], 16)
+        self.assertEqual(coverage["candidate_ready"], 16)
+        self.assertEqual(coverage["oracle_missing"], 0)
+        self.assertEqual(analysis["candidate_row_count"], 6)
+        self.assertEqual(analysis["oracle_missing_row_count"], 0)
         chosen = [c["method_data"]["assignment"] for c in result["candidates"]]
         self.assertEqual(len(chosen), analysis["covering_array_size"])
         domains = {"A":[1,2],"B":["x","y","z"],"C":[True,False]}
@@ -295,14 +301,40 @@ class CoveringArrayTests(unittest.TestCase):
         analysis = result["model_results"][0]["analysis"]
         self.assertEqual(analysis["strength"], 3)
         self.assertEqual(analysis["interaction_count"], 8)
+        coverage = result["model_results"][0]["coverage"]
+        self.assertEqual((coverage["candidate_ready"], coverage["denominator"]), (8, 8))
         chosen = [c["method_data"]["assignment"] for c in result["candidates"]]
         for va, vb, vc in itertools.product([1,2],[3,4],[5,6]):
             self.assertTrue(any(c["A"]==va and c["B"]==vb and c["C"]==vc for c in chosen), (va,vb,vc))
+
+    def test_strength_three_counts_distinct_interactions_not_rows(self):
+        params = [{"id": name, "values": [0, 1]} for name in "ABCD"]
+        for oracle in ("O", None):
+            with self.subTest(oracle=oracle):
+                spec = {"parameters": params, "strength": 3, "oracle_ref": oracle}
+                result = design_methods(self.bundle("combinatorial", spec))
+                rows = result["candidates"] if oracle else result["obligations"]
+                # Both record types retain the assignment used for design.
+                assignments = [row["method_data" if oracle else "subject"]["assignment"] for row in rows]
+                covered = {tuple((key, assignment[key]) for key in keys)
+                           for assignment in assignments
+                           for keys in itertools.combinations("ABCD", 3)}
+                self.assertEqual(len(covered), 32)
+                coverage = result["model_results"][0]["coverage"]
+                self.assertEqual(coverage["denominator"], 32)
+                self.assertEqual(coverage["candidate_ready"], 32 if oracle else 0)
+                self.assertEqual(coverage["oracle_missing"], 0 if oracle else 32)
+                self.assertLess(len(rows), 32)
 
     def test_pairwise_missing_oracle_is_obligation(self):
         spec = self.pairwise_spec(); spec["oracle_ref"] = None
         result = design_methods(self.bundle("pairwise", spec))
         self.assertEqual(result["candidates"], [])
+        coverage = result["model_results"][0]["coverage"]
+        self.assertEqual(coverage["candidate_ready"], 0)
+        self.assertEqual(coverage["oracle_missing"], 16)
+        self.assertEqual(coverage["denominator"], 16)
+        self.assertEqual(result["model_results"][0]["analysis"]["oracle_missing_row_count"], 6)
         self.assertTrue(result["obligations"])
         self.assertTrue(all(o["code"]=="COMBINATORIAL_ORACLE_MISSING" for o in result["obligations"]))
         self.assertEqual(len(result["obligations"]),

@@ -8,6 +8,8 @@ from __future__ import annotations
 from importlib import resources
 from pathlib import Path
 from typing import Iterable
+import re
+from .intent import mention_states
 
 from .core import DIMENSIONS, SKILLS, DIMENSION_SKILLS
 
@@ -217,12 +219,14 @@ def discover_vendor_skills(root=None) -> dict:
     }
 
 
-def select_vendor_skills(stages=None, dimensions=None, *, root=None) -> dict:
+def select_vendor_skills(stages=None, dimensions=None, *, root=None, prompt=None, language=None, names=None) -> dict:
     """Route planning stages/dimensions to matching vendored breadth skills.
 
-    Stages are mapped to canonical skill names via ``core.SKILLS`` and
-    dimensions via ``core.DIMENSION_SKILLS``; a name absent from the vendor
-    catalog (e.g. a dimension already owned by a bundled guide) is skipped.
+    Stages/dimensions, explicit catalog names and a small documented bilingual
+    alias set are deterministic selectors, not arbitrary language understanding.
+    Missing names and ambiguous aliases are reported as gaps. Prompt calls prefer
+    Chinese for Chinese text and English otherwise; stage-only calls retain both
+    languages for compatibility. This never authorizes or executes a workflow.
     """
     requested_stages = _requested(stages)
     requested_dimensions = _requested(dimensions)
@@ -237,16 +241,67 @@ def select_vendor_skills(stages=None, dimensions=None, *, root=None) -> dict:
         name = DIMENSION_SKILLS.get(dimension)
         if name:
             wanted.add(name)
+    gaps = list(discovered["gaps"])
+    matches = []
+    text = prompt.casefold() if isinstance(prompt, str) else ""
+    preferred = language
+    if preferred is None and prompt is not None:
+        preferred = "zh" if re.search(r"[\u3400-\u9fff]", text) else "en"
+    if preferred not in (None, "zh", "en"):
+        raise ValueError("language must be en or zh")
+    explicit = set(_requested(names))
+    excluded = set()
+    for name in by_name:
+        positive, negative = mention_states(text, (name,))
+        if negative: excluded.add(name)
+        elif positive:
+            explicit.add(name)
+            matches.append({"term": name, "names": [name], "basis": "CANONICAL_NAME"})
+    aliases = {
+        "property based testing": ("property-based-testing",),
+        "property-based testing": ("property-based-testing",),
+        "属性测试": ("property-based-testing",),
+        "基于属性的测试": ("property-based-testing",),
+        "chaos engineering": ("chaos-testing",),
+        "chaos testing": ("chaos-testing",),
+        "混沌测试": ("chaos-testing",),
+        "混沌工程": ("chaos-testing",),
+        "playwright": ("ui-test-playwright",),
+        "rag testing": ("rag-quality-testing", "rag-retrieval-testing"),
+        "rag 测试": ("rag-quality-testing", "rag-retrieval-testing"),
+        "rag测试": ("rag-quality-testing", "rag-retrieval-testing"),
+    }
+    for term, targets in aliases.items():
+        positive, negative = mention_states(text, (term,))
+        if negative: excluded.update(targets)
+        elif positive:
+            explicit.update(targets)
+            matches.append({"term": term, "names": list(targets), "basis": "CURATED_ALIAS"})
+            if len(targets) > 1:
+                gaps.append({"code": "AMBIGUOUS_SPECIALIST_REQUEST", "term": term,
+                             "candidates": list(targets)})
+    wanted.update(explicit)
+    wanted.difference_update(excluded)
     selected = []
     for name in sorted(wanted):
-        selected.extend(by_name.get(name, ()))
+        candidates = by_name.get(name, ())
+        if not candidates:
+            gaps.append({"code": "REQUESTED_VENDOR_SKILL_UNAVAILABLE", "name": name})
+            continue
+        localized = [item for item in candidates if item["language"] == preferred]
+        selected.extend(localized if preferred and localized else candidates)
+        if preferred and not localized:
+            gaps.append({"code": "PREFERRED_LANGUAGE_UNAVAILABLE", "name": name, "language": preferred})
+    if not selected:
+        gaps.append({"code": "NO_MATCHING_VENDOR_SKILL", "routing": "canonical names or curated aliases or stage/dimension mappings"})
     return {
         "status": "PLANNING_ONLY",
         "execution": "NOT_EXECUTED",
-        "requested": {"stages": list(requested_stages), "dimensions": list(requested_dimensions)},
+        "requested": {"stages": list(requested_stages), "dimensions": list(requested_dimensions), "language": preferred, "names": list(_requested(names))},
+        "matches": matches,
         "wanted": sorted(wanted),
         "selected": selected,
         "count": len(selected),
         "vendor_skill_count": discovered["count"],
-        "gaps": discovered["gaps"],
+        "gaps": gaps,
     }

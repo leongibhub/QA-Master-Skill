@@ -8,13 +8,13 @@ description = "Human-gated, resumable QA workflow controller"
 requires-python = ">=3.10"
 [project.optional-dependencies]
 attestation = ["cryptography>=41"]
-test = ["cryptography>=41"]
+test = ["cryptography>=41", "setuptools>=61", "wheel"]
 [project.scripts]
 qa-master = "qa_master.__main__:main"
 qa-master-paired-eval = "qa_master.paired_evaluation:main"
 [tool.setuptools.packages.find]
 include = ["qa_master*"]
 [tool.setuptools.package-data]
-qa_master = ["skills/**/*.md", "skills/**/*.json", "skills/vendor/**/*", "semantic_quality_assets/*.json"]
+qa_master = ["skills/**/*.md", "skills/**/*.json", "skills/vendor/**/*", "skills/vendor/**/.gitignore", "semantic_quality_assets/*.json"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]

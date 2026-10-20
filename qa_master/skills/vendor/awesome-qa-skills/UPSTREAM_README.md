@@ -559,6 +559,7 @@ bash scripts/run_skill_eval.sh skills/zh/testing-types/functional-testing/evals/
 | Skill | 类型 | 提交人 | 来源 | 上游信息（核验日期） |
 | --- | --- | --- | --- | --- |
 | [UIZZE anti-ui-slop](https://github.com/uizze/uizze/blob/main/skills/anti-ui-slop/SKILL.md) | Agent Skill / UX 质量门禁 | [@samuelbushi](https://github.com/samuelbushi) | [上游目录](https://github.com/uizze/uizze/tree/main/skills/anti-ui-slop) · [提交 Issue #3](https://github.com/naodeng/awesome-qa-skills/issues/3) | Apache-2.0 · v1.3.1 · 上游列出 Claude Code、Codex、Cursor、GitHub Copilot（核验于 2026-10-12） |
+| [UI Verify triage-visual-changes](https://github.com/uiverify/uiverify/blob/main/packages/skills/skills/triage-visual-changes/SKILL.md) | Agent Skill / 视觉回归分流 | [@igrlk](https://github.com/igrlk) | [上游目录](https://github.com/uiverify/uiverify/tree/main/packages/skills/skills/triage-visual-changes) · [提交 Issue #33](https://github.com/naodeng/awesome-qa-skills/issues/33) | MIT · UI Verify plugin v0.1.0 · 需要 UI Verify 账号和 MCP 连接（核验于 2026-10-19） |
 
 ## 贡献
 

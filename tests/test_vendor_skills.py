@@ -1,5 +1,7 @@
 import tempfile
 import unittest
+import hashlib
+import json
 from pathlib import Path
 
 from qa_master.skill_registry import (
@@ -10,6 +12,80 @@ from qa_master.skill_registry import (
 
 
 class VendorSkillsTests(unittest.TestCase):
+    def test_vendor_source_provenance_binds_bilingual_snapshot(self):
+        root = vendor_skill_root()
+        metadata = json.loads((root / "SOURCE_PROVENANCE.json").read_text(encoding="utf-8"))
+        self.assertEqual(metadata["schema_version"], 1)
+        self.assertEqual(metadata["source_repository"],
+                         "https://github.com/naodeng/awesome-qa-skills")
+        self.assertEqual(metadata["source_commit"], "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b")
+        self.assertEqual(metadata["upstream_commit_time"], "2026-10-19T01:50:43Z")
+        self.assertEqual(metadata["upstream_tree_git_sha1"],
+                         "694cf0b677cb90cee101e7806657537b016c356c")
+        self.assertEqual(metadata["license_path"], "LICENSE")
+        self.assertEqual(metadata["verification_status"], "OBSERVED")
+        self.assertEqual(metadata["independent_verification_status"], "PENDING")
+        self.assertRegex(metadata["retrieved_at"], r"^\d{4}-\d{2}-\d{2}$")
+        self.assertEqual(metadata["snapshot"]["included_paths"], ["skills/en", "skills/zh"])
+        def relative_path(path):
+            return path.relative_to(root).as_posix()
+
+        files = sorted(
+            (path for language in ("en", "zh") for path in (root / language).rglob("*")
+            if path.is_file()),
+            key=lambda path: relative_path(path).encode("utf-8"),
+        )
+        snapshot = metadata["snapshot"]
+        text_extensions = set(snapshot["text_extensions"])
+        binary_extensions = set(snapshot["binary_extensions"])
+
+        def canonical_bytes(path):
+            content = path.read_bytes()
+            if path.suffix.lower() in text_extensions or path.name in text_extensions:
+                content.decode("utf-8", errors="strict")
+                return content.replace(b"\r\n", b"\n")
+            self.assertIn(path.suffix.lower(), binary_extensions,
+                          f"undeclared vendor file extension: {path}")
+            return content
+
+        observed_extensions = {path.name if path.name in text_extensions else path.suffix.lower()
+                               for path in files}
+        self.assertEqual(observed_extensions, text_extensions | binary_extensions)
+        self.assertFalse(text_extensions & binary_extensions)
+        self.assertIn("UTF-8 bytewise relative POSIX path order", snapshot["algorithm"])
+        self.assertEqual(
+            sorted(["zh/Z.md", "en/a.md", "en/A.md", "en/é.md"],
+                   key=lambda path: path.encode("utf-8")),
+            ["en/A.md", "en/a.md", "en/é.md", "zh/Z.md"],
+        )
+        manifest = b"".join(
+            f"{relative_path(path)}|"
+            f"{hashlib.sha256(canonical_bytes(path)).hexdigest()}\n".encode("utf-8")
+            for path in files
+        )
+        self.assertEqual(snapshot["file_count"], len(files))
+        self.assertEqual(snapshot["sha256"], hashlib.sha256(manifest).hexdigest())
+        with tempfile.TemporaryDirectory() as directory:
+            invalid_text = Path(directory) / "invalid.md"
+            invalid_text.write_bytes(b"\xff")
+            with self.assertRaises(UnicodeDecodeError):
+                canonical_bytes(invalid_text)
+            unknown_extension = Path(directory) / "unknown.extension"
+            unknown_extension.write_bytes(b"text")
+            with self.assertRaises(AssertionError):
+                canonical_bytes(unknown_extension)
+            binary_file = Path(directory) / "binary.docx"
+            binary_file.write_bytes(b"\xff\r\n")
+            self.assertEqual(canonical_bytes(binary_file), b"\xff\r\n")
+
+    def test_playwright_runner_keeps_json_report_contract_bilingually(self):
+        root = vendor_skill_root()
+        for language in ("en", "zh"):
+            script = root / language / "testing-types" / "ui-test-playwright" / "scripts" / "run-tests.sh"
+            content = script.read_text(encoding="utf-8")
+            self.assertIn('PLAYWRIGHT_JSON_OUTPUT_FILE="$REPORT_JSON"', content)
+            self.assertIn("--reporter=list,html,json", content)
+
     def test_vendor_catalog_is_discovered_bilingually(self):
         result = discover_vendor_skills()
         self.assertEqual(result["status"], "DISCOVERED")

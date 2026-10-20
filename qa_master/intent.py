@@ -1,22 +1,23 @@
 """Conservative Chinese/English natural-language intent planner; no side effects."""
 from __future__ import annotations
 from dataclasses import dataclass, asdict
+import re
 STAGE_ALIASES={
  'requirements':('需求分析','分析需求','整理需求','逆向需求','requirements analysis'),
  'review':('需求评审','评审需求','review requirements'),
  'baseline':('需求基线','建立基线','基线确认','baseline'),
  'test_plan':('测试计划','测试方案','测试规划','test plan'),
- 'design':('测试用例','写用例','生成用例','用例设计','测试设计','test cases','test case'),
+ 'design':('测试用例','写用例','生成用例','用例设计','测试设计','test cases','test case','测试计划和用例','测试计划及用例'),
  'case_review':('用例评审','评审用例','用例审查','用例复核','case review'),
  'code_refinement':('分析代码','阅读源码','白盒','code review','代码分析','更新用例'),
- 'execution':('执行测试','开始测试','运行测试','跑测试','run tests','execute tests','提交bug','提交 bug','提交缺陷','缺陷提交','提bug'),
+ 'execution':('执行测试','开始测试','运行测试','跑测试','run tests','execute tests'),
  'regression':('回归','regression'),
- 'report':('测试报告','生成报告','测试总结','test report')}
+ 'report':('测试报告','生成报告','测试总结','test report','test reports')}
 NEGATED_EXECUTION=('不执行测试','不要执行测试','暂不执行测试','不开始测试','先不测试','开发还没完成',
  '开发还在进行','等待开发','不跑测试','不要运行测试','严禁执行','禁止执行','无需执行','不得执行','不能执行','do not run tests','without executing','never execute','must not execute')
 NEGATED_WRITE=('不导入','不要导入','不创建','不要创建','不要写入','不提交bug','不要提交bug','不修改jira','不操作jira')
 REQUESTED_WRITE=('导入jira','导入synapsert','导入用例','创建测试计划','创建测试周期','提交bug','回写结果')
-FULL=('从头到尾','全流程','完整测试流程','完整质量闭环','end to end')
+FULL=('从头到尾','全流程','完整测试流程','完整质量闭环','end to end workflow','end-to-end workflow','full workflow')
 LIMITED=('只','仅','先','only','just')
 @dataclass(frozen=True)
 class IntentPlan:
@@ -31,26 +32,53 @@ class IntentPlan:
   r=asdict(self)
   for k in ('stages','questions','uncertainty'):r[k]=list(r[k])
   return r
+# Bounded lexical grammar: a nearby explicit denial excludes that mention.
+# This is not arbitrary natural-language parsing or an execution authorization.
+_DENIAL = re.compile(r"(?:不(?:要|得|能|用|必)?|无需|禁止|严禁|暂不|(?<![a-z])(?:never|without|do not|don't|must not|no|not))\s*(?:(?:做|进行|使用|运行|做任何|再|实际|执行|run|execute|use|perform|submit|create|write|any|the)\s*)*$")
+
+def mention_states(text: str, terms) -> tuple[bool, bool]:
+ positive = negative = False
+ for term in terms:
+  pattern = re.escape(term)
+  if term and term[0].isascii() and term[0].isalnum():
+   pattern = r'(?<![a-z0-9_-])' + pattern
+  if term and term[-1].isascii() and term[-1].isalnum():
+   pattern += r'(?![a-z0-9_-])'
+  for match in re.finditer(pattern, text):
+   prefix = re.split(r'[,，;；。.!\n]', text[:match.start()])[-1]
+   if _DENIAL.search(prefix): negative = True
+   else: positive = True
+ return positive, negative
+
 def plan_task(message:str,known:dict|None=None)->dict:
  if not isinstance(message,str) or not message.strip():raise ValueError('Nonempty task required')
  p=message.casefold().strip();known=known or {}
- no_run=any(s in p for s in NEGATED_EXECUTION)
- no_write=any(s in p for s in NEGATED_WRITE) or not any(s in p for s in REQUESTED_WRITE)
- stages=[s for s,terms in STAGE_ALIASES.items() if any(t in p for t in terms)]
+ no_run=any(s in p for s in NEGATED_EXECUTION) or mention_states(p, ('执行测试','开始测试','运行测试','跑测试','run tests','execute tests'))[1]
+ write_positive, write_negative = mention_states(p, REQUESTED_WRITE + ('提交缺陷','提交 bug','缺陷提交','提bug','submit bugs','submit defects','write to jira','import cases'))
+ no_write=any(s in p for s in NEGATED_WRITE) or write_negative or not write_positive
+ states={s:mention_states(p, terms) for s,terms in STAGE_ALIASES.items()}
+ stages=[s for s,(positive,negative) in states.items() if positive and not negative]
+ if mention_states(p, ('提交bug','提交 bug','提交缺陷','缺陷提交','提bug','submit bugs','submit defects'))[0] and not no_write and not no_run:
+  stages.append('execution')
  limited=any(t in p for t in LIMITED)
- if any(t in p for t in FULL) and not limited:
+ full=mention_states(p, FULL)[0] and not mention_states(p, FULL)[1] and not limited
+ if full:
   from .workflow import STEPS
   stages=list(STEPS)
+ stages=[s for s in stages if not states[s][1]]
  if no_run:stages=[s for s in stages if s not in ('execution','regression')]
  if not stages:stages=['discovery']
  if not any(s in stages for s in ('execution','regression')):no_run=True
- scope='full' if any(t in p for t in FULL) and not limited else 'limited'
+ scope='full' if full else 'limited'
  phase='development' if any(t in p for t in ('开发中','开发还没完成','开发还在进行','正在开发','开发人员正在')) else 'unspecified'
  questions=[];uncertainty=[]
+ for stage,(positive,negative) in states.items():
+  if positive and negative:
+   uncertainty.append(f'Conflicting positive/negative mentions for {stage}; the denial takes precedence.')
  if not any(known.get(s) for s in ('requirements','gitlab','web_url')):
   questions.append('请提供需求文件/Wiki、GitLab 仓库地址或已部署系统地址（任选一种）。')
  elif known.get('gitlab') and known.get('requirements_status') not in ('PROVIDED','CONFIRMED_NONE') and not known.get('requirements'):
   questions.append('是否有正式需求文档或 Wiki 链接？没有请回答“没有”，再根据代码整理候选需求。')
- if no_run and any(t in p for t in FULL):
+ if no_run and full:
   uncertainty.append('请求同时涉及全流程与暂不执行，先只规划/设计，执行需要再次确认。')
- return IntentPlan(tuple(dict.fromkeys(stages)),scope,no_run,no_write,tuple(questions),tuple(uncertainty),phase).to_dict()
+ return IntentPlan(tuple(s for s in STAGE_ALIASES if s in stages) if stages != ['discovery'] else ('discovery',),scope,no_run,no_write,tuple(questions),tuple(uncertainty),phase).to_dict()

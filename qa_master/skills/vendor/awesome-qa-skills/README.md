@@ -8,6 +8,10 @@ This directory vendors the bilingual skill catalog from
 - **Vendored content:** `en/` and `zh/` — `testing-workflows` (10),
   `testing-types` (150), `skill-engineering` (5).
 - **Upstream README:** [UPSTREAM_README.md](./UPSTREAM_README.md)
+- **Source snapshot:** [SOURCE_PROVENANCE.json](./SOURCE_PROVENANCE.json) pins the
+  retrieved upstream commit, its Git tree, and a cross-platform canonical-content
+  digest of the `en/` and `zh/` subtrees. It deliberately excludes QA Master
+  wrapper files in this directory.
 
 ## Positioning
 
@@ -19,8 +23,8 @@ routes them: `plan` maps planning stages to canonical skill names
 (`core.SKILLS` / `core.DIMENSION_SKILLS`) and selects the matching vendored
 skill, reporting the result under `vendor_skills`.
 
-QA Master keeps what awesome-qa-skills lacks: conservative intent routing,
-`no_execution` gating, a resumable state machine, source traceability
+QA Master adds its own conservative intent routing, `no_execution` gating,
+a resumable state machine, source traceability
 (`trace_matrix`), enterprise adapters, and a deterministic coverage-array
 engine (`boundary` / `decision_table` / `state_transition` / `pairwise` /
 `combinatorial`).

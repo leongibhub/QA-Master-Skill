@@ -517,11 +517,17 @@ def _covering(model, refs, oracles, strength):
                 "Collect evidence for oracle " + oracle,
             ]
             candidates.append(case)
-    ready = len(candidates)
-    coverage = _coverage("interactions", len(interactions), ready, oracle_missing=len(chosen) - ready)
+    # Coverage counters use the denominator's interaction unit, not row count.
+    # This is design coverage only: a declared oracle does not execute a case.
+    selected_interactions = set().union(*(covered[index] for index in chosen))
+    ready = len(selected_interactions) if oracle is not None else 0
+    coverage = _coverage("interactions", len(interactions), ready,
+                         oracle_missing=len(selected_interactions) - ready)
     analysis = {"parameter_count": len(ids), "value_counts": {p: len(domains[p]) for p in ids},
                 "strength": t, "cartesian_size": cartesian, "interaction_count": len(interactions),
-                "covering_array_size": len(chosen)}
+                "covering_array_size": len(chosen),
+                "candidate_row_count": len(candidates),
+                "oracle_missing_row_count": len(obligations)}
     return candidates, obligations, coverage, analysis
 
 

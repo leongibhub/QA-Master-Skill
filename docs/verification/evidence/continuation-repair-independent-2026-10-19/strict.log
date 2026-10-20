@@ -1,0 +1,23 @@
+ITEM_FANOUT_VISITS [('case', [(1, 4, 22), (16, 64, 22), (64, 256, 22)]), ('gap_and_case', [(1, 9, 29), (16, 144, 29), (64, 576, 29)])]
+::error::test_codex_skill_independent.IndependentCodexSkillInstallTests.test_managed_update_replaces_bundle_and_keeps_complete_backup: Diff is 74420 characters long. Set self.maxDiff to None to see it.
+::notice::ran=798 failures=1 errors=0 skipped=8
+..........................................................................................................................................................................F.s.s............................................................................................................................................................................................................................................................................................................................................s............................................................................................................................................................................................................sssss.................................................................................
+======================================================================
+FAIL: test_managed_update_replaces_bundle_and_keeps_complete_backup (test_codex_skill_independent.IndependentCodexSkillInstallTests.test_managed_update_replaces_bundle_and_keeps_complete_backup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-PR2\tests\test_codex_skill_independent.py", line 83, in test_managed_update_replaces_bundle_and_keeps_complete_backup
+    self.assertEqual(list(self.target.parent.rglob("SKILL.md")), [self.target / "SKILL.md"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [Wind[120 chars].md'), WindowsPath('C:/Users/leon.wang/AppData[72847 chars]md')] != [Wind[120 chars].md')]
+
+First list contains 330 additional elements.
+First extra element 1:
+WindowsPath('C:/Users/leon.wang/AppData/Local/Temp/qa-master-pr2-independent-8xld3sxq/project/.agents/skills/qa-master/scripts/qa_master/skills/vendor/awesome-qa-skills/zh/testing-workflows/daily-testing-workflow/SKILL.md')
+
+Diff is 74420 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 798 tests in 1629.814s
+
+FAILED (failures=1, skipped=8)
