@@ -44,6 +44,8 @@ cd QA-Master-Skill
 py -3 -m qa_master --help
 ```
 
+若电脑已经装了 Python 3.10+，但没有 `py` 启动器，可将后续命令中的 `py -3` 换成 `python`。
+
 若没有 Python 3.10+，先安装 uv。可用 Windows 的官方 `winget` 包：
 
 ```cmd
