@@ -117,3 +117,34 @@ command, so the inspected target remains at the path recorded above.
 TC-HOST-002 remains `NOT_EXECUTED`. A filesystem copy, helper discovery count,
 or successful CLI exit does not prove VS Code Claude Code discovery, model
 selection, or a `/qa-master` conversation.
+
+## Attempt 2 — ancestor-junction repair retest
+
+- Subject: `7d6929bf9b45992e266f20193d40ea7be3b5529d`
+- Executor: independent tester (`/root/claude_host_independent_test`)
+- Observed: 2026-10-20T11:44:49+08:00 to 2026-10-20T11:45:42+08:00
+- Environment: Windows 11 Professional Workstation 10.0.26200; Python 3.13.5;
+  PowerShell; checkout import confirmed as `D:\\QA-Master-PR2\\qa_master\\__init__.py`.
+
+This retest covers the P1 ancestor-link repair introduced by `7d6929b`. It
+preserves the attempt-1 evidence above and does not convert TC-HOST-002 into an
+executed test.
+
+| Check | Result | Observable evidence |
+| --- | --- | --- |
+| TC-HOST-001A, Windows junction ancestor | PASS | A real Windows directory junction (`Directory, ReparsePoint`) from a disposable `junction-project` to a separate `external` directory was created with PowerShell. `py -3 -m qa_master install-codex --target "<junction>\\.claude\\skills\\qa-master"` returned exit 2 and `{"error": "SKILL_TARGET_CONFLICT"}`. The external directory had 0 entries both before and after; `<external>\\.claude\\skills\\qa-master` and the requested junction target did not exist. |
+| TC-HOST-001B, ordinary target regression | PASS | `py -3 -m qa_master install-codex --target "<ordinary-project>\\.claude\\skills\\qa-master"` returned `INSTALLED`, `files: 5882`, and `execution: NOT_EXECUTED`. The installed manifest had schema 1 and 5,882 entries; `SKILL.md`, `scripts/qa.py`, `references/`, and `examples/` existed. The installed helper, invoked through `py -3 -I`, reported vendor 330, English 165, Chinese 165 and `DISCOVERED`. |
+| Unit regression for link handling | PASS with one environment skip | `py -3 -m unittest tests.test_codex_skill.CodexSkillTests.test_linked_ancestor_is_rejected_before_install tests.test_codex_skill.CodexSkillTests.test_windows_junction_ancestor_is_rejected_before_install -v` completed `OK (skipped=1)`: the Windows junction case passed; the directory-symlink case was skipped because this user lacks the Windows symbolic-link privilege (`WinError 1314`). |
+| Documentation/catalog regression | PASS | `py -3 -m unittest tests.test_installation_docs tests.test_readme_catalog -v` completed 7 tests in 0.123 seconds with `OK`. |
+| TC-HOST-002, supplied VS Code Claude Code discovery/manual call | NOT_EXECUTED | No supplied VS Code Claude Code session was available. Neither junction rejection nor ordinary file installation proves host discovery, slash-command visibility, model selection, or a conversation result. |
+
+The repaired source normalizes the requested target lexically and calls
+`_assert_unlinked_ancestor_chain` before bundle construction, before parent
+directory creation, and at publication/update boundaries. The independent
+junction case observed the initial fail-closed boundary in the actual source
+CLI and verified that no bundle content reached the junction destination.
+
+The two attempt-2 disposable roots remain for inspection because the environment
+previously rejected the scoped cleanup command. No production, user-profile
+Claude directory, VS Code configuration, credential, external QA system, or
+business-test target was changed.

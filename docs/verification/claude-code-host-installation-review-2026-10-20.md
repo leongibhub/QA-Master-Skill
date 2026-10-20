@@ -73,3 +73,59 @@ sound, but the unresolved P1 containment gap prevents approval. `TC-HOST-001`
 remains only the tester's bounded ordinary-directory result, and `TC-HOST-002`
 remains `NOT_EXECUTED`. This review is not a Gate, release, acceptance, host
 discovery, model-capability, or test-execution conclusion.
+
+## Attempt 2 — repaired-subject re-review
+
+- Subject: `7d6929bf9b45992e266f20193d40ea7be3b5529d`
+- Evidence reviewed: attempt 2 in
+  `EVID-CLAUDE-CODE-HOST-INSTALLATION-2026-10-20`
+- Result: `PASS`
+- Severity count: P0 0, P1 0, P2 0, P3 0
+
+The attempt-1 `FAIL` above is retained as the result for `053c287`. The following
+checks apply only to the repaired subject.
+
+### Prior P1 — RESOLVED
+
+`install_skill` now converts the requested path to a lexical absolute path and
+uses `lstat` to reject a symlink or Windows reparse point anywhere in the
+existing ancestor chain. It repeats this check before parent creation, staging,
+update/recovery movement and final publication. This closes the prior gap where
+only the final target was checked.
+
+The independent tester exercised the source CLI through a real Windows
+ancestor junction. It returned `SKILL_TARGET_CONFLICT` before bundle content was
+written, while an ordinary `.claude/skills/qa-master` target still installed a
+complete 5,882-file manifest and ran its installed helper. The repository unit
+test for the Windows junction also passed. The ordinary directory-symlink test
+was skipped on this Windows account because it lacks symlink privilege; the
+same `lstat` branch covers both `stat.S_ISLNK` and Windows reparse attributes.
+
+### Prior P3 — RESOLVED
+
+`REQ-027` now explicitly permits installer-owned staging, backup and recovery
+locations beneath validated non-linked parents. This matches the existing
+update design instead of asserting that every write stays inside the final
+`qa-master` directory.
+
+The reviewer independently ran:
+
+```powershell
+D:\codex-rd-platform\.venv\Scripts\python.exe -m unittest tests.test_codex_skill.CodexSkillTests.test_managed_upgrade_keeps_restorable_archive -v
+```
+
+It passed in 95.983 seconds. The test performs a real managed bundle change,
+requires `UPDATED`, verifies that the backup is beside the target, verifies that
+the recovery tree is under `.qa-master-recovery`, reads the previous `SKILL.md`
+from the archive, and confirms publication of the changed bundle. The updated
+requirement and observed behavior therefore agree.
+
+### Attempt-2 decision
+
+`TC-HOST-003` is `PASS` for the repaired installer containment, controlled
+update locations, documentation accuracy and host/model/credential boundary.
+There are no unresolved P0–P3 findings in this bounded re-review.
+`TC-HOST-002` remains `NOT_EXECUTED`: neither this code review nor the installer
+tests prove VS Code Claude Code discovery, `/qa-master` visibility, selected
+model behavior or a conversation result. This is not a Gate, release,
+acceptance or host-integration execution conclusion.
