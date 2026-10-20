@@ -65,7 +65,7 @@ uv tool install --force --python 3.13 .
 选择宿主和范围。下表是已有 Python 用户可直接复制的 Windows `cmd` 命令；PowerShell 中将 `%USERPROFILE%` 改为 `$env:USERPROFILE`。若使用 uv 安装，把每条命令中的 `py -3 -m qa_master` 替换为 `qa-master`；PATH 尚未刷新时替换为上面的 `uv tool run ... qa-master` 前缀。
 
 | 聊天宿主 | 用户级安装 | 项目级安装 | Skill 位置 |
-| --- | --- | --- |
+| --- | --- | --- | --- |
 | Codex 或 OpenCode | `py -3 -m qa_master install-codex --user` | `py -3 -m qa_master install-codex --project "<项目绝对路径>"` | `%USERPROFILE%\.agents\skills\qa-master`；`<项目>\.agents\skills\qa-master` |
 | VS Code 中的 Claude Code | `py -3 -m qa_master install-codex --target "%USERPROFILE%\.claude\skills\qa-master"` | `py -3 -m qa_master install-codex --target "<项目绝对路径>\.claude\skills\qa-master"` | `%USERPROFILE%\.claude\skills\qa-master`；`<项目>\.claude\skills\qa-master` |
 | TRAE CN | `py -3 -m qa_master install-codex --target "%USERPROFILE%\.trae-cn\skills\qa-master"` | `py -3 -m qa_master install-codex --target "<项目绝对路径>\.trae\skills\qa-master"` | `%USERPROFILE%\.trae-cn\skills\qa-master`；`<项目>\.trae\skills\qa-master` |
