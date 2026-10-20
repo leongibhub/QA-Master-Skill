@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -76,6 +77,36 @@ class CodexSkillTests(unittest.TestCase):
             install_skill(self.target, update=True)
         self.assertEqual(marker.read_text(encoding='utf-8'), 'user-owned')
 
+    def test_linked_ancestor_is_rejected_before_install(self):
+        external = self.root / 'external'
+        external.mkdir()
+        project = self.root / 'linked-project'
+        project.mkdir()
+        linked_ancestor = project / '.claude'
+        try:
+            os.symlink(external, linked_ancestor, target_is_directory=True)
+        except OSError as error:
+            self.skipTest(f'directory symlink unavailable: {error}')
+        target = linked_ancestor / 'skills' / 'qa-master'
+        with self.assertRaisesRegex(SkillInstallError, 'SKILL_TARGET_CONFLICT'):
+            install_skill(target)
+        self.assertFalse((external / 'skills' / 'qa-master').exists())
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows junctions are Windows-specific')
+    def test_windows_junction_ancestor_is_rejected_before_install(self):
+        external = self.root / 'external-junction'
+        external.mkdir()
+        junction = self.root / 'junction-project'
+        result = subprocess.run(['cmd', '/c', 'mklink', '/J', str(junction), str(external)],
+                                capture_output=True, text=True, timeout=15)
+        if result.returncode:
+            self.skipTest('junction unavailable: ' + result.stderr + result.stdout)
+        self.addCleanup(lambda: junction.rmdir() if junction.exists() else None)
+        target = junction / '.claude' / 'skills' / 'qa-master'
+        with self.assertRaisesRegex(SkillInstallError, 'SKILL_TARGET_CONFLICT'):
+            install_skill(target)
+        self.assertFalse((external / '.claude' / 'skills' / 'qa-master').exists())
+
     def test_local_changes_block_even_explicit_update(self):
         install_skill(self.target)
         marker = self.target / 'references' / 'domains.md'
@@ -94,6 +125,9 @@ class CodexSkillTests(unittest.TestCase):
                 install_skill(self.target)
             result = install_skill(self.target, update=True)
         self.assertEqual(result['status'], 'UPDATED')
+        self.assertEqual(Path(result['backup']).parent, self.target.parent)
+        self.assertEqual(Path(result['recovery_directory']).parent,
+                         self.target.parent.parent / '.qa-master-recovery')
         with ZipFile(result['backup']) as archive:
             self.assertEqual(archive.read('SKILL.md'), previous)
         self.assertEqual((self.target / 'SKILL.md').read_bytes(), bundle['SKILL.md'])

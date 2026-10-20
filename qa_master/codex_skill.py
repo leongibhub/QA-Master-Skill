@@ -30,6 +30,21 @@ def _linked(path):
     )
 
 
+def _assert_unlinked_ancestor_chain(path):
+    """Fail closed when a target or an existing ancestor is a link/reparse point."""
+    for candidate in reversed((path, *path.parents)):
+        try:
+            metadata = candidate.lstat()
+        except FileNotFoundError:
+            continue
+        except OSError:
+            raise SkillInstallError('SKILL_TARGET_CONFLICT') from None
+        if (stat.S_ISLNK(metadata.st_mode)
+                or bool(getattr(metadata, 'st_file_attributes', 0)
+                        & getattr(stat, 'FILE_ATTRIBUTE_REPARSE_POINT', 0x400))):
+            raise SkillInstallError('SKILL_TARGET_CONFLICT')
+
+
 def _files(root, prefix=''):
     if isinstance(root, Path) and _linked(root):
         raise SkillInstallError('SKILL_RESOURCE_LINK_FORBIDDEN')
@@ -141,9 +156,11 @@ def _existing(target):
 
 def install_skill(target=None, *, user=False, project=None, update=False):
     target = Path(target) if target is not None else default_target(user=user, project=project)
-    if (target.exists() or target.is_symlink()) and _linked(target):
-        raise SkillInstallError('SKILL_TARGET_CONFLICT')
-    target = target.absolute()
+    # Normalize ``.``/``..`` lexically without resolving links.  The following
+    # lstat walk must see (and reject) every real ancestor that the installer
+    # will traverse.
+    target = Path(os.path.abspath(os.fspath(target)))
+    _assert_unlinked_ancestor_chain(target)
     bundle = skill_bundle()
     hashes = {name: _digest(data) for name, data in sorted(bundle.items())}
     previous = None
@@ -153,11 +170,14 @@ def install_skill(target=None, *, user=False, project=None, update=False):
             return {'status': 'UNCHANGED', 'target': str(target), 'files': len(hashes)}
         if not update:
             raise SkillInstallError('SKILL_UPDATE_REQUIRED')
+    _assert_unlinked_ancestor_chain(target)
     target.parent.mkdir(parents=True, exist_ok=True)
     backup = None
     recovery = None
+    _assert_unlinked_ancestor_chain(target)
     with tempfile.TemporaryDirectory(prefix='.qa-master-stage-', dir=target.parent) as temporary:
         staged = Path(temporary) / 'qa-master'
+        _assert_unlinked_ancestor_chain(staged)
         staged.mkdir()
         for name, data in bundle.items():
             output = staged / name
@@ -166,6 +186,7 @@ def install_skill(target=None, *, user=False, project=None, update=False):
         (staged / MANIFEST).write_text(json.dumps({'schema_version': 1, 'files': hashes},
                                                  sort_keys=True, indent=2) + '\n', encoding='utf-8')
         if target.exists():
+            _assert_unlinked_ancestor_chain(target)
             if _existing(target) != previous:
                 raise SkillInstallError('SKILL_TARGET_MODIFIED')
             identifier = uuid4().hex
@@ -175,13 +196,14 @@ def install_skill(target=None, *, user=False, project=None, update=False):
             # Standard Codex installs must not discover the retained old SKILL.md.
             recovery_base = target.parent.parent if target.parent.name == 'skills' else target.parent
             recovery_root = recovery_base / '.qa-master-recovery'
-            if recovery_root.exists() and _linked(recovery_root):
-                raise SkillInstallError('SKILL_TARGET_CONFLICT')
+            _assert_unlinked_ancestor_chain(recovery_root)
             recovery_root.mkdir(exist_ok=True)
             recovery = recovery_root / ('qa-master.previous-' + identifier)
+            _assert_unlinked_ancestor_chain(recovery)
             os.rename(target, recovery)
         try:
             if recovery is not None:
+                _assert_unlinked_ancestor_chain(recovery)
                 if _existing(recovery) != previous:
                     raise SkillInstallError('SKILL_TARGET_MODIFIED')
                 with ZipFile(backup, 'x', compression=ZIP_DEFLATED) as archive:
@@ -192,6 +214,8 @@ def install_skill(target=None, *, user=False, project=None, update=False):
                             archive.writestr(item.relative_to(recovery).as_posix(), item.read_bytes())
                 if _existing(recovery) != previous:
                     raise SkillInstallError('SKILL_TARGET_MODIFIED')
+            _assert_unlinked_ancestor_chain(target)
+            _assert_unlinked_ancestor_chain(staged)
             os.rename(staged, target)
         except (OSError, SkillInstallError):
             if recovery is not None and not target.exists():
