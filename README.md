@@ -58,7 +58,7 @@ winget install --id=astral-sh.uv -e
 uv tool install --force --python 3.13 .
 ```
 
-`uv` 会下载并管理所需的 Python 3.13。已有 Python 且希望以后也能直接输入 `qa-master` 的用户，可选运行 `py -3 -m pip install --user .`；若 PATH 没有刷新，继续使用稳定的 `py -3 -m qa_master ...` 即可。
+`uv` 会下载并管理所需的 Python 3.13。已有 Python 且希望以后也能直接输入 `qa-master` 的用户，可选运行 `py -3 -m pip install --user .`；若 PATH 没有刷新，继续使用稳定的 `py -3 -m qa_master ...` 即可。没有 `py` 启动器但 `python --version` 为 3.10+ 时，使用等价的 `python -m qa_master ...`。
 
 如果 uv 安装完成后仍提示找不到 `qa-master`，运行 `uv tool update-shell`，关闭并重新打开终端后再试；需要立即运行时，可用不依赖 PATH 的前缀 `uv tool run --from . --python 3.13 qa-master`。
 

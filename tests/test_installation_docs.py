@@ -27,6 +27,8 @@ class InstallationDocumentationTests(unittest.TestCase):
 
         self.assertIn('py -3 -m pip install --user .', self.readme)
         self.assertIn('py -3 -m pip install --user .', self.guide)
+        self.assertIn('python -m qa_master', self.readme)
+        self.assertIn('python -m qa_master install-codex --user', self.guide)
 
     def test_documented_windows_host_matrix_has_global_and_project_targets(self):
         for text in (self.readme, self.guide):
@@ -37,6 +39,20 @@ class InstallationDocumentationTests(unittest.TestCase):
             self.assertIn('<项目绝对路径>\\.claude\\skills\\qa-master', text)
             self.assertIn('%USERPROFILE%\\.trae-cn\\skills\\qa-master', text)
             self.assertIn('<项目绝对路径>\\.trae\\skills\\qa-master', text)
+
+    def test_direct_python_update_examples_do_not_depend_on_path(self):
+        self.assertIn(
+            'py -3 -m qa_master install-codex --target "%USERPROFILE%\\.claude\\skills\\qa-master" --update',
+            self.guide,
+        )
+        self.assertIn(
+            'py -3 -m qa_master install-codex --target "%USERPROFILE%\\.trae-cn\\skills\\qa-master" --update',
+            self.guide,
+        )
+        self.assertIn(
+            'python -m qa_master install-codex --target "%USERPROFILE%\\.trae-cn\\skills\\qa-master" --update',
+            self.guide,
+        )
 
     def test_boundaries_verification_and_non_windows_instructions_are_retained(self):
         for text in (self.readme, self.guide):

@@ -21,7 +21,7 @@ py -3 -m qa_master --help
 
 这条路径不依赖虚拟环境，也不依赖 `qa-master` 是否在 PATH 中。后续所有 `qa-master ...` 命令都可以替换成 `py -3 -m qa_master ...`。
 
-如果 `py` 启动器不可用而 `python --version` 显示 3.10+，可将命令中的 `py -3` 替换为 `python`。想把命令安装到用户环境、方便以后直接输入 `qa-master` 时，可选运行：
+如果 `py` 启动器不可用而 `python --version` 显示 3.10+，使用等价的 `python -m qa_master ...`，例如 `python -m qa_master install-codex --user`。想把命令安装到用户环境、方便以后直接输入 `qa-master` 时，可选运行：
 
 ```cmd
 py -3 -m pip install --user .
@@ -128,7 +128,7 @@ uv tool install --force --link-mode=copy --python 3.13 .
 qa-master install-codex --user --update
 ```
 
-已有 Python 的直接运行用户，先拉取仓库更新，然后在仓库根目录执行相同目标命令并加 `--update`，例如 `py -3 -m qa_master install-codex --target "%USERPROFILE%\.claude\skills\qa-master" --update`。TRAE CN 同理：`qa-master install-codex --target "%USERPROFILE%\.trae-cn\skills\qa-master" --update`。安装器仅更新未被手工修改的受管理安装并保留备份。遇到拒绝时先检查本地改动，不要删除目录来绕过保护。更新后再次运行安装助手的 `skills` 自检。
+已有 Python 的直接运行用户，先拉取仓库更新，然后在仓库根目录执行相同目标命令并加 `--update`，例如 `py -3 -m qa_master install-codex --target "%USERPROFILE%\.claude\skills\qa-master" --update`。TRAE CN 同理：`py -3 -m qa_master install-codex --target "%USERPROFILE%\.trae-cn\skills\qa-master" --update`。`py` 启动器不可用时，使用等价的 `python -m qa_master install-codex --target "%USERPROFILE%\.trae-cn\skills\qa-master" --update`。安装器仅更新未被手工修改的受管理安装并保留备份。遇到拒绝时先检查本地改动，不要删除目录来绕过保护。更新后再次运行安装助手的 `skills` 自检。
 
 在任务目录中，可保存暂停原因和恢复状态：
 
