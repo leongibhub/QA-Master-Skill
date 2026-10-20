@@ -77,6 +77,25 @@ class InstallationDocumentationTests(unittest.TestCase):
             self.assertIn('Linux / macOS', text)
             self.assertIn('python3 -m qa_master install-codex --user', text)
 
+    def test_host_specific_verification_does_not_direct_trae_to_codex_path(self):
+        """Each host check must use the directory selected during installation."""
+        expected_user_checks = (
+            'dir "%USERPROFILE%\\.agents\\skills\\qa-master\\SKILL.md"',
+            'dir "%USERPROFILE%\\.claude\\skills\\qa-master\\SKILL.md"',
+            'dir "%USERPROFILE%\\.trae-cn\\skills\\qa-master\\SKILL.md"',
+        )
+        for text in (self.readme, self.guide):
+            for command in expected_user_checks:
+                self.assertIn(command, text)
+            self.assertIn('"status": "INSTALLED"', text)
+            self.assertIn('"execution": "NOT_EXECUTED"', text)
+            self.assertIn('不是安装失败', text)
+
+        self.assertIn(
+            'py -3 -I "%USERPROFILE%\\.trae-cn\\skills\\qa-master\\scripts\\qa.py" skills',
+            self.guide,
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
