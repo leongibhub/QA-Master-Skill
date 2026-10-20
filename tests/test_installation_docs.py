@@ -77,6 +77,28 @@ class InstallationDocumentationTests(unittest.TestCase):
             self.assertIn('Linux / macOS', text)
             self.assertIn('python3 -m qa_master install-codex --user', text)
 
+    def test_host_specific_verification_does_not_direct_trae_to_codex_path(self):
+        """Each host check must use the directory selected during installation."""
+        expected_rows = (
+            '| Codex / OpenCode | `dir "%USERPROFILE%\\.agents\\skills\\qa-master\\SKILL.md"` | `py -3 -I "%USERPROFILE%\\.agents\\skills\\qa-master\\scripts\\qa.py" skills` |',
+            '| VS Code Claude Code | `dir "%USERPROFILE%\\.claude\\skills\\qa-master\\SKILL.md"` | `py -3 -I "%USERPROFILE%\\.claude\\skills\\qa-master\\scripts\\qa.py" skills` |',
+            '| TRAE CN | `dir "%USERPROFILE%\\.trae-cn\\skills\\qa-master\\SKILL.md"` | `py -3 -I "%USERPROFILE%\\.trae-cn\\skills\\qa-master\\scripts\\qa.py" skills` |',
+        )
+        for text in (self.readme, self.guide):
+            for row in expected_rows:
+                self.assertIn(row, text)
+            self.assertIn('"status": "INSTALLED"', text)
+            self.assertIn('"execution": "NOT_EXECUTED"', text)
+            self.assertIn('不是安装失败', text)
+
+            trae_rows = [
+                line
+                for line in text.splitlines()
+                if line.startswith('| TRAE CN |') and 'SKILL.md' in line
+            ]
+            self.assertEqual(trae_rows, [expected_rows[2]])
+            self.assertNotIn('.agents\\skills\\qa-master', trae_rows[0])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -76,14 +76,17 @@ Codex/OpenCode 的项目级入口文件为 `<项目>/.agents/skills/qa-master/SK
 
 Claude Code 或 TRAE CN 是加载 Skill 的宿主；DeepSeek 等模型仍由宿主的现有配置使用。QA Master 不读取、不配置模型端点、密码或 API Token。已验证的是安装包写入目标目录；实际某个版本的 Claude Code 或 TRAE CN 是否发现并调用 Skill 仍为 `NOT_EXECUTED`。
 
-安装后检查所选目录。以下示例是 Codex/OpenCode；将路径替换为 Claude Code 或 TRAE CN 的实际 Skill 目录：
+安装后，只检查刚才选择的宿主目录；不要把 TRAE CN 的安装结果检查到 Codex/OpenCode 的 `.agents` 目录。执行所选宿主这一行的两个命令：`dir` 应列出 `SKILL.md`，随后本地助手从该同一目录读取资料。
 
-```cmd
-dir "%USERPROFILE%\.agents\skills\qa-master\SKILL.md"
-py -3 -I "%USERPROFILE%\.agents\skills\qa-master\scripts\qa.py" skills
-```
+| 安装到的宿主 | 用户级 `SKILL.md` 检查命令 | 同一目录的本地助手自检 |
+| --- | --- | --- |
+| Codex / OpenCode | `dir "%USERPROFILE%\.agents\skills\qa-master\SKILL.md"` | `py -3 -I "%USERPROFILE%\.agents\skills\qa-master\scripts\qa.py" skills` |
+| VS Code Claude Code | `dir "%USERPROFILE%\.claude\skills\qa-master\SKILL.md"` | `py -3 -I "%USERPROFILE%\.claude\skills\qa-master\scripts\qa.py" skills` |
+| TRAE CN | `dir "%USERPROFILE%\.trae-cn\skills\qa-master\SKILL.md"` | `py -3 -I "%USERPROFILE%\.trae-cn\skills\qa-master\scripts\qa.py" skills` |
 
-第一条应列出文件；第二条 JSON 中应包含 `vendor.count = 330`，`en = 165` 和 `zh = 165`。没有系统 Python、只安装了 uv 的机器，可把第二条的 `py -3` 换成 `uv run --no-project --python 3.13 python`。关闭并新建目标聊天会话，使宿主重新发现 Skill。在 Claude Code 等支持 `/` 命令的宿主中，可先使用这一条最小任务：
+项目级安装时，将表格中的用户级目录替换成上面的对应项目级目录。JSON 中应包含 `vendor.count = 330`，`en = 165` 和 `zh = 165`。没有系统 Python、只安装了 uv 的机器，可把表格中的 `py -3` 替换为 `uv run --no-project --python 3.13 python`。
+
+安装命令输出的 `"status": "INSTALLED"` 表示文件已写入目标目录。`"execution": "NOT_EXECUTED"` 只表示安装过程没有执行任何 QA 工作，并不是安装失败；它也不表示聊天宿主已经发现或调用了 Skill。关闭并新建目标聊天会话，使宿主重新发现 Skill。在 Claude Code 等支持 `/` 命令的宿主中，可先使用这一条最小任务：
 
 ```text
 /qa-master 阅读当前项目需求并生成测试用例；只做设计，不执行测试，不写入外部系统。

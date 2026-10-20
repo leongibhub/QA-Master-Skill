@@ -82,14 +82,17 @@ VS Code 里的 Claude Code 和 TRAE CN 都是 Skill 宿主；DeepSeek 等模型�
 
 ## 检查安装后的内容
 
-将 `<skill>` 换成上表中实际安装的目录：
+只检查刚才安装到的宿主目录。比如已安装到 TRAE CN 的 `%USERPROFILE%\.trae-cn\skills\qa-master`，就不要检查 Codex/OpenCode 的 `%USERPROFILE%\.agents\skills\qa-master`。
 
-```cmd
-dir "<skill>\SKILL.md"
-py -3 -I "<skill>\scripts\qa.py" skills
-```
+| 安装到的宿主 | 用户级 `SKILL.md` 检查命令 | 同一目录的本地助手自检 |
+| --- | --- | --- |
+| Codex / OpenCode | `dir "%USERPROFILE%\.agents\skills\qa-master\SKILL.md"` | `py -3 -I "%USERPROFILE%\.agents\skills\qa-master\scripts\qa.py" skills` |
+| VS Code Claude Code | `dir "%USERPROFILE%\.claude\skills\qa-master\SKILL.md"` | `py -3 -I "%USERPROFILE%\.claude\skills\qa-master\scripts\qa.py" skills` |
+| TRAE CN | `dir "%USERPROFILE%\.trae-cn\skills\qa-master\SKILL.md"` | `py -3 -I "%USERPROFILE%\.trae-cn\skills\qa-master\scripts\qa.py" skills` |
 
-第一条应列出 `SKILL.md`。第二条从安装后的助手读取资料，而非从原仓库读取；JSON 中 `vendor.count` 应为 330，`en` / `zh` 各为 165。没有系统 Python、只安装了 uv 的机器，使用 `uv run --no-project --python 3.13 python -I "<skill>\scripts\qa.py" skills`。这些数量代表 165 个逻辑技能，分类合计为双语工作流 20、测试类型 300、技能工程 10。若数量为 0，不应继续假定安装完整；记录命令输出和安装版本后检查交付。
+项目级安装时，将表格中的用户级目录替换成上表相应的项目级目录。`dir` 应列出 `SKILL.md`。本地助手自检从安装后的助手读取资料，而非从原仓库读取；JSON 中 `vendor.count` 应为 330，`en` / `zh` 各为 165。没有系统 Python、只安装了 uv 的机器，使用 `uv run --no-project --python 3.13 python -I "<skill>\scripts\qa.py" skills`，其中 `<skill>` 是实际安装目录。这些数量代表 165 个逻辑技能，分类合计为双语工作流 20、测试类型 300、技能工程 10。若数量为 0，不应继续假定安装完整；记录命令输出和安装版本后检查交付。
+
+安装输出中 `"status": "INSTALLED"` 表示安装包已写入目标目录。`"execution": "NOT_EXECUTED"` 表示安装没有执行 QA 任务，不是安装失败；同样，它不证明宿主已发现或调用该 Skill。
 
 安装目录也应含 `SKILL.md`、`references/`、`examples/` 和 `scripts/`。目录存在只是交付检查，不代表 Agent 已实际应用这些指南。
 
