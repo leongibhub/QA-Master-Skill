@@ -140,3 +140,16 @@ registration for this increment is NOT_AVAILABLE at this recording point.
 Before assigning work, register the actual host identity with its exact Runtime role. Create a versioned `TASK` artifact and then a V3 `work` item that records: `project_id`, `gate_id`, `activity`, `required_role`, `why`, `input_refs` (typed ID/version references), dependency work IDs, and an `output_contract` with required artifact types and minimum outputs. A worker may claim only its own role-matching work. Completion must reference outputs that satisfy the contract; a claim, lease, agent name, or work completion never creates a Gate `PASS`.
 
 Use fresh execution evidence for test and review results. It must identify the exact revision, environment, command or method, executor role, time, result, and retained locator. Store only redacted metadata; do not record lease tokens or credentials.
+
+## CR-034 host assignments — 2026-10-23
+
+Actual Codex host assignments below are not Runtime leases. Runtime registration
+is NOT_AVAILABLE; the existing project Gates remain unchanged.
+
+| Task | Actual owner | Responsibility | Evidence state |
+| --- | --- | --- | --- |
+| TASK-137 | orchestrator /root; read-only /root/impact_requirements and /root/impact_architecture | Requirements, fixed DES-063, CR/RTM/plan and reconciliation. | DRAFT contract recorded before code at 895e824; OBSERVED. |
+| TASK-138 | developer /root/impact_developer | Pure comparison, CLI, unit tests. | Assigned; final verification NOT_EXECUTED. |
+| TASK-139 | documentation_manager /root/impact_docs | Source/bundled Skill guidance, example, README. | Assigned; command verification NOT_EXECUTED. |
+| TASK-140 | tester /root/impact_tester | Independent adversarial tests and clean installed delivery. | Assigned; execution NOT_EXECUTED. |
+| TASK-141 | reviewer /root/impact_reviewer | Independent risk/spec/source/evidence review. | Assigned; final review NOT_EXECUTED. |
