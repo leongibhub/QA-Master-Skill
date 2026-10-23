@@ -149,7 +149,7 @@ is NOT_AVAILABLE; the existing project Gates remain unchanged.
 | Task | Actual owner | Responsibility | Evidence state |
 | --- | --- | --- | --- |
 | TASK-137 | orchestrator /root; read-only /root/impact_requirements and /root/impact_architecture | Requirements, fixed DES-063, CR/RTM/plan and reconciliation. | DRAFT contract recorded before code at 895e824; OBSERVED. |
-| TASK-138 | developer /root/impact_developer | Pure comparison, CLI, unit tests. | Assigned; final verification NOT_EXECUTED. |
-| TASK-139 | documentation_manager /root/impact_docs | Source/bundled Skill guidance, example, README. | Assigned; command verification NOT_EXECUTED. |
-| TASK-140 | tester /root/impact_tester | Independent adversarial tests and clean installed delivery. | Assigned; execution NOT_EXECUTED. |
-| TASK-141 | reviewer /root/impact_reviewer | Independent risk/spec/source/evidence review. | Assigned; final review NOT_EXECUTED. |
+| TASK-138 | developer /root/impact_developer | Pure comparison, CLI, unit tests. | Runtime58c73ec, freeze5c516a6; 8 developer checks PASS, old13 audit checks unchanged/PASS. Initial findings retained. OBSERVED. |
+| TASK-139 | documentation_manager /root/impact_docs | Source/bundled Skill guidance, example, README. | Final teaching example10 retained/9 review/1 missing marker verified; source CLI and4 README checks PASS. OBSERVED. |
+| TASK-140 | tester /root/impact_tester | Independent adversarial tests and clean installed delivery. | EVD-CR034-INDEPENDENT-TEST-001:12 methods,11PASS/1symlink privilege SKIP; junctionPASS; clean archive wheel/5888-file Skill/module/helperPASS. OBSERVED. |
+| TASK-141 | reviewer /root/impact_reviewer | Independent risk/spec/source/evidence review. | Freeze5c516a6 bounded PASS WITH P3 FOLLOW-UP; unresolved P0/P1/P2=0, P3=1(cosmetic Markdown hash space). OBSERVED, no project Gate decision. |

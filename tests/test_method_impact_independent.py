@@ -6,6 +6,7 @@ test module.  It exercises the public Python and CLI boundaries only.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -346,6 +347,22 @@ class MethodImpactIndependentTests(unittest.TestCase):
                 if junction.exists():
                     os.rmdir(junction)
 
+    def test_tc_impact_009b_symbolic_link_input_is_rejected_when_test_account_allows_links(self):
+        with tempfile.TemporaryDirectory(prefix="impact-symlink-") as directory:
+            root = Path(directory)
+            before, after, cases = root / "before.json", root / "after.json", root / "cases.json"
+            before.write_text(json.dumps(self.before), encoding="utf-8")
+            after.write_text(json.dumps(self.before), encoding="utf-8")
+            cases.write_text(json.dumps(self.library), encoding="utf-8")
+            linked = root / "linked-before.json"
+            try:
+                os.symlink(before, linked)
+            except (OSError, NotImplementedError):
+                self.skipTest("symbolic links are unavailable to this test account")
+            with self.assertRaises(MethodImpactError):
+                write_method_impact(linked, after, cases, root / "impact.json")
+            self.assertFalse((root / "impact.json").exists())
+
     def test_tc_impact_010_clean_archive_wheel_module_and_installed_helper(self):
         """One frozen consumer run; execute only after root has committed the implementation."""
         with tempfile.TemporaryDirectory(prefix="impact-wheel-") as directory:
@@ -354,40 +371,70 @@ class MethodImpactIndependentTests(unittest.TestCase):
             archive, source, wheel_dir, venv_dir, consumer = (root / "source.zip", root / "source", root / "wheel",
                                                                root / "venv", root / "consumer")
             wheel_dir.mkdir(); consumer.mkdir()
-            archived = subprocess.run(["git", "archive", "--format=zip", "--output", str(archive), "HEAD"], cwd=repo,
-                                     capture_output=True, text=True, encoding="utf-8", errors="replace")
+            evidence_variable = os.environ.get("QA_MASTER_IMPACT_EVIDENCE_DIR")
+            evidence = Path(evidence_variable) if evidence_variable else None
+            metadata = {"test_case": "TC-IMPACT-010", "status": "IN_PROGRESS", "commands": {}}
+            if evidence:
+                evidence.mkdir(parents=True, exist_ok=True)
+
+            def persist():
+                if evidence:
+                    (evidence / "delivery-metadata.json").write_text(
+                        json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+            def invoke(label, command, *, cwd):
+                completed = subprocess.run(command, cwd=cwd, capture_output=True)
+                stdout = (completed.stdout or b"").decode("utf-8", "replace")
+                stderr = (completed.stderr or b"").decode("utf-8", "replace")
+                metadata["commands"][label] = {"returncode": completed.returncode, "stdout": stdout, "stderr": stderr}
+                persist()
+                return subprocess.CompletedProcess(command, completed.returncode, stdout, stderr)
+
+            frozen = invoke("source_freeze", ["git", "rev-parse", "HEAD"], cwd=repo)
+            self.assertEqual(frozen.returncode, 0, frozen.stdout + frozen.stderr)
+            metadata["source_freeze_sha"] = frozen.stdout.strip()
+            persist()
+            archived = invoke("archive", ["git", "archive", "--format=zip", "--output", str(archive), "HEAD"], cwd=repo)
             self.assertEqual(archived.returncode, 0, archived.stdout + archived.stderr)
             with zipfile.ZipFile(archive) as frozen:
                 frozen.extractall(source)
-            build = subprocess.run([sys.executable, "-m", "pip", "wheel", str(source), "--no-deps", "--no-build-isolation",
-                                    "-w", str(wheel_dir)], cwd=consumer, capture_output=True, text=True,
-                                   encoding="utf-8", errors="replace")
+            build = invoke("wheel_build", [sys.executable, "-m", "pip", "wheel", str(source), "--no-deps", "--no-build-isolation",
+                                             "-w", str(wheel_dir)], cwd=consumer)
             self.assertEqual(build.returncode, 0, build.stdout + build.stderr)
-            create = subprocess.run([sys.executable, "-m", "venv", str(venv_dir)], cwd=consumer, capture_output=True,
-                                    text=True, encoding="utf-8", errors="replace")
+            create = invoke("venv_create", [sys.executable, "-m", "venv", str(venv_dir)], cwd=consumer)
             self.assertEqual(create.returncode, 0, create.stdout + create.stderr)
             vpython = venv_dir / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
             wheel = next(wheel_dir.glob("*.whl"))
-            install = subprocess.run([str(vpython), "-m", "pip", "install", "--no-index", "--no-deps", str(wheel)],
-                                     cwd=consumer, capture_output=True, text=True, encoding="utf-8", errors="replace")
+            metadata["wheel_sha256"] = hashlib.sha256(wheel.read_bytes()).hexdigest()
+            persist()
+            install = invoke("wheel_install", [str(vpython), "-m", "pip", "install", "--no-index", "--no-deps", str(wheel)],
+                             cwd=consumer)
             self.assertEqual(install.returncode, 0, install.stdout + install.stderr)
             skill = consumer / "skill"
-            skill_install = subprocess.run([str(vpython), "-I", "-m", "qa_master", "install-codex", "--target", str(skill)],
-                                           cwd=consumer, capture_output=True, text=True, encoding="utf-8", errors="replace")
+            skill_install = invoke("skill_install", [str(vpython), "-I", "-m", "qa_master", "install-codex", "--target", str(skill)],
+                                  cwd=consumer)
             self.assertEqual(skill_install.returncode, 0, skill_install.stdout + skill_install.stderr)
             before = skill / "examples" / "design-methods.json"
             after = skill / "examples" / "design-methods-after.json"
             cases = skill / "examples" / "method-cases.json"
             self.assertTrue(after.exists(), "installed impact example is missing")
             module_output, helper_output = consumer / "module.json", consumer / "helper.md"
-            module = subprocess.run([str(vpython), "-I", "-m", "qa_master", "impact-method-cases", "--before", str(before),
-                                    "--after", str(after), "--cases", str(cases), "--output", str(module_output)],
-                                   cwd=consumer, capture_output=True, text=True, encoding="utf-8", errors="replace")
+            module = invoke("module_cli", [str(vpython), "-I", "-m", "qa_master", "impact-method-cases", "--before", str(before),
+                                             "--after", str(after), "--cases", str(cases), "--output", str(module_output)], cwd=consumer)
             self.assertEqual(module.returncode, 0, module.stdout + module.stderr)
-            helper = subprocess.run([str(vpython), "-I", str(skill / "scripts" / "qa.py"), "impact-method-cases",
-                                    "--before", str(before), "--after", str(after), "--cases", str(cases),
-                                    "--output", str(helper_output), "--format", "markdown"],
-                                   cwd=consumer, capture_output=True, text=True, encoding="utf-8", errors="replace")
+            helper = invoke("installed_helper", [str(vpython), "-I", str(skill / "scripts" / "qa.py"), "impact-method-cases",
+                                                   "--before", str(before), "--after", str(after), "--cases", str(cases),
+                                                   "--output", str(helper_output), "--format", "markdown"], cwd=consumer)
             self.assertEqual(helper.returncode, 0, helper.stdout + helper.stderr)
             self.assertTrue(module_output.exists())
             self.assertTrue(helper_output.exists())
+            report = json.loads(module_output.read_text(encoding="utf-8"))
+            metadata["report"] = {"status": report["status"], "execution": report["execution"],
+                                  "review_case_count": report["summary"]["review_case_count"],
+                                  "before_design_input_sha256": report["before_design_input_sha256"],
+                                  "after_design_input_sha256": report["after_design_input_sha256"],
+                                  "case_library_sha256": report["case_library_sha256"]}
+            metadata["module_output_sha256"] = hashlib.sha256(module_output.read_bytes()).hexdigest()
+            metadata["helper_output_sha256"] = hashlib.sha256(helper_output.read_bytes()).hexdigest()
+            metadata["status"] = "PASS"
+            persist()
