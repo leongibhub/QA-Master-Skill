@@ -130,10 +130,10 @@ registration for this increment is NOT_AVAILABLE at this recording point.
 | Task | Actual owner | Responsibility | State / evidence |
 | --- | --- | --- | --- |
 | TASK-132 | orchestrator `/root`; read-only investigations `/root/qa_differentiation_requirements` and `/root/qa_differentiation_architecture` | Requirements, DES-062, plan, CR and RTM; source baseline e8e085e; user design direction `ok`. | DRAFT documents OBSERVED; not a formal baseline approval. |
-| TASK-133 | developer `/root/case_audit_developer` | New pure audit/CLI and developer tests in the fixed plan's owned files. | Dispatched; results PENDING. |
-| TASK-134 | documentation_manager `/root/case_audit_docs` | Bundled/source instructions, reference, example and concise README usage. | Dispatched; results PENDING. |
-| TASK-135 | tester `/root/case_audit_tester` | Independent test fixtures, mutation cases, installed delivery and regression. | Dispatched for preparation; final execution NOT_EXECUTED. |
-| TASK-136 | independent reviewer identity to be recorded on actual dispatch | Frozen source/requirements, safety, evidence and claims review. | NOT_EXECUTED. |
+| TASK-133 | developer `/root/case_audit_developer` | New pure audit/CLI and developer tests in the fixed plan's owned files. | e9e141f frozen after retained review fixes; 13 developer checks PASS. Author evidence OBSERVED, not acceptance. |
+| TASK-134 | documentation_manager `/root/case_audit_docs` | Bundled/source instructions, reference, example and concise README usage. | Delivered at 7bd6b9c and unchanged through e9e141f; example 10/9/1 and 10 doc/catalogue checks observed. |
+| TASK-135 | tester `/root/case_audit_tester` | Independent test fixtures, mutation cases, installed delivery and regression. | e9e141f: 21 run, 20 PASS, 1 symlink-privilege SKIP; native junction PASS; clean-archive fresh wheel/consumer CLI PASS. Standalone helper PASS from the fresh installed wheel: 5,885 Skill files, exit 0, report 1,663 bytes. Initial harness/path errors retained; all four full CI jobs succeeded with 848 tests each. |
+| TASK-136 | reviewer `/root/case_audit_reviewer` | Frozen source/requirements, safety, evidence and claims review. | e9e141f bounded PASS; unresolved P0–P3=0. Initial and intermediate findings retained with resolution checks; not a Gate decision. |
 
 ## Runtime registration schema for subsequent work
 

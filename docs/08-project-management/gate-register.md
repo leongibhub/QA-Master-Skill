@@ -24,6 +24,22 @@ Gate Status is controlled to `PASS`, `FAIL`, or `BLOCKED`. No Gate has an eviden
 
 ## Gate readiness discipline
 
+### CR-033 bounded engineering evidence — 2026-10-23
+
+Frozen product e9e141f adds finite-model case conformance auditing. Separate
+developer, tester and reviewer owners produced 13 developer test passes;
+21 independent test executions (20 passed, one symbolic-link privilege skip);
+native Windows junction and clean-wheel/standalone-helper evidence; and a scoped
+review PASS with no unresolved P0–P3 finding. All four Ubuntu/Windows Python
+3.10/3.12 CI jobs ran 848 tests with no failures/errors, retaining 11 skips per
+Ubuntu job and three per Windows job. Initial findings and harness failures are
+preserved in the [delivery record](../verification/case-conformance-delivery-2026-10-23.md).
+
+This is G6/G7/G8 supporting evidence for a bounded increment only. It does not
+change any G0–G11 status, requirement-baseline approval, actual Agent-host UI
+discovery, whole-V1 acceptance, release readiness or comparative model-quality
+conclusion.
+
 Before any later Gate assessment, reconcile this register with the RTM, current source and Git history, actual test/review evidence, work records, defects/risks, and release evidence. A local test exit code, generated artifact, CI download, or agent message is not a Gate decision.
 
 ## Frozen-candidate evidence snapshot

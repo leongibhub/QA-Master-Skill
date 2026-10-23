@@ -105,26 +105,26 @@ must not reveal raw input or secrets. The installed helper inherits this command
 - [x] Inspect latest GitHub source, code, existing gaps and lifecycle state.
 - [x] Obtain requirement-analyst and architect investigations.
 - [x] Present reviewable proposal and record actual user `ok`.
-- [ ] Record CR-033, RTM and the versioned design/plan before implementation.
+- [x] Record CR-033, RTM and the versioned design/plan before implementation.
 
 ## TASK-133: implementation and developer tests (developer)
 
 Owned files: `qa_master/case_conformance.py`, `qa_master/__main__.py`,
 `tests/test_case_conformance.py`. No other file writes.
 
-- [ ] Add a failing missing-candidate test through the public API:
+- [x] Add a failing missing-candidate test through the public API:
 
 ```python
 result = audit_method_cases(bundle, empty_library_for(bundle))
 assert result['summary']['states']['MISSING'] == len(result['candidates'])
 ```
 
-- [ ] Implement strict validation and bounded engine replay, exact typed matching,
+- [x] Implement strict validation and bounded engine replay, exact typed matching,
   deterministic diagnostic arithmetic, hashes, Markdown and exclusive atomic I/O.
-- [ ] Add the CLI before campaign-state loading; preserve existing commands.
-- [ ] Run `python -m unittest tests.test_case_conformance -v` and relevant CLI
+- [x] Add the CLI before campaign-state loading; preserve existing commands.
+- [x] Run `python -m unittest tests.test_case_conformance -v` and relevant CLI
   regressions; retain commands/counts and report any failures without erasing them.
-- [ ] Self-review code; hand off exact Git revision for independent tests/review.
+- [x] Self-review code; hand off exact Git revision for independent tests/review.
 
 ## TASK-134: docs/example delivery (documentation worker)
 
@@ -132,12 +132,12 @@ Owned files: README addition only near design usage, both source/bundled SKILL.m
 entries, `qa_master/skills/codex/references/case-audit.md`, and
 `qa_master/skills/codex/examples/method-cases.json`. Root owns lifecycle docs.
 
-- [ ] Explain the ordinary chat trigger, source model limits and repair loop.
-- [ ] Build a valid example for the packaged `examples/design-methods.json`.
+- [x] Explain the ordinary chat trigger, source model limits and repair loop.
+- [x] Build a valid example for the packaged `examples/design-methods.json`.
   Include one intentional missing scenario so the visible example demonstrates
   the gap; do not teach a copy-binding trick as proof of prose correctness.
-- [ ] Document JSON/Markdown invocations, no-overwrite and exact flags/schema.
-- [ ] After implementation exists, run both example commands and validate README
+- [x] Document JSON/Markdown invocations, no-overwrite and exact flags/schema.
+- [x] After implementation exists, run both example commands and validate README
   catalogue/install regressions without broad unrelated README reformatting.
 
 ## TASK-135: independent test (tester)
@@ -145,25 +145,25 @@ entries, `qa_master/skills/codex/references/case-audit.md`, and
 Owned files: `tests/test_case_conformance_independent.py`,
 `docs/verification/case-conformance-independent-test-2026-10-23.md`.
 
-- [ ] Prepare tests from the spec, independently of developer fixtures.
-- [ ] At frozen revision, exercise all five design methods and each mutation,
+- [x] Prepare tests from the spec, independently of developer fixtures.
+- [x] At frozen revision, exercise all five design methods and each mutation,
   missing/duplicate/gap/orphan/stale/empty case and documentation limitation.
-- [ ] Validate input/size/depth/type limits and report no-clobber/link safety.
-- [ ] Run fresh wheel plus standalone invocation outside the repository.
-- [ ] Run required regression once; retain failures and separate platform skips.
+- [x] Validate input/size/depth/type limits and report no-clobber/link safety.
+- [x] Run fresh wheel plus standalone invocation outside the repository.
+- [x] Run required regression once; retain failures and separate platform skips.
 
 ## TASK-136: independent review (reviewer)
 
 Owned file: `docs/verification/case-conformance-independent-review-2026-10-23.md`.
 
-- [ ] Inspect frozen code/spec/installed evidence and catalogue integrity.
-- [ ] Classify findings P0–P3, require correction of material issues and re-review.
-- [ ] Verify no exact-binding, directory-count or CI result is sold as general
+- [x] Inspect frozen code/spec/installed evidence and catalogue integrity.
+- [x] Classify findings P0–P3, require correction of material issues and re-review.
+- [x] Verify no exact-binding, directory-count or CI result is sold as general
   semantic quality or overall superiority.
 
 ## Completion and delivery
 
-- [ ] Orchestrator records task-to-commit/test trace and all limits in the RTM.
+- [x] Orchestrator records task-to-commit/test trace and all limits in the RTM.
 - [ ] Commit reviewed code/docs; push the authorized repository branch, create a
   PR, inspect CI, merge the accepted increment and verify remote main readback.
 - [ ] Report the concrete new capability and current evidence; do not claim
