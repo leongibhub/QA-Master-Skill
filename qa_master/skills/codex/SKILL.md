@@ -99,6 +99,15 @@ row formally represents a declared candidate. It does not prove that the case
 prose is correct, executable, approved or executed; inspect the source and the
 case prose separately.
 
+When a saved finite model changes, prepare the old bundle, new bundle and the
+old case library, then run `impact-method-cases` before proposing regression
+work. The QA user asks for this in normal chat; do not require them to
+hand-fill JSON. Read [the change-impact reference](references/method-impact.md)
+for the exact commands and review loop. Formal-vector continuity can show that
+the declared input point did not change, but changed requirement, source or
+oracle context still requires review. The report never edits cases, runs tests,
+grants approval, or authorizes skipped regression.
+
 | Work | Guide under `scripts/qa_master/skills/professional/` |
 | --- | --- |
 | Sources, conflicts, reverse requirements, missing rules | `requirements-review.md` |

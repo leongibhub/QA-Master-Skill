@@ -20,3 +20,11 @@ user asks for this in normal chat and does not hand-fill JSON. Read
 and repair loop. Exact scenario binding checks only the formal model
 representation; it does not establish prose correctness, executability,
 approval or test execution.
+
+When a saved finite model is revised, the Agent prepares the old bundle, new
+bundle and old case library, then runs `impact-method-cases` to propose which
+cases need review. The QA user asks for this in normal chat and does not
+hand-fill JSON. Read
+`../../qa_master/skills/codex/references/method-impact.md` for commands and
+limits. The report is a declared finite-model comparison only: it never edits
+cases, runs tests, grants approval or proves that regression can be skipped.

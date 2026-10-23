@@ -28,6 +28,12 @@ def main():
     audit.add_argument('--cases', action='append', required=True)
     audit.add_argument('--output', action='append', required=True)
     audit.add_argument('--format', action='append', choices=('json', 'markdown'), default=[])
+    impact = sub.add_parser('impact-method-cases', help='Propose case review after finite design changes', allow_abbrev=False)
+    impact.add_argument('--before', action='append', required=True)
+    impact.add_argument('--after', action='append', required=True)
+    impact.add_argument('--cases', action='append', required=True)
+    impact.add_argument('--output', action='append', required=True)
+    impact.add_argument('--format', action='append', choices=('json', 'markdown'), default=[])
     sub.add_parser('plan').add_argument('prompt')
     a = sub.add_parser('answer'); a.add_argument('key'); a.add_argument('value')
     a = sub.add_parser('approve'); a.add_argument('kind'); a.add_argument('version')
@@ -40,6 +46,8 @@ def main():
         p.error('design requires exactly one --input and one --output')
     if args.cmd == 'audit-method-cases' and (len(args.input) != 1 or len(args.cases) != 1 or len(args.output) != 1 or len(args.format) > 1):
         p.error('audit-method-cases requires exactly one --input, --cases, --output, and optional --format')
+    if args.cmd == 'impact-method-cases' and (len(args.before) != 1 or len(args.after) != 1 or len(args.cases) != 1 or len(args.output) != 1 or len(args.format) > 1):
+        p.error('impact-method-cases requires exactly one --before, --after, --cases, --output, and optional --format')
     try:
         if args.cmd == 'design':
             from .campaign_cli import write_campaign
@@ -76,6 +84,16 @@ def main():
             output = {'status': report['status'], 'execution': report['execution'],
                       'candidate_denominator': report['summary']['candidate_denominator'],
                       'output': args.output[0]}
+        elif args.cmd == 'impact-method-cases':
+            from .method_impact import write_method_impact, MethodImpactError
+            try:
+                report = write_method_impact(args.before[0], args.after[0], args.cases[0], args.output[0],
+                                             format=args.format[0] if args.format else 'json')
+            except MethodImpactError as error:
+                print(json.dumps({'status': 'REJECTED', 'error': error.code}, ensure_ascii=True))
+                return 2
+            output = {'status': report['status'], 'execution': report['execution'],
+                      'review_case_count': report['summary']['review_case_count'], 'output': args.output[0]}
         elif args.cmd == 'install-codex':
             from .codex_skill import install_skill, SkillInstallError
             try:

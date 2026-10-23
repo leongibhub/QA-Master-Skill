@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "evidence_id": "EVD-CR034-CI-001",
+  "observed_at_utc": "2026-10-23 13:38:08 UTC",
+  "repository": "leongibhub/QA-Master-Skill",
+  "source_commit": "c2e795716b9b37644476978402ecf50b32d281d4",
+  "run_id": 39960201430,
+  "url": "https://github.com/leongibhub/QA-Master-Skill/actions/runs/39960201430",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 120435991097,
+      "os": "ubuntu-latest",
+      "python": "3.12",
+      "ran": 870,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12
+    },
+    {
+      "id": 120435991558,
+      "os": "ubuntu-latest",
+      "python": "3.10",
+      "ran": 870,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12
+    },
+    {
+      "id": 120435991522,
+      "os": "windows-latest",
+      "python": "3.12",
+      "ran": 870,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    {
+      "id": 120435991641,
+      "os": "windows-latest",
+      "python": "3.10",
+      "ran": 870,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    }
+  ],
+  "scope": "CI regression and installed-delivery checks on the frozen runtime, not product test execution, human acceptance or project Gate approval."
+}
