@@ -26,6 +26,11 @@ The Agent prepares the JSON artifacts; the QA user continues to work in chat.
 
 ## Explicit limits
 
+Independent review clarification: baseline MISSING/DUPLICATE/MISMATCH candidate
+identities remain visible through BASELINE_NONCONFORMANT delta reasons; they are
+not fabricated authored gaps. Preserve each actual gap occurrence and all
+concurrent review reasons even when one action takes precedence.
+
 An exact formal-vector pair establishes neither unchanged requirement meaning nor
 correct prose/oracles. Changed oracle/requirement bindings are not inferred
 renames. NO_DECLARED_IMPACT means only that this finite-model comparison found no

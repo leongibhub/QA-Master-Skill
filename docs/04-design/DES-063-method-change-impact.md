@@ -27,6 +27,15 @@ retained pairs carry one old/new ID. Groups with multiplicity are AMBIGUOUS; nev
 select an arbitrary pairing. Sum old/new ID cardinalities to the corresponding
 engine candidate totals.
 
+Review amendment after frozen `ebfc947`: candidate groups carrying a before
+candidate in baseline MISSING, DUPLICATE or MISMATCH also carry controlled reason
+BASELINE_NONCONFORMANT. This preserves the candidate identity needing baseline
+repair without inventing an authored gap. GAP_RECORDED remains a separate gap
+followup. In an ambiguous group the marker applies conservatively to the group.
+Action precedence selects the action only; retain the union of applicable
+baseline, formal/context and unresolved-obligation reasons. Preserve each old
+explicit gap occurrence, including duplicates and orphan references.
+
 ## Public boundary
 
 New module `qa_master/method_impact.py` exports:

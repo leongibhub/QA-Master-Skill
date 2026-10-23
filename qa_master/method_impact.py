@@ -23,6 +23,8 @@ def _fail(code):
 def _adapt(call):
     try:
         return call()
+    except MethodImpactError:
+        raise
     except (CaseConformanceError, DesignMethodError) as error:
         _fail(error.code)
     except (KeyError, TypeError, ValueError, RecursionError):
@@ -158,19 +160,22 @@ def _rows_and_actions(library, baseline, deltas, obligations):
                           "oracle_ref_ids": sorted(scenario["oracle_ref_ids"])}
             digest = _cc._digest(normalized); occurrences[digest] += 1
             cid = scenario["candidate_id"]; delta = by_old.get(cid); baseline_item = baseline_by_candidate.get(cid)
+            delta_reasons = list(delta["reason_codes"]) if delta else []
             reasons = []
             if case["id"] in finding_cases or (baseline_item and baseline_item["state"] != "EXACTLY_BOUND"):
-                action, reasons = "REVIEW_BASELINE", ["BASELINE_NONCONFORMANT"]
+                action, reasons = "REVIEW_BASELINE", delta_reasons + ["BASELINE_NONCONFORMANT"]
             elif not delta or delta["pair_state"] == "AMBIGUOUS":
-                action, reasons = "REVIEW_AMBIGUOUS", ["AMBIGUOUS_FORMAL_MATCH"]
+                action, reasons = "REVIEW_AMBIGUOUS", delta_reasons + ["AMBIGUOUS_FORMAL_MATCH"]
             elif delta["pair_state"] == "REMOVED":
-                action, reasons = "REVIEW_REMOVAL", delta["reason_codes"]
+                action, reasons = "REVIEW_REMOVAL", delta_reasons
             elif old_model.get(cid) in obligation_models:
-                action, reasons = "REVIEW_BINDING", ["UNRESOLVED_MODEL_OBLIGATION"]
+                action, reasons = "REVIEW_BINDING", delta_reasons + ["UNRESOLVED_MODEL_OBLIGATION"]
             elif set(delta["reason_codes"]) - {"FORMAL_VECTOR_UNCHANGED"}:
-                action, reasons = "REVIEW_BINDING", delta["reason_codes"]
+                action, reasons = "REVIEW_BINDING", delta_reasons
             else:
-                action, reasons = "NO_DECLARED_IMPACT", ["FORMAL_VECTOR_UNCHANGED"]
+                action, reasons = "NO_DECLARED_IMPACT", delta_reasons
+            if old_model.get(cid) in obligation_models:
+                reasons.append("UNRESOLVED_MODEL_OBLIGATION")
             after_ids = delta["after_candidate_ids"] if delta else []
             actions.append({"case_id": case["id"], "scenario_sha256": digest, "occurrence": occurrences[digest],
                             "before_candidate_id": cid, "after_candidate_id": after_ids[0] if len(after_ids) == 1 else None,
@@ -192,6 +197,12 @@ def analyze_method_impact(before_bundle: dict, after_bundle: dict, case_library:
             _fail("CANDIDATE_LIMIT_EXCEEDED")
         baseline = audit_method_cases(before_bundle, case_library)
         deltas = _candidate_deltas(before, after, before_bundle, after_bundle)
+        baseline_by_candidate = {item["id"]: item for item in baseline["candidates"]}
+        for delta in deltas:
+            states = {baseline_by_candidate[candidate_id]["state"] for candidate_id in delta["before_candidate_ids"]
+                      if candidate_id in baseline_by_candidate}
+            if states & {"MISSING", "DUPLICATE", "MISMATCH"}:
+                delta["reason_codes"] = sorted(set(delta["reason_codes"] + ["BASELINE_NONCONFORMANT"]))
         obligations = _obligation_deltas(before, after)
         actions = _rows_and_actions(case_library, baseline, deltas, obligations)
         review_ids = sorted({item["case_id"] for item in actions if item["action"] != "NO_DECLARED_IMPACT"} |
@@ -199,12 +210,10 @@ def analyze_method_impact(before_bundle: dict, after_bundle: dict, case_library:
         new_ids = sorted(cid for item in deltas if item["pair_state"] == "ADDED" for cid in item["after_candidate_ids"])
         gaps = []
         by_old = {cid: delta for delta in deltas for cid in delta["before_candidate_ids"]}
-        for item in baseline["candidates"]:
-            if item["gap_reasons"]:
-                mapped = by_old.get(item["id"])
-                for reason in item["gap_reasons"]:
-                    gaps.append({"before_candidate_id": item["id"], "reason_code": reason,
-                                 "after_candidate_ids": mapped["after_candidate_ids"] if mapped else [], "action": "REVIEW_GAP"})
+        for gap in sorted(case_library["gaps"], key=_cc._canonical):
+            mapped = by_old.get(gap["candidate_id"])
+            gaps.append({"before_candidate_id": gap["candidate_id"], "reason_code": gap["reason_code"],
+                         "after_candidate_ids": mapped["after_candidate_ids"] if mapped else [], "action": "REVIEW_GAP"})
         states = {name: sum(1 for item in deltas if item["pair_state"] == name) for name in ("RETAINED_VECTOR", "ADDED", "REMOVED", "AMBIGUOUS")}
         return {"schema_version": 1, "status": "DRAFT_UNAPPROVED", "execution": "NOT_EXECUTED",
                 "before_design_input_sha256": before["input_sha256"], "after_design_input_sha256": after["input_sha256"],

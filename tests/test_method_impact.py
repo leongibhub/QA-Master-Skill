@@ -5,10 +5,12 @@ import tempfile
 import unittest
 
 from qa_master.design_methods import design_methods
-from qa_master.method_impact import analyze_method_impact
+from qa_master.method_impact import MethodImpactError, analyze_method_impact, write_method_impact
 
 
 EXAMPLE = Path(__file__).resolve().parents[1] / "examples" / "design-methods.json"
+PACKAGED_EXAMPLE = Path(__file__).resolve().parents[1] / "qa_master" / "skills" / "codex" / "examples" / "design-methods.json"
+PACKAGED_CASES = Path(__file__).resolve().parents[1] / "qa_master" / "skills" / "codex" / "examples" / "method-cases.json"
 
 
 def row(candidate):
@@ -79,3 +81,51 @@ class MethodImpactTests(unittest.TestCase):
         self.assertEqual(report["gap_followups"][0]["action"], "REVIEW_GAP")
         self.assertTrue(report["obligation_deltas"])
         self.assertIn("ORACLE_DESCRIPTORS_CHANGED", {code for delta in report["candidate_deltas"] for code in delta["reason_codes"]})
+
+    def test_explicit_orphan_duplicate_gaps_and_context_reasons_are_preserved(self):
+        before = json.loads(EXAMPLE.read_text(encoding="utf-8")); after = copy.deepcopy(before)
+        after["design_models"]["source_refs"][0]["sha256"] = "2" * 64
+        candidate = design_methods(before)["candidates"][0]
+        gaps = [{"candidate_id": "TC-MD-UNKNOWN", "reason_code": "OTHER"},
+                {"candidate_id": "TC-MD-UNKNOWN", "reason_code": "OTHER"}]
+        report = analyze_method_impact(before, after, library(before, [row(candidate)], gaps))
+        self.assertEqual(report["gap_followups"], [
+            {"before_candidate_id": "TC-MD-UNKNOWN", "reason_code": "OTHER", "after_candidate_ids": [], "action": "REVIEW_GAP"},
+            {"before_candidate_id": "TC-MD-UNKNOWN", "reason_code": "OTHER", "after_candidate_ids": [], "action": "REVIEW_GAP"},
+        ])
+        reasons = report["case_row_actions"][0]["reason_codes"]
+        self.assertIn("SOURCE_DESCRIPTORS_CHANGED", reasons)
+
+    def test_baseline_missing_is_attached_to_its_exact_candidate_delta(self):
+        before = json.loads(PACKAGED_EXAMPLE.read_text(encoding="utf-8"))
+        cases = json.loads(PACKAGED_CASES.read_text(encoding="utf-8"))
+        report = analyze_method_impact(before, copy.deepcopy(before), cases)
+        marked = [delta for delta in report["candidate_deltas"] if "BASELINE_NONCONFORMANT" in delta["reason_codes"]]
+        self.assertEqual(len(marked), 1)
+        self.assertEqual(len(marked[0]["before_candidate_ids"]), 1)
+
+    def test_public_and_cli_preserve_stable_oversize_and_stale_codes(self):
+        before = json.loads(EXAMPLE.read_text(encoding="utf-8")); oversized = library(before)
+        oversized["cases"][0]["title"] = "x" * (5 * 1024 * 1024 + 1)
+        with self.assertRaisesRegex(MethodImpactError, "^INPUT_TOO_LARGE$"):
+            analyze_method_impact(before, before, oversized)
+        stale = library(before); stale["design_input_sha256"] = "0" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); old = root / "old.json"; new = root / "new.json"; cases = root / "cases.json"
+            old.write_text(json.dumps(before), encoding="utf-8"); new.write_text(json.dumps(before), encoding="utf-8"); cases.write_text(json.dumps(stale), encoding="utf-8")
+            with self.assertRaisesRegex(MethodImpactError, "^STALE_DESIGN_INPUT$"):
+                write_method_impact(old, new, cases, root / "report.json")
+            import subprocess, sys
+            run = subprocess.run([sys.executable, "-m", "qa_master", "impact-method-cases", "--before", str(old), "--after", str(new),
+                                  "--cases", str(cases), "--output", str(root / "cli.json")], capture_output=True, text=True)
+            self.assertEqual(run.returncode, 2)
+            self.assertIn('"error": "STALE_DESIGN_INPUT"', run.stdout)
+
+    def test_baseline_action_retains_unresolved_obligation_reason(self):
+        before = json.loads(EXAMPLE.read_text(encoding="utf-8")); after = copy.deepcopy(before)
+        candidate = design_methods(before)["candidates"][0]
+        del after["design_models"]["models"][0]["spec"]["oracle_by_class"]["UPPER_INVALID"]
+        report = analyze_method_impact(before, after, library(before, [row(candidate), row(candidate)]))
+        action = next(item for item in report["case_row_actions"] if item["before_candidate_id"] == candidate["id"])
+        self.assertEqual(action["action"], "REVIEW_BASELINE")
+        self.assertIn("UNRESOLVED_MODEL_OBLIGATION", action["reason_codes"])

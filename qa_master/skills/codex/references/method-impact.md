@@ -69,12 +69,25 @@ form an old model/library pair. The library deliberately represents nine of ten
 candidates and records no gap. `examples/design-methods-after.json` differs
 only by a declared SHA-256 descriptor on `SRC-REQ`.
 
-Run the source-checkout command with these three paths. The source descriptor
-change changes whole-model candidate IDs, but the formal vectors remain paired:
-the result must not present those vectors as `ADDED` or `REMOVED`. It should
-still request review/rebinding for the affected old cases, and the original
-missing candidate remains an explicit followup. These are teaching findings,
-not executed defects or permission to skip regression.
+From a source checkout, this is a copyable command:
+
+```text
+python -m qa_master impact-method-cases --before qa_master/skills/codex/examples/design-methods.json --after qa_master/skills/codex/examples/design-methods-after.json --cases qa_master/skills/codex/examples/method-cases.json --output .qa-master/method-impact.json
+```
+
+From an installed Skill, use the same bundled paths relative to its directory:
+
+```text
+python -I "<skill>/scripts/qa.py" impact-method-cases --before "<skill>/examples/design-methods.json" --after "<skill>/examples/design-methods-after.json" --cases "<skill>/examples/method-cases.json" --output impact.json
+```
+
+The source descriptor change changes whole-model candidate IDs, but the formal
+vectors remain paired: the result must not present those vectors as `ADDED` or
+`REMOVED`. It should still request review/rebinding for affected old cases. The
+teaching library produces ten retained-vector deltas and a baseline summary with
+`MISSING: 1`; the affected delta preserves its old candidate ID and carries
+`BASELINE_NONCONFORMANT` for review. It is not an explicit gap followup. These
+are teaching findings, not executed defects or permission to skip regression.
 
 ## Limits
 
