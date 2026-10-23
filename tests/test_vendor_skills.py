@@ -15,7 +15,7 @@ class VendorSkillsTests(unittest.TestCase):
     def test_vendor_source_provenance_binds_bilingual_snapshot(self):
         root = vendor_skill_root()
         metadata = json.loads((root / "SOURCE_PROVENANCE.json").read_text(encoding="utf-8"))
-        self.assertEqual(metadata["schema_version"], 1)
+        self.assertEqual(metadata["schema_version"], 2)
         self.assertEqual(metadata["source_repository"],
                          "https://github.com/naodeng/awesome-qa-skills")
         self.assertEqual(metadata["source_commit"], "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b")
@@ -24,7 +24,26 @@ class VendorSkillsTests(unittest.TestCase):
                          "694cf0b677cb90cee101e7806657537b016c356c")
         self.assertEqual(metadata["license_path"], "LICENSE")
         self.assertEqual(metadata["verification_status"], "OBSERVED")
-        self.assertEqual(metadata["independent_verification_status"], "PENDING")
+        self.assertNotIn("independent_verification_status", metadata)
+        self.assertEqual(metadata["independent_verification_status_at_freeze"], "PENDING")
+        verification = metadata["independent_verification"]
+        self.assertEqual(verification["status"], "VERIFIED")
+        self.assertEqual(verification["subject_commit"],
+                         "523ec344112f03ea350e1fa13c16d5ddc755277e")
+        self.assertEqual(verification["source_commit"], metadata["source_commit"])
+        self.assertEqual(verification["snapshot_sha256"], metadata["snapshot"]["sha256"])
+        self.assertEqual(len(verification["reports"]), 2)
+        for report in verification["reports"]:
+            expected_url = ("https://github.com/leongibhub/QA-Master-Skill/blob/"
+                            f"{verification['evidence_commit']}/{report['path']}")
+            self.assertEqual(report["url"], expected_url)
+            report_bytes = (Path(__file__).resolve().parents[1] / report["path"]).read_bytes()
+            report_text = report_bytes.decode("utf-8")
+            self.assertIn(report["artifact_id"], report_text)
+            self.assertIn(verification["subject_commit"], report_text)
+            self.assertIn(verification["snapshot_sha256"], report_text)
+            self.assertEqual(report["sha256"], hashlib.sha256(
+                report_bytes.replace(b"\r\n", b"\n")).hexdigest())
         self.assertRegex(metadata["retrieved_at"], r"^\d{4}-\d{2}-\d{2}$")
         self.assertEqual(metadata["snapshot"]["included_paths"], ["skills/en", "skills/zh"])
         def relative_path(path):
