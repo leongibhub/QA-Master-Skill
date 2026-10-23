@@ -1,12 +1,35 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "source_repository": "https://github.com/naodeng/awesome-qa-skills",
   "source_commit": "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b",
   "upstream_commit_time": "2026-10-19T01:50:43Z",
   "upstream_tree_git_sha1": "694cf0b677cb90cee101e7806657537b016c356c",
   "license_path": "LICENSE",
   "verification_status": "OBSERVED",
-  "independent_verification_status": "PENDING",
+  "independent_verification_status_at_freeze": "PENDING",
+  "independent_verification": {
+    "status": "VERIFIED",
+    "subject_commit": "523ec344112f03ea350e1fa13c16d5ddc755277e",
+    "source_commit": "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b",
+    "snapshot_sha256": "01c9414f426e36b8659aa08ac73d8db2042e2e1769aace4269881f7cb2c05799",
+    "scope": "Pinned en/ and zh/ source-snapshot identity only. Does not verify this metadata revision, later upstream currency, Skill behaviour, host discovery, acceptance, release or comparative quality.",
+    "evidence_commit": "cbff0bc0af4922ee75522f313cda10a646e70c7a",
+    "evidence_hash_algorithm": "SHA-256 of UTF-8 report bytes with CRLF normalized to LF; unsigned report references, not cryptographic attestations.",
+    "reports": [
+      {
+        "artifact_id": "EVID-CATALOG-VISIBILITY-INDEPENDENT-2026-10-19",
+        "path": "docs/verification/catalog-visibility-provenance-2026-10-19-independent.md",
+        "url": "https://github.com/leongibhub/QA-Master-Skill/blob/cbff0bc0af4922ee75522f313cda10a646e70c7a/docs/verification/catalog-visibility-provenance-2026-10-19-independent.md",
+        "sha256": "f65866f8c344cd0afcd9e775d4afb090716ba5e69d4bb657b5fc457f42262f4d"
+      },
+      {
+        "artifact_id": "DOC-CR029-INDEPENDENT-REVIEW-001",
+        "path": "docs/verification/catalog-visibility-provenance-final-review-2026-10-19.md",
+        "url": "https://github.com/leongibhub/QA-Master-Skill/blob/cbff0bc0af4922ee75522f313cda10a646e70c7a/docs/verification/catalog-visibility-provenance-final-review-2026-10-19.md",
+        "sha256": "1a209dedc5df76be542fca5d3d23463e9b0614c6ccd19ffe6868462749887e4c"
+      }
+    ]
+  },
   "retrieved_at": "2026-10-19",
   "snapshot": {
     "included_paths": [

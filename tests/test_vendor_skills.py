@@ -15,7 +15,7 @@ class VendorSkillsTests(unittest.TestCase):
     def test_vendor_source_provenance_binds_bilingual_snapshot(self):
         root = vendor_skill_root()
         metadata = json.loads((root / "SOURCE_PROVENANCE.json").read_text(encoding="utf-8"))
-        self.assertEqual(metadata["schema_version"], 1)
+        self.assertEqual(metadata["schema_version"], 2)
         self.assertEqual(metadata["source_repository"],
                          "https://github.com/naodeng/awesome-qa-skills")
         self.assertEqual(metadata["source_commit"], "547fbcd9c417ab8afbde1cd9f18b40ecbae0333b")
@@ -24,7 +24,42 @@ class VendorSkillsTests(unittest.TestCase):
                          "694cf0b677cb90cee101e7806657537b016c356c")
         self.assertEqual(metadata["license_path"], "LICENSE")
         self.assertEqual(metadata["verification_status"], "OBSERVED")
-        self.assertEqual(metadata["independent_verification_status"], "PENDING")
+        self.assertNotIn("independent_verification_status", metadata)
+        self.assertEqual(metadata["independent_verification_status_at_freeze"], "PENDING")
+        verification = metadata["independent_verification"]
+        self.assertEqual(verification["status"], "VERIFIED")
+        self.assertEqual(verification["subject_commit"],
+                         "523ec344112f03ea350e1fa13c16d5ddc755277e")
+        self.assertEqual(verification["source_commit"], metadata["source_commit"])
+        self.assertEqual(verification["snapshot_sha256"], metadata["snapshot"]["sha256"])
+        # Pin the independently checked Git-object references, so matching edits
+        # to metadata and current reports cannot silently retarget the evidence.
+        # Keep this offline: source archives and installed-wheel checks lack Git.
+        self.assertEqual(verification["evidence_commit"],
+                         "cbff0bc0af4922ee75522f313cda10a646e70c7a")
+        expected_reports = {
+            "EVID-CATALOG-VISIBILITY-INDEPENDENT-2026-10-19": (
+                "docs/verification/catalog-visibility-provenance-2026-10-19-independent.md",
+                "f65866f8c344cd0afcd9e775d4afb090716ba5e69d4bb657b5fc457f42262f4d"),
+            "DOC-CR029-INDEPENDENT-REVIEW-001": (
+                "docs/verification/catalog-visibility-provenance-final-review-2026-10-19.md",
+                "1a209dedc5df76be542fca5d3d23463e9b0614c6ccd19ffe6868462749887e4c"),
+        }
+        self.assertCountEqual([report["artifact_id"] for report in verification["reports"]],
+                              expected_reports)
+        for report in verification["reports"]:
+            self.assertEqual((report["path"], report["sha256"]),
+                             expected_reports[report["artifact_id"]])
+            expected_url = ("https://github.com/leongibhub/QA-Master-Skill/blob/"
+                            f"{verification['evidence_commit']}/{report['path']}")
+            self.assertEqual(report["url"], expected_url)
+            report_bytes = (Path(__file__).resolve().parents[1] / report["path"]).read_bytes()
+            report_text = report_bytes.decode("utf-8")
+            self.assertIn(report["artifact_id"], report_text)
+            self.assertIn(verification["subject_commit"], report_text)
+            self.assertIn(verification["snapshot_sha256"], report_text)
+            self.assertEqual(report["sha256"], hashlib.sha256(
+                report_bytes.replace(b"\r\n", b"\n")).hexdigest())
         self.assertRegex(metadata["retrieved_at"], r"^\d{4}-\d{2}-\d{2}$")
         self.assertEqual(metadata["snapshot"]["included_paths"], ["skills/en", "skills/zh"])
         def relative_path(path):
