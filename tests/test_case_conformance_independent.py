@@ -496,4 +496,3 @@ class CaseConformanceIndependentTests(unittest.TestCase):
             self.assertEqual(completed.returncode, 0, completed.stderr)
             self.assertTrue(output_path.exists())
             self.assertNotIn("case-secret", completed.stdout + completed.stderr)
-
