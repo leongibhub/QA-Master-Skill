@@ -32,8 +32,24 @@ class VendorSkillsTests(unittest.TestCase):
                          "523ec344112f03ea350e1fa13c16d5ddc755277e")
         self.assertEqual(verification["source_commit"], metadata["source_commit"])
         self.assertEqual(verification["snapshot_sha256"], metadata["snapshot"]["sha256"])
-        self.assertEqual(len(verification["reports"]), 2)
+        # Pin the independently checked Git-object references, so matching edits
+        # to metadata and current reports cannot silently retarget the evidence.
+        # Keep this offline: source archives and installed-wheel checks lack Git.
+        self.assertEqual(verification["evidence_commit"],
+                         "cbff0bc0af4922ee75522f313cda10a646e70c7a")
+        expected_reports = {
+            "EVID-CATALOG-VISIBILITY-INDEPENDENT-2026-10-19": (
+                "docs/verification/catalog-visibility-provenance-2026-10-19-independent.md",
+                "f65866f8c344cd0afcd9e775d4afb090716ba5e69d4bb657b5fc457f42262f4d"),
+            "DOC-CR029-INDEPENDENT-REVIEW-001": (
+                "docs/verification/catalog-visibility-provenance-final-review-2026-10-19.md",
+                "1a209dedc5df76be542fca5d3d23463e9b0614c6ccd19ffe6868462749887e4c"),
+        }
+        self.assertCountEqual([report["artifact_id"] for report in verification["reports"]],
+                              expected_reports)
         for report in verification["reports"]:
+            self.assertEqual((report["path"], report["sha256"]),
+                             expected_reports[report["artifact_id"]])
             expected_url = ("https://github.com/leongibhub/QA-Master-Skill/blob/"
                             f"{verification['evidence_commit']}/{report['path']}")
             self.assertEqual(report["url"], expected_url)
