@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "design_input_sha256": "664351926a3d081f886c0c3823fc30a3accc1329e45d3c30bc673896e9a6937b",
+  "cases": [
+    {
+      "id": "CASE-ORDER-SUBMIT",
+      "title": "Submit a draft order",
+      "preconditions": "An order is in the declared draft state.",
+      "steps": [
+        "Submit the draft order once."
+      ],
+      "expected": "The order transitions from draft to submitted.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-26D5401B41B48792472C",
+          "method_data": {
+            "from_state": "draft",
+            "trigger": "submit",
+            "guard_refs": [],
+            "validity": "valid",
+            "to_state": "submitted"
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-EFFECT",
+            "SRC-REQ",
+            "SRC-STATE"
+          ],
+          "oracle_ref_ids": [
+            "OR-SUBMITTED"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-MEMBER-NORMAL",
+      "title": "Return the normal outcome for a non-member",
+      "preconditions": "The customer is marked as a non-member.",
+      "steps": [
+        "Evaluate the member decision for the non-member customer."
+      ],
+      "expected": "The member decision returns the declared normal outcome.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-3B65C2065D0EF0FD7BAC",
+          "method_data": {
+            "assignment": {
+              "member": false
+            },
+            "outcome_id": "normal"
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ",
+            "SRC-RULE"
+          ],
+          "oracle_ref_ids": [
+            "OR-NORMAL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-AMOUNT-2",
+      "title": "Accept amount 2",
+      "preconditions": "An amount can be submitted under the declared amount rule.",
+      "steps": [
+        "Submit amount 2 for validation."
+      ],
+      "expected": "Amount 2 is accepted because it is within the declared inclusive range 1 through 9.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-53093E2E3C09FA5E25C4",
+          "method_data": {
+            "value": "2",
+            "class": "IN_DOMAIN",
+            "originating_bound_positions": [
+              "lower"
+            ]
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ"
+          ],
+          "oracle_ref_ids": [
+            "OR-VALID"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-AMOUNT-8",
+      "title": "Accept amount 8",
+      "preconditions": "An amount can be submitted under the declared amount rule.",
+      "steps": [
+        "Submit amount 8 for validation."
+      ],
+      "expected": "Amount 8 is accepted because it is within the declared inclusive range 1 through 9.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-681F0E2621D3C1C6AE4D",
+          "method_data": {
+            "value": "8",
+            "class": "IN_DOMAIN",
+            "originating_bound_positions": [
+              "upper"
+            ]
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ"
+          ],
+          "oracle_ref_ids": [
+            "OR-VALID"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-AMOUNT-1",
+      "title": "Accept amount 1",
+      "preconditions": "An amount can be submitted under the declared amount rule.",
+      "steps": [
+        "Submit amount 1 for validation."
+      ],
+      "expected": "Amount 1 is accepted because it is the declared inclusive lower bound.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-98AC4DF29DC3293C34E3",
+          "method_data": {
+            "value": "1",
+            "class": "IN_DOMAIN",
+            "originating_bound_positions": [
+              "lower"
+            ]
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ"
+          ],
+          "oracle_ref_ids": [
+            "OR-VALID"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-AMOUNT-10",
+      "title": "Reject amount 10",
+      "preconditions": "An amount can be submitted under the declared amount rule.",
+      "steps": [
+        "Submit amount 10 for validation."
+      ],
+      "expected": "Amount 10 is rejected because it exceeds the declared upper bound 9.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-CA61F8E9DD5DD6C005A1",
+          "method_data": {
+            "value": "10",
+            "class": "UPPER_INVALID",
+            "originating_bound_positions": [
+              "upper"
+            ]
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ"
+          ],
+          "oracle_ref_ids": [
+            "OR-INVALID"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-MEMBER-DISCOUNT",
+      "title": "Return the discount outcome for a member",
+      "preconditions": "The customer is marked as a member.",
+      "steps": [
+        "Evaluate the member decision for the member customer."
+      ],
+      "expected": "The member decision returns the declared discount outcome.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-D2E5C7D3E87BD75AB7FA",
+          "method_data": {
+            "assignment": {
+              "member": true
+            },
+            "outcome_id": "discount"
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ",
+            "SRC-RULE"
+          ],
+          "oracle_ref_ids": [
+            "OR-DISCOUNT"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-AMOUNT-0",
+      "title": "Reject amount 0",
+      "preconditions": "An amount can be submitted under the declared amount rule.",
+      "steps": [
+        "Submit amount 0 for validation."
+      ],
+      "expected": "Amount 0 is rejected because it is below the declared lower bound 1.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-DAE5F95EA03CF8166713",
+          "method_data": {
+            "value": "0",
+            "class": "LOWER_INVALID",
+            "originating_bound_positions": [
+              "lower"
+            ]
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ"
+          ],
+          "oracle_ref_ids": [
+            "OR-INVALID"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CASE-ORDER-DENY-RESUBMIT",
+      "title": "Deny a repeated submitted order",
+      "preconditions": "An order is already in the declared submitted state.",
+      "steps": [
+        "Submit the already submitted order again."
+      ],
+      "expected": "The repeated submission is denied and the order has no declared next state.",
+      "scenarios": [
+        {
+          "candidate_id": "TC-MD-F89E9F2EFD80DAB3CB35",
+          "method_data": {
+            "from_state": "submitted",
+            "trigger": "submit",
+            "guard_refs": [],
+            "validity": "invalid",
+            "to_state": null
+          },
+          "requirement_ids": [
+            "REQ-EXAMPLE"
+          ],
+          "source_ref_ids": [
+            "SRC-REQ",
+            "SRC-STATE"
+          ],
+          "oracle_ref_ids": [
+            "OR-DENY"
+          ]
+        }
+      ]
+    }
+  ],
+  "gaps": []
+}

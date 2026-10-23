@@ -23,6 +23,11 @@ def main():
     # append lets us reject duplicate options instead of silently accepting the last one.
     design.add_argument('--input', action='append', required=True)
     design.add_argument('--output', action='append', required=True)
+    audit = sub.add_parser('audit-method-cases', help='Audit explicit case rows against finite design candidates', allow_abbrev=False)
+    audit.add_argument('--input', action='append', required=True)
+    audit.add_argument('--cases', action='append', required=True)
+    audit.add_argument('--output', action='append', required=True)
+    audit.add_argument('--format', action='append', choices=('json', 'markdown'), default=[])
     sub.add_parser('plan').add_argument('prompt')
     a = sub.add_parser('answer'); a.add_argument('key'); a.add_argument('value')
     a = sub.add_parser('approve'); a.add_argument('kind'); a.add_argument('version')
@@ -33,6 +38,8 @@ def main():
     args = p.parse_args()
     if args.cmd == 'design' and (len(args.input) != 1 or len(args.output) != 1):
         p.error('design requires exactly one --input and one --output')
+    if args.cmd == 'audit-method-cases' and (len(args.input) != 1 or len(args.cases) != 1 or len(args.output) != 1 or len(args.format) > 1):
+        p.error('audit-method-cases requires exactly one --input, --cases, --output, and optional --format')
     try:
         if args.cmd == 'design':
             from .campaign_cli import write_campaign
@@ -58,6 +65,17 @@ def main():
                 },
                 'status': 'DRAFT_UNAPPROVED', 'execution': 'NOT_EXECUTED', 'output': args.output[0],
             }
+        elif args.cmd == 'audit-method-cases':
+            from .case_conformance import write_case_audit, CaseConformanceError
+            try:
+                report = write_case_audit(args.input[0], args.cases[0], args.output[0],
+                                          format=args.format[0] if args.format else 'json')
+            except CaseConformanceError as error:
+                print(json.dumps({'status': 'REJECTED', 'error': error.code}, ensure_ascii=True))
+                return 2
+            output = {'status': report['status'], 'execution': report['execution'],
+                      'candidate_denominator': report['summary']['candidate_denominator'],
+                      'output': args.output[0]}
         elif args.cmd == 'install-codex':
             from .codex_skill import install_skill, SkillInstallError
             try:

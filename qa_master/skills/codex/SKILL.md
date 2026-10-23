@@ -90,6 +90,15 @@ per combination or transition, classify conflicts as `CONFLICT`, rule-outs as
 row, and keep extra candidate ideas in the case table rather than the typed
 answer.
 
+After authoring cases from a finite model, prepare the structured case library
+and run `audit-method-cases` before delivery. The QA user asks for this in
+normal chat; do not require them to hand-fill JSON. Read
+[the case-audit reference](references/case-audit.md) for the exact schema,
+commands and repair loop. An exact scenario binding proves only that the typed
+row formally represents a declared candidate. It does not prove that the case
+prose is correct, executable, approved or executed; inspect the source and the
+case prose separately.
+
 | Work | Guide under `scripts/qa_master/skills/professional/` |
 | --- | --- |
 | Sources, conflicts, reverse requirements, missing rules | `requirements-review.md` |

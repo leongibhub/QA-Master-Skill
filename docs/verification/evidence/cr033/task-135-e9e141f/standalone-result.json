@@ -1,0 +1,40 @@
+{
+  "subject_commit": "e9e141fa1319c37d2166b1bebc69cee6f77ab1c8",
+  "wheel": {
+    "source": "git archive HEAD temporary snapshot",
+    "bytes": 6389424,
+    "sha256": "0f8f203b5f080b1947ee7e1faea0a110c9b5a6eb5af66c4e79ce43fad808ac73"
+  },
+  "isolated_import": {
+    "command": "python -I -c \"import qa_master;print(qa_master.__file__)\"",
+    "path": "venv-resume/Lib/site-packages/qa_master/__init__.py"
+  },
+  "skill_install": {
+    "command": "venv python -I -m qa_master install-codex --target temporary-skill",
+    "status": "INSTALLED",
+    "files": 5885,
+    "execution": "NOT_EXECUTED"
+  },
+  "helper": {
+    "initial_attempt": {
+      "exit": 2,
+      "result": "INPUT_IO_ERROR",
+      "cause": "tester fixture copied inputs from a non-packaged source path"
+    },
+    "corrected_attempt": {
+      "command": "venv python -I temporary-skill/scripts/qa.py audit-method-cases --input installed-example-bundle.json --cases installed-example-method-cases.json --output skill-audit-installed.md --format markdown",
+      "input_source": "installed Skill examples",
+      "exit": 0,
+      "status": "DRAFT_UNAPPROVED",
+      "execution": "NOT_EXECUTED",
+      "candidate_denominator": 10,
+      "output_bytes": 1663,
+      "output_sha256": "B29B086731B73C702CB1F887B1C54F4AE0628F1D7F32E801137EDFB25F72922C"
+    }
+  },
+  "raw_logs_retained": [
+    "standalone-skill.log",
+    "standalone-skill-resume.log",
+    "standalone-skill-helper-exit.txt"
+  ]
+}

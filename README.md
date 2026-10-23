@@ -178,12 +178,14 @@ python -m qa_master init demo-login
 python -m qa_master plan "需求评审 + 测试计划 + 编写用例，不执行测试"
 python -m qa_master skills
 python -m qa_master design --input examples/design-methods.json --output .qa-master/methods.json
+python -m qa_master audit-method-cases --input qa_master/skills/codex/examples/design-methods.json --cases qa_master/skills/codex/examples/method-cases.json --output .qa-master/case-audit.json
 python -m qa_master status
 ```
 
 - `plan` 返回阶段、信息缺口和所选指南，不会替你阅读需求并生成完整方案。
 - `skills` 可检查本地实际发现的指南及双语资料数量。
 - `design` 使用仓库中的教学模型；产物标记为 `DRAFT_UNAPPROVED`、`NOT_EXECUTED`，不是业务测试通过证明。
+- `audit-method-cases` 让 Agent 在交付有限模型的测试用例前核对明确的场景绑定；示例故意遗漏一个候选项，因此报告会显示 `MISSING`。选择尚不存在的输出路径；需要便于阅读的结果时，把输出改为 `.md` 并增加 `--format markdown`。精确绑定只核对结构化模型表示，不能证明用例文字正确、可执行、已批准或已执行。QA 人员仍可在聊天中提出需求，由 Agent 准备这些结构化文件并审阅发现，不必手工填写 JSON。见[用例审计](qa_master/skills/codex/references/case-audit.md)。
 - `pause` / `resume` 保存和恢复流程状态；恢复不会新增执行权限。
 
 普通需求文档可以直接交给 Agent 分析，无需先手工编写 JSON。只有使用确定性引擎时才需要符合契约的结构化输入。更多示例见 [设计方法](qa_master/skills/codex/references/design-methods.md) 和 [Campaign CLI](docs/CAMPAIGN_CLI.md)。

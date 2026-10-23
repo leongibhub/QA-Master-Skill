@@ -1,0 +1,49 @@
+{
+  "subject_commit": "e9e141fa1319c37d2166b1bebc69cee6f77ab1c8",
+  "scope": "Preexisting QA Master requirement-link check versus new finite-scenario audit on the same public scenario rows; not an Awesome/model-quality comparison.",
+  "design_input_sha256": "664351926a3d081f886c0c3823fc30a3accc1329e45d3c30bc673896e9a6937b",
+  "case_library_sha256": "97d71bba1178f08e26475f03d889a6af6892e13faf52472435ce4472ea432fb6",
+  "preexisting_uncovered_requirement_ids": [],
+  "new_audit_summary": {
+    "candidate_denominator": 10,
+    "states": {
+      "EXACTLY_BOUND": 9,
+      "GAP_RECORDED": 0,
+      "MISSING": 1,
+      "DUPLICATE": 0,
+      "MISMATCH": 0
+    },
+    "assessment": "ASSESSED",
+    "by_model": {
+      "DM-AMOUNT": {
+        "EXACTLY_BOUND": 5,
+        "GAP_RECORDED": 0,
+        "MISSING": 1,
+        "DUPLICATE": 0,
+        "MISMATCH": 0
+      },
+      "DM-MEMBER": {
+        "EXACTLY_BOUND": 2,
+        "GAP_RECORDED": 0,
+        "MISSING": 0,
+        "DUPLICATE": 0,
+        "MISMATCH": 0
+      },
+      "DM-ORDER": {
+        "EXACTLY_BOUND": 2,
+        "GAP_RECORDED": 0,
+        "MISSING": 0,
+        "DUPLICATE": 0,
+        "MISMATCH": 0
+      }
+    },
+    "obligation_count": 0,
+    "finding_count": 0
+  },
+  "new_missing_candidate_ids": [
+    "TC-MD-0F09CDEA90500A24D043"
+  ],
+  "artifact_status": "DRAFT_UNAPPROVED",
+  "product_execution": "NOT_EXECUTED",
+  "human_approval": "NOT_AVAILABLE"
+}

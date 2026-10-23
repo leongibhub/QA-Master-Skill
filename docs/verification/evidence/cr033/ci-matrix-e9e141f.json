@@ -1,0 +1,49 @@
+{
+  "subject_commit": "e9e141fa1319c37d2166b1bebc69cee6f77ab1c8",
+  "run_id": 39953357673,
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 120413033369,
+      "name": "test (ubuntu-latest, 3.12)",
+      "counts": {
+        "run": 848,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 11
+      }
+    },
+    {
+      "id": 120413033573,
+      "name": "test (windows-latest, 3.10)",
+      "counts": {
+        "run": 848,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "id": 120413033863,
+      "name": "test (windows-latest, 3.12)",
+      "counts": {
+        "run": 848,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "id": 120413033977,
+      "name": "test (ubuntu-latest, 3.10)",
+      "counts": {
+        "run": 848,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 11
+      }
+    }
+  ],
+  "source": "GitHub workflow job status plus decoded final log summaries read back through connector",
+  "scope": "Full regression of the frozen product code. Skips are retained per job; no host UI discovery, comparative model quality, release or acceptance claim."
+}

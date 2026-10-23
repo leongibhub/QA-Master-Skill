@@ -8,3 +8,5 @@ docs/verification/public-api-*.md -text -whitespace
 docs/01-research/public-development-linux-qa-evaluation-plan.md -text -whitespace
 docs/verification/public-api-ci-38743135594.md -text -whitespace
 docs/verification/continuation-repair-*.md -text -whitespace
+# Retain the interrupted console capture, including its trailing prompt bytes.
+docs/verification/evidence/cr033/task-135-e9e141f/independent-stderr.txt -text -whitespace
