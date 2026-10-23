@@ -119,6 +119,17 @@ class CaseConformanceTests(unittest.TestCase):
         self.assertIn("EXACTLY_BOUND", markdown)
         self.assertIn("Obligations", markdown)
 
+    def test_duplicate_identical_gaps_render_from_their_own_report(self):
+        candidate = self.design["candidates"][0]
+        gap = {"candidate_id": candidate["id"], "reason_code": "ORACLE_MISSING"}
+        data = library(self.bundle)
+        data["gaps"] = [gap, copy.deepcopy(gap)]
+        report = audit_method_cases(self.bundle, data)
+        entry = next(item for item in report["candidates"] if item["id"] == candidate["id"])
+        self.assertEqual(entry["state"], "DUPLICATE")
+        self.assertEqual(entry["gap_reasons"], ["ORACLE_MISSING"])
+        self.assertIn(candidate["id"], render_audit_markdown(report))
+
     def test_public_api_rejects_an_oversized_canonical_input(self):
         oversized = library(self.bundle)
         oversized["cases"][0]["title"] = "x" * (5 * 1024 * 1024 + 1)

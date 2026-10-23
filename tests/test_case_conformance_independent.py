@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 
 from qa_master.case_conformance import (
     CaseConformanceError,
@@ -220,6 +221,17 @@ class CaseConformanceIndependentTests(unittest.TestCase):
         self.assertEqual(self.reported(report, target)["state"], "DUPLICATE")
         self.assertIn({"code": "CASE_DOCUMENTATION_INCOMPLETE", "case_id": "CASE-INDEPENDENT"},
                       report["findings"])
+
+    def test_tc_cc_005b_repeated_identical_gap_is_renderable_as_one_reason(self):
+        target = self.candidates[0]
+        gap = {"candidate_id": target["id"], "reason_code": "ORACLE_MISSING"}
+        report = audit_method_cases(self.bundle, library(self.bundle, [], gaps=[gap, gap]))
+        entry = self.reported(report, target)
+        self.assertEqual(entry["state"], "DUPLICATE")
+        self.assertIn("GAP_DUPLICATE", entry["codes"])
+        self.assertEqual(entry["gap_reasons"], ["ORACLE_MISSING"])
+        markdown = render_audit_markdown(report)
+        self.assertIn("ORACLE_MISSING", markdown)
 
     def test_tc_cc_006_stale_empty_and_incomplete_libraries_never_claim_coverage(self):
         stale = library(self.bundle, [])
@@ -456,7 +468,14 @@ class CaseConformanceIndependentTests(unittest.TestCase):
             wheel_dir.mkdir()
             consumer.mkdir()
             repo = Path(__file__).resolve().parents[1]
-            build = subprocess.run([sys.executable, "-m", "pip", "wheel", str(repo), "--no-deps",
+            archive = root / "source.zip"
+            archived = subprocess.run(["git", "archive", "--format=zip", "--output", str(archive), "HEAD"],
+                                      cwd=repo, capture_output=True, text=True, encoding="utf-8", errors="replace")
+            self.assertEqual(archived.returncode, 0, archived.stdout + archived.stderr)
+            source = root / "source"
+            with zipfile.ZipFile(archive) as frozen:
+                frozen.extractall(source)
+            build = subprocess.run([sys.executable, "-m", "pip", "wheel", str(source), "--no-deps",
                                     "--no-build-isolation", "-w", str(wheel_dir)], cwd=consumer,
                                    capture_output=True, text=True, encoding="utf-8", errors="replace")
             self.assertEqual(build.returncode, 0, build.stdout + build.stderr)

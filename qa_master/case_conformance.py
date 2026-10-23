@@ -372,7 +372,7 @@ def _validate_report(report):
                 (item["state"] == "MISSING" and (item["case_ids"] or item["codes"] or item["gap_reasons"])) or
                 (item["state"] == "GAP_RECORDED" and (item["case_ids"] or item["codes"] or len(item["gap_reasons"]) != 1)) or
                 (item["state"] == "DUPLICATE" and not ((item["case_ids"] and not item["gap_reasons"] and not item["codes"]) or
-                                                          (not item["case_ids"] and len(item["gap_reasons"]) > 1 and item["codes"] == ["GAP_DUPLICATE"]))) or
+                                                          (not item["case_ids"] and item["gap_reasons"] and item["codes"] == ["GAP_DUPLICATE"]))) or
                 (item["state"] == "MISMATCH" and not item["codes"])):
             _fail("INVALID_REPORT")
         candidate_ids.add(item["id"]); candidate_counts[item["state"]] += 1
