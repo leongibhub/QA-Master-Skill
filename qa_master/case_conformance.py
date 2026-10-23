@@ -10,14 +10,20 @@ import tempfile
 
 from .design_methods import DesignMethodError, design_methods, load_bundle_json
 
-_MAX_BYTES = 5_000_000
+_MAX_BYTES = 5 * 1024 * 1024
 _MAX_DEPTH = 32
 _MAX_CASES = 10_000
 _MAX_CANDIDATES = 10_000
 _MAX_ROWS = 50_000
 _GAP_REASONS = {"SOURCE_MISSING", "ORACLE_MISSING", "SETUP_MISSING", "OBSERVABLE_MISSING", "CLEANUP_MISSING", "OTHER"}
 _STATES = ("EXACTLY_BOUND", "GAP_RECORDED", "MISSING", "DUPLICATE", "MISMATCH")
-_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
+_ID = re.compile(r"^[A-Za-z0-9_.:-]{1,128}$")
+_CODE = re.compile(r"^[A-Z][A-Z0-9_]{0,127}$")
+_METHODS = {"boundary", "decision_table", "state_transition", "pairwise", "combinatorial"}
+_CANDIDATE_CODES = {"DATA_MISMATCH", "ORACLE_MISMATCH", "SOURCE_MISMATCH", "TRACE_MISMATCH",
+                    "CASE_DOCUMENTATION_INCOMPLETE", "GAP_CASE_CONFLICT", "GAP_DUPLICATE"}
+_FINDING_CODES = _CANDIDATE_CODES | {"ORPHAN_CANDIDATE", "ORPHAN_CASE"}
+_MAX_FINDINGS = _MAX_ROWS + _MAX_CANDIDATES * len(_CANDIDATE_CODES) + _MAX_CASES
 
 
 class CaseConformanceError(ValueError):
@@ -67,6 +73,15 @@ def _typed_equal(left, right):
 def _id_set(value, code="INVALID_REFERENCE_SET"):
     if not isinstance(value, list) or any(not isinstance(item, str) or not _ID.fullmatch(item) for item in value):
         _fail(code)
+    if len(value) != len(set(value)):
+        _fail("DUPLICATE_REFERENCE")
+    return sorted(value)
+
+
+def _requirement_set(value):
+    """Requirements are engine-owned nonempty strings, not rendered identifiers."""
+    if not isinstance(value, list) or any(not isinstance(item, str) or not item for item in value):
+        _fail("INVALID_REFERENCE_SET")
     if len(value) != len(set(value)):
         _fail("DUPLICATE_REFERENCE")
     return sorted(value)
@@ -186,7 +201,7 @@ def _validate_library(library, expected_digest):
             if not isinstance(scenario["candidate_id"], str) or not _ID.fullmatch(scenario["candidate_id"]):
                 _fail("INVALID_SCENARIO")
             _walk(scenario["method_data"])
-            _id_set(scenario["requirement_ids"])
+            _requirement_set(scenario["requirement_ids"])
             _id_set(scenario["source_ref_ids"])
             _id_set(scenario["oracle_ref_ids"])
             rows.append((case_id, documentation_complete, scenario))
@@ -230,7 +245,8 @@ def audit_method_cases(campaign_bundle: dict, case_library: dict) -> dict:
     """Compare explicit authored scenario rows with fresh finite design candidates."""
     if not isinstance(campaign_bundle, dict) or not isinstance(case_library, dict):
         _fail("INVALID_SCHEMA")
-    _walk(campaign_bundle)
+    if len(_canonical(campaign_bundle)) > _MAX_BYTES or len(_canonical(case_library)) > _MAX_BYTES:
+        _fail("INPUT_TOO_LARGE")
     _preflight(campaign_bundle)
     try:
         design = design_methods(campaign_bundle)
@@ -245,7 +261,9 @@ def audit_method_cases(campaign_bundle: dict, case_library: dict) -> dict:
     gap_index = {candidate_id: [] for candidate_id in known}
     findings = []
     cases_with_rows = {row_case_id for row_case_id, _, _ in rows}
-    for case_id, _ in authored_cases:
+    for case_id, documented in authored_cases:
+        if not documented:
+            findings.append({"code": "CASE_DOCUMENTATION_INCOMPLETE", "case_id": case_id})
         if case_id not in cases_with_rows:
             findings.append({"code": "ORPHAN_CASE", "case_id": case_id})
     for case_id, documented, scenario in rows:
@@ -288,7 +306,8 @@ def audit_method_cases(campaign_bundle: dict, case_library: dict) -> dict:
                 codes.append("CASE_DOCUMENTATION_INCOMPLETE")
             for field, code in (("method_data", "DATA_MISMATCH"), ("oracle_ref_ids", "ORACLE_MISMATCH"),
                                 ("source_ref_ids", "SOURCE_MISMATCH"), ("requirement_ids", "TRACE_MISMATCH")):
-                actual = scenario[field] if field == "method_data" else _id_set(scenario[field])
+                actual = (scenario[field] if field == "method_data" else
+                          (_requirement_set(scenario[field]) if field == "requirement_ids" else _id_set(scenario[field])))
                 if not _typed_equal(actual, expected[field]):
                     codes.append(code)
             state = "EXACTLY_BOUND" if not codes else "MISMATCH"
@@ -308,7 +327,7 @@ def audit_method_cases(campaign_bundle: dict, case_library: dict) -> dict:
                             for item in design["obligations"]],
             "findings": findings,
             "summary": {"candidate_denominator": len(output), "states": states,
-                        "assessment": "UNASSESSED" if not output else "ASSESSED", "state": "UNASSESSED" if not output else "ASSESSED",
+                        "assessment": "UNASSESSED" if not output else "ASSESSED",
                         "by_model": {result["model_id"]: per_model.get(result["model_id"], {state: 0 for state in _STATES})
                                      for result in design["model_results"]},
                         "obligation_count": len(design["obligations"]), "finding_count": len(findings)},
@@ -316,12 +335,110 @@ def audit_method_cases(campaign_bundle: dict, case_library: dict) -> dict:
                             "It does not establish business correctness, prose quality, executability, approval, or a pass result."]}
 
 
+def _report_id(value):
+    return isinstance(value, str) and bool(_ID.fullmatch(value))
+
+
+def _report_code(value):
+    return isinstance(value, str) and bool(_CODE.fullmatch(value))
+
+
+def _validate_report(report):
+    """Validate all rendered fields so public Markdown rendering cannot inject text."""
+    root_keys = {"schema_version", "status", "execution", "design_input_sha256", "case_library_sha256",
+                 "candidates", "obligations", "findings", "summary", "limitations"}
+    if (not isinstance(report, dict) or set(report) != root_keys or type(report.get("schema_version")) is not int or
+            report["schema_version"] != 1):
+        _fail("INVALID_REPORT")
+    if report["status"] != "DRAFT_UNAPPROVED" or report["execution"] != "NOT_EXECUTED":
+        _fail("INVALID_REPORT")
+    if any(not isinstance(report[key], str) or not re.fullmatch(r"[0-9a-f]{64}", report[key])
+           for key in ("design_input_sha256", "case_library_sha256")):
+        _fail("INVALID_REPORT")
+    if not isinstance(report["candidates"], list) or len(report["candidates"]) > _MAX_CANDIDATES:
+        _fail("INVALID_REPORT")
+    candidate_ids = set(); candidate_counts = {state: 0 for state in _STATES}; model_counts = {}
+    for item in report["candidates"]:
+        if not isinstance(item, dict) or set(item) != {"id", "model_id", "method", "state", "case_ids", "gap_reasons", "codes"}:
+            _fail("INVALID_REPORT")
+        if not _report_id(item["id"]) or item["id"] in candidate_ids or not _report_id(item["model_id"]) or item["method"] not in _METHODS or item["state"] not in _STATES:
+            _fail("INVALID_REPORT")
+        if (not isinstance(item["case_ids"], list) or len(item["case_ids"]) != len(set(item["case_ids"])) or
+                any(not _report_id(value) for value in item["case_ids"]) or
+                not isinstance(item["codes"], list) or item["codes"] != sorted(set(item["codes"])) or any(value not in _CANDIDATE_CODES for value in item["codes"]) or
+                not isinstance(item["gap_reasons"], list) or item["gap_reasons"] != sorted(set(item["gap_reasons"])) or any(value not in _GAP_REASONS for value in item["gap_reasons"])):
+            _fail("INVALID_REPORT")
+        if ((item["state"] == "EXACTLY_BOUND" and (len(item["case_ids"]) != 1 or item["codes"] or item["gap_reasons"])) or
+                (item["state"] == "MISSING" and (item["case_ids"] or item["codes"] or item["gap_reasons"])) or
+                (item["state"] == "GAP_RECORDED" and (item["case_ids"] or item["codes"] or len(item["gap_reasons"]) != 1)) or
+                (item["state"] == "DUPLICATE" and not ((item["case_ids"] and not item["gap_reasons"] and not item["codes"]) or
+                                                          (not item["case_ids"] and len(item["gap_reasons"]) > 1 and item["codes"] == ["GAP_DUPLICATE"]))) or
+                (item["state"] == "MISMATCH" and not item["codes"])):
+            _fail("INVALID_REPORT")
+        candidate_ids.add(item["id"]); candidate_counts[item["state"]] += 1
+        model_counts.setdefault(item["model_id"], {state: 0 for state in _STATES})[item["state"]] += 1
+    if not isinstance(report["obligations"], list) or len(report["obligations"]) > _MAX_ROWS:
+        _fail("INVALID_REPORT")
+    for item in report["obligations"]:
+        if (not isinstance(item, dict) or set(item) != {"id", "code", "model_id", "method"} or not _report_id(item["id"]) or
+                not isinstance(item["code"], str) or not re.fullmatch(r"(?:BOUNDARY|DECISION|STATE|COMBINATORIAL)_[A-Z0-9_]{1,120}", item["code"]) or
+                not _report_id(item["model_id"]) or item["method"] not in _METHODS):
+            _fail("INVALID_REPORT")
+    if not isinstance(report["findings"], list) or len(report["findings"]) > _MAX_FINDINGS:
+        _fail("INVALID_REPORT")
+    for item in report["findings"]:
+        if not isinstance(item, dict) or item.get("code") not in _FINDING_CODES:
+            _fail("INVALID_REPORT")
+        keys = set(item)
+        if keys == {"code", "case_id"}:
+            values = [item["case_id"]]
+        elif keys in ({"code", "candidate_id"}, {"code", "candidate_id", "case_id"}):
+            values = [item["candidate_id"]] + ([item["case_id"]] if "case_id" in item else [])
+        elif keys == {"code", "candidate_id", "case_ids"} and isinstance(item["case_ids"], list):
+            values = [item["candidate_id"], *item["case_ids"]]
+        else:
+            _fail("INVALID_REPORT")
+        if any(not _report_id(value) for value in values):
+            _fail("INVALID_REPORT")
+    summary = report["summary"]
+    if not isinstance(summary, dict) or set(summary) != {"candidate_denominator", "states", "assessment", "by_model", "obligation_count", "finding_count"}:
+        _fail("INVALID_REPORT")
+    if (type(summary["candidate_denominator"]) is not int or summary["candidate_denominator"] < 0 or
+            type(summary["obligation_count"]) is not int or summary["obligation_count"] < 0 or
+            type(summary["finding_count"]) is not int or summary["finding_count"] < 0 or
+            not isinstance(summary["states"], dict) or set(summary["states"]) != set(_STATES) or
+            any(type(value) is not int or value < 0 for value in summary["states"].values()) or
+            summary["candidate_denominator"] != len(report["candidates"]) or summary["states"] != candidate_counts or
+            summary["assessment"] != ("UNASSESSED" if not report["candidates"] else "ASSESSED") or
+            summary["obligation_count"] != len(report["obligations"]) or summary["finding_count"] != len(report["findings"]) or
+            not isinstance(summary["by_model"], dict)):
+        _fail("INVALID_REPORT")
+    for model_id, counts in summary["by_model"].items():
+        if not _report_id(model_id) or not isinstance(counts, dict) or set(counts) != set(_STATES) or any(not isinstance(value, int) or isinstance(value, bool) or value < 0 for value in counts.values()):
+            _fail("INVALID_REPORT")
+        if (model_id in model_counts and counts != model_counts[model_id]) or (model_id not in model_counts and any(counts.values())):
+            _fail("INVALID_REPORT")
+    if set(model_counts) - set(summary["by_model"]):
+        _fail("INVALID_REPORT")
+    if not isinstance(report["limitations"], list) or any(not isinstance(value, str) for value in report["limitations"]):
+        _fail("INVALID_REPORT")
+
+
 def render_audit_markdown(report: dict) -> str:
-    """Render the same report without adding a quality or execution claim."""
-    if not isinstance(report, dict) or report.get("schema_version") != 1:
+    """Render a strictly validated report without adding a quality or execution claim."""
+    try:
+        _validate_report(report)
+    except (CaseConformanceError, KeyError, TypeError, ValueError):
         _fail("INVALID_REPORT")
     lines = ["# QA Master case conformance audit", "", "Status: `DRAFT_UNAPPROVED`", "Execution: `NOT_EXECUTED`", "",
              "Exact binding establishes formal representation of declared finite candidates only; it does not establish business correctness, prose quality, executability, approval, or a pass result.", "",
+             "## Summary", "", "- Assessment: `{}`".format(report["summary"]["assessment"]),
+             "- Design input SHA-256: `{}`".format(report["design_input_sha256"]),
+             "- Case library SHA-256: `{}`".format(report["case_library_sha256"]),
+             "- Candidate denominator: `{}`".format(report["summary"]["candidate_denominator"]),
+             "- States: " + ", ".join("`{}`={}".format(state, report["summary"]["states"][state]) for state in _STATES),
+             "- Obligations: `{}`".format(report["summary"]["obligation_count"]),
+             "- Findings: `{}`".format(report["summary"]["finding_count"]), "",
              "## Candidate reconciliation", "", "| Candidate | Model | State | Cases | Diagnostics |", "| --- | --- | --- | --- | --- |"]
     for item in report["candidates"]:
         lines.append("| {id} | {model_id} | {state} | {cases} | {codes} |".format(
@@ -335,8 +452,14 @@ def render_audit_markdown(report: dict) -> str:
     lines.extend(["", "## Findings", ""])
     if report["findings"]:
         for item in report["findings"]:
-            subject = item.get("candidate_id", item.get("case_id", "-"))
-            lines.append("- `{}`: `{}`".format(item["code"], subject))
+            identities = []
+            if "candidate_id" in item:
+                identities.append("candidate_id=`{}`".format(item["candidate_id"]))
+            if "case_id" in item:
+                identities.append("case_id=`{}`".format(item["case_id"]))
+            if "case_ids" in item:
+                identities.append("case_ids=`{}`".format(", ".join(item["case_ids"])))
+            lines.append("- `{}`: {}".format(item["code"], "; ".join(identities)))
     else:
         lines.append("- None.")
     return "\n".join(lines) + "\n"

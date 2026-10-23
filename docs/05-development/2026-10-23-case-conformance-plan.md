@@ -83,9 +83,17 @@ Root rulings from architecture preflight (2026-10-23):
   sort cases by ID, set-valued reference IDs, scenario rows and gap rows;
   preserve step order and actual textual/method values. No raw file hash replaces
   this value. Model-source staleness covers declared descriptors/digests only.
-- Authored IDs use the bounded engine-style identifier alphabet, not arbitrary
-  Markdown. Detect zero-scenario cases as ORPHAN_CASE. Use indexed rather than
-  case-by-row cross-product lookup and bounded file reads before parsing.
+- ID validation follows its producer: model/source/oracle IDs use the existing
+  engine alphabet `[A-Za-z0-9_.:-]{1,128}`; requirement IDs retain the engine's
+  unique nonempty-string contract, including spaces/Chinese. New authored case
+  and candidate IDs use the bounded engine alphabet. Raw requirement strings
+  are not reflected into diagnostic Markdown. This corrects the initially too
+  narrow root preflight rule without changing the existing engine.
+- Detect zero-scenario cases as ORPHAN_CASE. Use indexed rather than case-by-row
+  cross-product lookup and bounded file reads before parsing. Missing case
+  documentation is a case-level finding even when candidate rows are duplicates
+  or orphans. The public Markdown renderer validates its input report and includes
+  both design/library digests and every finding's candidate/case identities.
 
 CLI: `audit-method-cases --input bundle.json --cases cases.json --output audit.json
 [--format json|markdown]`. Duplicate flags are rejected. Exit 0 means report

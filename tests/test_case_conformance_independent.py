@@ -212,6 +212,15 @@ class CaseConformanceIndependentTests(unittest.TestCase):
         self.assertIn("ORPHAN_CANDIDATE", {code for finding in orphan_report["findings"]
                                              for code in finding.get("codes", [finding.get("code")])})
 
+    def test_tc_cc_005a_duplicate_precedence_retains_empty_expected_documentation_finding(self):
+        target = self.candidates[0]
+        case_library = library(self.bundle, [scenario(target), scenario(target)])
+        case_library["cases"][0]["expected"] = ""
+        report = audit_method_cases(self.bundle, case_library)
+        self.assertEqual(self.reported(report, target)["state"], "DUPLICATE")
+        self.assertIn({"code": "CASE_DOCUMENTATION_INCOMPLETE", "case_id": "CASE-INDEPENDENT"},
+                      report["findings"])
+
     def test_tc_cc_006_stale_empty_and_incomplete_libraries_never_claim_coverage(self):
         stale = library(self.bundle, [])
         stale["design_input_sha256"] = "0" * 64
@@ -286,6 +295,61 @@ class CaseConformanceIndependentTests(unittest.TestCase):
         self.assertIn("CLEANUP_MISSING", markdown)
         self.assertIn("ORPHAN_CANDIDATE", markdown)
 
+    def test_tc_cc_007b_renderer_rejects_malformed_public_reports_without_keyerror(self):
+        malformed = {"schema_version": 1, "candidates": [{"id": "<script>alert(1)</script>"}]}
+        with self.assertRaises(CaseConformanceError) as caught:
+            render_audit_markdown(malformed)
+        self.assertTrue(caught.exception.code)
+        self.assertNotIn("KeyError", caught.exception.code)
+
+    def test_tc_cc_007ba_renderer_rejects_forged_pass_and_inconsistent_summary(self):
+        report = self.report_for_all()
+        variants = []
+        forged_code = copy.deepcopy(report)
+        forged_code["candidates"][0]["codes"] = ["PASS"]
+        variants.append(forged_code)
+        boolean_schema = copy.deepcopy(report)
+        boolean_schema["schema_version"] = True
+        variants.append(boolean_schema)
+        boolean_count = copy.deepcopy(report)
+        boolean_count["summary"]["states"]["EXACTLY_BOUND"] = True
+        variants.append(boolean_count)
+        extra_model = copy.deepcopy(report)
+        extra_model["summary"]["by_model"]["M-FORGED"] = {"EXACTLY_BOUND": 1, "GAP_RECORDED": 0,
+                                                               "MISSING": 0, "DUPLICATE": 0, "MISMATCH": 0}
+        variants.append(extra_model)
+        for forged in variants:
+            with self.subTest(forged=forged is forged_code):
+                with self.assertRaises(CaseConformanceError) as caught:
+                    render_audit_markdown(forged)
+                self.assertTrue(caught.exception.code)
+
+    def test_tc_cc_007c_markdown_identifies_owning_case_and_both_input_identities(self):
+        report = self.report_for_all()
+        markdown = render_audit_markdown(report)
+        self.assertIn("CASE-INDEPENDENT", markdown)
+        self.assertIn(report["design_input_sha256"], markdown)
+        self.assertIn(report["case_library_sha256"], markdown)
+
+    def test_tc_cc_007d_requirement_and_reference_identifiers_are_data_not_markup(self):
+        bundle = copy.deepcopy(self.bundle)
+        bundle["requirements"][0]["id"] = "需求 空格"
+        for model in bundle["design_models"]["models"]:
+            model["requirement_ids"] = ["需求 空格"]
+        bundle["design_models"]["source_refs"][0]["id"] = ".SRC"
+        for model in bundle["design_models"]["models"]:
+            model["source_refs"] = [".SRC" if item == "SRC-REQ" else item for item in model["source_refs"]]
+            spec = model["spec"]
+            for record in spec.get("rules", []) + spec.get("states", []) + spec.get("transitions", []):
+                for key in ("source_refs", "guard_refs", "effect_refs"):
+                    if key in record:
+                        record[key] = [".SRC" if item == "SRC-REQ" else item for item in record[key]]
+        bundle["design_models"]["oracle_refs"][0]["id"] = ":VALID"
+        bundle["design_models"]["models"][0]["spec"]["oracle_by_class"]["IN_DOMAIN"] = ":VALID"
+        design = design_methods(bundle)
+        report = audit_method_cases(bundle, library(bundle, [scenario(candidate) for candidate in design["candidates"]]))
+        self.assertTrue(all(item["state"] == "EXACTLY_BOUND" for item in report["candidates"]))
+
     def test_tc_cc_008_file_loader_rejects_malformed_json_and_keeps_existing_output(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -308,11 +372,18 @@ class CaseConformanceIndependentTests(unittest.TestCase):
                     self.assertTrue(caught.exception.code)
                     self.assertEqual(output.read_bytes(), b"sentinel")
 
-            oversized = b"{" + b'"x":"' + b"a" * 5_000_001 + b'"}'
+            oversized = b"{" + b'"x":"' + b"a" * 5_242_881 + b'"}'
             cases_path.write_bytes(oversized)
             with self.assertRaises(CaseConformanceError):
                 write_case_audit(bundle_path, cases_path, output)
             self.assertEqual(output.read_bytes(), b"sentinel")
+
+            boundary = json.dumps(library(self.bundle, []), separators=(",", ":")).encode("utf-8")
+            self.assertLessEqual(len(boundary), 5_242_880)
+            cases_path.write_bytes(boundary + b" " * (5_242_880 - len(boundary)))
+            boundary_output = root / "boundary.json"
+            write_case_audit(bundle_path, cases_path, boundary_output)
+            self.assertTrue(boundary_output.exists())
 
     def test_tc_cc_008a_malformed_design_preflight_is_a_value_free_domain_rejection(self):
         malformed = copy.deepcopy(self.bundle)
@@ -349,6 +420,33 @@ class CaseConformanceIndependentTests(unittest.TestCase):
             with self.assertRaises(CaseConformanceError):
                 write_case_audit(bundle_path, cases_path, link)
             self.assertEqual(protected.read_bytes(), b"protected")
+
+    @unittest.skipUnless(os.name == "nt", "native Windows junction semantics only")
+    def test_tc_cc_009a_windows_junction_ancestor_is_rejected_without_touching_target(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target, junction = root / "target", root / "junction"
+            target.mkdir()
+            created = subprocess.run(["cmd", "/d", "/c", "mklink", "/J", str(junction), str(target)],
+                                     capture_output=True, text=True, encoding="utf-8", errors="replace")
+            self.assertEqual(created.returncode, 0, created.stdout + created.stderr)
+            try:
+                linked_bundle, linked_cases = junction / "bundle.json", junction / "cases.json"
+                linked_bundle.write_text(json.dumps(self.bundle), encoding="utf-8")
+                linked_cases.write_text(json.dumps(library(self.bundle, [])), encoding="utf-8")
+                with self.assertRaises(CaseConformanceError):
+                    write_case_audit(linked_bundle, linked_cases, root / "audit.json")
+                bundle_path, cases_path = root / "bundle.json", root / "cases.json"
+                bundle_path.write_text(json.dumps(self.bundle), encoding="utf-8")
+                cases_path.write_text(json.dumps(library(self.bundle, [])), encoding="utf-8")
+                protected = target / "audit.json"
+                protected.write_bytes(b"protected")
+                with self.assertRaises(CaseConformanceError):
+                    write_case_audit(bundle_path, cases_path, junction / "audit.json")
+                self.assertEqual(protected.read_bytes(), b"protected")
+            finally:
+                if junction.exists():
+                    os.rmdir(junction)
 
     def test_tc_cc_010_cli_is_offline_and_safe_from_a_consumer_directory(self):
         """E2E package check from a fresh wheel, outside the source checkout."""
