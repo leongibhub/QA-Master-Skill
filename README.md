@@ -179,6 +179,7 @@ python -m qa_master plan "需求评审 + 测试计划 + 编写用例，不执行
 python -m qa_master skills
 python -m qa_master design --input examples/design-methods.json --output .qa-master/methods.json
 python -m qa_master audit-method-cases --input qa_master/skills/codex/examples/design-methods.json --cases qa_master/skills/codex/examples/method-cases.json --output .qa-master/case-audit.json
+python -m qa_master impact-method-cases --before qa_master/skills/codex/examples/design-methods.json --after qa_master/skills/codex/examples/design-methods-after.json --cases qa_master/skills/codex/examples/method-cases.json --output .qa-master/method-impact.json
 python -m qa_master status
 ```
 
@@ -186,6 +187,7 @@ python -m qa_master status
 - `skills` 可检查本地实际发现的指南及双语资料数量。
 - `design` 使用仓库中的教学模型；产物标记为 `DRAFT_UNAPPROVED`、`NOT_EXECUTED`，不是业务测试通过证明。
 - `audit-method-cases` 让 Agent 在交付有限模型的测试用例前核对明确的场景绑定；示例故意遗漏一个候选项，因此报告会显示 `MISSING`。选择尚不存在的输出路径；需要便于阅读的结果时，把输出改为 `.md` 并增加 `--format markdown`。精确绑定只核对结构化模型表示，不能证明用例文字正确、可执行、已批准或已执行。QA 人员仍可在聊天中提出需求，由 Agent 准备这些结构化文件并审阅发现，不必手工填写 JSON。见[用例审计](qa_master/skills/codex/references/case-audit.md)。
+- `impact-method-cases` 在需求或模型更新后，比较旧模型、新模型和旧用例库，列出需要重新审阅的旧用例、增加/移除的有限测试点及仍未解决的缺口。示例仅更新一个来源描述的 SHA：候选 ID 会变化，但正式输入点没有增删，因此报告要求重新绑定和审阅，而不会把它误报为新增/删除。旧用例库故意少一个场景，该缺口仍会显示。它只提出复核建议，不修改用例、不执行测试，也不表示可以跳过回归。Agent 会在普通聊天中准备三个 JSON 文件，QA 无需手填。见[变更影响分析](qa_master/skills/codex/references/method-impact.md)。
 - `pause` / `resume` 保存和恢复流程状态；恢复不会新增执行权限。
 
 普通需求文档可以直接交给 Agent 分析，无需先手工编写 JSON。只有使用确定性引擎时才需要符合契约的结构化输入。更多示例见 [设计方法](qa_master/skills/codex/references/design-methods.md) 和 [Campaign CLI](docs/CAMPAIGN_CLI.md)。
