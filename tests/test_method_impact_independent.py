@@ -391,4 +391,3 @@ class MethodImpactIndependentTests(unittest.TestCase):
             self.assertEqual(helper.returncode, 0, helper.stdout + helper.stderr)
             self.assertTrue(module_output.exists())
             self.assertTrue(helper_output.exists())
-
