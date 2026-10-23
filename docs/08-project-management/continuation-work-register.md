@@ -121,6 +121,20 @@ This register provides the repository-side record for the existing-project conti
 | TASK-128 | tester `/root/install_matrix_independent_test` | CR-031: independently validate no-PATH existing-Python route, target/manifest/helper contract, and Python-absent/old bootstrap wording. | `EVD-WINDOWS-MULTIHOST-INSTALLATION-001` at frozen subject `027ca50`. | DONE: `TC-INSTALL-001/002/003 PASS` in their bounded contracts. Attempt 2 completes all six ordinary-length disposable host/scope targets; retained `BUG-015` is a P3 long-nested-target limitation. Actual Python-absent/old-machine bootstrap/install and host UI/session discovery are `NOT_EXECUTED`; test-root cleanup is also `NOT_EXECUTED` after environmental rejection. | VERIFIED |
 | TASK-129 | reviewer `/root/install_matrix_final_review` | CR-031: independently review the frozen documentation, implementation and TASK-128 evidence for no-PATH accuracy, target mapping, credential/model separation, and unsupported discovery claims. | `EVD-WINDOWS-MULTIHOST-INSTALLATION-REVIEW-001`; attempt 1 at `ee3ecd6b8590eaefe363f7171fff3be1364b8ceb`, attempt 2 at `6c56c43685df0b80154abf46cb11d95a9441bf59`. | DONE: attempt 1 `CHANGES_REQUESTED` is retained. Attempt 2 `PASS WITH P3 FOLLOW-UP`: P2-001/P3-001 resolved, four focused documentation tests pass, and no new finding exists. P3-002 is resolved by this lifecycle reconciliation; `BUG-015` remains open P3. Physical Python-absent/old-machine install and host discovery remain `NOT_EXECUTED`. | VERIFIED |
 
+## CR-033 host assignments — 2026-10-23
+
+The actual Codex host dispatched the identities below. These are host assignment
+records, not claims of new Runtime leases or completed lifecycle Gates. Runtime
+registration for this increment is NOT_AVAILABLE at this recording point.
+
+| Task | Actual owner | Responsibility | State / evidence |
+| --- | --- | --- | --- |
+| TASK-132 | orchestrator `/root`; read-only investigations `/root/qa_differentiation_requirements` and `/root/qa_differentiation_architecture` | Requirements, DES-062, plan, CR and RTM; source baseline e8e085e; user design direction `ok`. | DRAFT documents OBSERVED; not a formal baseline approval. |
+| TASK-133 | developer `/root/case_audit_developer` | New pure audit/CLI and developer tests in the fixed plan's owned files. | Dispatched; results PENDING. |
+| TASK-134 | documentation_manager `/root/case_audit_docs` | Bundled/source instructions, reference, example and concise README usage. | Dispatched; results PENDING. |
+| TASK-135 | tester `/root/case_audit_tester` | Independent test fixtures, mutation cases, installed delivery and regression. | Dispatched for preparation; final execution NOT_EXECUTED. |
+| TASK-136 | independent reviewer identity to be recorded on actual dispatch | Frozen source/requirements, safety, evidence and claims review. | NOT_EXECUTED. |
+
 ## Runtime registration schema for subsequent work
 
 Before assigning work, register the actual host identity with its exact Runtime role. Create a versioned `TASK` artifact and then a V3 `work` item that records: `project_id`, `gate_id`, `activity`, `required_role`, `why`, `input_refs` (typed ID/version references), dependency work IDs, and an `output_contract` with required artifact types and minimum outputs. A worker may claim only its own role-matching work. Completion must reference outputs that satisfy the contract; a claim, lease, agent name, or work completion never creates a Gate `PASS`.
