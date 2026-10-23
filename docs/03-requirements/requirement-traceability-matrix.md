@@ -86,3 +86,17 @@ retained recovery trees is P3. Remote CI `38713544622` passed all configured Win
 Python 3.10/3.12 jobs at `f54f85d`. CI `38717537656` is a separate CR-011 paired-runtime fixture portability result and is not evidence for this installer candidate. It therefore remains `PARTIAL`; no statement
 about actual Codex task behaviour, model cost, Linux remote execution, enterprise
 compatibility, release, acceptance, or superiority follows from the installer work.
+
+## CR-034 finite-model impact increment (DRAFT)
+
+| Requirement | Design | Task | Verification | Traceability |
+| --- | --- | --- | --- | --- |
+| REQ-032 | DES-063 / ADR-006 | TASK-137–138 | TC-IMPACT-001–003/005/008; NOT_EXECUTED | PARTIAL |
+| REQ-033 | DES-063 | TASK-138 | TC-IMPACT-006/008; NOT_EXECUTED | PARTIAL |
+| REQ-034 | DES-063 | TASK-138 | TC-IMPACT-002/004; NOT_EXECUTED | PARTIAL |
+| REQ-035 | DES-063 | TASK-138 | TC-IMPACT-007; NOT_EXECUTED | PARTIAL |
+| REQ-036 | DES-063 | TASK-139–140 | TC-IMPACT-010; NOT_EXECUTED | PARTIAL |
+| NFR-014 | DES-063 | TASK-138/140–141 | TC-IMPACT-009; NOT_EXECUTED | PARTIAL |
+
+Requirements: `change-impact-2026-10-23.md`. Baseline main `90a9226`.
+This table records bounded increment traceability, not a project Gate or acceptance.
