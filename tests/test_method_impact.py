@@ -79,4 +79,3 @@ class MethodImpactTests(unittest.TestCase):
         self.assertEqual(report["gap_followups"][0]["action"], "REVIEW_GAP")
         self.assertTrue(report["obligation_deltas"])
         self.assertIn("ORACLE_DESCRIPTORS_CHANGED", {code for delta in report["candidate_deltas"] for code in delta["reason_codes"]})
-
