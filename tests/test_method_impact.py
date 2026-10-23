@@ -5,7 +5,7 @@ import tempfile
 import unittest
 
 from qa_master.design_methods import design_methods
-from qa_master.method_impact import MethodImpactError, analyze_method_impact, write_method_impact
+from qa_master.method_impact import MethodImpactError, _markdown, _rows_and_actions, analyze_method_impact, write_method_impact
 
 
 EXAMPLE = Path(__file__).resolve().parents[1] / "examples" / "design-methods.json"
@@ -129,3 +129,21 @@ class MethodImpactTests(unittest.TestCase):
         action = next(item for item in report["case_row_actions"] if item["before_candidate_id"] == candidate["id"])
         self.assertEqual(action["action"], "REVIEW_BASELINE")
         self.assertIn("UNRESOLVED_MODEL_OBLIGATION", action["reason_codes"])
+
+    def test_ambiguous_group_never_selects_the_sole_after_candidate(self):
+        scenario = {"candidate_id": "TC-MD-OLD-1", "method_data": {}, "requirement_ids": [], "source_ref_ids": [], "oracle_ref_ids": []}
+        library_data = {"cases": [{"id": "CASE-1", "scenarios": [scenario, {**scenario, "candidate_id": "TC-MD-OLD-2"}]}]}
+        baseline = {"candidates": [{"id": "TC-MD-OLD-1", "model_id": "MODEL", "state": "EXACTLY_BOUND"},
+                                   {"id": "TC-MD-OLD-2", "model_id": "MODEL", "state": "EXACTLY_BOUND"}], "findings": []}
+        delta = {"pair_state": "AMBIGUOUS", "before_candidate_ids": ["TC-MD-OLD-1", "TC-MD-OLD-2"],
+                 "after_candidate_ids": ["TC-MD-NEW"], "reason_codes": ["AMBIGUOUS_FORMAL_MATCH"]}
+        actions = _rows_and_actions(library_data, baseline, [delta], [])
+        self.assertEqual([item["after_candidate_id"] for item in actions], [None, None])
+        self.assertTrue(all(item["action"] == "REVIEW_AMBIGUOUS" for item in actions))
+
+    def test_markdown_hash_code_spans_have_exact_digest_content(self):
+        bundle = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+        report = analyze_method_impact(bundle, bundle, library(bundle))
+        markdown = _markdown(report)
+        self.assertIn("`{}`".format(report["before_design_input_sha256"]), markdown)
+        self.assertNotIn("`{} `".format(report["before_design_input_sha256"]), markdown)

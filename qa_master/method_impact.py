@@ -178,7 +178,8 @@ def _rows_and_actions(library, baseline, deltas, obligations):
                 reasons.append("UNRESOLVED_MODEL_OBLIGATION")
             after_ids = delta["after_candidate_ids"] if delta else []
             actions.append({"case_id": case["id"], "scenario_sha256": digest, "occurrence": occurrences[digest],
-                            "before_candidate_id": cid, "after_candidate_id": after_ids[0] if len(after_ids) == 1 else None,
+                            "before_candidate_id": cid,
+                            "after_candidate_id": after_ids[0] if delta and delta["pair_state"] == "RETAINED_VECTOR" and len(after_ids) == 1 else None,
                             "action": action, "reason_codes": sorted(set(reasons))})
     return sorted(actions, key=lambda x: (x["case_id"], x["scenario_sha256"], x["occurrence"]))
 
@@ -246,9 +247,9 @@ def _markdown(report):
     summary = report["summary"]
     lines = ["# QA Master method change impact", "", "Status: `DRAFT_UNAPPROVED`", "Execution: `NOT_EXECUTED`", "",
              "This is a review proposal only; it does not establish correctness, execution, approval, or a safe regression skip.", "",
-             "## Summary", "", "- Before design SHA-256: `{} `".format(esc(report["before_design_input_sha256"])),
-             "- After design SHA-256: `{} `".format(esc(report["after_design_input_sha256"])),
-             "- Case library SHA-256: `{} `".format(esc(report["case_library_sha256"])),
+             "## Summary", "", "- Before design SHA-256: `{}`".format(esc(report["before_design_input_sha256"])),
+             "- After design SHA-256: `{}`".format(esc(report["after_design_input_sha256"])),
+             "- Case library SHA-256: `{}`".format(esc(report["case_library_sha256"])),
              "- Library rebinding required: `{}`".format(report["library_rebinding_required"]),
              "- Assessment: `{}`".format(summary["assessment"]),
              "- Candidates: before `{}`, after `{}`; groups `{}`".format(summary["before_candidate_count"], summary["after_candidate_count"], esc(summary["candidate_group_states"])),
