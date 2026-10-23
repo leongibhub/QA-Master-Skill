@@ -76,7 +76,10 @@ Own `docs/verification/method-impact-independent-review-2026-10-23.md`.
 
 ## Delivery
 
-- [ ] Persist source/test/review/CI evidence in RTM and change/work registers.
-- [ ] Push reviewed branch to the existing repository, create PR, inspect current
-  source CI, merge the authorized increment and read back main.
+- [x] Persist source/test/review/CI evidence in RTM and change/work registers.
+- [x] Push reviewed branch to the existing repository, create PR #9, inspect
+  current source CI (39960201430, all four jobs successful).
+- [ ] Merge the authorized increment and read back main. The GitHub PR merge
+  event and final user delivery report are the later event records; this
+  evidence commit precedes merge and does not invent its outcome.
 - [ ] Explain the new review/proposal capability and actual limits to the user.

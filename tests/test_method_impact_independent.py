@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 
 from qa_master.design_methods import design_methods
@@ -254,6 +255,39 @@ class MethodImpactIndependentTests(unittest.TestCase):
         self.assertEqual(first_report["case_library_sha256"], second_report["case_library_sha256"])
         self.assertEqual(first_report["case_row_actions"], second_report["case_row_actions"])
         self.assertEqual(first_report["summary"], second_report["summary"])
+
+    def test_tc_impact_008a_ambiguous_two_old_one_new_never_invents_a_row_pair(self):
+        """An ambiguous group must retain IDs only in its delta, never a row pairing."""
+        def candidate(identifier):
+            return {"id": identifier, "model_id": "M-AMB", "method": "decision_table",
+                    "dimension": "functional", "method_data": {"assignment": {"choice": True}},
+                    "trace": ["REQ-IMPACT"], "source_refs": [], "oracle_refs": []}
+
+        before_design = {"input_sha256": "a" * 64, "candidates": [candidate("TC-MD-OLD-A"), candidate("TC-MD-OLD-B")],
+                         "obligations": []}
+        after_design = {"input_sha256": "b" * 64, "candidates": [candidate("TC-MD-NEW")], "obligations": []}
+        library = {"schema_version": 1, "design_input_sha256": "a" * 64, "gaps": [], "cases": [{
+            "id": "CASE-AMB", "title": "ambiguous", "preconditions": "ready", "steps": ["act"],
+            "expected": "observe", "scenarios": [
+                {"candidate_id": "TC-MD-OLD-A", "method_data": {"assignment": {"choice": True}},
+                 "requirement_ids": ["REQ-IMPACT"], "source_ref_ids": [], "oracle_ref_ids": []},
+                {"candidate_id": "TC-MD-OLD-B", "method_data": {"assignment": {"choice": True}},
+                 "requirement_ids": ["REQ-IMPACT"], "source_ref_ids": [], "oracle_ref_ids": []},
+            ],
+        }]}
+        baseline = {"candidates": [{"id": "TC-MD-OLD-A", "model_id": "M-AMB", "state": "EXACTLY_BOUND"},
+                                   {"id": "TC-MD-OLD-B", "model_id": "M-AMB", "state": "EXACTLY_BOUND"}],
+                    "findings": [], "summary": {}, "case_library_sha256": "c" * 64}
+        with patch("qa_master.method_impact.design_methods", side_effect=[before_design, after_design]), \
+             patch("qa_master.method_impact.audit_method_cases", return_value=baseline):
+            report = analyze_method_impact(self.before, self.before, library)
+        self.assertEqual(len(report["candidate_deltas"]), 1)
+        delta = report["candidate_deltas"][0]
+        self.assertEqual(delta["pair_state"], "AMBIGUOUS")
+        self.assertEqual(delta["before_candidate_ids"], ["TC-MD-OLD-A", "TC-MD-OLD-B"])
+        self.assertEqual(delta["after_candidate_ids"], ["TC-MD-NEW"])
+        self.assertEqual({action["action"] for action in report["case_row_actions"]}, {"REVIEW_AMBIGUOUS"})
+        self.assertTrue(all(action["after_candidate_id"] is None for action in report["case_row_actions"]))
 
     def test_tc_impact_009_safe_file_boundary_cli_and_markdown_escaping(self):
         with tempfile.TemporaryDirectory(prefix="impact-independent-") as directory:

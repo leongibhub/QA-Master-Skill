@@ -17,7 +17,7 @@ candidate groups; one-sided multiplicity did not yield AMBIGUOUS. The developer
 was asked to repair these areas and expand direct checks. This initial state is
 not the final tested implementation or an acceptance result.
 
-## Final evidence
+## Initial frozen evidence (retained history)
 
 Frozen `ebfc947` independent preflight additionally reproduced orphan explicit
 gap loss, suppression of concurrent context reasons, error-adapter corruption of
@@ -64,7 +64,53 @@ while JSON digests remain exact. See `../08-project-management/cr034-defect-reco
 and the independent review for complete finding history. No project Gate,
 acceptance, release or superiority conclusion.
 
-## Operational boundary
+## Late repair retained after initial delivery
+
+Root identified and independent reviewer confirmed BUG-020 on `55594d7`:
+an AMBIGUOUS group with two old IDs and one new ID populated the singular new ID
+on both old case rows. This implied a pairing the contract does not establish.
+Final runtime `c2e795716b9b37644476978402ecf50b32d281d4` limits singular
+mapping to unique RETAINED_VECTOR groups; all ambiguous IDs stay in list-valued
+candidate deltas/followups. Developer and independent targeted fixtures pass.
+The same repair removes the previous cosmetic Markdown hash spaces.
+
+Root's final-source developer run: 10/10 PASS. The initial wheel/install evidence
+above remains bound only to `5c516a6`; it is not relabeled as final. The runtime
+change justified one additional clean-archive installed verification, which
+passed against the exact final runtime. Its evidence is retained separately at
+`evidence/cr034/delivery-repair/delivery-metadata.json`; all source/archive/build/
+venv/offline-install/Skill-install/module/helper exits are zero. Final wheel
+SHA-256: 6b5cd4e4f76b5a81deee31e63c375e12790d88e4d368e940e4589cf1331b011f.
+The final Skill has 5,888 files; both consumer reports retain draft/nonexecution
+status and nine review cases. No release/merge is inferred from installation.
+
+Final independent methods: 13 total (12 PASS / 1 Windows symbolic-link privilege
+SKIP), no failure/error. The native junction check and separately authored
+2-before/1-after ambiguity fixture pass. The final source review has no
+unresolved P0–P3 finding; prior P3 and BUG-020 history remain above.
+
+GitHub Actions run 39960201430 binds final runtime c2e7957. Final readback at
+2026-10-23 13:38:08 UTC verified all four jobs succeeded:
+
+| Environment | Python | Tests run | Failures | Errors | Skips |
+| --- | --- | --- | --- | --- | --- |
+| Ubuntu | 3.10 | 870 | 0 | 0 | 12 |
+| Ubuntu | 3.12 | 870 | 0 | 0 | 12 |
+| Windows | 3.10 | 870 | 0 | 0 | 3 |
+| Windows | 3.12 | 870 | 0 | 0 | 3 |
+
+Readback source: actual workflow-job completion and log summary, retained in
+`evidence/cr034/final-ci-summary.json`. Final reconciliation commits contain only
+documentation/evidence and the independently executed extra ambiguity fixture;
+they do not change the tested runtime. Root also freshly ran that additional
+fixture and the four README checks: 5/5 PASS. A documentation-manager read-only
+consistency review found no current-final evidence/count/link conflict.
+Earlier CI runs are historical; their results are not substituted for this
+final runtime. PR #9's merge and remote readback remain separate GitHub/Git
+events to be checked after this evidence commit. No project Gate, acceptance,
+release or whole-product quality/superiority conclusion follows from CI.
+
+## Operational boundary (unchanged)
 
 Only declared finite models, requirement records and source/oracle descriptors
 are compared. Exact formal-vector continuity is not semantic equivalence.

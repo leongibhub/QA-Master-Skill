@@ -4,13 +4,14 @@
 - Requirements: `REQ-032` through `REQ-036`, `NFR-014`
 - Design: `DES-063` / `ADR-006`
 - Initial reviewed product subject: `ebfc947`
-- Final reviewed product subject: `5c516a66b82d51d9473e149a426421f003e4dc95`
+- First installed product subject: `5c516a66b82d51d9473e149a426421f003e4dc95`
   (runtime repair `58c73ec`; subsequent commit trims an independent-test EOF only)
+- Final reviewed product subject: `c2e795716b9b37644476978402ecf50b32d281d4`
 - Document State: DRAFT
 - Evidence Status: VERIFIED for the bounded source, independent test and
   installed-delivery review below.
-- Review verdict: **PASS WITH P3 FOLLOW-UP**
-- Final unresolved findings: **P0 0 / P1 0 / P2 0 / P3 1**
+- Review verdict: **PASS**
+- Final unresolved findings: **P0 0 / P1 0 / P2 0 / P3 0**
 
 ## Scope and conclusion
 
@@ -85,14 +86,29 @@ rebinding and source-descriptor reasons. Requirements, design, README and the
 installed reference describe the same distinction. Developer and independent
 TC-IMPACT-002/006 checks passed; no external closure is claimed.
 
-### P3-001 - Markdown digest code spans include trailing whitespace - open
+### P2-005 / BUG-020 - ambiguous rows implied an unproven singular pairing - resolved and re-tested
 
-The private Markdown renderer formats all three digests as `` `{} ` ``. A
-generated line therefore contains a 64-character digest followed by one space
-inside the code span. JSON identities and internal comparisons are exact, and
-the installed module/helper completed successfully, so this does not affect
-matching, safety or machine-readable integrity. Remove the three trailing spaces
-in a later cosmetic patch so copied Markdown identities are visually exact.
+On `55594d7`, a two-before/one-after formal group was correctly classified
+`AMBIGUOUS`, but both old case rows populated their singular
+`after_candidate_id` with the sole new ID. The group retained all IDs and its
+action requested review, yet the row field still implied two pairings that the
+exact formal-vector contract does not establish.
+
+The final runtime populates the singular row field only for a uniquely retained
+vector. Ambiguous rows keep it null while list-valued candidate deltas preserve
+all participating IDs. The developer regression and an independently authored
+two-before/one-after fixture both passed against `c2e7957`; the clean installed
+delivery described below was rebuilt from that exact source. No external defect
+closure is claimed.
+
+### P3-001 - Markdown digest code spans included trailing whitespace - resolved and re-tested
+
+At `5c516a6`, the private Markdown renderer formatted all three digests as
+`` `{} ` ``. A generated line therefore contained a 64-character digest followed
+by one space inside the code span. JSON identities and internal comparisons were
+exact, so this did not affect matching, safety or machine-readable integrity.
+`c2e7957` removes the three spaces, and the developer regression verifies exact
+digest content in the rendered code spans.
 
 ## Architecture, correctness and safety observations
 
@@ -101,9 +117,10 @@ in a later cosmetic patch so copied Markdown identities are visually exact.
    and decimal-string values are not coerced. Requirement/model renames are not
    inferred.
 2. A reviewer-constructed two-before/one-after formal group returned
-   `AMBIGUOUS`, retained all three IDs and selected no arbitrary pair. The same
-   check for obligations retained all IDs with state `AMBIGUOUS`. Candidate ID
-   cardinalities are conserved by the grouping indexes.
+   `AMBIGUOUS`, retained all three IDs and left each row's singular after ID
+   null. The same check for obligations retained all IDs with state
+   `AMBIGUOUS`. Candidate ID cardinalities are conserved by the grouping
+   indexes.
 3. Source-only descriptor churn changes engine candidate IDs while all ten
    teaching vectors remain retained. Existing rows request rebinding/review;
    there is no false ADDED/REMOVED churn.
@@ -123,40 +140,48 @@ in a later cosmetic patch so copied Markdown identities are visually exact.
 ## Reviewer and installed verification
 
 Commands were run from `D:\QA-Master-Compare` against final product subject
-`5c516a66b82d51d9473e149a426421f003e4dc95`:
+`c2e795716b9b37644476978402ecf50b32d281d4`:
 
 ```powershell
-python -m unittest tests.test_method_impact -v
-git diff --check 90a922667320756a758718b5002ca568d09436b5 5c516a66b82d51d9473e149a426421f003e4dc95
+python -W error::ResourceWarning -m unittest tests.test_method_impact -v
+git diff --check 55594d7 c2e795716b9b37644476978402ecf50b32d281d4
 ```
 
-Observed results: 8/8 developer method-impact tests passed in 0.642 seconds and
-the full-branch whitespace check passed. Reviewer-specific reproductions verified
-the repaired stable errors, exact packaged MISSING identity, explicit orphan-gap
-retention, ambiguity behavior and the open Markdown trailing-space finding.
+Observed results: 10/10 developer method-impact tests passed in 0.428 seconds and
+the repair diff whitespace check passed. Reviewer-specific reproductions
+verified the repaired stable errors, exact packaged MISSING identity, explicit
+orphan-gap retention, ambiguous row behavior and exact Markdown digest spans.
 
-The tester-owned clean-archive installed fixture is retained at
-`docs/verification/evidence/cr034/delivery/delivery-metadata.json`. It binds to
-the same final subject, built wheel SHA-256
+The first tester-owned clean-archive installed fixture remains retained at
+`docs/verification/evidence/cr034/delivery/delivery-metadata.json`. It binds only
+to `5c516a6`, built wheel SHA-256
 `873d45fcd383f49dd188806feeff73a4b06700ffa4fad34817a5765ae41df6a6`,
-installed 5,888 Skill files, and records exit 0 for source freeze, archive, wheel
-build, fresh virtual environment, offline wheel installation, Skill installation,
+and installed 5,888 Skill files. It is historical evidence and is not relabeled
+as validation of the final runtime.
+
+The final clean-archive fixture at
+`docs/verification/evidence/cr034/delivery-repair/delivery-metadata.json` binds
+to `c2e7957`, built wheel SHA-256
+`6b5cd4e4f76b5a81deee31e63c375e12790d88e4d368e940e4589cf1331b011f`,
+and records exit 0 for source freeze, archive, wheel build, fresh virtual
+environment, offline wheel installation, 5,888-file Skill installation,
 isolated module CLI and installed helper. Both consumer entry points produced
 `DRAFT_UNAPPROVED` / `NOT_EXECUTED` reports with nine review cases and all three
 input identities. This is installed-delivery evidence, not execution of the
 authored product test cases.
 
-The separate tester-owned focused run executed TC-IMPACT-001 through 009 plus
-the native Windows junction check: 11 tests ran, 10 passed, one ordinary symbolic
-link check was skipped for unavailable account privilege, and there were zero
-failures or errors. The equivalent native junction test passed. TC-IMPACT-010 is
-the separate installed-delivery pass described above. Across the two executions,
-12 test methods ran: 11 passed, one skipped, zero failed and zero errored. The
-retained report is `docs/verification/method-impact-independent-test-2026-10-23.md`.
+The final tester-owned focused artifact at
+`docs/verification/evidence/cr034/focused-tests-repair.txt` executed the method
+impact checks plus native Windows junction and symbolic-link subchecks: 12 tests
+ran, 11 passed, one ordinary symbolic-link check was skipped for unavailable
+account privilege, and there were zero failures or errors. The equivalent native
+junction test passed, including the independently authored ambiguous-row fixture.
+TC-IMPACT-010 is the separate final installed-delivery pass described above.
+Across the final focused and installed executions, 13 test methods ran: 12
+passed, one skipped, zero failed and zero errored.
 
-GitHub Actions cross-platform regression was still in progress when this review
-verdict was written and is not represented as completed evidence here. The
-reviewed source and installed scope has no unresolved blocker, critical or major
-finding; P3-001 remains a disclosed cosmetic follow-up. This permits the bounded
-TASK-141 verdict above, but it is not human acceptance, release approval or a
-project Gate `PASS`.
+GitHub Actions cross-platform regression for the final freeze was still in
+progress when this review verdict was written and is not represented as completed
+evidence here. The reviewed source and installed scope has no unresolved P0,
+P1, P2 or P3 finding. This permits the bounded TASK-141 verdict above, but it is
+not human acceptance, release approval or a project Gate `PASS`.

@@ -24,6 +24,13 @@ Gate Status is controlled to `PASS`, `FAIL`, or `BLOCKED`. No Gate has an eviden
 
 ## Gate readiness discipline
 
+CR-034 supporting evidence is recorded in
+`../verification/method-impact-delivery-2026-10-23.md`, its separate independent
+test/review reports and the RTM. This bounded offline increment is not a Gate
+decision. All G0–G11 statuses above remain unchanged; requirement baselines,
+human acceptance and release evidence are not inferred from implementation,
+installation or CI results.
+
 ### CR-033 bounded engineering evidence — 2026-10-23
 
 Frozen product e9e141f adds finite-model case conformance auditing. Separate

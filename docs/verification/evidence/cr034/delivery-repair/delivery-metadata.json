@@ -1,0 +1,58 @@
+{
+  "test_case": "TC-IMPACT-010",
+  "status": "PASS",
+  "commands": {
+    "source_freeze": {
+      "returncode": 0,
+      "stdout": "c2e795716b9b37644476978402ecf50b32d281d4\n",
+      "stderr": ""
+    },
+    "archive": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "wheel_build": {
+      "returncode": 0,
+      "stdout": "Processing C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\impact-wheel-wjieeqyp\\source\r\n  Preparing metadata (pyproject.toml): started\r\n  Preparing metadata (pyproject.toml): finished with status 'done'\r\nBuilding wheels for collected packages: qa-master-skill\r\n  Building wheel for qa-master-skill (pyproject.toml): started\r\n  Building wheel for qa-master-skill (pyproject.toml): still running...\r\n  Building wheel for qa-master-skill (pyproject.toml): still running...\r\n  Building wheel for qa-master-skill (pyproject.toml): finished with status 'done'\r\n  Created wheel for qa-master-skill: filename=qa_master_skill-1.0.0-py3-none-any.whl size=6398626 sha256=6b5cd4e4f76b5a81deee31e63c375e12790d88e4d368e940e4589cf1331b011f\r\n  Stored in directory: C:\\Users\\leon.wang\\AppData\\Local\\Temp\\pip-ephem-wheel-cache-qtjobtz9\\wheels\\48\\23\\79\\aecc07cf623ee4e0fee755b181e2a2fe7c9f57a1dcbd002460\r\nSuccessfully built qa-master-skill\r\n",
+      "stderr": "\r\n[notice] A new release of pip is available: 26.1.2 -> 26.2.2\r\n[notice] To update, run: python.exe -m pip install --upgrade pip\r\n"
+    },
+    "venv_create": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Actual environment location may have moved due to redirects, links or junctions.\r\n  Requested location: \"C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\impact-wheel-wjieeqyp\\venv\\Scripts\\python.exe\"\r\n  Actual location:    \"C:\\Users\\leon.wang\\AppData\\Local\\Temp\\impact-wheel-wjieeqyp\\venv\\Scripts\\python.exe\"\r\n"
+    },
+    "wheel_install": {
+      "returncode": 0,
+      "stdout": "Processing c:\\users\\leon~1.wan\\appdata\\local\\temp\\impact-wheel-wjieeqyp\\wheel\\qa_master_skill-1.0.0-py3-none-any.whl\r\nInstalling collected packages: qa-master-skill\r\nSuccessfully installed qa-master-skill-1.0.0\r\n",
+      "stderr": ""
+    },
+    "skill_install": {
+      "returncode": 0,
+      "stdout": "{\r\n  \"status\": \"INSTALLED\",\r\n  \"target\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\impact-wheel-wjieeqyp\\\\consumer\\\\skill\",\r\n  \"files\": 5888,\r\n  \"backup\": null,\r\n  \"recovery_directory\": null,\r\n  \"execution\": \"NOT_EXECUTED\"\r\n}\r\n",
+      "stderr": ""
+    },
+    "module_cli": {
+      "returncode": 0,
+      "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"review_case_count\": 9,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\impact-wheel-wjieeqyp\\\\consumer\\\\module.json\"\r\n}\r\n",
+      "stderr": ""
+    },
+    "installed_helper": {
+      "returncode": 0,
+      "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"review_case_count\": 9,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\impact-wheel-wjieeqyp\\\\consumer\\\\helper.md\"\r\n}\r\n",
+      "stderr": ""
+    }
+  },
+  "source_freeze_sha": "c2e795716b9b37644476978402ecf50b32d281d4",
+  "wheel_sha256": "6b5cd4e4f76b5a81deee31e63c375e12790d88e4d368e940e4589cf1331b011f",
+  "report": {
+    "status": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "review_case_count": 9,
+    "before_design_input_sha256": "664351926a3d081f886c0c3823fc30a3accc1329e45d3c30bc673896e9a6937b",
+    "after_design_input_sha256": "6fda1d0db33c281f88bfe0edeb506ccca3045b9248e2503d87525bc899f319c2",
+    "case_library_sha256": "97d71bba1178f08e26475f03d889a6af6892e13faf52472435ce4472ea432fb6"
+  },
+  "module_output_sha256": "0a1e928494165e46386bb04783c9060954d71839bced1ead91e9603369ee892c",
+  "helper_output_sha256": "699f4580adbc7cbad46a285deb740eb561193db9b43bfcedeb46969ea0e708c5"
+}

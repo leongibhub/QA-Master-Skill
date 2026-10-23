@@ -91,11 +91,11 @@ compatibility, release, acceptance, or superiority follows from the installer wo
 
 | Requirement | Design | Task | Verification | Traceability |
 | --- | --- | --- | --- | --- |
-| REQ-032 | DES-063 / ADR-006 | TASK-137–138 | TC-IMPACT-001–003/005/008; offline PASS at 5c516a6 | PARTIAL |
-| REQ-033 | DES-063 | TASK-138 | TC-IMPACT-006/008; offline PASS at 5c516a6 | PARTIAL |
-| REQ-034 | DES-063 | TASK-138 | TC-IMPACT-002/004; offline PASS at 5c516a6 | PARTIAL |
-| REQ-035 | DES-063 | TASK-138 | TC-IMPACT-007; offline PASS at 5c516a6; BUG-016–019 repaired/retested | PARTIAL |
-| REQ-036 | DES-063 | TASK-139–140 | TC-IMPACT-010; clean archive wheel/module/Skill helper PASS at 5c516a6 | PARTIAL |
+| REQ-032 | DES-063 / ADR-006 | TASK-137–138 | TC-IMPACT-001–003/005/008; offline PASS at c2e7957 | PARTIAL |
+| REQ-033 | DES-063 | TASK-138 | TC-IMPACT-006/008; offline PASS at c2e7957 | PARTIAL |
+| REQ-034 | DES-063 | TASK-138 | TC-IMPACT-002/004; offline PASS at c2e7957 | PARTIAL |
+| REQ-035 | DES-063 | TASK-138 | TC-IMPACT-007; offline PASS at c2e7957; BUG-016–019 repaired/retested | PARTIAL |
+| REQ-036 | DES-063 | TASK-139–140 | TC-IMPACT-010; clean archive wheel/module/Skill helper PASS at c2e7957 | PARTIAL |
 | NFR-014 | DES-063 | TASK-138/140–141 | TC-IMPACT-009; offline PASS with symlink privilege skip, native junction PASS | PARTIAL |
 
 Requirements: `change-impact-2026-10-23.md`. Baseline main `90a9226`.
@@ -104,7 +104,7 @@ This table records bounded increment traceability, not a project Gate or accepta
 Evidence: EVD-CR034-INDEPENDENT-TEST-001 and the independent review at
 `../verification/method-impact-independent-review-2026-10-23.md`; delivery and CI
 readbacks at `../verification/method-impact-delivery-2026-10-23.md`.
-Independent total: 12 methods, 11 PASS/1 privilege SKIP, no failure/error.
-Review: PASS WITH P3 FOLLOW-UP; no unresolved P0/P1/P2, cosmetic digest-space P3
-retained. Requirements remain DRAFT; host chat discovery, human acceptance,
+Independent total: 13 methods, 12 PASS/1 privilege SKIP, no failure/error.
+Review: PASS; no unresolved P0–P3. Former cosmetic finding and late BUG-020
+repair history are retained. Requirements remain DRAFT; host chat discovery, human acceptance,
 project Gates, release and same-task competitor quality assessment are not proven.

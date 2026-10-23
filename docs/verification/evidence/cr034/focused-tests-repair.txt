@@ -1,0 +1,21 @@
+Product freeze: c2e795716b9b37644476978402ecf50b32d281d4
+Command:
+python -W error::ResourceWarning -m unittest (TASK-140 custom suite excluding TC-IMPACT-010)
+
+test_tc_impact_001_unchanged_all_five_methods_keep_explicit_vectors ... ok
+test_tc_impact_002_source_descriptor_churn_changes_ids_without_false_add_remove ... ok
+test_tc_impact_003_typed_boolean_integer_and_decimal_changes_are_not_coerced ... ok
+test_tc_impact_004_oracle_requirement_and_source_context_changes_require_review ... ok
+test_tc_impact_005_model_rename_and_new_model_do_not_get_guessed_pairs ... ok
+test_tc_impact_006_stale_and_nonconformant_baseline_remains_visible ... ok
+test_tc_impact_007_obligations_gaps_and_unmodeled_requirement_changes_are_followups ... ok
+test_tc_impact_008_row_identity_reference_order_and_input_order_are_deterministic ... ok
+test_tc_impact_008a_ambiguous_two_old_one_new_never_invents_a_row_pair ... ok
+test_tc_impact_009_safe_file_boundary_cli_and_markdown_escaping ... ok
+test_tc_impact_009a_windows_junction_ancestor_rejected_without_touching_target ... ok
+test_tc_impact_009b_symbolic_link_input_is_rejected_when_test_account_allows_links ... skipped 'symbolic links are unavailable to this test account'
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.500s
+
+OK (skipped=1)
