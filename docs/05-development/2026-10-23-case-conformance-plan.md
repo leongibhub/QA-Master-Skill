@@ -56,13 +56,36 @@ Both gap and case rows for one candidate are a conflict, not a success.
 Audit root includes `schema_version`, `status`, `execution`,
 `design_input_sha256`, `case_library_sha256`, `candidates`, `obligations`,
 `findings`, `summary`, `limitations`. Candidate rows contain IDs/model/method,
-`state`, `case_ids` and diagnostic `codes`. States: `EXACTLY_BOUND`,
+`state`, `case_ids`, sorted unique `gap_reasons` and diagnostic `codes`. Candidate
+identity key is `id` (the engine candidate ID). States: `EXACTLY_BOUND`,
 `GAP_RECORDED`, `MISSING`, `DUPLICATE`, `MISMATCH`. Codes distinguish
 `DATA_MISMATCH`, `ORACLE_MISMATCH`, `SOURCE_MISMATCH`, `TRACE_MISMATCH`,
 `CASE_DOCUMENTATION_INCOMPLETE`, `ORPHAN_CANDIDATE`, and `GAP_CASE_CONFLICT`.
-Per-model and total counts reconcile to the candidate denominator. Empty
-candidate sets are `UNASSESSED`, never implied complete. `obligations` preserve
-engine IDs/codes/model IDs, without copying source prose into diagnostics.
+Per-model and total counts reconcile to the candidate denominator. Summary exact
+keys: `candidate_denominator`, `states`, `by_model`, `obligation_count`,
+`finding_count`, `assessment`. `by_model` maps each engine model ID (including
+zero-candidate models) to the five state counts. Empty candidate sets have
+`assessment: UNASSESSED`; nonempty sets have `assessment: ASSESSED`, not a quality
+grade. `obligations` preserve engine `id`, `code`, `model_id`, `method`, without
+copying source prose into diagnostics.
+
+Root rulings from architecture preflight (2026-10-23):
+
+- State precedence: a gap plus case row is MISMATCH/GAP_CASE_CONFLICT; multiple
+  representations of one candidate are DUPLICATE; one case row is exact only
+  when fields and documented case shape match; one gap is GAP_RECORDED; otherwise
+  MISSING. Repeated identical gaps must not inflate coverage or hide ambiguity.
+- Findings are exact variant objects: orphan case `{code, case_id}`; orphan case
+  scenario `{code, candidate_id, case_id}`; orphan gap `{code, candidate_id}`;
+  candidate-local mismatch `{code, candidate_id, case_ids}`. Markdown renders
+  both candidate diagnostics/gap reasons and all root findings.
+- `case_library_sha256` means normalized canonical JSON identity in both APIs:
+  sort cases by ID, set-valued reference IDs, scenario rows and gap rows;
+  preserve step order and actual textual/method values. No raw file hash replaces
+  this value. Model-source staleness covers declared descriptors/digests only.
+- Authored IDs use the bounded engine-style identifier alphabet, not arbitrary
+  Markdown. Detect zero-scenario cases as ORPHAN_CASE. Use indexed rather than
+  case-by-row cross-product lookup and bounded file reads before parsing.
 
 CLI: `audit-method-cases --input bundle.json --cases cases.json --output audit.json
 [--format json|markdown]`. Duplicate flags are rejected. Exit 0 means report
