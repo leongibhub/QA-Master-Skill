@@ -32,6 +32,15 @@ actual audit emitter's two MISMATCH variants (gap/case conflict, or one authored
 case with nonempty data/reference/documentation diagnostics), and code-specific
 finding shapes, preserving root and candidate documentation findings.
 
+BUG-023 follow-up before freeze: independent fault injection also reproduced
+cleanup PermissionError escaping from the writer's finally block. The bounded
+decision retains the cleanup attempt and preserves any in-flight domain error
+(including OUTPUT_EXISTS); otherwise cleanup OSError rejects OUTPUT_IO_ERROR.
+After successful atomic publication, that rejection may coexist with an already
+published valid report and a remaining temporary file. Do not invent rollback,
+delete the published report, overwrite on retry, or silently report complete
+success. Caller should inspect the requested destination before retrying.
+
 Independent source tests precede final freeze; independently verify final wheel
 and installed helper once after repair stabilization. Full Windows/Linux CI is
 regression evidence, not acceptance or an application test result.

@@ -34,6 +34,7 @@ Runtime registration is NOT_AVAILABLE; these are actual host identities only.
 | TASK-143 | reviewer /root/case_audit_reviewer | Independent code/contract/risk review and final severity-classified report. | Investigation assigned, final verdict NOT_EXECUTED. |
 | TASK-144 | developer /root/impact_developer | Scoped product repair and developer regressions after confirmed BUG-021–026 findings. | Assigned; final source/verification NOT_EXECUTED. |
 | TASK-145 | orchestrator /root | CR, plan, defect traceability, reconciliation, GitHub delivery/readback. | Context and scope OBSERVED. |
+| TASK-146 | documentation_manager /root/impact_docs | Concise rejection/retry notes in the two existing bundled audit/impact references. | Assigned and static checks OBSERVED; installation validation remains separate. |
 
 Read-only next-feature investigations /root/impact_requirements and
 /root/impact_architecture are advisory only, not an implementation assignment.

@@ -272,7 +272,7 @@ def _markdown(report):
 
 
 def write_method_impact(before_path, after_path, cases_path, output_path, *, format="json") -> dict:
-    if format not in {"json", "markdown"}:
+    if not isinstance(format, str) or format not in {"json", "markdown"}:
         _fail("INVALID_FORMAT")
     def write():
         before_source = _cc._source(before_path); after_source = _cc._source(after_path); cases_source = _cc._source(cases_path)
