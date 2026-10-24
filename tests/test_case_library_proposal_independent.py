@@ -319,8 +319,13 @@ class CaseLibraryProposalIndependentTests(unittest.TestCase):
             else:
                 with self.assertRaises(CaseLibraryProposalError) as linked:
                     write_method_case_library_proposal(before, after, cases, link)
-                self.assertEqual(linked.exception.code, "LINK_PATH_REJECTED")
+                self.assertEqual(linked.exception.code, "OUTPUT_EXISTS")
                 self.assertEqual(protected.read_bytes(), b"PROTECTED")
+                linked_input = root / "linked-before.json"
+                os.symlink(before, linked_input)
+                with self.assertRaises(CaseLibraryProposalError) as input_linked:
+                    write_method_case_library_proposal(linked_input, after, cases, root / "linked-input-output.json")
+                self.assertEqual(input_linked.exception.code, "LINK_PATH_REJECTED")
             if os.name == "nt":
                 junction_target, junction = root / "junction-target", root / "junction"
                 junction_target.mkdir()
