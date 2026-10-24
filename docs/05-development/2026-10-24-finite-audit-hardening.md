@@ -32,7 +32,7 @@ Runtime registration is NOT_AVAILABLE; these are actual host identities only.
 | --- | --- | --- | --- |
 | TASK-142 | tester /root/case_audit_tester | Independent adversarial fixtures, evidence and retest; own tests/test_finite_audit_hardening_independent.py and its verification record/evidence. | Investigation assigned, final results NOT_EXECUTED. |
 | TASK-143 | reviewer /root/case_audit_reviewer | Independent code/contract/risk review and final severity-classified report. | Investigation assigned, final verdict NOT_EXECUTED. |
-| TASK-144 | Unassigned | Scoped product repair and developer regressions, only after confirmed findings. | NOT_EXECUTED. |
+| TASK-144 | developer /root/impact_developer | Scoped product repair and developer regressions after confirmed BUG-021–026 findings. | Assigned; final source/verification NOT_EXECUTED. |
 | TASK-145 | orchestrator /root | CR, plan, defect traceability, reconciliation, GitHub delivery/readback. | Context and scope OBSERVED. |
 
 Read-only next-feature investigations /root/impact_requirements and

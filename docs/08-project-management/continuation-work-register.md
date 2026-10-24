@@ -153,3 +153,13 @@ is NOT_AVAILABLE; the existing project Gates remain unchanged.
 | TASK-139 | documentation_manager /root/impact_docs | Source/bundled Skill guidance, example, README. | Final teaching example10 retained/9 review/1 missing marker verified; source CLI and4 README checks PASS. OBSERVED. |
 | TASK-140 | tester /root/impact_tester | Independent adversarial tests and clean installed delivery. | EVD-CR034-INDEPENDENT-TEST-001:13 methods,12PASS/1symlink privilege SKIP; junctionPASS; clean archive wheel/5888-file Skill/module/helperPASS. OBSERVED. |
 | TASK-141 | reviewer /root/impact_reviewer | Independent risk/spec/source/evidence review. | Final freeze c2e7957 bounded PASS; unresolved P0–P3=0; earlier findings/history retained. OBSERVED, no project Gate decision. |
+
+## CR-035 actual host assignments — 2026-10-24
+
+TASK-142 /root/case_audit_tester independently reproduces/retests; TASK-143
+/root/case_audit_reviewer independently reviews; TASK-144 /root/impact_developer
+owns scoped production repair/developer tests; TASK-145 /root orchestrates and
+reconciles. Exact ownership/criteria are in
+`../05-development/2026-10-24-finite-audit-hardening.md`. Runtime registration
+NOT_AVAILABLE; no leases or Gate outcomes are inferred. Initial RED evidence
+and reproduced BUG-021–026 precede production repair; final outcomes pending.
