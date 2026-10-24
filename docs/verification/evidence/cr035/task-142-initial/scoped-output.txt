@@ -1,0 +1,77 @@
+test_tc_fah_001_all_five_methods_keep_typed_context_changes_out_of_no_declared_impact (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_001_all_five_methods_keep_typed_context_changes_out_of_no_declared_impact) ... ok
+test_tc_fah_002_baseline_missing_and_explicit_gap_remain_distinct_followups (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_002_baseline_missing_and_explicit_gap_remain_distinct_followups) ... ok
+test_tc_fah_003_typed_scenario_mutation_never_becomes_no_declared_impact (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_003_typed_scenario_mutation_never_becomes_no_declared_impact) ... ok
+test_tc_fah_004_invalid_gap_reason_is_a_stable_audit_rejection_in_api_and_cli (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_004_invalid_gap_reason_is_a_stable_audit_rejection_in_api_and_cli) ... ERROR
+test_tc_fah_005_unhashable_method_is_a_stable_schema_rejection (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_005_unhashable_method_is_a_stable_schema_rejection) ... ERROR
+test_tc_fah_006_existing_regular_file_parent_is_safe_domain_io_rejection_for_both_writers_and_clis (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_006_existing_regular_file_parent_is_safe_domain_io_rejection_for_both_writers_and_clis) ... ERROR
+
+======================================================================
+ERROR: test_tc_fah_004_invalid_gap_reason_is_a_stable_audit_rejection_in_api_and_cli (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_004_invalid_gap_reason_is_a_stable_audit_rejection_in_api_and_cli)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 126, in test_tc_fah_004_invalid_gap_reason_is_a_stable_audit_rejection_in_api_and_cli
+    self.assert_domain_error(lambda: audit_method_cases(self.bundle, library), CaseConformanceError, "INVALID_GAP")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 72, in assert_domain_error
+    call()
+    ~~~~^^
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 126, in <lambda>
+    self.assert_domain_error(lambda: audit_method_cases(self.bundle, library), CaseConformanceError, "INVALID_GAP")
+                                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\qa_master\case_conformance.py", line 258, in audit_method_cases
+    rows, gaps, authored_cases = _validate_library(case_library, design["input_sha256"])
+                                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\qa_master\case_conformance.py", line 215, in _validate_library
+    if not isinstance(gap["candidate_id"], str) or not _ID.fullmatch(gap["candidate_id"]) or gap["reason_code"] not in _GAP_REASONS:
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+
+======================================================================
+ERROR: test_tc_fah_005_unhashable_method_is_a_stable_schema_rejection (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_005_unhashable_method_is_a_stable_schema_rejection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 143, in test_tc_fah_005_unhashable_method_is_a_stable_schema_rejection
+    self.assert_domain_error(lambda: audit_method_cases(malformed, self.library), CaseConformanceError, "INVALID_SCHEMA")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 72, in assert_domain_error
+    call()
+    ~~~~^^
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 143, in <lambda>
+    self.assert_domain_error(lambda: audit_method_cases(malformed, self.library), CaseConformanceError, "INVALID_SCHEMA")
+                                     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\qa_master\case_conformance.py", line 250, in audit_method_cases
+    _preflight(campaign_bundle)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\qa_master\case_conformance.py", line 158, in _preflight
+    elif method in {"pairwise", "combinatorial"}:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+
+======================================================================
+ERROR: test_tc_fah_006_existing_regular_file_parent_is_safe_domain_io_rejection_for_both_writers_and_clis (tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_006_existing_regular_file_parent_is_safe_domain_io_rejection_for_both_writers_and_clis)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 154, in test_tc_fah_006_existing_regular_file_parent_is_safe_domain_io_rejection_for_both_writers_and_clis
+    self.assert_domain_error(lambda: write_case_audit(before, cases, output), CaseConformanceError, "OUTPUT_IO_ERROR")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 72, in assert_domain_error
+    call()
+    ~~~~^^
+  File "D:\QA-Master-Compare\tests\test_finite_audit_hardening_independent.py", line 154, in <lambda>
+    self.assert_domain_error(lambda: write_case_audit(before, cases, output), CaseConformanceError, "OUTPUT_IO_ERROR")
+                                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\qa_master\case_conformance.py", line 538, in write_case_audit
+    _write_exclusive(output, content)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\QA-Master-Compare\qa_master\case_conformance.py", line 495, in _write_exclusive
+    path.parent.mkdir(parents=True, exist_ok=True)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python\Lib\pathlib\_local.py", line 722, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileExistsError: [WinError 183] ���ļ��Ѵ���ʱ���޷��������ļ���: 'C:\\Users\\leon.wang\\AppData\\Local\\Temp\\tmplaa9aqi3\\blocker'
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.085s
+
+FAILED (errors=3)

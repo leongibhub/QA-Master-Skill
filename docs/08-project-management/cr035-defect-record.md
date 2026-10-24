@@ -6,7 +6,7 @@ NFR-014 (DES-063). Independent tester TASK-142 and reviewer TASK-143 reproduced
 the following before any production repair. All are local engineering findings;
 no enterprise issue, human approval or external defect closure is implied.
 
-| ID | Severity | Input / observed behavior | Root cause | Required repair / acceptance | Current state |
+| ID | Severity | Input / observed behavior | Root cause | Required repair / acceptance | Initial state |
 | --- | --- | --- | --- | --- | --- |
 | BUG-021 | P2 | Valid bundle/library, but a gap reason_code is JSON object or list: audit Python API leaks TypeError, CLI falls back to generic COMMAND_REJECTED. | Membership test in a set precedes reason string validation. | Require string before membership, reject INVALID_GAP; API and CLI exact-code regressions. | REPRODUCED; repair NOT_EXECUTED |
 | BUG-022 | P2 | Model method is JSON object/list: audit API leaks unhashable TypeError from _preflight. | Preflight asks set membership before authoritative engine validation/adaptation. | Non-string method rejects stable INVALID_SCHEMA before membership; all valid methods retain existing replay bounds/behavior. | REPRODUCED; repair NOT_EXECUTED |
@@ -51,3 +51,15 @@ for data/reference/documentation candidate diagnostics, nonempty cases for
 GAP_CASE_CONFLICT, zero cases for GAP_DUPLICATE, and unique valid case IDs.
 Independent public-renderer counterexamples and genuine emitter variants support
 this additional structural validation; no cross-record authenticity is inferred.
+
+## Final repaired disposition
+
+BUG-021–026 are repaired in frozen source 8fc8533, independently source-retested
+and reviewed without an unresolved P0–P3 product finding. Evidence is retained
+in the independent test/review reports and EVD-CR035-DELIVERY-001. Final source
+suite:13/13 PASS. The isolated confirmed installed run has tool/wrapper exit0,
+19 coherent child commands (13 exit0, six prescribed rejection exit2), and
+exact source/archive/wheel identities. Earlier lost-wrapper/duplicate-driver
+snapshots are retained as history, not relabeled as complete evidence.
+This is bounded repair/retest disposition, not external defect closure,
+project acceptance, release approval or a Gate decision.

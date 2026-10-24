@@ -39,3 +39,22 @@ Runtime registration is NOT_AVAILABLE; these are actual host identities only.
 Read-only next-feature investigations /root/impact_requirements and
 /root/impact_architecture are advisory only, not an implementation assignment.
 The present increment hardens existing behavior; no new subsystem is approved.
+
+## CR-035 final outcomes on frozen8fc8533
+
+- TASK-142: independent13/13 PASS; confirmed installed consumer tool/wrapper
+  exit0,19 expected child-command results. Prior partial/interrupted/fixture
+  records are historical and are not substituted for this confirmation.
+- TASK-143: independent review PASS; unresolved P0/P1/P2/P3=0.
+- TASK-144: six developer regressions PASS; old audit13 and impact10 checks PASS.
+  Original RED fixtures were independently authored before production repair.
+- TASK-145: CR/defects/RTM/source/install/review/CI evidence reconciled. PR#10
+  merge and remote readback are later GitHub/Git events, not invented here.
+- TASK-146: the two existing bundled references explain rejection/retry and the
+  post-publication cleanup boundary; static checks passed.
+- Full PR CI40074191090: four Ubuntu/Windows Python3.10/3.12 jobs succeeded,
+  each889 tests with zero failures/errors. Detailed skip counts in delivery.
+- Ancillary interrupted-fixture cleanup was rejected by automatic policy and
+  NOT_EXECUTED; its known Temp directory remains, with no source impact.
+
+No project Gate, release, human acceptance or business-test execution is implied.

@@ -1,0 +1,29 @@
+[
+  {
+    "label": "source_freeze",
+    "command": [
+      "git",
+      "rev-parse",
+      "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6"
+    ],
+    "cwd": "D:\\QA-Master-Compare",
+    "returncode": 0,
+    "stdout": "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6\n",
+    "stderr": ""
+  },
+  {
+    "label": "archive",
+    "command": [
+      "git",
+      "archive",
+      "--format=zip",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-0vtu5dyc\\source.zip",
+      "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6"
+    ],
+    "cwd": "D:\\QA-Master-Compare",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -163,3 +163,11 @@ reconciles. Exact ownership/criteria are in
 `../05-development/2026-10-24-finite-audit-hardening.md`. Runtime registration
 NOT_AVAILABLE; no leases or Gate outcomes are inferred. Initial RED evidence
 and reproduced BUG-021–026 precede production repair; final outcomes pending.
+
+CR-035 final readback: actual owners above delivered source8fc8533;
+TASK-142 independent13/13 PASS plus confirmed installed flow exit0;
+TASK-143 PASS with no unresolved P0–P3; TASK-144 six developer regressions
+and old13+10 checks passed; TASK-146 two references checked. TASK-145 reconciles
+full PR CI40074191090 (four successful889-test jobs) and traceability. See
+EVD-CR035-DELIVERY-001. Initial RED/harness/fixture records and policy-denied
+ancillary cleanup remain retained. No Runtime lease, Gate or release is inferred.

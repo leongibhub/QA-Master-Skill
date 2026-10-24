@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "evidence_id": "EVD-CR035-CI-001",
+  "repository": "leongibhub/QA-Master-Skill",
+  "source_commit": "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6",
+  "observed_at_utc": "2026-10-24 07:47:53 UTC",
+  "run_id": 40074191090,
+  "url": "https://github.com/leongibhub/QA-Master-Skill/actions/runs/40074191090",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 120813941687,
+      "os": "ubuntu-latest",
+      "python": "3.12",
+      "ran": 889,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12
+    },
+    {
+      "id": 120813941849,
+      "os": "ubuntu-latest",
+      "python": "3.10",
+      "ran": 889,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12
+    },
+    {
+      "id": 120813941832,
+      "os": "windows-latest",
+      "python": "3.12",
+      "ran": 889,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    {
+      "id": 120813941798,
+      "os": "windows-latest",
+      "python": "3.10",
+      "ran": 889,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    }
+  ],
+  "scope": "Frozen-runtime CI. Later evidence/docs and independently executed aggregate-budget test changes do not change the tested runtime."
+}

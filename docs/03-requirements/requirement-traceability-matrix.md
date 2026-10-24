@@ -108,3 +108,15 @@ Independent total: 13 methods, 12 PASS/1 privilege SKIP, no failure/error.
 Review: PASS; no unresolved P0–P3. Former cosmetic finding and late BUG-020
 repair history are retained. Requirements remain DRAFT; host chat discovery, human acceptance,
 project Gates, release and same-task competitor quality assessment are not proven.
+
+## CR-035 repair verification (bounded; requirements remain DRAFT)
+
+| Existing requirement | Design / repair | Task | Evidence | Traceability |
+| --- | --- | --- | --- | --- |
+| REQ-029–031 / NFR-013 | DES-062; BUG-021/022/023/024/025/026 | TASK-142–146 | Source8fc8533; independent13/13 PASS; strict API/CLI rejection, sparse open-state acceptance, genuine/forged report variants and aggregate budget controls. | PARTIAL |
+| REQ-032–036 / NFR-014 | DES-063; shared validation/output protections | TASK-142–146 | Exact frozen archive -> wheel -> isolated installed module/Skill helper confirmation, tool/wrapper exit0; CI readback in delivery record. | PARTIAL |
+
+Records: `../verification/finite-audit-hardening-delivery-2026-10-24.md`,
+`../verification/finite-audit-hardening-test-2026-10-24.md`, and independent review.
+Prior RED, fixture errors and interrupted driver history are retained. No business
+case correctness, human acceptance, Gate, release or superiority follows.

@@ -90,6 +90,26 @@ def closed_world_state_bundle():
     return bundle
 
 
+def aggregate_decision_bundle():
+    """Four individually valid decision models whose aggregate exceeds the audit cap."""
+    seed = json.loads(BASE.read_text(encoding="utf-8"))
+    template = next(model for model in seed["design_models"]["models"] if model["method"] == "decision_table")
+    models = []
+    for model_number in range(4):
+        model = copy.deepcopy(template)
+        model["id"] = f"DM-AGGREGATE-{model_number}"
+        model["title"] = f"Aggregate finite model {model_number}"
+        model["spec"] = {
+            "conditions": [{"id": "value", "values": [f"V{index:04d}" for index in range(2501)]}],
+            "constraints": [],
+            "rules": [{"id": "R-ALL", "when": {}, "outcome_id": "review",
+                       "source_refs": ["SRC-RULE"], "oracle_ref": "OR-DISCOUNT"}],
+        }
+        models.append(model)
+    seed["design_models"]["models"] = models
+    return seed
+
+
 class FiniteAuditHardeningIndependentTests(unittest.TestCase):
     def setUp(self):
         self.bundle = five_method_bundle()
@@ -332,6 +352,22 @@ class FiniteAuditHardeningIndependentTests(unittest.TestCase):
                 finally:
                     remove_verified_temporaries(root)
                 self.assertFalse(race_output.exists())
+
+    def test_tc_fah_013_aggregate_valid_models_are_rejected_before_engine_replay(self):
+        bundle = aggregate_decision_bundle()
+        # Four valid decision models have 2,501 typed assignments apiece. Each is
+        # under the engine's 4,096-row bound while their 10,004-row aggregate
+        # must be rejected by the audit boundary without allocating candidates.
+        self.assertLess(len(json.dumps(bundle, separators=(",", ":")).encode("utf-8")), 5 * 1024 * 1024)
+        for model in bundle["design_models"]["models"]:
+            one_model = copy.deepcopy(bundle)
+            one_model["design_models"]["models"] = [model]
+            self.assertEqual(len(design_methods(one_model)["candidates"]), 2501)
+        library = {"schema_version": 1, "design_input_sha256": "0" * 64, "cases": [], "gaps": []}
+        with mock.patch("qa_master.case_conformance.design_methods", side_effect=AssertionError("must not replay design")):
+            self.assert_domain_error(lambda: audit_method_cases(bundle, library), CaseConformanceError, "CANDIDATE_LIMIT_EXCEEDED")
+        with mock.patch("qa_master.method_impact.design_methods", side_effect=AssertionError("must not replay design")):
+            self.assert_domain_error(lambda: analyze_method_impact(bundle, bundle, library), MethodImpactError, "CANDIDATE_LIMIT_EXCEEDED")
 
 
 if __name__ == "__main__":

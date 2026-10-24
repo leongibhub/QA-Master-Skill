@@ -1,0 +1,6 @@
+{
+  "session_id": 36511,
+  "tools_write_stdin_returned_exit_code": 0,
+  "stdout": "",
+  "note": "Observed from the direct tools.write_stdin completion for the isolated confirmation wrapper."
+}

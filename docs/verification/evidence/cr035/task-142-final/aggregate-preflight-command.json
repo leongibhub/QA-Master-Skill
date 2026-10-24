@@ -1,0 +1,1 @@
+["C:\\Program Files\\Python\\python.exe", "-W", "error::ResourceWarning", "-m", "unittest", "tests.test_finite_audit_hardening_independent.FiniteAuditHardeningIndependentTests.test_tc_fah_013_aggregate_open_world_models_are_rejected_before_engine_replay", "-v"]
