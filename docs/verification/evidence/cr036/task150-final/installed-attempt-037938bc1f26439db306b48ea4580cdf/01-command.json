@@ -1,0 +1,1 @@
+{"args": ["git", "archive", "--format=zip", "--output", "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\p036-4p89ampy\\source.zip", "ddb2fc2665b2b6f044eba9bf56a70de69211db7e"], "cwd": "D:\\QA-Master-Compare", "exit": 0, "stderr": "", "stdout": ""}

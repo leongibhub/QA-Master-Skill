@@ -123,15 +123,17 @@ case correctness, human acceptance, Gate, release or superiority follows.
 
 ## CR-036 proposed-library traceability (DRAFT)
 
-| Requirement | Design | Task | Planned verification | Traceability |
+| Requirement | Design | Task | Observed verification | Traceability |
 | --- | --- | --- | --- | --- |
-| REQ-037 | DES-064/ADR-007 | TASK-147–148 | TC-PROP-001/002/011; NOT_EXECUTED | PARTIAL |
-| REQ-038 | DES-064 | TASK-148/150 | TC-PROP-004/005/006; NOT_EXECUTED | PARTIAL |
-| REQ-039 | DES-064 | TASK-148–150 | TC-PROP-002/003/009; NOT_EXECUTED | PARTIAL |
-| REQ-040 | DES-064 | TASK-148/150 | TC-PROP-005/007/008; NOT_EXECUTED | PARTIAL |
-| NFR-015 | DES-064 | TASK-148/150–151 | TC-PROP-009/010/011; NOT_EXECUTED | PARTIAL |
-| NFR-003 (inherited) | DES-064 sensitivity/stdout/error boundary | TASK-148–151 | Synthetic case-prose marker preserved only in proposal file; stdout/error values private; inherited design secret-field rejection. NOT_EXECUTED | PARTIAL |
+| REQ-037 | DES-064/ADR-007 | TASK-147–148 | TC-PROP-001/002/011; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| REQ-038 | DES-064 | TASK-148/150 | TC-PROP-004/005/006; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| REQ-039 | DES-064 | TASK-148–150 | TC-PROP-002/003/009; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| REQ-040 | DES-064 | TASK-148/150 | TC-PROP-005/007/008; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| NFR-015 | DES-064 | TASK-148/150–151 | TC-PROP-009/010/011; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| NFR-003 (inherited) | DES-064 sensitivity/stdout/error boundary | TASK-148–151 | Synthetic case-prose marker preserved only in proposal file; stdout/error values private; inherited design secret-field rejection. Frozen ddb2fc2 PASS; corrected CI40080022358 four-job PASS. | PARTIAL |
 
 Requirement source:case-library-proposal-2026-10-24.md. User's option2 is
-engineering authorization, not a baseline/Gate/human acceptance. Actual results
-and frozen identities will replace planned evidence only after observation.
+engineering authorization, not a baseline/Gate/human acceptance. Actual frozen evidence is linked in
+`../verification/case-library-proposal-delivery-2026-10-24.md`
+(EVD-CR036-DELIVERY-001); detailed tests/review remain separate. CI evidence EVD-CR036-CI-001 records four successful910-test jobs. Publication
+receipt follows Git/PR history; no acceptance is inferred.

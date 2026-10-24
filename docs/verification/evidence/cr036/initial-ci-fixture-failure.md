@@ -9,6 +9,11 @@ The failure was in `test_tc_prop_010_strict_parse_limits_io_and_cli_contract`:
 an existing output leaf symlink returned `OUTPUT_EXISTS`, while the fixture
 expected `LINK_PATH_REJECTED`. The protected target remained unchanged.
 
+Later Windows readback confirms the same single assertion failure: Python 3.12
+job `120829761748` and Python 3.10 job `120829761754` each ran 910 tests with
+1 failure, 0 errors, 3 skips. Thus all four initial jobs failed the same fixture;
+none is counted as a successful matrix run.
+
 The test now expects the existing-output collision code and separately asserts
 that a symlinked input returns `LINK_PATH_REJECTED`. No product or protected-core
 change was required. These failed results remain failed; a fresh CI run is needed

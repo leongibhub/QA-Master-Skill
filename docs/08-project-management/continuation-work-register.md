@@ -186,3 +186,13 @@ These are Codex host assignments, not Runtime leases. Runtime registration
 NOT_AVAILABLE; central Gate statuses and human approvals remain unchanged.
 Decisions on all-gap holds, obligated-model holds, mandatoryreview, representation
 ordering and reason taxonomy are recorded in DES-064 before production code.
+
+
+CR-036 observed continuation: TASK-148 product freeze ddb2fc2; developer9 and
+root43 focused checks PASS. TASK-149 source teaching9 proposed/1 missing and
+README4 checks PASS. TASK-150 one frozen installed11/11 PASS (session66660,
+exit0), plus local corrected source11/11 PASS; test-only fix83afa58. Initial
+CI40079455590 fixture failure retained; corrected CI40080022358 all4PASS
+(each910tests,0failures/errors; Ubuntu12/Windows3skips). TASK-151 final
+source/evidence verdict is in the independent review report. See EVD-CR036-DELIVERY-001. These updates supersede assignment-time
+execution placeholders only; Runtime/Gates/approval domains remain unchanged.

@@ -1,0 +1,31 @@
+{
+  "archive": {
+    "bytes": 8847851,
+    "sha256": "94176e96a048a0b7532575fa1f8707d548fd3f14c948b654bd54a30ace7ba9f2"
+  },
+  "helper_output": {
+    "bytes": 31744,
+    "sha256": "49dee810a4c56027f2000d5d5180d17e519ce1b2cfd8319535db8c916fd1ddb0"
+  },
+  "installer_reported_file_count": 5890,
+  "module_output": {
+    "bytes": 31744,
+    "sha256": "49dee810a4c56027f2000d5d5180d17e519ce1b2cfd8319535db8c916fd1ddb0"
+  },
+  "post_audit_states": {
+    "DUPLICATE": 0,
+    "EXACTLY_BOUND": 17,
+    "GAP_RECORDED": 0,
+    "MISMATCH": 0,
+    "MISSING": 0
+  },
+  "proposal_application_state": "NOT_APPLIED",
+  "proposal_execution": "NOT_EXECUTED",
+  "proposal_status": "DRAFT_UNAPPROVED",
+  "runtime_python_file_count": 1077,
+  "source_python_file_count": 1077,
+  "wheel": {
+    "bytes": 6407909,
+    "sha256": "9ed0d4e3fd02e6a31cf19deff5e3a39d5c4b813ab88dab50fa017d640458cc36"
+  }
+}
