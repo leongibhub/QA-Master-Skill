@@ -120,3 +120,17 @@ Records: `../verification/finite-audit-hardening-delivery-2026-10-24.md`,
 `../verification/finite-audit-hardening-test-2026-10-24.md`, and independent review.
 Prior RED, fixture errors and interrupted driver history are retained. No business
 case correctness, human acceptance, Gate, release or superiority follows.
+
+## CR-036 proposed-library traceability (DRAFT)
+
+| Requirement | Design | Task | Planned verification | Traceability |
+| --- | --- | --- | --- | --- |
+| REQ-037 | DES-064/ADR-007 | TASK-147–148 | TC-PROP-001/002/011; NOT_EXECUTED | PARTIAL |
+| REQ-038 | DES-064 | TASK-148/150 | TC-PROP-004/005/006; NOT_EXECUTED | PARTIAL |
+| REQ-039 | DES-064 | TASK-148–150 | TC-PROP-002/003/009; NOT_EXECUTED | PARTIAL |
+| REQ-040 | DES-064 | TASK-148/150 | TC-PROP-005/007/008; NOT_EXECUTED | PARTIAL |
+| NFR-015 | DES-064 | TASK-148/150–151 | TC-PROP-009/010/011; NOT_EXECUTED | PARTIAL |
+
+Requirement source:case-library-proposal-2026-10-24.md. User's option2 is
+engineering authorization, not a baseline/Gate/human acceptance. Actual results
+and frozen identities will replace planned evidence only after observation.
