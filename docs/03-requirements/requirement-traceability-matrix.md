@@ -134,3 +134,4 @@ case correctness, human acceptance, Gate, release or superiority follows.
 Requirement source:case-library-proposal-2026-10-24.md. User's option2 is
 engineering authorization, not a baseline/Gate/human acceptance. Actual results
 and frozen identities will replace planned evidence only after observation.
+| NFR-003 (inherited) | DES-064 sensitivity/stdout/error boundary | TASK-148–151 | Synthetic case-prose marker preserved only in proposal file; stdout/error values private; inherited design secret-field rejection. NOT_EXECUTED | PARTIAL |

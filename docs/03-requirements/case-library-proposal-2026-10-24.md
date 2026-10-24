@@ -1,6 +1,7 @@
 # CR-036: reviewable after-change case-library proposal
 
 - Artifact: DOC-CASE-LIBRARY-PROPOSAL-REQ-001; Document State: DRAFT.
+- Evaluation State:IN_REVIEW; Evidence Status:OBSERVED for scoped design only.
 - Authorization: user explicitly selected option2, the offered next-version case
   library draft preserving the old library and human review. Detailed schema is
   orchestrator-authored engineering design, not formal baseline/Gate acceptance.
@@ -13,7 +14,7 @@
 | REQ-037 | Generate one non-applied proposal from before/after finite bundles and the before-bound strict v1 case library. The nested proposed_case_library binds the after digest and passes the existing after audit. Preserve inputs and original case values; no campaign, original library or external system is updated. |
 | REQ-038 | A case enters the nested library only if every row has a conformant baseline, unique RETAINED_VECTOR pair and no unresolved model obligation. Ambiguous/removed/baseline-defective/obligation rows hold the entire case. Every old case/row remains identifiable, including empty cases and duplicate normalized occurrences. No partial case migration. |
 | REQ-039 | Proposed scenarios exactly project after candidate_id, typed method_data, requirement/source/oracle ID sets. Case title, preconditions, steps and expected prose retain their values/order. Context/binding changes retain all impact/baseline reasons and require human review; formal pairing never establishes prose correctness or semantic equivalence. |
-| REQ-040 | Every old explicit gap remains held verbatim for reason review; no gap is silently discarded or carried as newly confirmed. Every after-audit MISSING vector has one exact after-context followup, including new points and points excluded by whole-case holds. Preserve baseline findings, obligation deltas and unmodeled changes. |
+| REQ-040 | Every old explicit gap remains held verbatim for reason review; no gap is silently discarded or carried as newly confirmed. Every after-audit MISSING vector has one exact after-candidate binding/descriptor followup, including new points and points excluded by whole-case holds. Full requirement/model context is reviewed in the after bundle. Preserve baseline findings, obligation deltas and unmodeled changes. |
 | NFR-015 | Stdlib-only, offline, bounded and deterministic, no input mutation/overwrite. Reuse strict CR-033–035 input/I/O contracts. Fixed draft/nonexecution/nonapplication fields; no apply/execution/history-copy path. Source and installed helper work from a consumer directory without campaign state. |
 
 Limits:5MiB per input; input JSON depth32; existing per-design aggregate replay

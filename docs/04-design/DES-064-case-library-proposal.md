@@ -1,6 +1,8 @@
 # DES-064 / ADR-007: non-applied case-library proposal overlay
 
 Document State:DRAFT; CR-036; REQ-037–040 / NFR-015.
+Evaluation State:IN_REVIEW; Evidence Status:OBSERVED for design decisions only.
+Implementation/test/package evidence initially NOT_EXECUTED.
 
 ## Decision and alternatives
 
@@ -80,26 +82,49 @@ method_data, requirement_ids, source_ref_ids, oracle_ref_ids. Use after candidat
 values, typed data and sorted unique reference-ID sets. Preserve case id/title/
 preconditions/steps/expected exactly; retain original scenario order. Cases in
 the nested library and case decisions sort by case ID; row decisions sort by
-case ID/hash/occurrence. A case is CARRY_PROPOSED only if every formal projection
-is unchanged and its only impact reason is FORMAL_VECTOR_UNCHANGED; otherwise
-eligible cases/rows use REBIND_PROPOSED_REVIEW_REQUIRED.
+case ID/hash/occurrence. Each eligible row is CARRY_PROPOSED only when its own
+formal projection is unchanged and its only impact reason is
+FORMAL_VECTOR_UNCHANGED; otherwise it is REBIND_PROPOSED_REVIEW_REQUIRED.
+An eligible case is CARRY_PROPOSED iff every row is CARRY_PROPOSED; otherwise
+the case is REBIND_PROPOSED_REVIEW_REQUIRED. Do not relabel unchanged rows
+because a different row in the same eligible case changed.
+
+For every row, possible_after_candidate_ids is exactly the sorted matched
+delta.after_candidate_ids, including baseline/obligation/ambiguous holds; it is
+[] when no old delta exists. Its singular after_candidate_id is populated only
+for a proposed unique retained row, never for a held row.
 
 Held gap exact keys: gap_sha256, occurrence, original_gap,
 possible_after_candidate_ids, decision, reason_codes. Preserve each occurrence
 including identical duplicates/orphan references. decision is always
 HELD_GAP_REVIEW_REQUIRED. No proposed gap is inserted in the nested library.
+The gap identity projection is exactly {candidate_id,reason_code}; gap_sha256
+hashes existing canonical bytes of that projection. Sort gaps by those bytes
+and assign one-based occurrence per equal digest. Possible IDs are the exact
+sorted matched-delta after IDs, else[]. Gap reasons are the sorted unique union
+of matched delta reasons, actual baseline finding codes for that candidate, and
+the always-present GAP_HELD and GAP_REASON_REVIEW_REQUIRED.
 
 Missing-vector followup exact keys: candidate_id, model_id, method, dimension,
 method_data, requirement_ids, source_ref_ids, oracle_ref_ids, source_refs,
 oracle_refs, action, reason_codes. Full refs are exact sorted after descriptors;
-action is AUTHOR_CASE_OR_RECORD_GAP. Context identifies formal data only and does
-not invent expected prose or business reasons.
+action is AUTHOR_CASE_OR_RECORD_GAP. Context identifies exact after-candidate
+bindings/descriptors only, not complete requirement records or model metadata;
+review those against the after bundle identified by its digest. Sort descriptor
+arrays by id. Never invent expected prose or business reasons.
 
 Reason codes preserve all applicable CR-033 diagnostic and CR-034 controlled
 codes, plus CASE_PARTIAL_REBIND_FORBIDDEN, CASE_HELD, GAP_HELD,
 GAP_REASON_REVIEW_REQUIRED. Mix of eligible/ineligible rows adds the partial-case
 code to the case and every row; do not lose context/obligation/baseline reasons.
 Missing followups union matching impact reasons with held-case/gap reasons.
+Precisely: union the after candidate's delta reasons, held-row reasons and that
+row's case-decision reasons whenever its possible after IDs contain this ID,
+and held-gap reasons whenever its possible after IDs contain this ID. Add
+CASE_HELD/GAP_HELD only when the corresponding held source exists. Also add
+UNRESOLVED_MODEL_OBLIGATION if its model appears in any obligation delta. Sort
+unique. Case-level reasons explain exclusion through whole-case atomicity;
+they do not reclassify the after vector itself as removed/changed.
 
 Summary exact keys: source_case_count, source_row_count, source_gap_count,
 proposed_case_count, proposed_row_count, proposed_gap_count, held_case_count,
@@ -130,6 +155,12 @@ assessment copies post-audit ASSESSED/UNASSESSED; never a quality PASS.
    library hash equals post-audit case_library_sha256. Impossible internal
    mapping/count/post-audit outcomes reject PROPOSAL_INVARIANT_FAILED.
 
+Count equations: source_case_count=proposed_case_count+held_case_count;
+source_row_count=proposed_row_count+held_row_count; source_gap_count=held_gap_count;
+proposed_gap_count=0. Case/row decision-map sums equal source case/row counts.
+Before the post-audit, reject OUTPUT_TOO_LARGE when compact nested library plus
+newline exceeds5MiB; do not mislabel generated-size rejection as bad input.
+
 Impact performs3 bounded replays; after design and post-audit add2, maximum5.
 Do not call the before audit redundantly. Compare/index by exact keys, not an
 O(rows*candidates) search. Preserve all input dictionaries/files and detach
@@ -154,3 +185,25 @@ limit, not a promise to stream or shard arbitrarily large proposals.
 No source locator is dereferenced, model/provider called, subprocess executed,
 state mutated or external object written by this feature. Existing safe file
 helpers reject linked/reparse ancestors, collisions and existing outputs.
+
+Inherited NFR-003: the proposal intentionally repeats case prose/descriptors and
+has the same data sensitivity as its inputs. Errors/stdout never echo prose or
+input values; existing design secret-field rejection remains inherited. There
+is no arbitrary-prose credential detector/redactor. Agent guidance must keep
+real credentials out of shared artifacts, without falsely claiming that this
+generator can detect secrets in unrestricted case text. Synthetic-marker tests
+verify file preservation versus stdout/error non-disclosure.
+
+## Preimplementation rulings and change impact
+
+Ruling: preserve parsed original representation but compare normalized semantic
+identities — avoids silently rewriting prose/steps; raw representation
+permutations may yield different envelope bytes. Ruling: hold all gaps and
+obligated models while allowing uniquely paired context-changed rows as review
+drafts — avoids inventing current gap validity; costs explicit held followups.
+Ruling: fix row/case decisions, gap locators and reason unions as above before
+implementation — makes independent tests decidable without inferred semantics.
+Compatibility is additive only. Release/install assets gain a module/reference;
+existing commands and libraries remain compatible.5MiB output rejection and
+duplicated-content sensitivity are declared limits. All project Gates, human
+baseline approval, acceptance, release and execution boundaries remain unchanged.
