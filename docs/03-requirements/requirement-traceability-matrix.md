@@ -120,3 +120,20 @@ Records: `../verification/finite-audit-hardening-delivery-2026-10-24.md`,
 `../verification/finite-audit-hardening-test-2026-10-24.md`, and independent review.
 Prior RED, fixture errors and interrupted driver history are retained. No business
 case correctness, human acceptance, Gate, release or superiority follows.
+
+## CR-036 proposed-library traceability (DRAFT)
+
+| Requirement | Design | Task | Observed verification | Traceability |
+| --- | --- | --- | --- | --- |
+| REQ-037 | DES-064/ADR-007 | TASK-147–148 | TC-PROP-001/002/011; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| REQ-038 | DES-064 | TASK-148/150 | TC-PROP-004/005/006; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| REQ-039 | DES-064 | TASK-148–150 | TC-PROP-002/003/009; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| REQ-040 | DES-064 | TASK-148/150 | TC-PROP-005/007/008; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| NFR-015 | DES-064 | TASK-148/150–151 | TC-PROP-009/010/011; frozen ddb2fc2 PASS, corrected CI40080022358 four-job PASS | PARTIAL |
+| NFR-003 (inherited) | DES-064 sensitivity/stdout/error boundary | TASK-148–151 | Synthetic case-prose marker preserved only in proposal file; stdout/error values private; inherited design secret-field rejection. Frozen ddb2fc2 PASS; corrected CI40080022358 four-job PASS. | PARTIAL |
+
+Requirement source:case-library-proposal-2026-10-24.md. User's option2 is
+engineering authorization, not a baseline/Gate/human acceptance. Actual frozen evidence is linked in
+`../verification/case-library-proposal-delivery-2026-10-24.md`
+(EVD-CR036-DELIVERY-001); detailed tests/review remain separate. CI evidence EVD-CR036-CI-001 records four successful910-test jobs. Publication
+receipt follows Git/PR history; no acceptance is inferred.

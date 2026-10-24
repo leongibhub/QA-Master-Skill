@@ -1,0 +1,54 @@
+{
+  "artifact_id": "EVD-CR036-CI-001",
+  "evidence_status": "OBSERVED",
+  "run_id": 40080022358,
+  "source_commit": "83afa5837bac375d291ae9d4742a1b6dd4f8540e",
+  "product_freeze": "ddb2fc2665b2b6f044eba9bf56a70de69211db7e",
+  "readback_utc": "2026-10-24T09:17:49Z",
+  "jobs": [
+    {
+      "id": 120831450071,
+      "name": "test (ubuntu-latest, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "tests": 910,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12,
+      "url": "https://github.com/leongibhub/QA-Master-Skill/actions/runs/40080022358/job/120831450071"
+    },
+    {
+      "id": 120831450227,
+      "name": "test (windows-latest, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "tests": 910,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3,
+      "url": "https://github.com/leongibhub/QA-Master-Skill/actions/runs/40080022358/job/120831450227"
+    },
+    {
+      "id": 120831450233,
+      "name": "test (windows-latest, 3.10)",
+      "status": "completed",
+      "conclusion": "success",
+      "tests": 910,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3,
+      "url": "https://github.com/leongibhub/QA-Master-Skill/actions/runs/40080022358/job/120831450233"
+    },
+    {
+      "id": 120831450356,
+      "name": "test (ubuntu-latest, 3.12)",
+      "status": "completed",
+      "conclusion": "success",
+      "tests": 910,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12,
+      "url": "https://github.com/leongibhub/QA-Master-Skill/actions/runs/40080022358/job/120831450356"
+    }
+  ]
+}
