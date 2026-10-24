@@ -126,6 +126,19 @@ UNRESOLVED_MODEL_OBLIGATION if its model appears in any obligation delta. Sort
 unique. Case-level reasons explain exclusion through whole-case atomicity;
 they do not reclassify the after vector itself as removed/changed.
 
+Exact case/row formulas: eligible proposed row reasons equal its CR-034 impact
+row reasons. For each ineligible row add actual baseline finding codes that
+identify its case (case_id or case_ids) or its before candidate_id. Every held
+row adds CASE_HELD, including atomicity-held otherwise-eligible rows. In a mixed
+eligible/ineligible case all row reasons also add CASE_PARTIAL_REBIND_FORBIDDEN.
+Proposed case reasons are the union of its proposed-row reasons. Held case
+reasons are the union of all final row reasons, actual baseline findings that
+identify the case or any of its candidate IDs, and CASE_HELD; add the partial
+code iff eligibility was mixed. Empty cases use actual case findings+CASE_HELD.
+Sort/deduplicate every reason list. The gap's business reason_code stays only
+inside original_gap; never copy that business label into reason_codes unless
+it independently is an actual controlled audit/impact diagnostic code.
+
 Summary exact keys: source_case_count, source_row_count, source_gap_count,
 proposed_case_count, proposed_row_count, proposed_gap_count, held_case_count,
 held_row_count, held_gap_count, after_candidate_count, exact_after_candidate_count,
