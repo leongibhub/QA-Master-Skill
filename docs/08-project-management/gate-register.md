@@ -24,6 +24,11 @@ Gate Status is controlled to `PASS`, `FAIL`, or `BLOCKED`. No Gate has an eviden
 
 ## Gate readiness discipline
 
+CR-035 supports only bounded finite audit/impact repairs, with evidence at
+`../verification/finite-audit-hardening-delivery-2026-10-24.md` and its independent
+test/review records. Source/installation/CI observations do not decide a Gate;
+all G0–G11 statuses above remain unchanged.
+
 CR-034 supporting evidence is recorded in
 `../verification/method-impact-delivery-2026-10-23.md`, its separate independent
 test/review reports and the RTM. This bounded offline increment is not a Gate

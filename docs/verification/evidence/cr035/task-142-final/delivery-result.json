@@ -1,0 +1,55 @@
+{
+  "subject_sha": "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6",
+  "run_class": "COHERENT_ARCHIVE_WHEEL_OFFLINE_VENV_INSTALLED_CONSUMER_COMMAND_CHAIN",
+  "overall_wrapper_evidence_status": "NOT_AVAILABLE",
+  "temporary_root": "t142-0vtu5dyc",
+  "command_log": "delivery-commands.json",
+  "command_count": 19,
+  "normal_exit_zero_labels": [
+    "source_freeze",
+    "archive",
+    "wheel_build",
+    "venv_create",
+    "wheel_install",
+    "skill_install",
+    "module_audit_json",
+    "module_audit_markdown",
+    "helper_audit_json",
+    "helper_audit_markdown",
+    "module_impact_json",
+    "module_impact_markdown",
+    "direct_format_type"
+  ],
+  "expected_rejection_exit_two_labels": [
+    "audit_bad_gap",
+    "impact_bad_gap",
+    "audit_bad_method",
+    "impact_bad_method",
+    "audit_blocked_parent",
+    "impact_blocked_parent"
+  ],
+  "completion_basis": "The final direct_format_type command returned 0 and delivery-manifest.json was written after all 19 logged commands. This does not establish the foreground wrapper process exit code.",
+  "driver_exit_marker": "NOT_AVAILABLE: this retained foreground run began before the durable wrapper was added.",
+  "manifest_sha256": "dc9614ca7bd97a7a7cee25b15e0eba5774cd91159d2b86e221ec7337eeaebb38",
+  "archive_sha256": "82b772eff5be48d93b50019ae26ec81360ab02c4ce782e677812b594bc893725",
+  "wheel": {
+    "name": "qa_master_skill-1.0.0-py3-none-any.whl",
+    "bytes": 6399339,
+    "sha256": "dc2360f9d218640c17869c4d5870b81deeb0df73c69e22cb065a082bf7bdf49c"
+  },
+  "installed_skill": {
+    "installer_reported_files": 5888,
+    "filesystem_count_after_helper_execution": 5900
+  },
+  "historical_snapshot": {
+    "evidence": "delivery-commands-interrupted-foreground.json",
+    "outcome": "EARLY_PARTIAL_SNAPSHOT_OF_COMPLETED_0VTU_CHAIN",
+    "note": "It is the first two-command snapshot of the same t142-0vtu5dyc command chain, not a separate attempt."
+  },
+  "separate_interrupted_attempts": [
+    {
+      "evidence": "delivery-detached-xaxef1hn-interrupted.json",
+      "outcome": "INTERRUPTED_BY_TEST_HARNESS_AFTER_CONCURRENT_RUN_DISCOVERY"
+    }
+  ]
+}

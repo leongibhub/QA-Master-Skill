@@ -10,3 +10,5 @@ docs/verification/public-api-ci-38743135594.md -text -whitespace
 docs/verification/continuation-repair-*.md -text -whitespace
 # Retain the interrupted console capture, including its trailing prompt bytes.
 docs/verification/evidence/cr033/task-135-e9e141f/independent-stderr.txt -text -whitespace
+# Preserve the raw unittest subtest progress line in the initial RED capture.
+docs/verification/evidence/cr035/task-142-initial/scoped-output-final-initial.txt -text -whitespace

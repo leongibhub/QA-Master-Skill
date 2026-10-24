@@ -140,6 +140,8 @@ def _preflight(bundle):
             continue  # The authoritative engine reports the schema error.
         spec = model["spec"]
         method = model.get("method")
+        if not isinstance(method, str):
+            _fail("INVALID_SCHEMA")
         if method == "boundary":
             total += 6
         elif method == "decision_table":
@@ -152,9 +154,12 @@ def _preflight(bundle):
             states = spec.get("states", [])
             triggers = spec.get("triggers", [])
             transitions = spec.get("transitions", [])
-            total += ((len(states) * len(triggers) + len(transitions))
-                      if isinstance(states, list) and isinstance(triggers, list) and isinstance(transitions, list)
-                      else 4097)
+            if not (isinstance(states, list) and isinstance(triggers, list) and isinstance(transitions, list)):
+                total += 4097
+            elif spec.get("closed_world") is False:
+                total += len(transitions)
+            else:
+                total += len(states) * len(triggers) + len(transitions)
         elif method in {"pairwise", "combinatorial"}:
             parameters = spec.get("parameters")
             count = 1
@@ -212,7 +217,8 @@ def _validate_library(library, expected_digest):
     normalized_gaps = []
     for gap in gaps:
         _strict_keys(gap, {"candidate_id", "reason_code"}, "INVALID_GAP")
-        if not isinstance(gap["candidate_id"], str) or not _ID.fullmatch(gap["candidate_id"]) or gap["reason_code"] not in _GAP_REASONS:
+        if (not isinstance(gap["candidate_id"], str) or not _ID.fullmatch(gap["candidate_id"]) or
+                not isinstance(gap["reason_code"], str) or gap["reason_code"] not in _GAP_REASONS):
             _fail("INVALID_GAP")
         normalized_gaps.append(gap)
     return rows, normalized_gaps, normalized_cases
@@ -373,7 +379,11 @@ def _validate_report(report):
                 (item["state"] == "GAP_RECORDED" and (item["case_ids"] or item["codes"] or len(item["gap_reasons"]) != 1)) or
                 (item["state"] == "DUPLICATE" and not ((item["case_ids"] and not item["gap_reasons"] and not item["codes"]) or
                                                           (not item["case_ids"] and item["gap_reasons"] and item["codes"] == ["GAP_DUPLICATE"]))) or
-                (item["state"] == "MISMATCH" and not item["codes"])):
+                (item["state"] == "MISMATCH" and not (
+                    (item["case_ids"] and item["gap_reasons"] and item["codes"] == ["GAP_CASE_CONFLICT"]) or
+                    (len(item["case_ids"]) == 1 and not item["gap_reasons"] and item["codes"] and
+                     set(item["codes"]).issubset({"DATA_MISMATCH", "ORACLE_MISMATCH", "SOURCE_MISMATCH", "TRACE_MISMATCH", "CASE_DOCUMENTATION_INCOMPLETE"}))
+                ))):
             _fail("INVALID_REPORT")
         candidate_ids.add(item["id"]); candidate_counts[item["state"]] += 1
         model_counts.setdefault(item["model_id"], {state: 0 for state in _STATES})[item["state"]] += 1
@@ -390,15 +400,29 @@ def _validate_report(report):
         if not isinstance(item, dict) or item.get("code") not in _FINDING_CODES:
             _fail("INVALID_REPORT")
         keys = set(item)
-        if keys == {"code", "case_id"}:
+        if item["code"] == "ORPHAN_CASE" and keys == {"code", "case_id"}:
             values = [item["case_id"]]
-        elif keys in ({"code", "candidate_id"}, {"code", "candidate_id", "case_id"}):
+        elif item["code"] == "ORPHAN_CANDIDATE" and keys in ({"code", "candidate_id"}, {"code", "candidate_id", "case_id"}):
             values = [item["candidate_id"]] + ([item["case_id"]] if "case_id" in item else [])
-        elif keys == {"code", "candidate_id", "case_ids"} and isinstance(item["case_ids"], list):
+        elif item["code"] == "CASE_DOCUMENTATION_INCOMPLETE" and keys == {"code", "case_id"}:
+            values = [item["case_id"]]
+        elif item["code"] == "CASE_DOCUMENTATION_INCOMPLETE" and keys == {"code", "candidate_id", "case_ids"} and isinstance(item["case_ids"], list):
+            values = [item["candidate_id"], *item["case_ids"]]
+        elif item["code"] in _CANDIDATE_CODES - {"CASE_DOCUMENTATION_INCOMPLETE"} and keys == {"code", "candidate_id", "case_ids"} and isinstance(item["case_ids"], list):
             values = [item["candidate_id"], *item["case_ids"]]
         else:
             _fail("INVALID_REPORT")
         if any(not _report_id(value) for value in values):
+            _fail("INVALID_REPORT")
+        if "case_ids" in item and (len(item["case_ids"]) != len(set(item["case_ids"]))):
+            _fail("INVALID_REPORT")
+        if item["code"] in {"DATA_MISMATCH", "ORACLE_MISMATCH", "SOURCE_MISMATCH", "TRACE_MISMATCH", "CASE_DOCUMENTATION_INCOMPLETE"} and "candidate_id" in item:
+            if len(item.get("case_ids", [])) != 1:
+                _fail("INVALID_REPORT")
+        elif item["code"] == "GAP_CASE_CONFLICT":
+            if not item.get("case_ids", []):
+                _fail("INVALID_REPORT")
+        elif item["code"] == "GAP_DUPLICATE" and item.get("case_ids", []) != []:
             _fail("INVALID_REPORT")
     summary = report["summary"]
     if not isinstance(summary, dict) or set(summary) != {"candidate_denominator", "states", "assessment", "by_model", "obligation_count", "finding_count"}:
@@ -492,22 +516,32 @@ def _safe_output(path, inputs):
 
 
 def _write_exclusive(path, content):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fd, temporary = tempfile.mkstemp(prefix=".qa-master-audit-", suffix=".tmp", dir=path.parent)
+    temporary = None
+    primary_failure = False
     try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        fd, temporary = tempfile.mkstemp(prefix=".qa-master-audit-", suffix=".tmp", dir=path.parent)
         with os.fdopen(fd, "wb") as handle:
             handle.write(content)
         try:
             os.link(temporary, path)
         except FileExistsError:
             _fail("OUTPUT_EXISTS")
+    except CaseConformanceError:
+        primary_failure = True
+        raise
     except OSError:
+        primary_failure = True
         _fail("OUTPUT_IO_ERROR")
     finally:
-        try:
-            os.unlink(temporary)
-        except FileNotFoundError:
-            pass
+        if temporary is not None:
+            try:
+                os.unlink(temporary)
+            except FileNotFoundError:
+                pass
+            except OSError:
+                if not primary_failure:
+                    _fail("OUTPUT_IO_ERROR")
 
 
 def _read_bounded(path):
@@ -527,7 +561,7 @@ def _read_bounded(path):
 
 def write_case_audit(input_path, cases_path, output_path, *, format="json") -> dict:
     """Load bounded JSON inputs and write one new, exclusive report file."""
-    if format not in {"json", "markdown"}:
+    if not isinstance(format, str) or format not in {"json", "markdown"}:
         _fail("INVALID_FORMAT")
     source = _source(input_path); cases = _source(cases_path)
     output = _safe_output(output_path, (source, cases))

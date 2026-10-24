@@ -44,6 +44,15 @@ reading. Choose a new output path: the command refuses an existing output and
 does not overwrite inputs. Exit 0 means only that the report was created; input
 or I/O rejection returns exit 2 and is not a quality result.
 
+## Rejection and retry
+
+Malformed artifact fields are rejected with a stable error code; correct the
+declared JSON rather than expecting a fallback report. `OUTPUT_IO_ERROR` means
+report writing, its preparation, or cleanup failed. If cleanup fails after
+atomic publication, the target report may already exist: inspect that target
+before retrying. Do not assume silent success or automatic rollback. The command
+never overwrites an input or an existing output path.
+
 ## Read the proposal
 
 `candidate_deltas` groups formal points as `RETAINED_VECTOR`, `ADDED`,

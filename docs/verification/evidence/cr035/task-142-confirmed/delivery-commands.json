@@ -1,0 +1,361 @@
+[
+  {
+    "label": "source_freeze",
+    "command": [
+      "git",
+      "rev-parse",
+      "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6"
+    ],
+    "cwd": "D:\\QA-Master-Compare",
+    "returncode": 0,
+    "stdout": "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6\n",
+    "stderr": ""
+  },
+  {
+    "label": "archive",
+    "command": [
+      "git",
+      "archive",
+      "--format=zip",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\source.zip",
+      "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6"
+    ],
+    "cwd": "D:\\QA-Master-Compare",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "label": "wheel_build",
+    "command": [
+      "C:\\Program Files\\Python\\python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\source",
+      "--no-deps",
+      "--no-build-isolation",
+      "-w",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\wheel"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "Processing C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\source\r\n  Preparing metadata (pyproject.toml): started\r\n  Preparing metadata (pyproject.toml): finished with status 'done'\r\nBuilding wheels for collected packages: qa-master-skill\r\n  Building wheel for qa-master-skill (pyproject.toml): started\r\n  Building wheel for qa-master-skill (pyproject.toml): still running...\r\n  Building wheel for qa-master-skill (pyproject.toml): still running...\r\n  Building wheel for qa-master-skill (pyproject.toml): finished with status 'done'\r\n  Created wheel for qa-master-skill: filename=qa_master_skill-1.0.0-py3-none-any.whl size=6399339 sha256=ee85671a0ea42f7136eb5491b1ad8619c2865639c5f4f6906c5e40810f762a7b\r\n  Stored in directory: C:\\Users\\leon.wang\\AppData\\Local\\Temp\\pip-ephem-wheel-cache-mp2po176\\wheels\\4b\\22\\45\\4d09a5e120971faa257429416cbfdcad26632f50aea3dfc417\r\nSuccessfully built qa-master-skill\r\n",
+    "stderr": "\r\n[notice] A new release of pip is available: 26.1.2 -> 26.2.2\r\n[notice] To update, run: python.exe -m pip install --upgrade pip\r\n"
+  },
+  {
+    "label": "venv_create",
+    "command": [
+      "C:\\Program Files\\Python\\python.exe",
+      "-m",
+      "venv",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "Actual environment location may have moved due to redirects, links or junctions.\r\n  Requested location: \"C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe\"\r\n  Actual location:    \"C:\\Users\\leon.wang\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe\"\r\n"
+  },
+  {
+    "label": "wheel_install",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "install",
+      "--no-index",
+      "--no-deps",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\wheel\\qa_master_skill-1.0.0-py3-none-any.whl"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "Processing c:\\users\\leon~1.wan\\appdata\\local\\temp\\t142-h2bp1ota\\wheel\\qa_master_skill-1.0.0-py3-none-any.whl\r\nInstalling collected packages: qa-master-skill\r\nSuccessfully installed qa-master-skill-1.0.0\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "skill_install",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "install-codex",
+      "--target",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\skill"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\r\n  \"status\": \"INSTALLED\",\r\n  \"target\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\t142-h2bp1ota\\\\consumer\\\\skill\",\r\n  \"files\": 5888,\r\n  \"backup\": null,\r\n  \"recovery_directory\": null,\r\n  \"execution\": \"NOT_EXECUTED\"\r\n}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "module_audit_json",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "audit-method-cases",
+      "--input",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\module-audit.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"candidate_denominator\": 10,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\t142-h2bp1ota\\\\consumer\\\\module-audit.json\"\r\n}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "module_audit_markdown",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "audit-method-cases",
+      "--input",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\module-audit.md",
+      "--format",
+      "markdown"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"candidate_denominator\": 10,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\t142-h2bp1ota\\\\consumer\\\\module-audit.md\"\r\n}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "helper_audit_json",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\skill\\scripts\\qa.py",
+      "audit-method-cases",
+      "--input",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\helper-audit.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"candidate_denominator\": 10,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\t142-h2bp1ota\\\\consumer\\\\helper-audit.json\"\r\n}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "helper_audit_markdown",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\skill\\scripts\\qa.py",
+      "audit-method-cases",
+      "--input",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\helper-audit.md",
+      "--format",
+      "markdown"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"candidate_denominator\": 10,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\t142-h2bp1ota\\\\consumer\\\\helper-audit.md\"\r\n}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "module_impact_json",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "impact-method-cases",
+      "--before",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--after",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods-after.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\module-impact.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"review_case_count\": 9,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\t142-h2bp1ota\\\\consumer\\\\module-impact.json\"\r\n}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "module_impact_markdown",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "impact-method-cases",
+      "--before",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--after",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods-after.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\module-impact.md",
+      "--format",
+      "markdown"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\r\n  \"status\": \"DRAFT_UNAPPROVED\",\r\n  \"execution\": \"NOT_EXECUTED\",\r\n  \"review_case_count\": 9,\r\n  \"output\": \"C:\\\\Users\\\\LEON~1.WAN\\\\AppData\\\\Local\\\\Temp\\\\t142-h2bp1ota\\\\consumer\\\\module-impact.md\"\r\n}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "audit_bad_gap",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "audit-method-cases",
+      "--input",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\bad-gap.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\rejected.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 2,
+    "stdout": "{\"status\": \"REJECTED\", \"error\": \"INVALID_GAP\"}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "impact_bad_gap",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "impact-method-cases",
+      "--before",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--after",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\bad-gap.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\rejected.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 2,
+    "stdout": "{\"status\": \"REJECTED\", \"error\": \"INVALID_GAP\"}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "audit_bad_method",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "audit-method-cases",
+      "--input",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\bad-method.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\rejected.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 2,
+    "stdout": "{\"status\": \"REJECTED\", \"error\": \"INVALID_SCHEMA\"}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "impact_bad_method",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "impact-method-cases",
+      "--before",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\bad-method.json",
+      "--after",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\rejected.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 2,
+    "stdout": "{\"status\": \"REJECTED\", \"error\": \"INVALID_SCHEMA\"}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "audit_blocked_parent",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "audit-method-cases",
+      "--input",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\blocker\\report.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 2,
+    "stdout": "{\"status\": \"REJECTED\", \"error\": \"OUTPUT_IO_ERROR\"}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "impact_blocked_parent",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "qa_master",
+      "impact-method-cases",
+      "--before",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--after",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\design-methods.json",
+      "--cases",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\method-cases.json",
+      "--output",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\blocker\\report.json"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 2,
+    "stdout": "{\"status\": \"REJECTED\", \"error\": \"OUTPUT_IO_ERROR\"}\r\n",
+    "stderr": ""
+  },
+  {
+    "label": "direct_format_type",
+    "command": [
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\venv\\Scripts\\python.exe",
+      "-I",
+      "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer\\format-probe.py",
+      "<before>",
+      "<cases>",
+      "<output>"
+    ],
+    "cwd": "C:\\Users\\LEON~1.WAN\\AppData\\Local\\Temp\\t142-h2bp1ota\\consumer",
+    "returncode": 0,
+    "stdout": "{\"audit\": \"INVALID_FORMAT\", \"impact\": \"INVALID_FORMAT\"}\r\n",
+    "stderr": ""
+  }
+]

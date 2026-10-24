@@ -1,0 +1,55 @@
+{
+  "subject_sha": "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6",
+  "execution_session_id": "36511",
+  "wrapper_exit_code": 0,
+  "command_log": "delivery-commands.json",
+  "command_count": 19,
+  "normal_exit_zero_labels": [
+    "source_freeze",
+    "archive",
+    "wheel_build",
+    "venv_create",
+    "wheel_install",
+    "skill_install",
+    "module_audit_json",
+    "module_audit_markdown",
+    "helper_audit_json",
+    "helper_audit_markdown",
+    "module_impact_json",
+    "module_impact_markdown",
+    "direct_format_type"
+  ],
+  "expected_rejection_exit_two_labels": [
+    "audit_bad_gap",
+    "impact_bad_gap",
+    "audit_bad_method",
+    "impact_bad_method",
+    "audit_blocked_parent",
+    "impact_blocked_parent"
+  ],
+  "manifest_sha256": "ecb3491ade2f114b20796dddb52eac2dbcc947d60c7dc53ac4c7430d34bfa5ba",
+  "archive_sha256": "82b772eff5be48d93b50019ae26ec81360ab02c4ce782e677812b594bc893725",
+  "wheel": {
+    "name": "qa_master_skill-1.0.0-py3-none-any.whl",
+    "bytes": 6399339,
+    "sha256": "ee85671a0ea42f7136eb5491b1ad8619c2865639c5f4f6906c5e40810f762a7b"
+  },
+  "installer_reported_files": 5888,
+  "post_helper_skill_file_count": 5900,
+  "audit": {
+    "status": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "candidate_denominator": 10
+  },
+  "impact": {
+    "status": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "review_case_count": 9
+  },
+  "rejections": {
+    "bad_gap": "INVALID_GAP",
+    "bad_method": "INVALID_SCHEMA",
+    "blocked_parent": "OUTPUT_IO_ERROR",
+    "format": "INVALID_FORMAT"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "source_freeze_sha": "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6",
+  "archive_sha256": "82b772eff5be48d93b50019ae26ec81360ab02c4ce782e677812b594bc893725",
+  "wheel": {
+    "name": "qa_master_skill-1.0.0-py3-none-any.whl",
+    "bytes": 6399339,
+    "sha256": "ee85671a0ea42f7136eb5491b1ad8619c2865639c5f4f6906c5e40810f762a7b"
+  },
+  "installed_skill_file_count": 5900,
+  "outputs": {
+    "module_audit_json": {
+      "bytes": 3747,
+      "sha256": "218efedd75d3f1935c2d567e1bfe18e181efba3e5646344fb2e8cebbc73c9cbd"
+    },
+    "module_audit_markdown": {
+      "bytes": 1663,
+      "sha256": "b29b086731b73c702cb1f887b1c54f4ae0628f1d7f32e801137edfb25f72922c"
+    },
+    "helper_audit_json": {
+      "bytes": 3747,
+      "sha256": "218efedd75d3f1935c2d567e1bfe18e181efba3e5646344fb2e8cebbc73c9cbd"
+    },
+    "helper_audit_markdown": {
+      "bytes": 1663,
+      "sha256": "b29b086731b73c702cb1f887b1c54f4ae0628f1d7f32e801137edfb25f72922c"
+    },
+    "module_impact_json": {
+      "bytes": 11189,
+      "sha256": "0a1e928494165e46386bb04783c9060954d71839bced1ead91e9603369ee892c"
+    },
+    "module_impact_markdown": {
+      "bytes": 6375,
+      "sha256": "699f4580adbc7cbad46a285deb740eb561193db9b43bfcedeb46969ea0e708c5"
+    }
+  },
+  "audit": {
+    "status": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "candidate_denominator": 10
+  },
+  "impact": {
+    "status": "DRAFT_UNAPPROVED",
+    "execution": "NOT_EXECUTED",
+    "review_case_count": 9
+  },
+  "rejections": {
+    "bad_gap": "INVALID_GAP",
+    "bad_method": "INVALID_SCHEMA",
+    "blocked_parent": "OUTPUT_IO_ERROR",
+    "format": "INVALID_FORMAT"
+  }
+}

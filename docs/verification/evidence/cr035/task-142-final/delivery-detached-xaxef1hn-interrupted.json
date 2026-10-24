@@ -1,0 +1,10 @@
+{
+  "subject": "8fc8533d4ec533bc5ba1ea66e6f24ef51a92f0f6",
+  "wheel_build": "INTERRUPTED_NO_RECORDED_RESULT",
+  "outcome": "INTERRUPTED_BY_TEST_HARNESS_AFTER_CONCURRENT_RUN_DISCOVERY",
+  "temp_root": "t142-xaxef1hn",
+  "completed_stages": [
+    "source_freeze",
+    "archive"
+  ]
+}

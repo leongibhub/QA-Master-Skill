@@ -47,6 +47,15 @@ command refuses an existing output and never overwrites an input, so choose a
 new report path on every run. Exit code 0 only means that a report was created;
 validation or I/O rejection returns exit code 2 and is not a quality result.
 
+## Rejection and retry
+
+Malformed artifact fields are rejected with a stable error code; correct the
+declared JSON rather than expecting a fallback report. `OUTPUT_IO_ERROR` means
+report writing, its preparation, or cleanup failed. If cleanup fails after
+atomic publication, the target report may already exist: inspect that target
+before retrying. Do not assume silent success or automatic rollback. The command
+never overwrites an input or an existing output path.
+
 ## Case-library contract
 
 The root has exactly these keys:
