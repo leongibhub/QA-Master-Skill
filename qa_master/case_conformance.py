@@ -414,6 +414,16 @@ def _validate_report(report):
             _fail("INVALID_REPORT")
         if any(not _report_id(value) for value in values):
             _fail("INVALID_REPORT")
+        if "case_ids" in item and (len(item["case_ids"]) != len(set(item["case_ids"]))):
+            _fail("INVALID_REPORT")
+        if item["code"] in {"DATA_MISMATCH", "ORACLE_MISMATCH", "SOURCE_MISMATCH", "TRACE_MISMATCH", "CASE_DOCUMENTATION_INCOMPLETE"} and "candidate_id" in item:
+            if len(item.get("case_ids", [])) != 1:
+                _fail("INVALID_REPORT")
+        elif item["code"] == "GAP_CASE_CONFLICT":
+            if not item.get("case_ids", []):
+                _fail("INVALID_REPORT")
+        elif item["code"] == "GAP_DUPLICATE" and item.get("case_ids", []) != []:
+            _fail("INVALID_REPORT")
     summary = report["summary"]
     if not isinstance(summary, dict) or set(summary) != {"candidate_denominator", "states", "assessment", "by_model", "obligation_count", "finding_count"}:
         _fail("INVALID_REPORT")

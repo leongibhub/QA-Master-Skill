@@ -235,8 +235,19 @@ class FiniteAuditHardeningIndependentTests(unittest.TestCase):
         forged_finding = copy.deepcopy(report)
         forged_finding["findings"].append({"code": "ORPHAN_CASE", "candidate_id": target["id"]})
         forged_finding["summary"]["finding_count"] += 1
-        for forged in (forged_state, forged_finding):
-            with self.subTest(kind="state" if forged is forged_state else "finding"):
+        malformed_findings = []
+        for code, case_ids in (
+            ("DATA_MISMATCH", []),
+            ("GAP_CASE_CONFLICT", []),
+            ("GAP_DUPLICATE", ["CASE-X"]),
+            ("GAP_CASE_CONFLICT", ["CASE-X", "CASE-X"]),
+        ):
+            forged = copy.deepcopy(report)
+            forged["findings"].append({"code": code, "candidate_id": target["id"], "case_ids": case_ids})
+            forged["summary"]["finding_count"] += 1
+            malformed_findings.append(forged)
+        for index, forged in enumerate((forged_state, forged_finding, *malformed_findings), start=1):
+            with self.subTest(kind=index):
                 self.assert_domain_error(lambda: render_audit_markdown(forged), CaseConformanceError, "INVALID_REPORT")
 
         duplicate_gap_library = complete_library(self.bundle)

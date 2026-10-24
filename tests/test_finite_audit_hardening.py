@@ -61,6 +61,24 @@ class FiniteAuditHardeningTests(unittest.TestCase):
         clean = audit_method_cases(self.bundle, library(self.bundle)); clean["findings"].append({"code": "ORPHAN_CASE", "candidate_id": candidate["id"]}); clean["summary"]["finding_count"] += 1
         with self.assertRaisesRegex(CaseConformanceError, "^INVALID_REPORT$"): render_audit_markdown(clean)
 
+    def test_renderer_enforces_candidate_finding_case_id_cardinality(self):
+        candidate = design_methods(self.bundle)["candidates"][0]
+        report = audit_method_cases(self.bundle, library(self.bundle))
+        for code, case_ids in (("DATA_MISMATCH", []), ("GAP_CASE_CONFLICT", []), ("GAP_DUPLICATE", ["CASE-X"])):
+            forged = copy.deepcopy(report)
+            forged["findings"].append({"code": code, "candidate_id": candidate["id"], "case_ids": case_ids})
+            forged["summary"]["finding_count"] += 1
+            with self.subTest(code=code):
+                with self.assertRaisesRegex(CaseConformanceError, "^INVALID_REPORT$"):
+                    render_audit_markdown(forged)
+        genuine = library(self.bundle)
+        scenario = {"candidate_id": candidate["id"], "method_data": copy.deepcopy(candidate["method_data"]),
+                    "requirement_ids": list(candidate["trace"]), "source_ref_ids": [x["id"] for x in candidate["source_refs"]],
+                    "oracle_ref_ids": [x["id"] for x in candidate["oracle_refs"]]}
+        genuine["cases"] = [{"id": "CASE-X", "title": "x", "preconditions": "x", "steps": ["x"], "expected": "x", "scenarios": [scenario]}]
+        genuine["gaps"] = [{"candidate_id": candidate["id"], "reason_code": "OTHER"}]
+        self.assertIn(candidate["id"], render_audit_markdown(audit_method_cases(self.bundle, genuine)))
+
     def test_cleanup_failure_is_domain_error_but_never_masks_link_race(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory); bundle, cases, output = root / "bundle.json", root / "cases.json", root / "report.json"

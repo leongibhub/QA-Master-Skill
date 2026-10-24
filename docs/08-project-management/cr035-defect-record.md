@@ -44,3 +44,10 @@ success. Caller should inspect the requested destination before retrying.
 Independent source tests precede final freeze; independently verify final wheel
 and installed helper once after repair stabilization. Full Windows/Linux CI is
 regression evidence, not acceptance or an application test result.
+
+BUG-026 follow-up at intermediate9579467: code-specific keys alone still allowed
+impossible candidate finding case counts. Final repair enforces exactly one case
+for data/reference/documentation candidate diagnostics, nonempty cases for
+GAP_CASE_CONFLICT, zero cases for GAP_DUPLICATE, and unique valid case IDs.
+Independent public-renderer counterexamples and genuine emitter variants support
+this additional structural validation; no cross-record authenticity is inferred.
