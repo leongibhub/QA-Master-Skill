@@ -27,6 +27,16 @@
 
 **单独做一个阶段、组合多个阶段或规划完整流程，都使用同一个入口。** 企业系统接入可选；需求评审和本地设计无需 Jira、GitLab 或测试机。
 
+## 最新闭环：有限模型用例维护
+
+把需求、设计或代码变更和旧用例交给 Agent 即可；Agent 准备严格 JSON 并读回结果，QA 人员不需要手工编写 JSON。闭环是：先审计当前用例，再分析变更影响，生成**未应用**的 after 用例库草稿，完成人工审阅后才可提取该嵌套库并另行审计。
+
+| 任务 | 可直接发送给聊天宿主的提示 | 输出边界 |
+| --- | --- | --- |
+| 审计有限模型用例 | `使用 QA Master 审计当前有限模型测试用例，列出绑定、缺口和待修复项；不要执行测试。` | `audit-method-cases` 的结构化审计和 `MISSING`/绑定发现；不证明用例文字正确、已批准或已执行。 |
+| 比较变更影响 | `使用 QA Master 对比新旧需求或设计与旧用例，列出需要重审、补测和回归关注的内容；先不要执行测试。` | `impact-method-cases` 的复审、缺口和未知项；不会改用例或自动跳过回归。 |
+| 生成新版用例库草稿 | `使用 QA Master 根据新旧有限模型和旧用例生成可人工审阅的新版用例库草稿；不要应用、不执行测试。` | `propose-method-case-library` 的严格嵌套库、原始值、审阅理由、保留项和缺失向量；没有 `--apply`，也不是批准或执行证据。 |
+
 ## 快速开始
 
 需要 Git、支持加载 Skill 的 Agent，以及 Python 3.10+ **或** [uv](https://docs.astral.sh/uv/)。Windows 上不需要手工创建或激活 `.venv`。先克隆仓库；**仅克隆不会安装 `qa-master` 命令**。
@@ -61,6 +71,32 @@ uv tool install --force --python 3.13 .
 `uv` 会下载并管理所需的 Python 3.13。已有 Python 且希望以后也能直接输入 `qa-master` 的用户，可选运行 `py -3 -m pip install --user .`；若 PATH 没有刷新，继续使用稳定的 `py -3 -m qa_master ...` 即可。没有 `py` 启动器但 `python --version` 为 3.10+ 时，使用等价的 `python -m qa_master ...`。
 
 如果 uv 安装完成后仍提示找不到 `qa-master`，运行 `uv tool update-shell`，关闭并重新打开终端后再试；需要立即运行时，可用不依赖 PATH 的前缀 `uv tool run --from . --python 3.13 qa-master`。
+
+### 已安装用户更新
+
+在原仓库目录先获取最新源码；`--ff-only` 不会替你合并分叉历史：
+
+```cmd
+git pull --ff-only
+```
+
+通过 uv 安装过命令的用户，更新工具后把 Skill 更新到**原来的同一宿主和目标**：
+
+```cmd
+uv tool install --force --link-mode=copy --python 3.13 .
+qa-master install-codex --user --update
+```
+
+已有 Python 3.10+ 时，从当前源码运行模块即可，不依赖 PATH；以下二选一：有 `py` 启动器用第一行，没有则用第二行：
+
+```cmd
+py -3 -m qa_master install-codex --user --update
+python -m qa_master install-codex --user --update
+```
+
+上例只适用于原来以 Codex/OpenCode 用户级 `--user` 安装的情况。原来使用项目级 `--project` 或指定目录 `--target`（包括 Claude Code、TRAE CN）的用户，请按下方“聊天宿主”表保留原来的参数和绝对路径，只在该命令末尾加 `--update`；不要把一个宿主的安装更新到另一个宿主目录。`qa-master` 是 uv 安装的命令入口，`py -3 -m qa_master` / `python -m qa_master` 是当前源码的模块入口。
+
+`--update` 只更新未被手工修改的受管理安装；内容变化并实际更新时保留旧安装备份，内容相同时返回 `UNCHANGED`。若目标曾被手工修改，请先检查差异，不要删除目标目录后强行覆盖。
 
 选择宿主和范围。下表是已有 Python 用户可直接复制的 Windows `cmd` 命令；PowerShell 中将 `%USERPROFILE%` 改为 `$env:USERPROFILE`。若使用 uv 安装，把每条命令中的 `py -3 -m qa_master` 替换为 `qa-master`；PATH 尚未刷新时替换为上面的 `uv tool run ... qa-master` 前缀。
 
@@ -171,7 +207,7 @@ $qa-master 使用 ui-test-playwright，评审登录页面的浏览器自动化�
 
 ## 本地工具：可观察、可复核
 
-在仓库根目录、已激活的虚拟环境中运行；未激活时用虚拟环境 Python 的完整路径替换 `python`。
+在仓库根目录使用 Python 3.10+ 的源码模块入口 `python -m qa_master ...`（Windows 可用 `py -3 -m qa_master ...`）；不要求创建或激活 `.venv`。若已通过 uv 安装，则等价命令入口是 `qa-master ...`，但它使用已安装工具而非当前源码目录。
 
 ```bash
 python -m qa_master init demo-login
