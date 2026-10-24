@@ -28,3 +28,12 @@ hand-fill JSON. Read
 `../../qa_master/skills/codex/references/method-impact.md` for commands and
 limits. The report is a declared finite-model comparison only: it never edits
 cases, runs tests, grants approval or proves that regression can be skipped.
+
+When the requested outcome is a reviewable, not-yet-applied after library, the
+Agent prepares the same three inputs and runs `propose-method-case-library`.
+Read `../../qa_master/skills/codex/references/case-library-proposal.md`. Its
+JSON envelope contains a strict after-bound nested library plus every original,
+case/row review reason, held case/gap and missing-vector context. Review every
+case and row, including unchanged vectors. It has no apply path; the envelope
+is not a `--cases` input. Only after human review may the Agent extract the
+nested library to a new file and audit it separately.

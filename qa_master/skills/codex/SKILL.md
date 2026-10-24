@@ -108,6 +108,19 @@ the declared input point did not change, but changed requirement, source or
 oracle context still requires review. The report never edits cases, runs tests,
 grants approval, or authorizes skipped regression.
 
+When the user wants a reviewable after-version case library, prepare the same
+before bundle, after bundle and old case library, then run
+`propose-method-case-library`. The user remains in normal chat and never
+hand-fills JSON. Read [the case-library proposal reference](references/case-library-proposal.md).
+The JSON-only draft is non-applied and is not itself a `--cases` file: it holds
+the strict after-bound `proposed_case_library` beside originals and mandatory
+per-case/per-row review reasons. Review all cases and rows, including unchanged
+formal vectors; preserve prose, hold whole cases for an ineligible row or
+unresolved obligation, and hold every old gap for reason review. There is no
+apply command, approval, execution, or regression-skip conclusion. After human
+review only, the Agent may extract the nested library to a new file and run the
+separate after audit.
+
 | Work | Guide under `scripts/qa_master/skills/professional/` |
 | --- | --- |
 | Sources, conflicts, reverse requirements, missing rules | `requirements-review.md` |

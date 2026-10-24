@@ -34,7 +34,9 @@ def write_method_case_library_proposal(before_path, after_path, cases_path,
 CLI: propose-method-case-library --before old.json --after new.json
 --cases old-cases.json --output proposal.json. JSON only; each flag exactly once.
 No --apply/--format; no campaign state required/read/written. Exit0 means only
-proposal created; rejection returns exit2 and {status:REJECTED,error:<code>}.
+proposal created. Parsed-artifact/domain/I/O rejection returns exit2 and
+{status:REJECTED,error:<code>}. CLI syntax, missing/duplicate/unknown-flag errors
+retain inherited argparse usage on stderr and exit2; they read no artifact.
 CLI stdout carries fixed status/execution/application_state, proposed/held case
 and missing-vector counts, and output path; never case prose.
 
@@ -200,8 +202,11 @@ state mutated or external object written by this feature. Existing safe file
 helpers reject linked/reparse ancestors, collisions and existing outputs.
 
 Inherited NFR-003: the proposal intentionally repeats case prose/descriptors and
-has the same data sensitivity as its inputs. Errors/stdout never echo prose or
-input values; existing design secret-field rejection remains inherited. There
+has the same data sensitivity as its inputs. Domain/I/O errors and CLI stdout
+never echo artifact prose/input values; existing design secret-field rejection
+remains inherited. Argument-parser syntax usage may include command-line
+tokens; this CLI has no inline credential/prose argument, and those values
+must be kept out of command-line tokens. There
 is no arbitrary-prose credential detector/redactor. Agent guidance must keep
 real credentials out of shared artifacts, without falsely claiming that this
 generator can detect secrets in unrestricted case text. Synthetic-marker tests
@@ -220,3 +225,9 @@ Compatibility is additive only. Release/install assets gain a module/reference;
 existing commands and libraries remain compatible.5MiB output rejection and
 duplicated-content sensitivity are declared limits. All project Gates, human
 baseline approval, acceptance, release and execution boundaries remain unchanged.
+
+Prefreeze ruling: retain existing argparse syntax-error behavior rather than
+rewriting the shared parser solely for this additive command. Stable JSON and
+value-free error guarantees apply to parsed artifact/domain/I/O rejections;
+syntax misuse still exits2 before reading input artifacts. Held gaps retain
+canonical projection order, not SHA ordering.

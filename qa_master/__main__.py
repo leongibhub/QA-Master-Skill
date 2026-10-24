@@ -34,6 +34,11 @@ def main():
     impact.add_argument('--cases', action='append', required=True)
     impact.add_argument('--output', action='append', required=True)
     impact.add_argument('--format', action='append', choices=('json', 'markdown'), default=[])
+    proposal = sub.add_parser('propose-method-case-library', help='Draft a non-applied after-design case library', allow_abbrev=False)
+    proposal.add_argument('--before', action='append', required=True)
+    proposal.add_argument('--after', action='append', required=True)
+    proposal.add_argument('--cases', action='append', required=True)
+    proposal.add_argument('--output', action='append', required=True)
     sub.add_parser('plan').add_argument('prompt')
     a = sub.add_parser('answer'); a.add_argument('key'); a.add_argument('value')
     a = sub.add_parser('approve'); a.add_argument('kind'); a.add_argument('version')
@@ -48,6 +53,8 @@ def main():
         p.error('audit-method-cases requires exactly one --input, --cases, --output, and optional --format')
     if args.cmd == 'impact-method-cases' and (len(args.before) != 1 or len(args.after) != 1 or len(args.cases) != 1 or len(args.output) != 1 or len(args.format) > 1):
         p.error('impact-method-cases requires exactly one --before, --after, --cases, --output, and optional --format')
+    if args.cmd == 'propose-method-case-library' and (len(args.before) != 1 or len(args.after) != 1 or len(args.cases) != 1 or len(args.output) != 1):
+        p.error('propose-method-case-library requires exactly one --before, --after, --cases, and --output')
     try:
         if args.cmd == 'design':
             from .campaign_cli import write_campaign
@@ -94,6 +101,16 @@ def main():
                 return 2
             output = {'status': report['status'], 'execution': report['execution'],
                       'review_case_count': report['summary']['review_case_count'], 'output': args.output[0]}
+        elif args.cmd == 'propose-method-case-library':
+            from .case_library_proposal import write_method_case_library_proposal, CaseLibraryProposalError
+            try:
+                report = write_method_case_library_proposal(args.before[0], args.after[0], args.cases[0], args.output[0])
+            except CaseLibraryProposalError as error:
+                print(json.dumps({'status': 'REJECTED', 'error': error.code}, ensure_ascii=True))
+                return 2
+            output = {'status': report['status'], 'execution': report['execution'], 'application_state': report['application_state'],
+                      'proposed_case_count': report['summary']['proposed_case_count'], 'held_case_count': report['summary']['held_case_count'],
+                      'missing_vector_count': report['summary']['missing_after_candidate_count'], 'output': args.output[0]}
         elif args.cmd == 'install-codex':
             from .codex_skill import install_skill, SkillInstallError
             try:
