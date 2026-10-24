@@ -20,7 +20,14 @@ nonexecuted, nonapplied; no apply or arbitrary-report rendering API.
 
 - [x] Read current Git/history, instructions, lifecycle and existing contracts.
 - [x] Obtain read-only requirement/architecture options and choose fixed DES-064.
-- [ ] Record CR/RTM and actual assignments; commit design before implementation.
+- [x] Record CR/RTM and actual assignments; commit design before implementation.
+
+Actual owners: TASK-147 /root; TASK-148 developer /root/rebind_developer;
+TASK-149 documentation_manager /root/rebind_docs; TASK-150 tester
+/root/rebind_tester; TASK-151 reviewer /root/rebind_reviewer. Requirements and
+architecture investigations /root/rebind_requirements and /root/rebind_architecture
+were read-only advisory inputs, not implementation or acceptance evidence.
+Runtime registration NOT_AVAILABLE; no lease/Gate result is invented.
 
 ## TASK-148 — developer module/CLI/unit regressions
 

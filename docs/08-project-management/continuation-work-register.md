@@ -171,3 +171,18 @@ and old13+10 checks passed; TASK-146 two references checked. TASK-145 reconciles
 full PR CI40074191090 (four successful889-test jobs) and traceability. See
 EVD-CR035-DELIVERY-001. Initial RED/harness/fixture records and policy-denied
 ancillary cleanup remain retained. No Runtime lease, Gate or release is inferred.
+
+## CR-036 actual host assignments — 2026-10-24
+
+| Task | Actual owner | Scope | Evidence state at assignment |
+| --- | --- | --- | --- |
+| TASK-147 | /root | Selected-scope requirements, DES-064/ADR-007, plan/CR/RTM and decisions. | DRAFTdesign84711da; OBSERVED. |
+| TASK-148 | developer /root/rebind_developer | New proposal module, additiveCLI and developer tests; existingthreecoremodulesuntouched. | Assignedread-onlyfirst; implementation NOT_EXECUTED untilrootGOafterthisrecord. |
+| TASK-149 | documentation_manager /root/rebind_docs | README/Skillentries/newreference; existingexamples. | Staticchecks OBSERVED; command/package NOT_EXECUTED. |
+| TASK-150 | tester /root/rebind_tester | Independentlyauthoredfixture and source/installed evidence. | InitialRED1moduleimporterror OBSERVED, not11executed tests; finalexecutionpending. |
+| TASK-151 | reviewer /root/rebind_reviewer | Preimplementationcontract and finalsource/evidence review. | Preflightambiguitiesresolved84711da; finalverdict NOT_EXECUTED. |
+
+These are Codex host assignments, not Runtime leases. Runtime registration
+NOT_AVAILABLE; central Gate statuses and human approvals remain unchanged.
+Decisions on all-gap holds, obligated-model holds, mandatoryreview, representation
+ordering and reason taxonomy are recorded in DES-064 before production code.
