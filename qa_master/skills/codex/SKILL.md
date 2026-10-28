@@ -34,6 +34,13 @@ submit bugs). A specialist end-to-end testing request does not imply the full
 QA lifecycle. Do not run a selected skill's external commands beyond the user's
 scope, and do not claim execution from the mere presence of its instructions.
 
+Before authoring or reviewing any test case or defect draft, including work
+selected through a specialist and tracker/import packets, read [the readable
+artifact reference](references/readable-artifacts.md). It is mandatory for
+reader-facing prose: keep machine fields required by a contract, but ground the
+human-readable case or bug in the user's requested language and supplied facts
+before delivery. Chinese examples in the reference are illustrative only.
+
 ## Start with the requested outcome
 
 Identify the project, requested stages, available sources, development stage,
