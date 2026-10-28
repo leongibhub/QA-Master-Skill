@@ -1,5 +1,10 @@
 # Typed observation conventions
 
+Apply this reference only when the task explicitly requests typed observations
+or graded answers. It does not rewrite ordinary human-facing case or bug prose;
+when active, retain the literal-token, synthesized-label and declared-precision
+rules below in the required typed field or payload.
+
 These conventions govern every typed observation a QA Master deliverable
 reports — whether in a neutral response envelope, a case table or a review
 packet. They exist so that two independent readers (human or grader) obtain

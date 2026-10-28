@@ -19,6 +19,16 @@ including selected-specialist work and tracker/import packets, read
 path resolves the canonical readable-artifact contract; preserve required
 machine fields while grounding human-readable prose in supplied facts.
 
+Default human-facing cases use the `步骤 | 操作步骤 | 预期结果` mapping unless an
+explicit project format requires an equivalent one. Every numbered action,
+including preparation, needs its own fact-grounded expected result or a precise
+pending statement for that step. Keep unsolicited machine keys out of ordinary
+prose; an explicit import/schema payload remains separate and exact.
+
+Respect the user's requested language and narrow scope: for a case or bug-only
+request, return only the requested artifacts and relevant gaps unless a project
+contract requires additional material.
+
 When an Agent has authored cases from a finite design model, it prepares the
 structured case library and runs `audit-method-cases` before delivery. The QA
 user asks for this in normal chat and does not hand-fill JSON. Read

@@ -148,3 +148,12 @@ receipt follows Git/PR history; no acceptance is inferred.
 
 Source: readable-qa-artifacts-2026-10-28.md. No human readability acceptance or
 project Gate decision is inferred from instruction or packaging checks.
+
+
+CR-037 strict-default follow-up: user explicitly authorizes tightening REQ-041/042
+with one expected-result slot for every step and no unsolicited machine fields.
+TASK-157–159; contract `strict-qa-writing-2026-10-28.md`. Prior rubric results
+remain historical; stricter TC-STRICT-001–005 all pass at instruction freeze e47c0f5: three
+fresh probes, 29 related checks and exact 5,891-file installed parity. Final
+independent review is linked in strict-qa-writing-review-2026-10-28.md.
+Traceability remains PARTIAL for formal human acceptance; no Gate is changed.

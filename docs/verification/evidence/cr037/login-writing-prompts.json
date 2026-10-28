@@ -1,0 +1,31 @@
+{
+  "source": "aaf8b1c215a9cc84834668b42f72d3a9304a4fde",
+  "skill": "installed user QA Master; mandatory references included",
+  "default_request": "帮我写一个“输入错误的用户名和密码，登录不成功”的测试用例，以及对应的 Bug 草稿。",
+  "explicit_request": "帮我写一个“输入错误的用户名和密码，登录不成功”的测试用例，以及对应的 Bug 草稿。像日常 QA 那样写，一个操作步骤对应一个预期结果；Bug 明确分为复现步骤、实际结果、预期结果。",
+  "facts": {
+    "synthetic": true,
+    "product": "DemoLogin",
+    "build": "demo-login-1",
+    "initial_state": "浏览器位于登录页面，用户未登录",
+    "controls": [
+      "用户名输入框",
+      "密码输入框",
+      "登录按钮"
+    ],
+    "username_entry_expected": "显示输入的用户名原值",
+    "password_entry_expected": "完成密码输入并以掩码显示",
+    "invalid_username": "unknown_user_demo",
+    "invalid_password": "invalid_password_demo",
+    "login_expected": "登录失败并保持未登录；未提供准确错误提示文案",
+    "reported_actual": "虚构测试人员报告同样输入反而登录成功并显示系统首页；Agent 未复现",
+    "not_provided": [
+      "截图或日志",
+      "发生频率",
+      "严重程度策略",
+      "根因"
+    ]
+  },
+  "boundary": "authoring only; no business execution, tracker write, Skill/source/install edits; authors isolated from each other's outputs",
+  "rubric": "docs/verification/qa-writing-login-check-2026-10-28.md"
+}

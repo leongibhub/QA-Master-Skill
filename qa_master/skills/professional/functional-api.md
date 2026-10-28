@@ -20,6 +20,14 @@ machine contract fields, then write grounded readable case details.
 
 Inputs are an approved requirement ID and oracle, data domain or state model, API contract/version where relevant, identities and authorization policy, and a declared environment. Output is the requested scoped artifact: a `functional-case-set` with trace IDs, data partitions, state transitions, preconditions, exact expected result and `execution: NOT_RUN`; add an `api-contract-matrix` or `auth-negative-matrix` only when the request or project contract needs it. For a narrow case request, return the cases and relevant gaps, not a default full strategy, all-dimension matrix, JSON handoff or routing analysis.
 
+Default human-facing case detail uses `步骤 | 操作步骤 | 预期结果`, unless an explicit
+project format requires an equivalent mapping. Every numbered action, including
+preparation, has a fact-grounded expected result or `待确认：具体缺什么，影响第几步`.
+Keep actual supplied API/domain/response literals and fields where relevant.
+Raw artifact/import metadata keys never enter human prose; when a user, project
+or schema explicitly requires them, preserve their exact names and values only
+in a separate payload/support block.
+
 ## Method
 
 Partition input domains into valid equivalence classes, invalid classes and boundaries. For an ordered range, include each endpoint, just-inside and just-outside values; never use arbitrary values as a substitute for a declared bound. Cover **both** ends of the range with interior step points: when the domain has a declared step or natural unit, include one interior step point adjacent to each endpoint (for example a `2..9` whole-number range includes both `2`, `3` and `8`, `9` as accepted neighbours), not just one side. Build a state-transition table: each allowed transition has a triggering role and effect; each forbidden transition has its denial and invariant. For APIs, compare method, path, parameters, headers, media types, status, response schema, idempotency and error shape to the contract. Exercise authentication absence, invalid credentials, expired credentials, wrong tenant and authorized-but-forbidden roles according to the documented policy.

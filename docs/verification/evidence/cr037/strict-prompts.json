@@ -1,0 +1,21 @@
+{
+  "source_freeze": "e47c0f5d031f73bd150ca7c6f88377efab4e919f",
+  "capture_note": "Original author task prompts transcribed verbatim from this chat's dispatch tool calls after outputs existed, on reviewer request. This is a late durable capture, not a pre-registered prompt hash or a new run. The strict acceptance/rubric was recorded before edits; the prompts below were sent before these outputs.",
+  "probes": [
+    {
+      "agent": "/root/strict_login_author",
+      "output": "strict-login-output.md",
+      "task_prompt": "Read/apply current QA Master at D:/QA-Master-Compare/qa_master/skills/codex/SKILL.md and mandatory references; instruction freezee47c0f5. Do notreadotherauthoroutputs. Your onlyfileownership D:/QA-Master-Compare/docs/verification/evidence/cr037/strict-login-output.md; save exact user-facing answer, reportSHA256. Notalone,noedit/revertothers/source/install. No business execution or externalwrites. Userrequest: 帮我写一个输入错误用户名和密码、登录不成功的测试用例，以及对应的 Bug 草稿。Supplied fictional facts: DemoLogin builddemo-login-2, alreadyon登录页andloggedout; controls用户名输入框/密码输入框/登录按钮. Usernameinputechoestheenteredvalue; passwordinputusesmasking. unknown_user_demo andinvalid_password_demo areexplicitlyinvalidsyntheticcredentials. Clicking登录mustfail andkeeploggedout; exacterrormessagenotprovided. Afictionaltesterreportssamevaluesinsteadloginsuccessanddisplay系统首页; no logs/screenshots/frequency/rootcause/severitypolicy. Agentdidnotreproduce. Allfactsfictional; writeonlyrequestedChineseQAartifacts basedonSkill, withoutbusinessrequests. Do not inventfacts."
+    },
+    {
+      "agent": "/root/strict_unknown_author",
+      "output": "strict-unknown-output.md",
+      "task_prompt": "Read/apply currentQA Master D:/QA-Master-Compare/qa_master/skills/codex/SKILL.md andmandatoryrefs frozene47c0f5. Onlyfileownership D:/QA-Master-Compare/docs/verification/evidence/cr037/strict-unknown-output.md saveexactanswer/reportSHA. Nootherauthorfiles/source/install edits/reverts; notalone. No business execution/externalobjects. Userrequest: 根据这个需求写一条文件导入的反向测试用例。Syntheticfacts: ImportDemo buildimport-2; useralreadyon导入页面with文件选择控件and导入按钮. Steps needed: select invalid.csv, thenclick导入. invalid.csv lacksrequiredcolumnname. Givenrule REQ-IMPORT-01: clicking导入 withthisfile returns exactMISSING_NAME anddoesnotaddanyrecords. Noindependentexpected UIstate, echoedfilename, preview, message, validationorobservable forselectingthefileisprovided. It isunknown; noauth/OS/browser/cleanuppolicyprovided. The documentexplicitlydoesnotstateanyresultforthefileselectionaction. Allfictional; useronlywantstheonecase. FollowSkillwithoutinventingmissingfacts ordoingrequests. Saveuser-facingdeliverableonly."
+    },
+    {
+      "agent": "/root/strict_schema_author",
+      "output": "strict-schema-output.md",
+      "task_prompt": "Read/apply currentQA Master D:/QA-Master-Compare/qa_master/skills/codex/SKILL.md andmandatoryrefs frozene47c0f5. Onlyfileownership D:/QA-Master-Compare/docs/verification/evidence/cr037/strict-schema-output.md; saveexactanswer/reportSHA. Notalone,do notreadotheroutputsoredit/revertothers/source/install; noAPIrequests/externalwrites. Userrequest: 写一条接口测试用例，并另附可导入的 JSON。Syntheticfacts: ProfileDemo buildprofile-2; membertestidentityalreadyavailable. REQ-PROFILE-01 says GET /profile returnsHTTP200 with responsefields source_role exactlymember andTrace exactlytrace-demo-01; otherfieldsunspecified. UseactualcaseID TC-PROFILE-01 andrequirementID REQ-PROFILE-01. RequiredimportJSONkeysandvalues: id='TC-PROFILE-01', source_role='direct_input', Trace=['REQ-PROFILE-01'], execution='NOT_RUN', steps=[{'action':'GET /profile','expected':'HTTP 200; source_role=member; Trace=trace-demo-01'}]. Do not drop/rename/changeanyrequiredJSONkey/value; userneedsit independentlyfromthehumanreadablecase. Responsefieldnamesareactualcontractfields,notartifactmetadata. Do not inventURLs/authscheme/schemafields/credentials or executeanything. WriteChinese ordinaryQA case plusrequestedJSON onlybasedonfacts."
+    }
+  ]
+}

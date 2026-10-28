@@ -21,6 +21,16 @@ the reader-facing explanation grounded and reviewable.
 
 Inputs are pinned before/after revisions, changed components and interfaces, approved requirements/cases, known defects, environment/build identity, execution records and artifact hashes. Output is the requested scoped artifact: an impact map, a reproducible `defect-report` where a failure is observed, or an evidence report whose result state is `NOT_EXECUTED`, `UNVERIFIED_EXTERNAL_ARTIFACT`, `OBSERVED`, or `VERIFIED` according to actual provenance. For a narrow case or bug request, return that artifact and relevant gaps only; do not default to a full strategy, all-dimension matrix, JSON handoff or routing analysis.
 
+Default human-facing case detail uses `步骤 | 操作步骤 | 预期结果`, unless an explicit
+project format requires an equivalent mapping. Every numbered action, including
+preparation, has a fact-grounded expected result or `待确认：具体缺什么，影响第几步`.
+Bug drafts lead with symptom, known setup, reproduction, actual and expected
+results, impact and locatable evidence; do not invent a root cause, severity or
+frequency. Keep actual supplied API/domain/response fields relevant to the
+steps or expected results. Raw artifact/import metadata keys never enter human
+prose; when a user, project or schema explicitly requires them, preserve their
+exact names and values only in a separate payload/support block.
+
 ## Method
 
 Trace changed code/configuration/schema/API contracts to direct requirements, callers, consumers, data migration paths and critical journeys. Select smoke, direct-impact and risk-based adjacent cases with a stated reason. A defect report records title, severity rationale, build/environment, exact preconditions, minimal reproduction, expected oracle, observed result, timestamps, logs/screenshots/artifact hashes and duplicates/known limitations. Keep flaky or unavailable results distinct from failures.
