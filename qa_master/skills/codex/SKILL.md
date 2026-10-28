@@ -41,6 +41,11 @@ reader-facing prose: keep machine fields required by a contract, but ground the
 human-readable case or bug in the user's requested language and supplied facts
 before delivery. Chinese examples in the reference are illustrative only.
 
+For a narrow request for one or more cases or bug drafts, deliver those requested
+artifacts and their relevant gaps only. Do not append a full QA strategy,
+all-dimension coverage matrix, JSON handoff, or routing analysis unless the user
+asks or the project contract requires it.
+
 ## Start with the requested outcome
 
 Identify the project, requested stages, available sources, development stage,

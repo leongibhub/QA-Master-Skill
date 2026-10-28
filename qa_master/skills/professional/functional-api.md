@@ -18,7 +18,7 @@ machine contract fields, then write grounded readable case details.
 
 ## Inputs and output contract
 
-Inputs are an approved requirement ID and oracle, data domain or state model, API contract/version where relevant, identities and authorization policy, and a declared environment. Output is a `functional-case-set` with trace IDs, data partitions, state transitions, preconditions, exact expected result and `execution: NOT_RUN`; an `api-contract-matrix`; and an `auth-negative-matrix`.
+Inputs are an approved requirement ID and oracle, data domain or state model, API contract/version where relevant, identities and authorization policy, and a declared environment. Output is the requested scoped artifact: a `functional-case-set` with trace IDs, data partitions, state transitions, preconditions, exact expected result and `execution: NOT_RUN`; add an `api-contract-matrix` or `auth-negative-matrix` only when the request or project contract needs it. For a narrow case request, return the cases and relevant gaps, not a default full strategy, all-dimension matrix, JSON handoff or routing analysis.
 
 ## Method
 

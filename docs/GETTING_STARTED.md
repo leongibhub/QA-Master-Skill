@@ -127,7 +127,7 @@ py -3 -I "<skill>\scripts\qa.py" status
 已通过 uv 安装的用户，更新 Python 包后对原目标使用安装器更新模式：
 
 ```cmd
-uv tool install --force --link-mode=copy --python 3.13 .
+uv tool install --force --reinstall --link-mode=copy --python 3.13 .
 qa-master install-codex --user --update
 ```
 

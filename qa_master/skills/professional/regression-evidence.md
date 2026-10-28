@@ -19,7 +19,7 @@ the reader-facing explanation grounded and reviewable.
 
 ## Inputs and output contract
 
-Inputs are pinned before/after revisions, changed components and interfaces, approved requirements/cases, known defects, environment/build identity, execution records and artifact hashes. Output is a `regression-impact-map`, a reproducible `defect-report` where a failure is observed, and an `evidence-report` whose result state is `NOT_EXECUTED`, `UNVERIFIED_EXTERNAL_ARTIFACT`, `OBSERVED`, or `VERIFIED` according to actual provenance.
+Inputs are pinned before/after revisions, changed components and interfaces, approved requirements/cases, known defects, environment/build identity, execution records and artifact hashes. Output is the requested scoped artifact: an impact map, a reproducible `defect-report` where a failure is observed, or an evidence report whose result state is `NOT_EXECUTED`, `UNVERIFIED_EXTERNAL_ARTIFACT`, `OBSERVED`, or `VERIFIED` according to actual provenance. For a narrow case or bug request, return that artifact and relevant gaps only; do not default to a full strategy, all-dimension matrix, JSON handoff or routing analysis.
 
 ## Method
 

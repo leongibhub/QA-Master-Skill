@@ -85,7 +85,7 @@ git pull --ff-only
 通过 uv 安装过命令的用户，更新工具后把 Skill 更新到**原来的同一宿主和目标**：
 
 ```cmd
-uv tool install --force --link-mode=copy --python 3.13 .
+uv tool install --force --reinstall --link-mode=copy --python 3.13 .
 qa-master install-codex --user --update
 ```
 
