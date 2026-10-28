@@ -51,4 +51,6 @@ CR-001 through CR-006 are late registrations for corrections already observed in
 CR-037 follow-up (TASK-157–159): current user explicitly authorizes strict
 step/expected mapping and suppression of unsolicited reader-facing machine
 metadata. DES-065/REQ-041–042 clarification recorded before instruction edits
-in strict-qa-writing-2026-10-28.md; final evidence PENDING.
+in strict-qa-writing-2026-10-28.md. Final freeze e47c0f5; TC-STRICT-001–005
+bounded PASS, 29 related checks PASS, exact 5,891-file local parity; review and
+late prompt-capture/harness history retained in strict delivery records.
