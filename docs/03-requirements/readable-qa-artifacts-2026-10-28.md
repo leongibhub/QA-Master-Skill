@@ -62,3 +62,8 @@ All project Gates remain unchanged; Runtime registration and human acceptance ar
 NOT_AVAILABLE. Results are PENDING until recorded in verification documents.
 Company knowledge-base guidance was consulted read-only; internal documents,
 product data, identifiers and examples must not be copied into the public bundle.
+
+Delivery-method follow-up: local same-path uv refresh reused an old cached wheel.
+BUG-032 is recorded in the delivery report; existing-user update instructions
+add `--reinstall`, with fresh-build/resource verification. This is propagation of
+the same authorized instruction repair, not a runtime or permission change.

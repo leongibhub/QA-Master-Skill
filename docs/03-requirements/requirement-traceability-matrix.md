@@ -143,8 +143,8 @@ receipt follows Git/PR history; no acceptance is inferred.
 
 | Requirement | Design | Task | Verification | Traceability |
 | --- | --- | --- | --- | --- |
-| REQ-041 | DES-065 | TASK-154–156 | Web/API/bug/missing-oracle synthetic writing checks; PENDING | PARTIAL |
-| REQ-042 | DES-065 | TASK-154–156 | Exact technical fact preservation, gap/evidence/authorization checks; PENDING | PARTIAL |
+| REQ-041 | DES-065 | TASK-154–156 | TC-READ-001–005: baseline readability finding retained, fresh Chinese/English drafts and final focused probe PASS; installed5,891-file map exact | PARTIAL |
+| REQ-042 | DES-065 | TASK-154–156 | TC-READ-001–005: exact values/source attribution/gaps/no-write scope checked; 29 related regressions PASS; initial BUG-032 delivery FAIL repaired/retested | PARTIAL |
 
 Source: readable-qa-artifacts-2026-10-28.md. No human readability acceptance or
 project Gate decision is inferred from instruction or packaging checks.
