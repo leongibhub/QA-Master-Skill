@@ -137,3 +137,14 @@ engineering authorization, not a baseline/Gate/human acceptance. Actual frozen e
 `../verification/case-library-proposal-delivery-2026-10-24.md`
 (EVD-CR036-DELIVERY-001); detailed tests/review remain separate. CI evidence EVD-CR036-CI-001 records four successful910-test jobs. Publication
 receipt follows Git/PR history; no acceptance is inferred.
+
+
+## CR-037 readable authoring (DRAFT)
+
+| Requirement | Design | Task | Verification | Traceability |
+| --- | --- | --- | --- | --- |
+| REQ-041 | DES-065 | TASK-154–156 | TC-READ-001–005: baseline readability finding retained, fresh Chinese/English drafts and final focused probe PASS; installed5,891-file map exact | PARTIAL |
+| REQ-042 | DES-065 | TASK-154–156 | TC-READ-001–005: exact values/source attribution/gaps/no-write scope checked; 29 related regressions PASS; initial BUG-032 delivery FAIL repaired/retested | PARTIAL |
+
+Source: readable-qa-artifacts-2026-10-28.md. No human readability acceptance or
+project Gate decision is inferred from instruction or packaging checks.

@@ -10,9 +10,16 @@ artifacts: regression-impact-map, defect-report, evidence-report
 
 Use this guide to decide what must be rechecked after a bounded change and to make results assessable. It cannot convert a draft, a runner exit code or an unverified external artifact into a pass result.
 
+Before authoring or reviewing reader-facing cases or defect drafts, follow the
+QA Master `readable-artifacts` reference as resolved by the entry Skill. The
+installed professional guide is packaged under
+`scripts/qa_master/skills/professional/`; the reference is at the Skill root,
+not beside this guide. Preserve exact evidence and machine fields while making
+the reader-facing explanation grounded and reviewable.
+
 ## Inputs and output contract
 
-Inputs are pinned before/after revisions, changed components and interfaces, approved requirements/cases, known defects, environment/build identity, execution records and artifact hashes. Output is a `regression-impact-map`, a reproducible `defect-report` where a failure is observed, and an `evidence-report` whose result state is `NOT_EXECUTED`, `UNVERIFIED_EXTERNAL_ARTIFACT`, `OBSERVED`, or `VERIFIED` according to actual provenance.
+Inputs are pinned before/after revisions, changed components and interfaces, approved requirements/cases, known defects, environment/build identity, execution records and artifact hashes. Output is the requested scoped artifact: an impact map, a reproducible `defect-report` where a failure is observed, or an evidence report whose result state is `NOT_EXECUTED`, `UNVERIFIED_EXTERNAL_ARTIFACT`, `OBSERVED`, or `VERIFIED` according to actual provenance. For a narrow case or bug request, return that artifact and relevant gaps only; do not default to a full strategy, all-dimension matrix, JSON handoff or routing analysis.
 
 ## Method
 

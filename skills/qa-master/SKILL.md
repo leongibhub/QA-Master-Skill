@@ -13,6 +13,12 @@ Install the complete skill with `python -m qa_master install-codex --user`, or
 copies the canonical entry, references, professional guides and local helper into
 one discoverable skill folder. No separate QA Skills repository is required.
 
+Before authoring or reviewing a reader-facing test case or defect draft,
+including selected-specialist work and tracker/import packets, read
+`../../qa_master/skills/codex/references/readable-artifacts.md`. This source-tree
+path resolves the canonical readable-artifact contract; preserve required
+machine fields while grounding human-readable prose in supplied facts.
+
 When an Agent has authored cases from a finite design model, it prepares the
 structured case library and runs `audit-method-cases` before delivery. The QA
 user asks for this in normal chat and does not hand-fill JSON. Read

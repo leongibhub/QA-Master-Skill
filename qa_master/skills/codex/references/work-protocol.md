@@ -18,6 +18,12 @@ not as permission to change the task or write to external systems.
 Adapt the format to the task and existing project conventions. For an unconstrained
 new design task, keep reviewable outputs in `.qa-master/artifacts/<task-id>/`:
 
+Before authoring or reviewing reader-facing cases, defects, tracker packets or
+import packets, read `readable-artifacts.md`. A generator's rows are candidates,
+not a deliverable, until an Agent grounds and rewrites them from the supplied
+facts. Keep contract-required IDs and codes, but do not let metadata replace a
+reader's scenario, action and observable result.
+
 - Requirement review: atomic candidate ID, actor/trigger, rule, observable outcome,
   versioned source, fact/inference/assumption, conflict and question. Highlight
   missing rules that change test expectations.
@@ -29,11 +35,14 @@ new design task, keep reviewable outputs in `.qa-master/artifacts/<task-id>/`:
   execution evidence is missing is incomplete.
 - Test strategy: object and risk, applicable types, meaningful coverage obligations,
   prerequisites and exclusions. Do not use a count of generated cases as coverage.
-- Case table: stable ID, requirement/risk/source, type, priority and reason,
-  preconditions, concrete input/actions, expected observables and their oracle,
-  cleanup, automation candidate, approval and execution status. Link each expected
-  result to a rule or mark it awaiting confirmation. Include relevant negative,
-  boundary, permission, concurrency and recovery checks without duplicate padding.
+- Case list: use a compact summary (ID, title, source and state), then put the
+  readable setup, numbered actions and paired observables in each case detail.
+  Link every expected result to a rule or mark it awaiting confirmation. Include
+  relevant negative, boundary, permission, concurrency and recovery checks
+  without duplicate padding or a wide metadata table. Summary is presentation
+  only: preserve project/schema risk, type, priority, oracle, automation,
+  approval and other required machine fields in the detail or compact metadata;
+  never drop or rename them.
 - Traceability: link requirements/risks to cases and expose uncovered obligations,
   conflicting oracles, uninspected source and blocked cases.
 - Review: critique the draft for omissions, wrong expectations, infeasible setup,
