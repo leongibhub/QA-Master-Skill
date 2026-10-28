@@ -43,6 +43,11 @@ reader's scenario, action and observable result.
   only: preserve project/schema risk, type, priority, oracle, automation,
   approval and other required machine fields in the detail or compact metadata;
   never drop or rename them.
+- Default case detail is a `步骤 | 操作步骤 | 预期结果` table, unless an explicit
+  project format supplies the same one-to-one mapping. Every numbered action,
+  including preparation, has an expected result grounded in supplied facts. If
+  it is unknown, write `待确认：具体缺什么，影响第几步`; do not invent an echo,
+  masking behavior, error status or side effect merely to complete the row.
 - Traceability: link requirements/risks to cases and expose uncovered obligations,
   conflicting oracles, uninspected source and blocked cases.
 - Review: critique the draft for omissions, wrong expectations, infeasible setup,

@@ -41,6 +41,13 @@ reader-facing prose: keep machine fields required by a contract, but ground the
 human-readable case or bug in the user's requested language and supplied facts
 before delivery. Chinese examples in the reference are illustrative only.
 
+Default human-facing cases use `步骤 | 操作步骤 | 预期结果`, unless an explicit
+project format requires an equivalent one-to-one mapping. Every numbered action,
+including preparation, has its own fact-grounded expected result; otherwise use
+a precise pending statement for that step. Keep unsolicited machine keys and
+synthesized trace labels out of ordinary prose, while preserving them exactly in
+a separate payload/support block when an explicit schema requires them.
+
 For a narrow request for one or more cases or bug drafts, deliver those requested
 artifacts and their relevant gaps only. Do not append a full QA strategy,
 all-dimension coverage matrix, JSON handoff, or routing analysis unless the user
